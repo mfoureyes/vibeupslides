@@ -94,6 +94,7 @@ the rest you read with your eyes, and you write it down, example by example, bef
 | what the accent colour is used for: one word, whole areas, thin marks | `--accent`, `--motif`, `theme.css` |
 | how full a slide is, how much ground stays free | margins and sizes in `theme.css`; a note for vs-create in `design.md` |
 | how pictures sit: bleeding to the edge, framed, round, tinted | the picture rules in `theme.css` |
+| how a slide is arranged: where the title stands, which share the picture takes, what overlaps what (a person in front of the type, a picture breaking out of a band, a figure larger than the slide, circles running into each other), where the small text goes | masters of the look's own (see "Arrangements become masters" below) |
 | whether things move, and how | `--motion` (the set that is closest) |
 
 Then find **what the examples share**, not their average: if two of three are quiet and one is
@@ -116,11 +117,51 @@ as the style left it. Run `vs preview <name>` and look at the contact sheets nex
 of the examples: someone who sees both should say they belong to the same taste, and nobody
 should say one is a copy of the other.
 
+### Arrangements become masters
+
+Colours, type and `theme.css` change how the slides look; they do not change how a slide is
+built. The default masters give every look the same structure: title top left, content below. When
+the examples arrange their slides in ways of their own, the arrangement is often what the user
+likes most, and a look that only recolours the defaults loses it. So read the arrangements too.
+
+1. **Inventory.** Go through the example slides one by one and write down each arrangement in a
+   sentence: what the slide does (opens, states one figure, asks for money, compares, tells a path,
+   closes) and how it is built ("a narrow white column with title and text, the photo takes two
+   thirds and carries one huge word, the person stands in front of the word"; "a blue band across
+   the slide with one big sum, an upright photo breaks out of the band"). Leave out what is only
+   a recoloured default.
+2. **Decide per arrangement:** a default master changed in `theme.css` serves it, or it needs a
+   master of its own. Write the masters of the look's own into `library/<name>/masters/`, usually
+   six to ten, with low `order` numbers so that they lead the preview, and a `use` that tells
+   vs-create when to prefer them over the defaults. The defaults stay as the reserve for
+   everything the own forms do not cover.
+3. **Free ways are allowed.** Text does not have to stand top left; a photo may take two thirds or
+   bleed off two edges; a figure may be larger than anything else and run into a picture or a
+   disc; a person may stand in front of the type (cut out with `cutout.py`, offered as an optional
+   slot `cutout`, so the master also works without it); bands, rings and overlapping circles may
+   carry content. Write them with the engine's tokens, so that they follow D (dark) and the
+   accent, and mark planes that bleed on purpose with the class `image`, so that the overflow
+   check leaves them out while the text in them is still checked.
+4. **The same limits as every master** (vs-build's `references/masters.md`): text at least 24 px,
+   contrast 4.5 to 1 (3 to 1 from 24 px), content ends at 930 px unless it is a picture, no text
+   over a face, every text over a photo on a scrim that holds whatever photo comes later. Check
+   each own master in light and in dark before you show it.
+5. **Principle, not a copy.** Take the idea of an arrangement and build it with this look's own
+   proportions, number of elements and wording; samples are new sentences, never the example's
+   text, names or figures.
+
+Record the inventory in `design.md`: arrangement in a sentence, the master it became.
+
 **A look, not a copy.** Take what they like about an example (calm, much white, large figures, a
 serif for titles), never the design of someone else as it stands: no logo, no name, no picture
 and no exact layout of another company goes into the library, and a typeface that is not open is
 replaced by the nearest open one. If the examples are all from one company and they want exactly
 that, say that you make them a look in that spirit which is theirs.
+
+**An example only as inspiration.** When the user says an example is only an inspiration and must
+not be traceable, nothing of it goes into the library: no name, no file name, no source address,
+no description that points back to it, in `design.md` neither. `vs design --examine` copies the
+examples into `design/examples/`; delete that folder once you have read them.
 
 Show it next to two alternatives, so that the choice is real:
 

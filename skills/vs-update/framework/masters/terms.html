@@ -1,0 +1,20 @@
+<!--vs {"name": "terms", "order": 82, "use": "Longer legal or commercial text in two columns: terms, conditions, assumptions. Holds about 330 words in up to eight clauses; split longer texts over two slides. Set at 20 px, far below body size, because legal text is read on paper or screen and never projected.", "slots": {"topic": "short label that names the subject, above the title (optional), e.g. \"Schedule\"", "title": "a short title, one line", "sections": "list of {head, text}: head is the clause heading with its number if it has one (optional), text the wording; <br> starts a new line. About 330 words in all with two columns, 420 with three", "cols": "2 (default) or 3 columns; three are set at 18 px"}, "defaults": {"cols": 2}, "sample": {"voice": false, "topic": "Terms", "title": "The terms of this <em>proposal</em>", "sections": [{"head": "1 Scope", "text": "The services are those described in sections 2 to 4 of this proposal. Work beyond them is agreed in writing before it begins and is charged at the day rates stated in section 5."}, {"head": "2 Price and payment", "text": "The fixed price covers all three phases including travel. It is invoiced in three parts, each at the end of a phase, and is payable within 30 days of the invoice date without deduction."}, {"head": "3 Contribution of the client", "text": "The client names one contact with authority to decide, gives access to the records and systems listed in section 2 and makes the named employees available at the agreed times. Delays caused by missing contributions move the schedule by the same time."}, {"head": "4 Acceptance", "text": "Each phase ends with a result named in section 2. The client accepts it in writing within ten working days or names the defects. Without a reply the result counts as accepted."}, {"head": "5 Confidentiality", "text": "Both parties keep confidential what they learn about the other in the course of the project. This duty continues for three years after the end of the contract."}, {"head": "6 Rights of use", "text": "On full payment the client receives the unrestricted right to use all results created for it. Methods and tools the contractor brings into the project remain with the contractor."}, {"head": "7 Liability", "text": "The contractor is liable for intent and gross negligence without limit, for slight negligence only where essential duties are breached and then up to the amount of the fixed price."}, {"head": "8 Validity", "text": "This proposal is valid until 28 February. The contract begins with both signatures and ends with the acceptance of the third phase."}], "source": "Sample wording for this preview, not legal advice"}} -->
+<section class="slide vs-doc vs-trm" {{attrs}}>
+  <style>
+  .vs-doc{display:flex;flex-direction:column;padding-bottom:150px}
+  .vs-topic{flex:none;font-weight:700;font-size:22px;line-height:1.3;color:var(--accent-text);margin-bottom:12px}
+  .vs-doc>h2{flex:none;font-size:46px;line-height:1.14;max-width:1680px;margin-bottom:0}
+  .vs-terms{margin-top:40px;column-count:2;column-gap:88px;column-rule:1px solid var(--line);font-size:20px;line-height:1.5;color:var(--ink)}
+  .vs-terms.c3{column-count:3;column-gap:64px;font-size:18px}
+  .vs-terms div{margin-bottom:18px}
+  .vs-terms div:last-child{margin-bottom:0}
+  .vs-terms h3{font-size:inherit;line-height:inherit;font-weight:700;color:var(--ink);break-after:avoid}
+  .vs-terms p{font-size:inherit;line-height:inherit;orphans:2;widows:2}
+  </style>
+  {{#topic}}<div class="vs-topic">{{topic}}</div>{{/topic}}{{^topic}}{{#kicker}}<div class="vs-topic">{{kicker}}</div>{{/kicker}}{{/topic}}
+  <h2>{{title}}</h2>
+  <div class="vs-terms c{{cols}}">
+    {{#sections}}<div>{{#head}}<h3>{{head}}</h3>{{/head}}<p>{{text}}</p></div>{{/sections}}
+  </div>
+  {{notes}}
+</section>

@@ -1,0 +1,43 @@
+/*vs {"name": "draw", "order": 50, "title": "Draw",
+ "character": "A rule is drawn first, then the content unrolls from it: construction lines, even speed, numbers that tick like a meter.",
+ "fits": "technical brands: engineering, software, data, research, industry; grids, hairlines, monospace or narrow type",
+ "tokens": {"ease": "cubic-bezier(.65,0,.35,1)", "duration": 0.7, "stagger": 0.1, "travel": 0, "change": "fade"}} */
+/* --m-rule: thickness of the construction line */
+.slide{--m-rule:3px;--mw-ease:cubic-bezier(.65,0,.35,1);--m-roll-ease:linear;--m-bar-ease:linear}
+.mslide{--mseq:.8}
+.f{transform:none}
+/* headings are drawn as a whole: the rule under the heading, then the lines; the accent word switches its colour on last */
+.active .mtext .mw>span{animation:none}
+.active.mslide .mtext{animation:m-title calc(var(--md)*1.3) var(--me) var(--d) both}
+.active .mtext .maccent em{animation-timing-function:step-end;animation-delay:calc(var(--d) + var(--md)*1.4)}
+.active.mcount .ghost{animation:none}
+@keyframes m-item{
+  from{clip-path:inset(0 100% calc(100% - var(--m-rule)) 0);box-shadow:inset 0 var(--m-rule) 0 var(--accent)}
+  45%{clip-path:inset(0 0 calc(100% - var(--m-rule)) 0);box-shadow:inset 0 var(--m-rule) 0 var(--accent)}
+  to{clip-path:inset(-80px)}}
+@keyframes m-title{
+  from{clip-path:inset(calc(100% - var(--m-rule)) 100% 0 0);box-shadow:inset 0 calc(var(--m-rule)*-1) 0 var(--accent-text)}
+  40%{clip-path:inset(calc(100% - var(--m-rule)) 0 0 0);box-shadow:inset 0 calc(var(--m-rule)*-1) 0 var(--accent-text)}
+  to{clip-path:inset(-80px)}}
+@keyframes m-label{from{clip-path:inset(0 100% 0 0);animation-timing-function:steps(12,end)}to{clip-path:inset(-80px)}}
+@keyframes m-word{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(-.3em)}}
+@keyframes m-accent{from{color:inherit}}
+@keyframes m-shape{from{clip-path:polygon(var(--wt) 0,var(--wt) 0,var(--wb) 100%,var(--wb) 100%)}}
+@keyframes m-wipe{0%,15%{clip-path:polygon(var(--wt) 0,calc(var(--wt) + .4%) 0,calc(var(--wb) + .4%) 100%,var(--wb) 100%)}}
+@keyframes m-logo{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+@keyframes m-numeral{}
+@keyframes m-roll{from{transform:none}}
+@keyframes m-figure{
+  from{clip-path:inset(calc(100% - var(--m-rule)) 100% 0 0);box-shadow:inset 0 calc(var(--m-rule)*-1) 0 var(--accent-text)}
+  40%{clip-path:inset(calc(100% - var(--m-rule)) 0 0 0);box-shadow:inset 0 calc(var(--m-rule)*-1) 0 var(--accent-text)}
+  to{clip-path:inset(-80px)}}
+@keyframes m-drift{}
+@keyframes m-bar{from{width:0}}
+@keyframes m-mark{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(-80px)}}
+@keyframes m-photo{
+  from{clip-path:inset(0 100% calc(100% - var(--m-rule)*2) 0)}
+  35%{clip-path:inset(0 0 calc(100% - var(--m-rule)*2) 0)}
+  to{clip-path:inset(0 0 0 0)}}
+@keyframes m-rule{from{scale:1 0}}
+@keyframes m-panel{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+@keyframes m-sting{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}

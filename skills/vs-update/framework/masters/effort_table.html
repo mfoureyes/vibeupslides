@@ -1,0 +1,27 @@
+<!--vs {"name": "effort_table", "order": 80, "use": "Effort as a grid: phases or work packages in the rows, roles or people in the columns, sums in the last column and in the totals row. Up to eight rows and seven columns. A table for reading decks, set at 24 px.", "slots": {"topic": "short label that names the subject, above the title (optional), e.g. \"Schedule\"", "title": "the claim as a full sentence, at most two lines (about 110 characters); <em> marks the one accent word", "head": "list of column headings, up to 7; the first names the rows, the last is the sum column", "rows": "list of rows, each a list of cell texts with as many cells as head; \"\" for an empty cell; up to 8 rows, the first cell is the row label (up to 30 characters)", "totals": "list of total rows, each a list of cells like a row; the last one is emphasised (optional). The template does not add up: give the sums", "note": "one or two lines under the table: unit, currency, what is not included (optional)", "sum": "true (default): the last column is set off as the sum column; false for a plain grid"}, "defaults": {"sum": true}, "sample": {"topic": "Effort", "title": "The work comes to 184 person-days, most of them in the <em>pilot</em>", "head": ["Phase", "Project lead", "Consultant", "System specialist", "Days"], "rows": [["1 Analyse", "12", "34", "–", "46"], ["2 Pilot", "18", "30", "32", "80"], ["3 Roll out", "8", "26", "24", "58"]], "totals": [["Total", "38", "90", "56", "184"]], "note": "Person-days of eight hours. Travel time is not counted as effort.", "source": "Sample figures, invented for this preview"}} -->
+<section class="slide vs-doc vs-eft" {{attrs}}>
+  <style>
+  .vs-doc{display:flex;flex-direction:column;padding-bottom:150px}
+  .vs-topic{flex:none;font-weight:700;font-size:22px;line-height:1.3;color:var(--accent-text);margin-bottom:12px}
+  .vs-doc>h2{flex:none;font-size:46px;line-height:1.14;max-width:1680px;margin-bottom:0}
+  .vs-et{width:100%;table-layout:fixed;border-collapse:collapse;margin-top:44px;font-size:24px;line-height:1.3;font-variant-numeric:tabular-nums;color:var(--ink)}
+  .vs-et th{vertical-align:bottom;text-align:right;font-weight:700;font-size:19px;line-height:1.2;padding:0 20px 14px;border-bottom:1px solid var(--ink)}
+  .vs-et td{text-align:right;padding:12px 20px;border-bottom:1px solid var(--line)}
+  .vs-et th:first-child,.vs-et td:first-child{width:30%;text-align:left;padding-left:0;font-weight:700}
+  .vs-et th:first-child{font-weight:700;font-size:18px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .vs-et.sum1 td:last-child{font-weight:700;background:var(--soft)}
+  .vs-et tfoot td{font-weight:700;border-top:2px solid var(--ink);border-bottom:0}
+  .vs-et tbody tr:last-child td{border-bottom:0}
+  .vs-et.sum1 tfoot tr:last-child td:last-child{background:var(--accent);color:var(--on-accent)}
+  .vs-tnote{font-size:20px;line-height:1.45;color:var(--muted);margin-top:22px;max-width:1400px}
+  </style>
+  {{#topic}}<div class="vs-topic">{{topic}}</div>{{/topic}}{{^topic}}{{#kicker}}<div class="vs-topic">{{kicker}}</div>{{/kicker}}{{/topic}}
+  <h2>{{title}}</h2>
+  <table class="vs-et sum{{#sum}}1{{/sum}}">
+    <thead><tr>{{#head}}<th>{{.}}</th>{{/head}}</tr></thead>
+    <tbody>{{#rows}}<tr>{{#.}}<td>{{.}}</td>{{/.}}</tr>{{/rows}}</tbody>
+    <tfoot>{{#totals}}<tr>{{#.}}<td>{{.}}</td>{{/.}}</tr>{{/totals}}</tfoot>
+  </table>
+  {{#note}}<p class="vs-tnote">{{note}}</p>{{/note}}
+  {{notes}}
+</section>

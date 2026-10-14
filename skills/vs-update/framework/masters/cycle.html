@@ -1,0 +1,28 @@
+<!--vs {"name": "cycle", "order": 49, "use": "Something that repeats: a loop of three to five stations (build, measure, learn). The ring stands on the left with what turns it in the middle, the stations are explained on the right in the order of the ring. Not for a path with an end: use steps or process.", "slots": {"kicker": "small label above the title (optional)", "title": "the title as a full sentence, <em> marks the one accent word", "center": "what stands in the middle of the ring: two or three words on what drives the loop (optional)", "items": "list of 3 to 5 {title, text}: the stations clockwise, starting at the top", "note": "one sentence below, the point of the loop (optional)", "step": "true: the stations appear one by one on click"}, "sample": {"kicker": "Cycle", "title": "Every maintenance round ends with a better <em>plan</em>", "center": "One round takes a week", "items": [{"title": "Plan", "text": "What is due, who does it, which parts are needed."}, {"title": "Do", "text": "The shift carries out the work and notes what it found."}, {"title": "Review", "text": "What took longer than planned goes into the next plan."}]}} -->
+<section class="slide vs-cyc" {{attrs}}>
+  <style>
+  .vs-cyc .vs-cy{display:grid;grid-template-columns:440px 1fr;gap:120px;align-items:center;margin-top:56px}
+  .vs-cyc .vs-cy-ring{position:relative;width:400px;height:400px;margin:20px}
+  .vs-cyc .vs-cy-ring::before{content:"";position:absolute;inset:0;border:10px solid var(--soft);border-radius:50%}
+  .vs-cyc .vs-cy-ring::after{content:"";position:absolute;inset:0;border:10px solid transparent;border-top-color:var(--accent);border-right-color:var(--accent);border-radius:50%;transform:rotate(-45deg)}
+  .vs-cyc .vs-cy-mid{position:absolute;inset:70px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:24px;line-height:1.35;color:var(--muted)}
+  .vs-cyc .vs-cy-dot{--a:calc((var(--k) - 1) / var(--n) * 360deg - 90deg);position:absolute;left:calc(50% + cos(var(--a)) * 200px);top:calc(50% + sin(var(--a)) * 200px);width:68px;height:68px;margin:-34px 0 0 -34px;border-radius:50%;
+    background:var(--ink);color:var(--paper);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:30px;z-index:1;box-shadow:0 0 0 10px var(--paper)}
+  .vs-cyc .vs-cy-dot:first-child{background:var(--accent);color:var(--on-accent,var(--on))}
+  .vs-cyc .vs-cy-ring:has(.vs-cy-dot:nth-child(3)){--n:3} .vs-cyc .vs-cy-ring:has(.vs-cy-dot:nth-child(4)){--n:4} .vs-cyc .vs-cy-ring:has(.vs-cy-dot:nth-child(5)){--n:5}
+  .vs-cyc .vs-cy-list{display:grid;gap:26px}
+  .vs-cyc .vs-cy-item{display:grid;grid-template-columns:64px 1fr;column-gap:26px;align-items:start}
+  .vs-cyc .vs-cy-item i{font-style:normal;font-weight:700;font-size:26px;color:var(--accent-text);line-height:1.5}
+  .vs-cyc .vs-cy-item h3{font-size:34px;line-height:1.25;font-weight:var(--w-head)}
+  .vs-cyc .vs-cy-item p{font-size:26px;line-height:1.45;color:var(--muted);margin-top:6px}
+  .vs-cyc .callout{margin-top:30px}
+  </style>
+  {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+  <h2>{{title}}</h2>
+  <div class="vs-cy">
+    <div class="vs-cy-ring anim">{{#items}}<b class="vs-cy-dot" style="--k:{{@i}}">{{@i}}</b>{{/items}}{{#center}}<div class="vs-cy-mid">{{center}}</div>{{/center}}</div>
+    <div class="vs-cy-list" data-seq>{{#items}}<div class="vs-cy-item {{#step}}{{#@first}}anim{{/@first}}{{^@first}}f{{/@first}}{{/step}}{{^step}}anim{{/step}}"><i>{{@ii}}</i><div><h3>{{title}}</h3><p>{{text}}</p></div></div>{{/items}}</div>
+  </div>
+  {{#note}}<p class="callout anim">{{note}}</p>{{/note}}
+  {{notes}}
+</section>

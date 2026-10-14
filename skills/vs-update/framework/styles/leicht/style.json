@@ -1,0 +1,55 @@
+{
+ "name": "leicht",
+ "order": 60,
+ "title": {
+  "en": "Light",
+  "de": "Leicht"
+ },
+ "character": {
+  "en": "Friendly and open: soft pastel grounds, round corners, a rounded typeface, circles instead of edges.",
+  "de": "Freundlich und offen: weiche Pastelltöne, runde Ecken, eine runde Schrift, Kreise statt Kanten."
+ },
+ "fits": {
+  "en": "social work, health and care, education, families and children, communities; whenever nobody should feel talked down to",
+  "de": "Soziales, Gesundheit und Pflege, Bildung, Familien und Kinder, Gemeinschaften; immer dann, wenn sich niemand belehrt fühlen soll"
+ },
+ "fonts": [
+  "Nunito Sans",
+  "Nunito"
+ ],
+ "brand": {
+  "colors": {
+   "accent": "#5B6EE1",
+   "on_accent": "#FFFFFF",
+   "ink": "#262A40",
+   "deep": "#2D3260",
+   "on_deep": "#FFFFFF",
+   "muted": "#585E78",
+   "line": "#D5D9EC",
+   "soft": "#F2F4FC",
+   "ghost": "#E4E7F6",
+   "paper": "#FBFAF7",
+   "accent_on_deep": "#AEB8FF",
+   "accent_text": "#3D4CC0"
+  },
+  "fonts": {
+   "body": {
+    "family": "Nunito Sans",
+    "fallback": "Helvetica Neue, Arial, sans-serif"
+   },
+   "head": {
+    "family": "Nunito",
+    "fallback": "Helvetica Neue, Arial, sans-serif"
+   },
+   "display_weight": 800,
+   "head_weight": 800
+  },
+  "shape": {
+   "radius": 28,
+   "motif": "none"
+  },
+  "motion": {
+   "set": "soft"
+  }
+ }
+}

@@ -1,0 +1,24 @@
+<!--vs {"name": "waterfall", "order": 70, "prepare": "waterfall", "use": "How one figure becomes another: a bridge from a starting value through the steps that add or take away to the result (revenue last year, plus new customers, minus churn, revenue this year). Totals stand on the ground, the steps float between them. Real numbers with a source.", "slots": {"kicker": "small label above the title (optional)", "title": "the title as a full sentence, <em> marks the one accent word", "items": "list of 3 to 8 {label, amount, total, value}: amount is a number (negative for what takes away); total true marks a value that stands on the ground (the first and the last, as a rule); value is the text above the bar (optional, otherwise the amount with its sign)", "unit": "the unit after every number (\"m €\", \"%\"; optional)", "note": "one sentence below (optional)"}, "sample": {"kicker": "Bridge", "title": "New customers more than make up for those we <em>lost</em>", "unit": "m €", "source": "Sample figures", "items": [{"label": "Revenue 2025", "amount": 42, "total": true}, {"label": "New customers", "amount": 14}, {"label": "Higher prices", "amount": 5}, {"label": "Lost customers", "amount": -8}, {"label": "Currency", "amount": -2}, {"label": "Revenue 2026", "amount": 51, "total": true}]}} -->
+<section class="slide vs-wfl" {{attrs}}>
+  <style>
+  .vs-wfl .vs-wf{display:flex;gap:22px;margin-top:36px;height:470px;align-items:stretch}
+  .vs-wfl .vs-wf-c{flex:1;display:flex;flex-direction:column;min-width:0}
+  .vs-wfl .vs-wf-a{position:relative;flex:1;border-bottom:3px solid var(--ink)}
+  .vs-wfl .vs-wf-b{position:absolute;left:0;right:0;bottom:var(--b);height:var(--h);min-height:4px;background:var(--ink);transform-origin:bottom;animation:vs-wf-grow calc(var(--md)*1.2) var(--me) backwards;animation-delay:calc(var(--k) * 120ms)}
+  .vs-wfl .vs-wf-c.down .vs-wf-b{background:var(--line);transform-origin:top}
+  .vs-wfl .vs-wf-c.total .vs-wf-b{background:var(--accent)}
+  .vs-wfl .vs-wf-v{position:absolute;left:0;right:0;bottom:calc(var(--b) + var(--h) + 10px);text-align:center;font-weight:700;font-size:28px;line-height:1.1;white-space:nowrap}
+  .vs-wfl .vs-wf-c.total .vs-wf-v{color:var(--accent-text)}
+  .vs-wfl .vs-wf-c.down .vs-wf-v{bottom:auto;top:calc(100% - var(--b) + 10px)}
+  .vs-wfl .vs-wf-c.down.low .vs-wf-v{top:auto;bottom:calc(var(--b) + var(--h) + 10px)}
+  .vs-wfl .vs-wf-l{font-size:22px;line-height:1.25;text-align:center;padding-top:12px;height:66px}
+  @keyframes vs-wf-grow{from{transform:scaleY(0)}}
+  html.export .vs-wfl .vs-wf-b,html[data-motion="off"] .vs-wfl .vs-wf-b{animation:none}
+  .vs-wfl .callout{margin-top:30px}
+  </style>
+  {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+  <h2>{{title}}</h2>
+  <div class="vs-wf">{{#items}}<div class="vs-wf-c anim {{_kind}}" style="--b:{{_b}}%;--h:{{_h}}%;--k:{{@i}}"><div class="vs-wf-a"><i class="vs-wf-b"></i><b class="vs-wf-v">{{#value}}{{value}}{{/value}}{{^value}}{{_v}}{{/value}}</b></div><div class="vs-wf-l">{{label}}</div></div>{{/items}}</div>
+  {{#note}}<p class="callout anim">{{note}}</p>{{/note}}
+  {{notes}}
+</section>

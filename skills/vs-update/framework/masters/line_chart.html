@@ -1,0 +1,7 @@
+<!--vs {"name": "line_chart", "order": 70, "use": "A time series; the lines draw from left to right. Real numbers with a source.", "slots": {"kicker": "small label above the title (optional)", "title": "the title as a full sentence, <em> marks the one accent word", "axis": "list of x labels", "series": "list of {values, color, labels}; color e.g. var(--accent), labels: true writes the numbers", "ymax": "top of the y axis"}, "sample": {"kicker": "Line chart", "title": "The lines draw themselves from left to <em>right</em>", "source": "Sample figures", "axis": ["2021", "2022", "2023", "2024", "2025"], "ymax": 60, "series": [{"values": [12, 19, 27, 38, 52], "color": "var(--accent)", "labels": true}, {"values": [8, 11, 15, 18, 24], "color": "var(--muted)", "labels": false}]}} -->
+<section class="slide" {{attrs}}>
+  {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+  <h2>{{title}}</h2>
+  <div class="mcurve-wrap" style="margin-top:30px">{{>line_chart axis series ymax}}</div>
+  {{notes}}
+</section>

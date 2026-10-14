@@ -1,0 +1,10 @@
+<!--vs {"name": "fullbleed", "order": 60, "use": "A photo carries the whole slide, a short text at the bottom.", "slots": {"photo": "image file, at least 1600 px wide", "kicker": "small label above the title (optional)", "title": "short title", "lead": "one sentence", "video": "a video file that plays silently in a loop behind the text while the slide is shown: relative to the deck folder, or brand:videos/<file> for a film of the brand library (optional; a deck with a video is a folder); the photo stays as its still in PDFs and overviews"}, "sample": {"photo": "@photo", "kicker": "Full-bleed photo", "title": "A large photo and a short text", "lead": "One sentence of context is enough.", "source": "Photo: say where it comes from", "video": "@video"}, "full_images": true} -->
+<section class="slide fullbleed{{#motion}} mslide mphoto{{/motion}}" {{attrs}}>
+  <div class="image"><img src="{{photo}}" alt="">{{>bgvideo}}</div>
+  <div class="text">
+    {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+    <h2>{{title}}</h2>
+    {{#lead}}<p class="lead">{{lead}}</p>{{/lead}}
+  </div>
+  {{notes}}
+</section>

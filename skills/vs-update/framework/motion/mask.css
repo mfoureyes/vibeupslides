@@ -1,0 +1,27 @@
+/*vs {"name": "mask", "order": 40, "title": "Mask",
+ "character": "Uncovered, not moved: straight masks open over text and pictures, line after line from left to right, slow in and slow out.",
+ "fits": "editorial brands: magazines, culture, architecture, fashion, law; serif or large quiet type, generous white space",
+ "tokens": {"ease": "cubic-bezier(.7,0,.2,1)", "duration": 0.8, "stagger": 0.12, "travel": 0, "change": "fade"}} */
+.slide{--mw-ease:cubic-bezier(.7,0,.2,1)}
+.mslide{--mseq:.85;--wg:calc(var(--md)*.16)}
+/* the words of a heading open in one run from left to right */
+.active .mtext .mw>span{animation-duration:calc(var(--md)*.4);animation-timing-function:cubic-bezier(.4,0,.4,1)}
+.f{transform:none}
+@keyframes m-item{from{clip-path:inset(0 0 100% 0)}to{clip-path:inset(-80px)}}
+@keyframes m-title{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(-80px)}}
+@keyframes m-label{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(-80px)}}
+@keyframes m-word{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(-.3em)}}
+@keyframes m-accent{}
+@keyframes m-shape{from{clip-path:polygon(100% 0,100% 0,100% 100%,100% 100%)}}
+@keyframes m-wipe{0%,22%{clip-path:polygon(0 0,100% 0,100% 100%,0 100%)}}
+@keyframes m-logo{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+@keyframes m-numeral{from{clip-path:inset(100% 0 0 0)}to{clip-path:inset(-80px)}}
+@keyframes m-roll{}
+@keyframes m-figure{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(-80px)}}
+@keyframes m-drift{from{scale:1.06}}
+@keyframes m-bar{from{width:0}}
+@keyframes m-mark{from{clip-path:inset(100% 0 0 0)}to{clip-path:inset(-80px)}}
+@keyframes m-photo{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+@keyframes m-rule{from{scale:1 0}}
+@keyframes m-panel{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+@keyframes m-sting{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}

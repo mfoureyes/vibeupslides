@@ -1,0 +1,33 @@
+<!--vs {"name": "profile", "order": 65, "use": "One person on a slide: portrait, name, role, a short biography, experience points and earlier stations. For the team part or appendix of a proposal; for several people at a glance use team.", "slots": {"topic": "short label that names the subject, above the title (optional), e.g. \"Schedule\", e.g. the role in the project", "photo": "portrait, upright or square; without one a placeholder is shown", "person": "the name", "role": "position or role, one line", "bio": "two or three sentences, up to 260 characters", "contact": "one line, e.g. mail address (optional)", "experience": "list of up to 4 points of about 75 characters (three when there are also four stations) (optional)", "stations": "list of up to 4 {period, text}: earlier positions, period up to 12 characters, text one line (optional)", "labels": "{experience, stations}: the two headings on the right; give both when you translate them"}, "defaults": {"labels": {"experience": "Experience", "stations": "Earlier stations"}}, "sample": {"topic": "Project lead", "photo": "@portrait", "person": "Alex Morgan", "role": "Managing partner", "bio": "Alex has introduced maintenance and planning systems in manufacturing for fourteen years, first as a plant engineer and since 2016 as a consultant. She leads this project and is your contact for every decision.", "contact": "alex.morgan@example.com", "experience": ["Rollout of a maintenance system in five plants of a packaging manufacturer", "New shift planning for 600 employees of a food producer", "More than forty courses for planners and shift leads"], "stations": [{"period": "since 2016", "text": "Consultant, partner since 2020"}, {"period": "2011 to 2016", "text": "Head of maintenance, automotive supplier"}, {"period": "2008 to 2011", "text": "Plant engineer"}]}} -->
+<section class="slide vs-prof" {{attrs}}>
+  <style>
+  .vs-prof{display:grid;grid-template-columns:400px 1fr auto;gap:72px;align-items:start;padding-bottom:150px}
+  .vs-prof-pic{height:500px;border-radius:var(--radius);overflow:hidden;background:var(--soft)}
+  .vs-prof-pic img{width:100%;height:100%;object-fit:cover}
+  .vs-prof-pic .placeholder{height:100%;aspect-ratio:auto;border-radius:0}
+  .vs-prof .vs-topic{font-weight:700;font-size:22px;line-height:1.3;color:var(--accent-text);margin-bottom:12px}
+  .vs-prof h2{font-size:58px;margin-bottom:10px}
+  .vs-prof-role{font-size:27px;line-height:1.3;font-weight:700;color:var(--muted)}
+  .vs-prof-main p{margin-top:30px;font-size:27px;line-height:1.5}
+  .vs-prof-contact{margin-top:26px;font-size:22px;font-weight:700;color:var(--accent-text)}
+  .vs-prof-side{width:600px;padding-left:56px;border-left:1px solid var(--line)}
+  .vs-prof-side:empty{display:none}
+  .vs-prof-side>small{display:block;font-weight:700;font-size:18px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:16px}
+  .vs-prof-side ul.bullets{margin:0 0 34px}
+  .vs-prof-side ul.bullets li{font-size:27px;line-height:1.38;margin-bottom:14px;padding-left:34px}
+  .vs-prof-side ul.bullets li::before{top:17px}
+  .vs-prof-side table{width:100%;border-collapse:collapse;font-size:22px;line-height:1.35;color:var(--ink)}
+  .vs-prof-side td{padding:9px 0;border-top:1px solid var(--line);vertical-align:top}
+  .vs-prof-side td:first-child{width:176px;padding-right:20px;font-weight:700;color:var(--accent-text);white-space:nowrap}
+  </style>
+  <div class="vs-prof-pic anim">{{#photo}}<img src="{{photo}}" alt="">{{/photo}}{{^photo}}<div class="placeholder">Portrait to come</div>{{/photo}}</div>
+  <div class="vs-prof-main anim">
+    {{#topic}}<div class="vs-topic">{{topic}}</div>{{/topic}}{{^topic}}{{#kicker}}<div class="vs-topic">{{kicker}}</div>{{/kicker}}{{/topic}}
+    <h2>{{person}}</h2>
+    {{#role}}<div class="vs-prof-role">{{role}}</div>{{/role}}
+    {{#bio}}<p>{{bio}}</p>{{/bio}}
+    {{#contact}}<div class="vs-prof-contact">{{contact}}</div>{{/contact}}
+  </div>
+  <div class="vs-prof-side anim" data-wave="2">{{#experience.0}}<small>{{labels.experience}}</small><ul class="bullets">{{/experience.0}}{{#experience}}<li>{{.}}</li>{{/experience}}{{#experience.0}}</ul>{{/experience.0}}{{#stations.0}}<small>{{labels.stations}}</small><table>{{/stations.0}}{{#stations}}<tr><td>{{period}}</td><td>{{text}}</td></tr>{{/stations}}{{#stations.0}}</table>{{/stations.0}}</div>
+  {{notes}}
+</section>

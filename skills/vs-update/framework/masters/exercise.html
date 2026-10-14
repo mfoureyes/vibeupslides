@@ -1,0 +1,9 @@
+<!--vs {"name": "exercise", "order": 66, "use": "A task for the audience with duration, format and material. Follow it with a timer slide in workshops.", "slots": {"kicker": "small label above the title (optional)", "title": "the task as a sentence", "badge": "label in the corner, e.g. Exercise", "steps": "list of instructions", "facts": "list of {label, value}"}, "sample": {"kicker": "Exercise", "badge": "Exercise", "title": "The task stands here as a sentence", "steps": ["The first step, written as an instruction.", "The second step.", "The third step, with the result that should be on the table at the end."], "facts": [{"label": "Duration", "value": "20 minutes"}, {"label": "Format", "value": "In pairs"}, {"label": "Material", "value": "Canvas, pens"}]}} -->
+<section class="slide exercise" {{attrs}}>
+  {{#badge}}<div class="badge">{{badge}}</div>{{/badge}}
+  {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+  <h2>{{title}}</h2>
+  <div class="frame"><div><ul class="bullets">{{#steps}}<li class="anim">{{.}}</li>{{/steps}}</ul></div>
+  <aside class="f">{{#facts}}<div><small>{{label}}</small><span>{{value}}</span></div>{{/facts}}</aside></div>
+  {{notes}}
+</section>

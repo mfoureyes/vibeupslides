@@ -1,0 +1,7 @@
+<!--vs {"name": "verdict", "order": 72, "use": "Criteria with examples in three columns, e.g. fits, clarify first, does not fit.", "slots": {"kicker": "small label above the title (optional)", "title": "the title as a full sentence, <em> marks the one accent word", "columns": "list of {title, color, bullets}; color is accent, deep or muted"}, "sample": {"kicker": "Verdict columns", "title": "What the pilot plant needs and what it does not", "columns": [{"title": "Fits", "color": "accent", "bullets": ["A clear maintenance backlog", "A shift lead who takes part"]}, {"title": "Clarify first", "color": "deep", "bullets": ["Who enters the old records", "Network on the shop floor"]}, {"title": "Does not fit", "color": "muted", "bullets": ["A plant about to close", "No planner on site"]}]}} -->
+<section class="slide" {{attrs}}>
+  {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+  <h2>{{title}}</h2>
+  {{>verdict columns}}
+  {{notes}}
+</section>

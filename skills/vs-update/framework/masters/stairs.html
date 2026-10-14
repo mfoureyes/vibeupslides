@@ -1,0 +1,20 @@
+<!--vs {"name": "stairs", "order": 47, "use": "Stages that build on each other, each higher than the one before: three or four blocks rising from left to right, the first in the accent colour, the later ones lighter (what comes first, what follows, what comes last). For steps of equal weight use steps.", "slots": {"kicker": "small label above the title (optional)", "title": "the title as a full sentence, <em> marks the one accent word", "items": "list of 3 or 4 {tag, title, text}: the stages from the first to the last", "note": "one sentence below (optional)", "step": "true: the stages appear one by one on click"}, "sample": {"kicker": "Stages", "title": "Each plant goes live stage by <em>stage</em>", "items": [{"tag": "First", "title": "Record", "text": "All machines and spare parts are entered in the system."}, {"tag": "Then", "title": "Plan", "text": "Maintenance is planned in the system, still checked on paper."}, {"tag": "Later", "title": "Switch", "text": "Paper is dropped once two months ran without a gap."}]}} -->
+<section class="slide vs-sta" {{attrs}}>
+  <style>
+  .vs-sta .vs-st{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:14px;align-items:end;margin-top:60px;min-height:440px}
+  .vs-sta .vs-st-b{background:var(--soft);padding:34px 34px 38px;min-height:calc(250px + (var(--k) - 1) * 70px);display:flex;flex-direction:column}
+  .vs-sta .vs-st-b:first-child{background:var(--accent);color:var(--on-accent,var(--on))}
+  .vs-sta .vs-st-b:nth-child(2){background:color-mix(in srgb,var(--ink) 9%,var(--paper))}
+  .vs-sta .vs-st-b b{font-weight:var(--w-display);font-size:54px;line-height:1;color:var(--accent-text)}
+  .vs-sta .vs-st-b small{display:block;font-weight:700;font-size:18px;letter-spacing:.14em;text-transform:uppercase;margin:16px 0 10px;color:var(--muted)}
+  .vs-sta .vs-st-b h3{font-size:34px;line-height:1.2;font-weight:var(--w-head)}
+  .vs-sta .vs-st-b p{font-size:25px;line-height:1.42;margin-top:12px}
+  .vs-sta .vs-st-b:first-child b,.vs-sta .vs-st-b:first-child small,.vs-sta .vs-st-b:first-child h3,.vs-sta .vs-st-b:first-child p{color:inherit}
+  .vs-sta .callout{margin-top:44px}
+  </style>
+  {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+  <h2>{{title}}</h2>
+  <div class="vs-st" data-seq>{{#items}}<div class="vs-st-b {{#step}}{{#@first}}anim{{/@first}}{{^@first}}f{{/@first}}{{/step}}{{^step}}anim{{/step}}" style="--k:{{@i}}"><b>{{@ii}}</b>{{#tag}}<small>{{tag}}</small>{{/tag}}<h3>{{title}}</h3>{{#text}}<p>{{text}}</p>{{/text}}</div>{{/items}}</div>
+  {{#note}}<p class="callout anim">{{note}}</p>{{/note}}
+  {{notes}}
+</section>

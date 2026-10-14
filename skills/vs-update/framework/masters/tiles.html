@@ -1,0 +1,19 @@
+<!--vs {"name": "tiles", "order": 63, "use": "Four to eight things that each have a picture: departments, locations, products, teams. Photo tiles with a short label and one line, in two rows. For two or three large pictures use gallery, for people team.", "slots": {"kicker": "small label above the title (optional)", "title": "the title as a full sentence, <em> marks the one accent word", "lead": "one sentence under the title (optional)", "items": "list of 4 to 8 {photo, tag, title, text}; without photo the tile is a plain field", "cols": "tiles per row: 2, 3 or 4 (default 4)"}, "sample": {"kicker": "Tiles", "title": "Six plants, each with its own <em>focus</em>", "items": [{"photo": "@wide", "tag": "01", "title": "Hamburg", "text": "Packaging lines"}, {"photo": "@photo", "tag": "02", "title": "Leipzig", "text": "Printing"}, {"photo": "@wide", "tag": "03", "title": "Kassel", "text": "Cutting and folding"}, {"photo": "@photo", "tag": "04", "title": "Ulm", "text": "Coating"}, {"tag": "05", "title": "Linz", "text": "A tile without a picture"}, {"photo": "@wide", "tag": "06", "title": "Brno", "text": "Logistics"}], "cols": 3}} -->
+<section class="slide vs-til" {{attrs}}>
+  <style>
+  .vs-til .vs-ti{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;margin-top:60px}
+  .vs-til .vs-ti.c2{grid-template-columns:repeat(2,1fr)} .vs-til .vs-ti.c3{grid-template-columns:repeat(3,1fr)}
+  .vs-til .vs-ti-t{display:grid;grid-template-columns:42% 1fr;min-height:190px;border:1px solid var(--line);background:var(--paper);overflow:hidden}
+  .vs-til .vs-ti-t img{width:100%;height:100%;min-height:190px;object-fit:cover}
+  .vs-til .vs-ti-t .vs-ti-none{background:var(--soft)}
+  .vs-til .vs-ti-t div{padding:24px 24px 22px;align-self:center}
+  .vs-til .vs-ti-t small{display:block;font-weight:700;font-size:18px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-text);margin-bottom:8px}
+  .vs-til .vs-ti-t h3{font-size:28px;line-height:1.2;font-weight:var(--w-head)}
+  .vs-til .vs-ti-t p{font-size:22px;line-height:1.35;color:var(--muted);margin-top:6px}
+  </style>
+  {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+  <h2>{{title}}</h2>
+  {{#lead}}<p class="lead">{{lead}}</p>{{/lead}}
+  <div class="vs-ti {{#cols}}c{{cols}}{{/cols}}">{{#items}}<figure class="vs-ti-t anim">{{#photo}}<img src="{{photo}}" alt="">{{/photo}}{{^photo}}<span class="vs-ti-none"></span>{{/photo}}<div>{{#tag}}<small>{{tag}}</small>{{/tag}}<h3>{{title}}</h3>{{#text}}<p>{{text}}</p>{{/text}}</div></figure>{{/items}}</div>
+  {{notes}}
+</section>

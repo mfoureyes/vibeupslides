@@ -1,0 +1,23 @@
+<!--vs {"name": "logo_wall", "order": 67, "use": "Client or partner logos in labelled groups, for example by industry. Two to four groups with up to six logos each in one row (twelve in two rows with at most three groups). Logos must read on the brand's soft colour: transparent PNG or SVG, light versions for a dark brand. Use only logos you may show.", "slots": {"topic": "short label that names the subject, above the title (optional), e.g. \"Schedule\"", "title": "the claim as a full sentence, at most two lines (about 110 characters); <em> marks the one accent word", "groups": "list of 2 to 4 {label, logos}: label up to 16 characters, logos a list of {src, name}: src the image file, name the organisation, printed as a word when there is no file", "tone": "\"\" as supplied (default), \"mono\" all in grey, \"light\" all in white for a dark paper colour"}, "sample": {"topic": "Clients", "title": "Manufacturers in three industries plan their maintenance with <em>us</em>", "groups": [{"label": "Automotive", "logos": [{"name": "Alderbrook"}, {"name": "Corvane"}, {"name": "Dunmere Parts"}, {"name": "Eastfold"}, {"name": "Fennick"}]}, {"label": "Packaging", "logos": [{"name": "Garrow Pack"}, {"name": "Hollin"}, {"name": "Ivelton"}, {"name": "Kestrow"}]}, {"label": "Food", "logos": [{"name": "Larkmill"}, {"name": "Merrow Foods"}, {"name": "Brindlecote"}, {"name": "Quarrow Dairy"}, {"name": "Penmoor"}, {"name": "Quince & Rye"}]}], "source": "Sample names, invented for this preview; a real slide shows the logos"}} -->
+<section class="slide vs-doc vs-lgw" {{attrs}}>
+  <style>
+  .vs-doc{display:flex;flex-direction:column;padding-bottom:150px}
+  .vs-topic{flex:none;font-weight:700;font-size:22px;line-height:1.3;color:var(--accent-text);margin-bottom:12px}
+  .vs-doc>h2{flex:none;font-size:46px;line-height:1.14;max-width:1680px;margin-bottom:0}
+  .vs-lw{margin-top:44px;border-bottom:1px solid var(--line)}
+  .vs-lw-group{display:grid;grid-template-columns:230px 1fr;gap:24px;padding:20px 0;border-top:1px solid var(--line)}
+  .vs-lw-group>small{font-weight:700;font-size:18px;letter-spacing:.14em;text-transform:uppercase;line-height:1.3;color:var(--accent-text);padding-top:37px}
+  .vs-lw-row{display:grid;grid-template-columns:repeat(6,1fr);gap:14px}
+  .vs-lw-cell{display:grid;place-items:center;height:94px;padding:0 22px;background:var(--soft);border-radius:min(var(--radius),20px)}
+  .vs-lw-cell img{max-width:100%;max-height:50px;object-fit:contain}
+  .vs-lw-cell span{font-family:var(--font-head);font-weight:700;font-size:22px;line-height:1.1;text-align:center;color:var(--muted)}
+  .vs-lw.mono img{filter:grayscale(1)}
+  .vs-lw.light img{filter:brightness(0) invert(1)}
+  </style>
+  {{#topic}}<div class="vs-topic">{{topic}}</div>{{/topic}}{{^topic}}{{#kicker}}<div class="vs-topic">{{kicker}}</div>{{/kicker}}{{/topic}}
+  <h2>{{title}}</h2>
+  <div class="vs-lw {{tone}}">
+    {{#groups}}<div class="vs-lw-group anim"><small>{{label}}</small><div class="vs-lw-row">{{#logos}}<div class="vs-lw-cell">{{#src}}<img src="{{src}}" alt="">{{/src}}{{^src}}<span>{{name}}</span>{{/src}}</div>{{/logos}}</div></div>{{/groups}}
+  </div>
+  {{notes}}
+</section>

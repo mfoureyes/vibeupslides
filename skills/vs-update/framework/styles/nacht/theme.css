@@ -1,0 +1,25 @@
+/* Night: dark and precise. Every slide on a deep ground, one colour that glows, soft corners. */
+
+/* ---------- label above titles: a small tag ---------- */
+.kicker{display:inline-block;align-self:flex-start;width:fit-content;padding:8px 16px;border:1px solid color-mix(in srgb,var(--accent) 55%,transparent);border-radius:999px;letter-spacing:.12em;font-size:18px;color:var(--accent)}
+.dark .kicker{color:var(--accent);opacity:1}
+
+/* ---------- titles ---------- */
+h1,h2,h3{font-family:var(--font-head)}
+h1{font-size:108px}
+
+/* ---------- a glow of the accent colour behind the dark slides and, faintly, behind the others ---------- */
+.slide{background-image:radial-gradient(1100px 620px at 88% -8%,color-mix(in srgb,var(--accent) 9%,transparent),transparent 70%)}
+.slide.dark{background-image:radial-gradient(1200px 760px at 82% 12%,color-mix(in srgb,var(--accent) 26%,transparent),transparent 68%),radial-gradient(900px 600px at 6% 108%,color-mix(in srgb,var(--accent) 12%,transparent),transparent 70%)}
+
+/* ---------- cards, figures ---------- */
+.card{background:var(--soft);border:1px solid var(--line);border-radius:var(--radius)}
+.card.accent{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.kpis{border-color:var(--line)}
+.kpi .v,.kpi b{color:var(--accent)}
+#deck .vs-fl-box,#deck .vs-hb-i,#deck .vs-mx-q,#deck .vs-st-b,#deck .vs-lv-b,#deck .vs-ti-t,#deck .vs-ba-s{border-radius:var(--radius)}
+#deck .vs-fl-box,#deck .vs-hb-i,#deck .vs-ti-t{background:var(--soft)}
+#deck .vs-fl-box.vs-fl-accent{background:var(--accent)}
+
+/* ---------- bullets: a dot that glows ---------- */
+ul.bullets li::before{width:10px;height:10px;border-radius:50%;top:16px;box-shadow:0 0 14px var(--accent)}

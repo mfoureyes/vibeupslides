@@ -1,0 +1,26 @@
+/*vs {"name": "soft", "order": 20, "title": "Soft",
+ "character": "Scale and soft blur: things come into focus and settle from slightly smaller, slow and without edges.",
+ "fits": "soft and friendly brands: rounded shapes, pastel or warm colours, care, education, wellbeing, consumer apps",
+ "tokens": {"ease": "cubic-bezier(.16,1,.3,1)", "duration": 0.9, "stagger": 0.12, "travel": 12, "change": "fade"}} */
+.mslide{--mseq:.5}
+.slide h1,.slide h2,.slide .kicker,.slide .lead,.slide .who{transform-origin:0 60%}
+.slide .wedge{transform-origin:100% 50%}
+.f{transform:scale(.95)}
+@keyframes m-item{from{opacity:0;scale:.94;filter:blur(10px)}}
+@keyframes m-title{from{opacity:0;scale:.96;filter:blur(14px)}}
+@keyframes m-label{from{opacity:0;filter:blur(6px)}}
+@keyframes m-word{from{opacity:0;scale:.86;filter:blur(10px)}}
+@keyframes m-accent{}
+@keyframes m-shape{from{opacity:0;scale:1.12}}
+@keyframes m-wipe{from{opacity:0;scale:1.5;filter:blur(30px)}}
+@keyframes m-logo{from{opacity:0;scale:.9;filter:blur(8px)}}
+@keyframes m-numeral{from{opacity:0;scale:.9;filter:blur(24px)}}
+@keyframes m-roll{}
+@keyframes m-figure{from{opacity:0;scale:.8;filter:blur(8px)}}
+@keyframes m-drift{from{scale:1.1}}
+@keyframes m-bar{from{scale:0 1;opacity:0}}
+@keyframes m-mark{from{opacity:0;scale:.5;filter:blur(8px)}}
+@keyframes m-photo{from{opacity:0;scale:1.08;filter:blur(24px)}}
+@keyframes m-rule{from{scale:1 0;opacity:0}}
+@keyframes m-panel{from{opacity:0;scale:.94;filter:blur(8px)}}
+@keyframes m-sting{from{opacity:0;scale:.88;filter:blur(16px)}}

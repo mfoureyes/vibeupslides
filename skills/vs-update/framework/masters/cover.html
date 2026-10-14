@@ -1,0 +1,10 @@
+<!--vs {"name": "cover", "order": 10, "use": "Opening slide. Title, one sentence, nothing else: no date, host or venue line.", "slots": {"kicker": "small label above the title (optional)", "title": "the deck title, <em> marks the accent word", "lead": "one sentence that says what the audience gets"}, "sample": {"kicker": "Cover", "title": "A title that says what this is <em>about</em>", "lead": "One sentence that tells the audience what they will take away.", "notes": "Welcome, one sentence on why we are here."}} -->
+<section class="slide dark cover{{#motion}} mslide mcover{{/motion}}" {{attrs}}>
+  <div class="wedge"></div>
+  <div class="text">
+    {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+    <h1{{#motion}} class="mtext"{{/motion}}>{{title}}</h1>
+    {{#lead}}<p class="lead">{{lead}}</p>{{/lead}}
+  </div>
+  {{notes}}
+</section>

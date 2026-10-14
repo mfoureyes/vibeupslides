@@ -1,0 +1,24 @@
+<!--vs {"name": "requirements", "order": 79, "use": "Sets the client's requirements against the proposed answer, one pair per row, so that a reader can check the brief line by line. Up to six pairs of one line or four of two lines. Set at 24 px as a table. The requirements stand first, from top to bottom, then the answers follow in the same order.", "slots": {"topic": "short label that names the subject, above the title (optional), e.g. \"Schedule\"", "title": "the claim as a full sentence, at most two lines (about 110 characters); <em> marks the one accent word", "head": "list of the two column headings", "rows": "list of up to 6 {need, answer, ref}: need in the client's own words (up to 45 characters per line), answer up to 60 per line, ref an optional short pointer such as a page or section"}, "defaults": {"head": ["Your requirement", "Our answer"]}, "sample": {"topic": "Match with the brief", "title": "Every requirement of the brief has its <em>answer</em> in this proposal", "rows": [{"need": "One system for all three plants", "answer": "A single installation with one plan per plant", "ref": "Section 2.1"}, {"need": "Usable on the shop floor without a desk", "answer": "Tablets at each line; it keeps working offline", "ref": "Section 2.2"}, {"need": "No interruption of production", "answer": "Four weeks of parallel running before each switch", "ref": "Section 2.3"}, {"need": "Planners are trained in-house", "answer": "We train two trainers per plant and hand over the material", "ref": "Section 2.4"}, {"need": "A fixed price", "answer": "One fixed price for all three phases, travel included", "ref": "Section 5"}]}} -->
+<section class="slide vs-doc vs-rqm" {{attrs}}>
+  <style>
+  .vs-doc{display:flex;flex-direction:column;padding-bottom:150px}
+  .vs-topic{flex:none;font-weight:700;font-size:22px;line-height:1.3;color:var(--accent-text);margin-bottom:12px}
+  .vs-doc>h2{flex:none;font-size:46px;line-height:1.14;max-width:1680px;margin-bottom:0}
+  .vs-req{margin-top:40px}
+  .vs-req-head,.vs-req-row{display:grid;grid-template-columns:1fr 72px 1.35fr}
+  .vs-req-head{font-weight:700;font-size:18px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding-bottom:12px}
+  .vs-req-head span:first-child{padding-left:26px}
+  .vs-req-row{margin-bottom:10px;font-size:24px;line-height:1.35;color:var(--ink)}
+  .vs-req-need{display:flex;align-items:center;background:var(--soft);border-radius:min(var(--radius),20px);padding:17px 26px}
+  .vs-req-row>i{align-self:center;justify-self:center;width:15px;height:15px;margin-left:-8px;border-top:3px solid var(--accent);border-right:3px solid var(--accent);transform:rotate(45deg)}
+  .vs-req-ans{display:flex;align-items:center;justify-content:space-between;gap:28px;padding:17px 0;border-bottom:1px solid var(--line)}
+  .vs-req-ans small{flex:none;font-size:18px;font-weight:700;letter-spacing:.04em;color:var(--accent-text);white-space:nowrap}
+  </style>
+  {{#topic}}<div class="vs-topic">{{topic}}</div>{{/topic}}{{^topic}}{{#kicker}}<div class="vs-topic">{{kicker}}</div>{{/kicker}}{{/topic}}
+  <h2>{{title}}</h2>
+  <div class="vs-req">
+    <div class="vs-req-head"><span>{{head.0}}</span><span></span><span>{{head.1}}</span></div>
+    {{#rows}}<div class="vs-req-row"><div class="vs-req-need anim">{{need}}</div><i class="anim" data-wave="2"></i><div class="vs-req-ans anim" data-wave="2"><span>{{answer}}</span>{{#ref}}<small>{{ref}}</small>{{/ref}}</div></div>{{/rows}}
+  </div>
+  {{notes}}
+</section>

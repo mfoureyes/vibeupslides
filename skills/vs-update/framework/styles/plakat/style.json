@@ -1,0 +1,57 @@
+{
+ "name": "plakat",
+ "order": 50,
+ "title": {
+  "en": "Poster",
+  "de": "Plakat"
+ },
+ "character": {
+  "en": "Loud and direct: huge condensed type in capitals, flat colour, hard contrasts, nothing small.",
+  "de": "Laut und direkt: riesige schmale Schrift in Großbuchstaben, flächige Farbe, harte Kontraste, nichts Kleines."
+ },
+ "fits": {
+  "en": "campaigns, events, music and sport, young brands; a talk that should be remembered more than read",
+  "de": "Kampagnen, Events, Musik und Sport, junge Marken; ein Vortrag, der eher im Kopf bleiben als gelesen werden soll"
+ },
+ "fonts": [
+  "Inter",
+  "Anton"
+ ],
+ "brand": {
+  "colors": {
+   "accent": "#FFDD00",
+   "on_accent": "#0B0B0B",
+   "ink": "#0B0B0B",
+   "deep": "#0B0B0B",
+   "on_deep": "#FFFFFF",
+   "muted": "#55554F",
+   "line": "#0B0B0B",
+   "soft": "#F0EFE9",
+   "ghost": "#E4E3DB",
+   "paper": "#FFFFFF",
+   "accent_text": "#0B0B0B",
+   "accent_on_deep": "#FFDD00"
+  },
+  "fonts": {
+   "body": {
+    "family": "Inter",
+    "fallback": "Helvetica Neue, Arial, sans-serif"
+   },
+   "head": {
+    "family": "Anton",
+    "fallback": "Impact, 'Arial Narrow', sans-serif"
+   },
+   "display_weight": 400,
+   "head_weight": 400
+  },
+  "shape": {
+   "radius": 0,
+   "motif": "block",
+   "head_case": "uppercase",
+   "head_tracking": "0.005em"
+  },
+  "motion": {
+   "set": "cut"
+  }
+ }
+}

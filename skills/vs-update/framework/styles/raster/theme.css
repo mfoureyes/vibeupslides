@@ -1,0 +1,25 @@
+/* Grid: strict and clear. A visible grid, black type, one signal colour. */
+
+/* ---------- label above titles ---------- */
+.kicker{display:flex;align-items:center;gap:16px;letter-spacing:.14em}
+.kicker::before{content:"";width:44px;height:4px;background:var(--accent)}
+.dark .kicker::before,.accent .kicker::before{background:currentColor}
+
+/* ---------- titles ---------- */
+h1{font-size:112px;line-height:.98}
+h2{max-width:1400px}
+
+/* ---------- dark slides: a grid of hairlines and one bar in the signal colour ---------- */
+.slide.dark{background-image:linear-gradient(to right,color-mix(in srgb,var(--on) 9%,transparent) 1px,transparent 1px);background-size:calc((100% - 2*var(--pad))/6) 100%;background-position:var(--pad) 0}
+.slide.dark::before{content:"";position:absolute;left:0;top:0;bottom:0;width:26px;background:var(--accent);z-index:1}
+
+/* ---------- cards, figures ---------- */
+.card{border:0;border-top:4px solid var(--ink);padding:30px 0 0;background:transparent;min-height:0}
+.card.accent{border-top-color:var(--accent);background:transparent;color:var(--ink)}
+.card.accent h3,.card.accent p{color:inherit}.card.accent .n{color:var(--accent-text)}
+.kpis{border-top:4px solid var(--ink);border-bottom:0}
+.kpi .v,.kpi b{color:var(--ink)}
+.kpi:first-child .v,.kpi:first-child b{color:var(--accent-text)}
+
+/* ---------- bullets ---------- */
+ul.bullets li::before{width:14px;height:14px;top:14px;background:var(--ink)}

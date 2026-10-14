@@ -1,0 +1,9 @@
+<!--vs {"name": "team", "order": 64, "use": "Up to five people with portrait, name and role.", "slots": {"kicker": "small label above the title (optional)", "title": "the title as a full sentence, <em> marks the one accent word", "people": "list of {photo, name, role, contact}"}, "sample": {"kicker": "Team", "title": "The <em>team</em>", "people": [{"photo": "@portrait", "name": "First Last", "role": "Role in the team", "contact": "first.last@example.com"}, {"photo": "@portrait", "name": "First Last", "role": "Role in the team", "contact": "first.last@example.com"}, {"photo": "@portrait", "name": "First Last", "role": "Role in the team", "contact": "first.last@example.com"}, {"photo": "@portrait", "name": "First Last", "role": "Role in the team", "contact": "first.last@example.com"}]}} -->
+<section class="slide center" {{attrs}}>
+  {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+  <h2>{{title}}</h2>
+  <div class="team" style="grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:1fr">
+    {{#people}}<div class="person anim"><div class="pic">{{#photo}}<img src="{{photo}}" alt="">{{/photo}}</div><b>{{name}}</b><span>{{role}}</span>{{#contact}}<small>{{contact}}</small>{{/contact}}</div>{{/people}}
+  </div>
+  {{notes}}
+</section>

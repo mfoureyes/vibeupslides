@@ -1,0 +1,8 @@
+<!--vs {"name": "embed", "order": 63, "use": "A live website, Figma file, Loom recording or a local HTML page inside the slide. Loaded only while the slide is current; needs to be online for remote addresses. Sites that forbid embedding stay blank: give a poster and say the address in the notes.", "slots": {"url": "https address, or an HTML file relative to the deck folder", "poster": "still image shown while loading, in PDFs and overviews (recommended)", "layout": "\"full\" the page fills the slide (default) or \"boxed\" with title above", "title": "title; printed in the boxed layout, name of the slide in the outline otherwise", "kicker": "small label above the title (boxed layout, optional)", "caption": "one line under the page (optional)", "allow": "extra rights for the page, only if it needs them: autoplay, encrypted-media, picture-in-picture, clipboard-write"}, "sample": {"layout": "boxed", "kicker": "Embed", "title": "A live website inside the <em>slide</em>", "caption": "Name the address in the slot url and give it a poster image."}, "defaults": {"layout": "full"}, "full_images": true, "title_as_name": true} -->
+<section class="slide media {{#is_boxed}}boxed{{/is_boxed}}{{^is_boxed}}full dark no-header no-footer{{/is_boxed}}" {{attrs}}>
+  {{#is_boxed}}{{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+  {{#title}}<h2>{{title}}</h2>{{/title}}{{/is_boxed}}
+  {{>embed}}
+  {{#caption}}<p class="caption">{{caption}}</p>{{/caption}}
+  {{notes}}
+</section>

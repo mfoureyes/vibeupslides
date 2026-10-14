@@ -1,0 +1,56 @@
+{
+ "name": "nacht",
+ "order": 30,
+ "title": {
+  "en": "Night",
+  "de": "Nacht"
+ },
+ "character": {
+  "en": "Dark and precise: every slide on a deep ground, one colour that glows, a technical typeface, soft corners.",
+  "de": "Dunkel und präzise: jede Folie auf tiefem Grund, eine Farbe, die leuchtet, technische Schrift, weiche Ecken."
+ },
+ "fits": {
+  "en": "software, data, product launches, a pitch in front of investors; rooms with the lights down",
+  "de": "Software, Daten, Produktvorstellungen, der Pitch vor Investoren; Räume mit gedimmtem Licht"
+ },
+ "fonts": [
+  "Inter",
+  "Space Grotesk"
+ ],
+ "brand": {
+  "colors": {
+   "accent": "#5EEAD4",
+   "on_accent": "#06110F",
+   "ink": "#EEF2F6",
+   "deep": "#07090D",
+   "on_deep": "#FFFFFF",
+   "muted": "#9AA6B4",
+   "line": "#2B323D",
+   "soft": "#171C24",
+   "ghost": "#1D232D",
+   "paper": "#0E1218",
+   "accent_text": "#5EEAD4"
+  },
+  "fonts": {
+   "body": {
+    "family": "Inter",
+    "fallback": "Helvetica Neue, Arial, sans-serif"
+   },
+   "head": {
+    "family": "Space Grotesk",
+    "fallback": "Helvetica Neue, Arial, sans-serif"
+   },
+   "display_weight": 700,
+   "head_weight": 600
+  },
+  "shape": {
+   "radius": 14,
+   "motif": "none",
+   "head_tracking": "-0.02em"
+  },
+  "motion": {
+   "set": "rise"
+  },
+  "scheme": "light"
+ }
+}

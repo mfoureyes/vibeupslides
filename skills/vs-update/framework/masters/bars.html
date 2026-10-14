@@ -1,0 +1,7 @@
+<!--vs {"name": "bars", "order": 68, "use": "Figures that count up with bars growing along; the first row is in the accent colour. Real numbers with a source.", "slots": {"kicker": "small label above the title (optional)", "title": "the title as a full sentence, <em> marks the one accent word", "rows": "list of {label, value, share}; share is the bar width in percent of the widest"}, "sample": {"kicker": "Figures with bars", "title": "Most stoppages come from a few <em>causes</em>", "source": "Sample figures", "rows": [{"label": "Late maintenance", "value": 240, "share": 100}, {"label": "Missing spare parts", "value": 96, "share": 40}, {"label": "Operating errors", "value": 33, "share": 14}]}} -->
+<section class="slide mslide mkpi" {{attrs}}>
+  {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+  <h2 class="mtext">{{title}}</h2>
+  {{>bars rows}}
+  {{notes}}
+</section>

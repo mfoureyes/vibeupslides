@@ -1,0 +1,11 @@
+<!--vs {"name": "closing", "order": 90, "use": "Last slide: thanks, one sentence, contact details.", "slots": {"kicker": "small label above the title (optional)", "title": "e.g. Thank you", "lead": "one sentence", "contacts": "list of {label, value}, at most three", "button": "a call to action as a link in the look of the brand's button: {label, url} (optional; the place for a button is here or on a call-to-action slide, not on a cover)"}, "sample": {"kicker": "Closing", "title": "Thank you", "lead": "Questions are welcome.", "contacts": [{"label": "Web", "value": "example.com"}, {"label": "Mail", "value": "hello@example.com"}], "button": {"label": "Get in touch", "url": "https://example.com"}}} -->
+<section class="slide accent cover" {{attrs}}>
+  <div class="text">
+    {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+    <h1>{{title}}</h1>
+    {{#lead}}<p class="lead">{{lead}}</p>{{/lead}}
+    {{#button}}{{#url}}<div><a class="vs-btn" href="{{url}}" target="_blank" rel="noopener" onclick="event.stopPropagation()">{{label}}</a></div>{{/url}}{{/button}}
+    {{#contacts.0}}<div class="meta">{{/contacts.0}}{{#contacts}}<div><small>{{label}}</small>{{value}}</div>{{/contacts}}{{#contacts.0}}</div>{{/contacts.0}}
+  </div>
+  {{notes}}
+</section>

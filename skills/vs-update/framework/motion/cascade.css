@@ -1,0 +1,28 @@
+/*vs {"name": "cascade", "order": 60, "title": "Cascade",
+ "character": "Staggered cascade: pieces drop in one after the other from above, tilt a little and settle with a small bounce.",
+ "fits": "lively, playful brands: start-ups, events, communities, youth, food, entertainment; bold colour, rounded or chunky type",
+ "tokens": {"ease": "cubic-bezier(.2,.8,.2,1)", "duration": 0.6, "stagger": 0.14, "travel": 44, "change": "slide"}} */
+/* --m-bounce: the easing of the small pieces, it overshoots and comes back */
+.slide{--m-bounce:cubic-bezier(.34,1.56,.64,1);--m-roll-gap:calc(var(--ms)*1.2)}
+.mslide{--mseq:.5;--wg:var(--ms)}
+.slide h1,.slide h2{transform-origin:0 100%}
+.slide .wedge{transform-origin:100% 50%}
+.f{transform:translateY(calc(var(--mt)*-1)) rotate(-2deg);transition-timing-function:var(--m-bounce)}
+@keyframes m-item{from{opacity:0;translate:0 calc(var(--mt)*-1);rotate:-2.5deg;animation-timing-function:var(--m-bounce)}}
+@keyframes m-title{from{opacity:0;translate:0 calc(var(--mt)*-1);rotate:-2deg;animation-timing-function:var(--m-bounce)}}
+@keyframes m-label{from{opacity:0;translate:calc(var(--mt)*-1) 0;animation-timing-function:var(--m-bounce)}}
+@keyframes m-word{from{opacity:0;translate:0 -.7em;rotate:-7deg;animation-timing-function:var(--m-bounce)}}
+@keyframes m-accent{from{scale:1.1;rotate:-5deg;animation-timing-function:var(--m-bounce)}}
+@keyframes m-shape{from{translate:45% 0;animation-timing-function:var(--m-bounce)}}
+@keyframes m-wipe{from{translate:100% 0}55%{translate:-6% 0}78%{translate:2% 0}}
+@keyframes m-logo{from{opacity:0;translate:0 calc(var(--mt)*-2);rotate:6deg;animation-timing-function:var(--m-bounce)}}
+@keyframes m-numeral{from{opacity:0;translate:0 -25%;rotate:5deg;animation-timing-function:var(--m-bounce)}}
+@keyframes m-roll{}
+@keyframes m-figure{from{opacity:0;scale:.4;rotate:-6deg;animation-timing-function:var(--m-bounce)}}
+@keyframes m-drift{from{scale:1.1}}
+@keyframes m-bar{from{scale:0 1;animation-timing-function:var(--m-bounce)}}
+@keyframes m-mark{from{opacity:0;scale:0;rotate:-40deg;animation-timing-function:var(--m-bounce)}}
+@keyframes m-photo{from{clip-path:inset(0 0 100% 0);scale:1.12}to{clip-path:inset(0 0 0 0)}}
+@keyframes m-rule{from{scale:1 0;animation-timing-function:var(--m-bounce)}}
+@keyframes m-panel{from{opacity:0;translate:-60px 0;animation-timing-function:var(--m-bounce)}}
+@keyframes m-sting{from{opacity:0;scale:.5;rotate:-8deg;animation-timing-function:var(--m-bounce)}}

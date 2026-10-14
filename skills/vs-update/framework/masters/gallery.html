@@ -1,0 +1,9 @@
+<!--vs {"name": "gallery", "order": 62, "use": "Two or three images with captions.", "slots": {"kicker": "small label above the title (optional)", "title": "the title as a full sentence, <em> marks the one accent word", "items": "list of 2 or 3 {photo, title, text}; without photo a placeholder is shown"}, "sample": {"kicker": "Gallery", "title": "Three images with <em>captions</em>", "items": [{"photo": "@wide", "title": "Caption 1", "text": "One sentence about what can be seen."}, {"photo": "@wide", "title": "Caption 2", "text": "One sentence about what can be seen."}, {"title": "Caption 3", "text": "The placeholder while a photo is missing."}]}} -->
+<section class="slide" {{attrs}}>
+  {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+  <h2>{{title}}</h2>
+  <div class="gallery" style="grid-auto-flow:column;grid-auto-columns:1fr">
+    {{#items}}<figure class="anim">{{#photo}}<img src="{{photo}}" alt="">{{/photo}}{{^photo}}<div class="placeholder">Photo to come</div>{{/photo}}<figcaption><b>{{title}}</b>{{text}}</figcaption></figure>{{/items}}
+  </div>
+  {{notes}}
+</section>

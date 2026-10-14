@@ -1,0 +1,53 @@
+{
+ "name": "raster",
+ "order": 10,
+ "title": {
+  "en": "Grid",
+  "de": "Raster"
+ },
+ "character": {
+  "en": "Strict and clear: much white, black type on a visible grid, one signal colour that marks what matters.",
+  "de": "Streng und klar: viel Weiß, schwarze Schrift auf sichtbarem Raster, eine Signalfarbe für das, was zählt."
+ },
+ "fits": {
+  "en": "consulting, technology, administration, research; whenever the content should speak and the design should stay out of the way",
+  "de": "Beratung, Technik, Verwaltung, Forschung; immer dann, wenn der Inhalt sprechen soll und die Gestaltung sich zurückhält"
+ },
+ "fonts": [
+  "Inter"
+ ],
+ "brand": {
+  "colors": {
+   "accent": "#E5352B",
+   "on_accent": "#FFFFFF",
+   "ink": "#111111",
+   "deep": "#111111",
+   "on_deep": "#FFFFFF",
+   "muted": "#4F5358",
+   "line": "#C8CACC",
+   "soft": "#F5F5F4",
+   "ghost": "#E7E7E5",
+   "paper": "#FFFFFF",
+   "accent_text": "#C92A21"
+  },
+  "fonts": {
+   "body": {
+    "family": "Inter",
+    "fallback": "Helvetica Neue, Arial, sans-serif"
+   },
+   "head": {
+    "family": null
+   },
+   "display_weight": 800,
+   "head_weight": 700
+  },
+  "shape": {
+   "radius": 0,
+   "motif": "none",
+   "head_tracking": "-0.02em"
+  },
+  "motion": {
+   "set": "mask"
+  }
+ }
+}

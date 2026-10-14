@@ -1,0 +1,9 @@
+<!--vs {"name": "cards", "order": 46, "use": "Two to four similar things as cards. At most one accent card.", "slots": {"kicker": "small label above the title (optional)", "title": "the title as a full sentence, <em> marks the one accent word", "cols": "2, 3 or 4", "items": "list of {icon, n, tag, title, text, style}; icon: the name of an icon from the brand's library (vs.py elements <brand>); style is \"\", \"accent\" or \"muted\"; n and tag optional"}, "sample": {"kicker": "Cards", "title": "Four offers <em>compared</em>", "cols": 4, "items": [{"n": "01", "tag": "Category", "title": "Card title", "text": "Two sentences that explain the point."}, {"n": "02", "tag": "Category", "title": "Card title", "text": "Two sentences that explain the point."}, {"n": "03", "tag": "Category", "title": "Quiet card", "text": "The version without a border.", "style": "muted"}, {"n": "04", "tag": "Category", "title": "Accent card", "text": "At most one per slide, it draws the eye.", "style": "accent"}]}, "defaults": {"cols": 3}} -->
+<section class="slide center" {{attrs}}>
+  {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+  <h2>{{title}}</h2>
+  <div class="cards c{{cols}}">
+    {{#items}}<div class="card {{style}} anim">{{#icon}}<div class="vs-ic">{{>icon icon}}</div>{{/icon}}{{#n}}<div class="n">{{n}}</div>{{/n}}{{#tag}}<div class="m">{{tag}}</div>{{/tag}}<h3>{{title}}</h3><p>{{text}}</p></div>{{/items}}
+  </div>
+  {{notes}}
+</section>

@@ -1,0 +1,9 @@
+<!--vs {"name": "agenda", "order": 54, "use": "The schedule of a day or a session.", "slots": {"kicker": "small label above the title (optional)", "title": "the title as a full sentence, <em> marks the one accent word", "items": "list of {title, text, time, current}; current: true marks the active item"}, "sample": {"kicker": "Agenda", "title": "How the <em>day</em> goes", "items": [{"title": "First item", "text": "One sentence about what happens here.", "time": "10 am", "current": true}, {"title": "Second item", "text": "One sentence about what happens here.", "time": "11 am"}, {"title": "Third item", "text": "The current item is marked in the accent colour.", "time": "2 pm"}]}} -->
+<section class="slide agenda" {{attrs}}>
+  {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+  <h2>{{title}}</h2>
+  <div class="main">
+    {{#items}}<div class="row{{#current}} current{{/current}} anim"><div class="n">{{@ii}}</div><div class="t">{{title}}{{#text}}<small>{{text}}</small>{{/text}}</div><div class="z">{{time}}</div></div>{{/items}}
+  </div>
+  {{notes}}
+</section>

@@ -1,0 +1,28 @@
+<!--vs {"name": "spectrum", "order": 55, "use": "Where things stand between two poles: a scale from one end to the other with two to four marks on it (cautious to bold, local to global; where the market is and where we are). One mark is the one the slide is about. Not for numbers over time: use line_chart.", "slots": {"kicker": "small label above the title (optional)", "title": "the title as a full sentence, <em> marks the one accent word", "left": "the left end of the scale, one to three words", "right": "the right end", "items": "list of 2 to 4 {label, text, pos, accent}: pos is the place on the scale from 0 (left) to 100 (right); accent true marks the one the slide is about; in the order of pos", "note": "one sentence below (optional)"}, "sample": {"kicker": "Position", "title": "We stand closer to the users than <em>anyone</em> in the market", "left": "Built for experts", "right": "Built for everyone", "items": [{"label": "Classic suppliers", "text": "Powerful, but only for specialists.", "pos": 12}, {"label": "New platforms", "text": "Easier, still made for teams with IT.", "pos": 46}, {"label": "Us", "text": "Ready to use on the first day.", "pos": 84, "accent": true}]}} -->
+<section class="slide vs-spc" {{attrs}}>
+  <style>
+  .vs-spc .vs-sp{position:relative;height:500px;margin:30px 0 0}
+  .vs-spc .vs-sp-ms{position:absolute;left:250px;right:250px;top:0;height:500px}
+  .vs-spc .vs-sp-line{position:absolute;left:250px;right:250px;top:250px;height:6px;background:linear-gradient(90deg,var(--line),var(--ink))}
+  .vs-spc .vs-sp-end{position:absolute;top:253px;transform:translateY(-50%);width:210px;font-size:26px;font-weight:700;line-height:1.25}
+  .vs-spc .vs-sp-end.l{left:0;text-align:right} .vs-spc .vs-sp-end.r{right:0}
+  .vs-spc .vs-sp-m{position:absolute;left:var(--p);top:0;height:500px;width:0}
+  .vs-spc .vs-sp-m::before{content:"";position:absolute;left:-17px;top:236px;width:34px;height:34px;border-radius:50%;background:var(--paper);border:6px solid var(--ink);box-sizing:border-box}
+  .vs-spc .vs-sp-m.on::before{background:var(--accent);border-color:var(--accent)}
+  .vs-spc .vs-sp-t{position:absolute;bottom:282px;width:340px;left:calc(var(--p0) * -3.4px)}
+  .vs-spc .vs-sp-m:nth-child(odd) .vs-sp-t{display:flex;flex-direction:column;justify-content:flex-end}
+  .vs-spc .vs-sp-m:nth-child(even) .vs-sp-t{bottom:auto;top:340px}
+  .vs-spc .vs-sp-t h3{font-size:30px;line-height:1.2;font-weight:var(--w-head)}
+  .vs-spc .vs-sp-t p{font-size:24px;line-height:1.4;color:var(--muted);margin-top:6px}
+  .vs-spc .vs-sp-m.on .vs-sp-t h3{color:var(--accent-text)}
+  .vs-spc .callout{margin-top:24px}
+  </style>
+  {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+  <h2>{{title}}</h2>
+  <div class="vs-sp">
+    <div class="vs-sp-line anim"></div><b class="vs-sp-end l anim">{{left}}</b><b class="vs-sp-end r anim">{{right}}</b>
+    <div class="vs-sp-ms" data-seq>{{#items}}<div class="vs-sp-m anim{{#accent}} on{{/accent}}" style="--p:{{pos}}%;--p0:{{pos}}"><div class="vs-sp-t"><h3>{{label}}</h3>{{#text}}<p>{{text}}</p>{{/text}}</div></div>{{/items}}</div>
+  </div>
+  {{#note}}<p class="callout anim">{{note}}</p>{{/note}}
+  {{notes}}
+</section>

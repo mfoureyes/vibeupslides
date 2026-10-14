@@ -1,0 +1,7 @@
+<!--vs {"name": "quote", "order": 56, "use": "A quotation with its source.", "slots": {"text": "the quotation, without quotation marks", "who": "name and role", "surface": "\"\" for paper or \"accent\""}, "sample": {"text": "A quote stands alone on its slide and says one thing.", "who": "Name, role"}} -->
+<section class="slide {{surface}} quote{{#motion}} mslide mquote{{/motion}}" {{attrs}}>
+  <div class="text"><span class="mark">“</span>
+  <h2{{#motion}} class="mtext"{{/motion}}>{{text}}</h2>
+  {{#who}}<div class="who">{{who}}</div>{{/who}}</div>
+  {{notes}}
+</section>

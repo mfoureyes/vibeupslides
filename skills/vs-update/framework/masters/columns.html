@@ -1,0 +1,9 @@
+<!--vs {"name": "columns", "order": 42, "use": "Two or three topics side by side.", "slots": {"kicker": "small label above the title (optional)", "title": "the title as a full sentence, <em> marks the one accent word", "columns": "list of 2 or 3 {icon, title, text, bullets}; icon: the name of an icon from the brand's library; text or bullets"}, "sample": {"kicker": "Columns", "title": "Three topics <em>side by side</em>", "columns": [{"title": "First topic", "text": "A short paragraph of two or three sentences that explains one thing calmly."}, {"title": "Second topic", "text": "A short paragraph of two or three sentences that explains one thing calmly."}, {"title": "Third topic", "bullets": ["Or a short list.", "With two or three points."]}]}} -->
+<section class="slide center" {{attrs}}>
+  {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+  <h2>{{title}}</h2>
+  <div class="columns" style="grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:1fr">
+    {{#columns}}<div class="anim">{{#icon}}<div class="vs-ic">{{>icon icon}}</div>{{/icon}}<h3>{{title}}</h3>{{#text}}<p>{{text}}</p>{{/text}}{{#bullets.0}}<ul class="bullets">{{/bullets.0}}{{#bullets}}<li>{{.}}</li>{{/bullets}}{{#bullets.0}}</ul>{{/bullets.0}}</div>{{/columns}}
+  </div>
+  {{notes}}
+</section>

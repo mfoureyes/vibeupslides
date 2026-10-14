@@ -1,0 +1,26 @@
+<!--vs {"name": "summary", "order": 38, "use": "Executive summary of a proposal or consulting deck: situation and complication short, the answer large, three or four supporting claims with their evidence. Must make sense to someone who reads no other slide. Not an agenda.", "slots": {"topic": "short label that names the subject, above the title (optional), e.g. \"Schedule\"", "context": "list of 1 to 3 {label, text}: the lead-in, usually Situation and Complication; each text one or two short sentences (up to 110 characters with two items)", "title": "the answer or recommendation as one full sentence, up to 120 characters (two lines); <em> marks the one accent word", "points": "list of 3 or 4 {claim, evidence}: claim is a short sentence (up to 45 characters), evidence the fact or figure behind it (up to 110 characters with three points, 70 with four)", "facts": "list of up to 4 {label, value} in a closing strip, e.g. duration, start, price, decision date (optional)"}, "sample": {"topic": "Executive summary", "context": [{"label": "Situation", "text": "Maintenance in the three plants is planned on paper, and unplanned downtime has risen for two years."}, {"label": "Complication", "text": "From January the largest customer contract carries penalties for late delivery."}], "title": "One shared maintenance system, introduced plant by plant, cuts unplanned downtime by a <em>third</em> within a year", "points": [{"claim": "The cause is planning, not the machines", "evidence": "Seven of ten stoppages in the sample followed a missed inspection."}, {"claim": "A standard system covers the need", "evidence": "All 14 requirements of the brief are met without custom development."}, {"claim": "The rollout pays for itself in year one", "evidence": "Savings of about 410,000 stand against a fixed price of 286,000."}], "facts": [{"label": "Duration", "value": "9 months"}, {"label": "Start", "value": "1 March"}, {"label": "Fixed price", "value": "286,000 net"}, {"label": "Decision needed by", "value": "14 February"}], "source": "Sample figures, invented for this preview"}} -->
+<section class="slide vs-doc vs-sum" {{attrs}}>
+  <style>
+  .vs-doc{display:flex;flex-direction:column;padding-bottom:150px}
+  .vs-topic{flex:none;font-weight:700;font-size:22px;line-height:1.3;color:var(--accent-text);margin-bottom:12px}
+  .vs-doc>h2{flex:none;font-size:46px;line-height:1.14;max-width:1680px;margin-bottom:0}
+  .vs-sum-ctx{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:64px}
+  .vs-sum-ctx small,.vs-sum-pts i,.vs-sum-facts small{display:block;font-style:normal;font-weight:700;font-size:18px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .vs-sum-ctx p{font-size:27px;line-height:1.4;margin-top:6px}
+  .vs-sum>h2{font-size:52px;line-height:1.12;margin-top:34px;padding-left:32px;border-left:8px solid var(--accent)}
+  .vs-sum>h2:first-of-type:nth-child(2){margin-top:0}
+  .vs-sum-pts{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:48px;margin-top:40px;padding-top:26px;border-top:1px solid var(--line)}
+  .vs-sum-pts i{color:var(--accent-text)}
+  .vs-sum-pts b{display:block;font-family:var(--font-head);font-size:29px;line-height:1.22;margin:8px 0 10px}
+  .vs-sum-pts p{font-size:27px;line-height:1.38}
+  .vs-sum-facts{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:48px;margin-top:auto;padding-top:22px;border-top:1px solid var(--ink)}
+  .vs-sum-facts b{display:block;font-size:28px;line-height:1.25;margin-top:4px}
+  .vs-sum-pts+.vs-sum-facts{margin-top:30px}
+  </style>
+  {{#topic}}<div class="vs-topic">{{topic}}</div>{{/topic}}{{^topic}}{{#kicker}}<div class="vs-topic">{{kicker}}</div>{{/kicker}}{{/topic}}
+  {{#context.0}}<div class="vs-sum-ctx">{{/context.0}}{{#context}}<div class="anim"><small>{{label}}</small><p>{{text}}</p></div>{{/context}}{{#context.0}}</div>{{/context.0}}
+  <h2>{{title}}</h2>
+  <div class="vs-sum-pts">{{#points}}<div class="anim"><i>{{@ii}}</i><b>{{claim}}</b><p>{{evidence}}</p></div>{{/points}}</div>
+  {{#facts.0}}<div class="vs-sum-facts">{{/facts.0}}{{#facts}}<div class="anim"><small>{{label}}</small><b>{{value}}</b></div>{{/facts}}{{#facts.0}}</div>{{/facts.0}}
+  {{notes}}
+</section>

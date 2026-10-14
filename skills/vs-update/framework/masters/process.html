@@ -1,0 +1,7 @@
+<!--vs {"name": "process", "order": 50, "use": "A path in three to six stages; every click fills the next stage.", "slots": {"kicker": "small label above the title (optional)", "title": "the title as a full sentence, <em> marks the one accent word", "stages": "list of {tag, title, text}"}, "sample": {"kicker": "Process", "title": "Each click fills the next <em>stage</em>", "stages": [{"tag": "Week 1", "title": "Report", "text": "The shift notes the fault."}, {"tag": "Week 2", "title": "Plan", "text": "Planning sets the date."}, {"tag": "Week 3", "title": "Repair", "text": "The technician does the work."}, {"tag": "Week 4", "title": "Review", "text": "We check what it changed."}]}} -->
+<section class="slide mslide" {{attrs}}>
+  {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+  <h2 class="mtext">{{title}}</h2>
+  {{>chevron_fill stages}}
+  {{notes}}
+</section>

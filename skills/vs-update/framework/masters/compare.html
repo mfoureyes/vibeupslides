@@ -1,0 +1,30 @@
+<!--vs {"name": "compare", "order": 69, "use": "One figure and what it is measured against: the large number with its sentence on the left, three to five bars on the right, the first or the marked one in the accent colour. Real numbers with a source. For figures alone use kpis or big_number, for a development over time line_chart.", "slots": {"kicker": "small label above the title (optional)", "title": "the title as a full sentence, <em> marks the one accent word", "value": "the large figure, as it should stand (\"43\")", "unit": "what follows the figure (\"%\", \"bn €\"; optional)", "text": "one sentence about the figure", "rows_title": "a line above the bars saying what they show (optional)", "rows": "list of {label, value, share, accent}; share is the bar's width in percent of the widest; accent true marks the row the slide is about (default: the first)", "note": "one sentence below (optional)"}, "sample": {"kicker": "Comparison", "title": "One plant causes almost half of all <em>stoppages</em>", "value": "43", "unit": "%", "text": "of all unplanned stoppages last year happened in plant A.", "rows_title": "Hours of unplanned downtime last year", "rows": [{"label": "Plant A", "value": "218", "share": 100, "accent": true}, {"label": "Plant B", "value": "148", "share": 68}, {"label": "Plant C", "value": "97", "share": 44}, {"label": "Plant D", "value": "47", "share": 22}], "source": "Sample figures"}} -->
+<section class="slide vs-cmp" {{attrs}}>
+  <style>
+  .vs-cmp .vs-cm{display:grid;grid-template-columns:5fr 7fr;gap:110px;align-items:start;margin-top:76px}
+  .vs-cmp .vs-cm-fig b{display:block;font-weight:var(--w-display);font-size:190px;line-height:.9;letter-spacing:-.02em;color:var(--accent-text)}
+  .vs-cmp .vs-cm-fig b span{font-size:.42em;letter-spacing:0;margin-left:.08em}
+  .vs-cmp .vs-cm-fig p{font-size:30px;line-height:1.4;margin-top:26px;max-width:620px}
+  .vs-cmp .vs-cm-rows>small{display:block;font-weight:700;font-size:20px;margin-bottom:22px}
+  .vs-cmp .vs-cm-row{display:grid;grid-template-columns:230px 1fr 110px;align-items:center;gap:22px;padding:13px 0}
+  .vs-cmp .vs-cm-row span{font-size:26px;font-weight:600;line-height:1.2}
+  .vs-cmp .vs-cm-row u{display:block;height:46px;background:var(--soft);text-decoration:none}
+  .vs-cmp .vs-cm-row u i{display:block;height:100%;width:var(--w);background:var(--line);transform-origin:left;animation:vs-cm-grow calc(var(--md)*1.6) var(--me) backwards}
+  .vs-cmp .vs-cm-row.on u i{background:var(--accent)}
+  .vs-cmp .vs-cm-row em{font-style:normal;font-weight:700;font-size:28px;text-align:right}
+  .vs-cmp .vs-cm-row.on em{color:var(--accent-text)}
+  .vs-cmp .vs-cm-rows:not(:has(.on)) .vs-cm-row:first-of-type u i{background:var(--accent)}
+  .vs-cmp .vs-cm-rows:not(:has(.on)) .vs-cm-row:first-of-type em{color:var(--accent-text)}
+  @keyframes vs-cm-grow{from{transform:scaleX(0)}}
+  html.export .vs-cmp .vs-cm-row u i,html[data-motion="off"] .vs-cmp .vs-cm-row u i{animation:none}
+  .vs-cmp .callout{margin-top:44px}
+  </style>
+  {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+  <h2>{{title}}</h2>
+  <div class="vs-cm">
+    <div class="vs-cm-fig anim"><b>{{value}}{{#unit}}<span>{{unit}}</span>{{/unit}}</b>{{#text}}<p>{{text}}</p>{{/text}}</div>
+    <div class="vs-cm-rows anim">{{#rows_title}}<small>{{rows_title}}</small>{{/rows_title}}{{#rows}}<div class="vs-cm-row{{#accent}} on{{/accent}}"><span>{{label}}</span><u><i style="--w:{{share}}%"></i></u><em>{{value}}</em></div>{{/rows}}</div>
+  </div>
+  {{#note}}<p class="callout anim">{{note}}</p>{{/note}}
+  {{notes}}
+</section>

@@ -1,0 +1,24 @@
+<!--vs {"name": "figure", "order": 59, "use": "A claim and its evidence: the title is a full sentence, below it stands exactly one chart, diagram or screenshot, with an optional callout on the point that matters and the source in the footer. The form for findings in talks and consulting decks. A simple column chart is drawn from numbers (slot columns) and builds up column by column; anything else is an image file.", "slots": {"topic": "short label that names the subject, above the title (optional), e.g. \"Schedule\"", "title": "the finding as a full sentence, at most two lines (about 90 characters); <em> marks the one accent word", "image": "the chart, diagram or screenshot as an image file, at least 1400 px wide (smaller images are shown at their own size, not enlarged), landscape works best; without image and columns a placeholder is shown", "callout": "one sentence beside the figure on the point that matters, up to 80 characters (optional)", "mark_x": "with an image and mark_y: a ring on the key point, as percent of the image from the left (optional)", "mark_y": "percent of the image from the top", "caption": "one line under the figure: what is shown, units, period (optional)", "fit": "\"contain\" shows the whole image (default), \"cover\" fills the area and crops, for photos and screenshots", "columns": "instead of an image: list of 3 to 12 {label, value} for a column chart that builds up from left to right; labels up to about 8 characters", "mark": "with columns: number of the column that carries the point (1 is the first); it stands in the accent colour with a ring on its number (optional)", "step": "with columns: true makes every column a forward press of its own; by default the chart builds by itself when the slide appears"}, "defaults": {"fit": "contain"}, "sample": {"topic": "Finding", "title": "Unplanned downtime has fallen in every quarter since the <em>switch</em>", "callout": "The drop begins in the quarter the pilot plant went live.", "caption": "Hours of unplanned downtime per quarter, pilot plant", "source": "Sample data, invented for this preview", "columns": [{"label": "Q1", "value": 310}, {"label": "Q2", "value": 300}, {"label": "Q3", "value": 316}, {"label": "Q4", "value": 241}, {"label": "Q1", "value": 210}, {"label": "Q2", "value": 200}], "mark": 4}} -->
+<section class="slide vs-fig" {{attrs}}>
+  <style>
+  .vs-fig{display:flex;flex-direction:column;padding-bottom:150px}
+  .vs-fig .vs-topic{flex:none;font-weight:700;font-size:22px;line-height:1.3;color:var(--accent-text);margin-bottom:12px}
+  .vs-fig>h2{flex:none;max-width:1680px;margin-bottom:0}
+  .vs-fig-area{flex:1;min-height:260px;margin-top:40px;container-type:size}
+  .vs-fig-area.co{--co:470px}
+  .vs-fig-img{position:relative;display:inline-block;vertical-align:top;line-height:0}
+  .vs-fig-img img{display:block;width:auto;height:auto;max-width:calc(100cqw - var(--co,0px));max-height:100cqh;border-radius:min(var(--radius),24px)}
+  .vs-fig-img.fit-cover img{width:calc(100cqw - var(--co,0px));height:100cqh;object-fit:cover}
+  .vs-fig-img.vs-fig-cols{width:min(1180px,calc(100cqw - var(--co,0px)));height:100cqh;line-height:1.2}
+  .vs-fig-img .placeholder{width:calc(100cqw - var(--co,0px));height:100cqh;aspect-ratio:auto;line-height:1.4}
+  .vs-fig-img>i{position:absolute;width:84px;height:84px;margin:-42px 0 0 -42px;border:6px solid var(--accent);border-radius:50%}
+  .vs-fig-co{position:absolute;left:calc(100% + 64px);top:0;bottom:0;width:406px;display:flex;align-items:center}
+  .vs-fig-co aside{padding:6px 0 6px 32px;border-left:6px solid var(--accent);font-family:var(--font-head);font-weight:700;font-size:32px;line-height:1.3;color:var(--ink)}
+  .vs-fig .caption{flex:none;font-size:20px;margin-top:16px}
+  </style>
+  {{#topic}}<div class="vs-topic">{{topic}}</div>{{/topic}}{{^topic}}{{#kicker}}<div class="vs-topic">{{kicker}}</div>{{/kicker}}{{/topic}}
+  <h2>{{title}}</h2>
+  <div class="vs-fig-area{{#callout}} co{{/callout}}"><div class="vs-fig-img fit-{{fit}}{{#columns.0.label}} vs-fig-cols{{/columns.0.label}}">{{#columns.0.label}}{{>columns columns}}{{/columns.0.label}}{{^columns.0.label}}{{#image}}<img src="{{image}}" alt="">{{#mark_x}}<i style="left:{{mark_x}}%;top:{{mark_y}}%"></i>{{/mark_x}}{{/image}}{{^image}}<div class="placeholder">Figure to come</div>{{/image}}{{/columns.0.label}}{{#callout}}<div class="vs-fig-co"><aside class="anim">{{callout}}</aside></div>{{/callout}}</div></div>
+  {{#caption}}<p class="caption">{{caption}}</p>{{/caption}}
+  {{notes}}
+</section>

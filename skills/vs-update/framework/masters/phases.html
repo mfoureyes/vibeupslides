@@ -1,0 +1,35 @@
+<!--vs {"name": "phases", "order": 76, "use": "All phases of a project side by side, each with its activities, staffing and results, plus a line for what the client contributes. Three to five phases. A dense slide for proposals and reading decks: the cells are set at 21 px, smaller than body text, because it is a table. It builds on forward presses: one phase per press from left to right, each as a whole column that fills from top to bottom.", "slots": {"topic": "short label that names the subject, above the title (optional), e.g. \"Schedule\"", "title": "the claim as a full sentence, at most two lines (about 110 characters); <em> marks the one accent word", "phases": "list of 3 to 5 {tag, title, activities, team, results, client}: tag is the duration (\"Weeks 1 to 6\"), title one or two words, activities and results are lists of up to 3 short points (about 40 characters each with three phases, 28 with five), team and client one line each. A row is shown when the first phase has it", "labels": "{activities, team, results, client}: the row labels; give all four when you translate them", "step": "false: the slide builds by itself when it appears. Default true: it builds on forward presses, one phase (its whole column) per press, the first with the slide"}, "defaults": {"labels": {"activities": "Activities", "team": "Our team", "results": "Results", "client": "Your contribution"}, "step": true}, "sample": {"topic": "Approach", "title": "Three phases take the plants from paper to one <em>shared</em> system", "phases": [{"tag": "Weeks 1 to 6", "title": "Analyse", "activities": ["Interviews in all three plants", "Review one year of downtime records", "Map today's planning process"], "team": "Project lead, two consultants", "results": ["Findings report", "Agreed target process"], "client": "Access to records, twelve interview partners"}, {"tag": "Weeks 7 to 20", "title": "Pilot", "activities": ["Configure the system for plant A", "Train planners and shift leads", "Run paper and system in parallel"], "team": "Project lead, consultant, system specialist", "results": ["Working system in plant A", "Training material"], "client": "One planner at half time, a contact in IT"}, {"tag": "Weeks 21 to 38", "title": "Roll out", "activities": ["Transfer to plants B and C", "Train two trainers per plant", "Hand over to line management"], "team": "Consultant, system specialist", "results": ["All plants live", "Operating manual"], "client": "Plant managers as sponsors, two trainers per plant"}]}} -->
+<section class="slide vs-doc vs-phs" {{attrs}}>
+  <style>
+  .vs-doc{display:flex;flex-direction:column;padding-bottom:150px}
+  .vs-topic{flex:none;font-weight:700;font-size:22px;line-height:1.3;color:var(--accent-text);margin-bottom:12px}
+  .vs-doc>h2{flex:none;font-size:46px;line-height:1.14;max-width:1680px;margin-bottom:0}
+  .vs-ph{width:100%;table-layout:fixed;border-collapse:collapse;margin-top:36px;font-size:21px;line-height:1.36}
+  .vs-ph th{text-align:left;vertical-align:top;font-weight:700}
+  .vs-ph tr>th:first-child{width:190px;font-weight:700;font-size:18px;letter-spacing:.14em;text-transform:uppercase;line-height:1.3;color:var(--muted);padding:17px 16px 0 0}
+  .vs-ph td{vertical-align:top;padding:13px 24px 13px 26px;color:var(--ink)}
+  .vs-ph tr+tr>*{border-top:1px solid var(--line)}
+  .vs-ph tr.vs-ph-head+tr>*{border-top:0}
+  .vs-ph-head th{padding:0 6px 10px 0}
+  .vs-ph-head div{background:var(--soft);min-height:104px;padding:20px 44px 16px 26px;clip-path:polygon(0 0,calc(100% - 30px) 0,100% 50%,calc(100% - 30px) 100%,0 100%)}
+  .vs-ph-head small{display:block;font-weight:700;font-size:18px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-text);margin-bottom:6px;white-space:nowrap}
+  .vs-ph-head b{font-family:var(--font-head);font-size:32px;line-height:1.1}
+  .vs-ph .f.on{transition-delay:calc(var(--r,0)*var(--mb))}
+  .vs-ph ul{list-style:none}
+  .vs-ph li{position:relative;padding-left:20px;margin-bottom:4px}
+  .vs-ph li::before{content:"";position:absolute;left:0;top:13px;width:9px;height:3px;background:var(--accent)}
+  .vs-ph tr.vs-ph-client>*{border-top:2px solid var(--accent)}
+  .vs-ph tr.vs-ph-client>th{color:var(--accent-text)}
+  .vs-ph tr.vs-ph-client>td{font-weight:700}
+  </style>
+  {{#topic}}<div class="vs-topic">{{topic}}</div>{{/topic}}{{^topic}}{{#kicker}}<div class="vs-topic">{{kicker}}</div>{{/kicker}}{{/topic}}
+  <h2>{{title}}</h2>
+  <table class="vs-ph">
+    <tr class="vs-ph-head"><th></th>{{#phases}}<th class="{{#step}}{{#@first}}anim{{/@first}}{{^@first}}f{{/@first}}{{/step}}{{^step}}anim{{/step}}" data-o="{{@i}}" style="--r:0"><div><small>{{@ii}}{{#tag}} · {{tag}}{{/tag}}</small><b>{{title}}</b></div></th>{{/phases}}</tr>
+    {{#phases.0.activities.0}}<tr><th>{{labels.activities}}</th>{{#phases}}<td class="{{#step}}{{#@first}}anim{{/@first}}{{^@first}}f{{/@first}}{{/step}}{{^step}}anim{{/step}}" data-o="{{@i}}" style="--r:1"><ul>{{#activities}}<li>{{.}}</li>{{/activities}}</ul></td>{{/phases}}</tr>{{/phases.0.activities.0}}
+    {{#phases.0.team}}<tr><th>{{labels.team}}</th>{{#phases}}<td class="{{#step}}{{#@first}}anim{{/@first}}{{^@first}}f{{/@first}}{{/step}}{{^step}}anim{{/step}}" data-o="{{@i}}" style="--r:2">{{team}}</td>{{/phases}}</tr>{{/phases.0.team}}
+    {{#phases.0.results.0}}<tr><th>{{labels.results}}</th>{{#phases}}<td class="{{#step}}{{#@first}}anim{{/@first}}{{^@first}}f{{/@first}}{{/step}}{{^step}}anim{{/step}}" data-o="{{@i}}" style="--r:3"><ul>{{#results}}<li>{{.}}</li>{{/results}}</ul></td>{{/phases}}</tr>{{/phases.0.results.0}}
+    {{#phases.0.client}}<tr class="vs-ph-client"><th>{{labels.client}}</th>{{#phases}}<td class="{{#step}}{{#@first}}anim{{/@first}}{{^@first}}f{{/@first}}{{/step}}{{^step}}anim{{/step}}" data-o="{{@i}}" style="--r:4">{{client}}</td>{{/phases}}</tr>{{/phases.0.client}}
+  </table>
+  {{notes}}
+</section>

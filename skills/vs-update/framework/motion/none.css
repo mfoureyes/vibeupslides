@@ -1,0 +1,11 @@
+/*vs {"name": "none", "order": 90, "title": "None",
+ "character": "Nothing moves: slides and click steps cut, numbers and bars stand at their final values.",
+ "fits": "documents to read, formal reports, rooms with weak projectors or video calls with a low frame rate; also what \"motion\": \"off\" gives a deck",
+ "tokens": {"ease": "linear", "duration": 0.3, "stagger": 0, "travel": 0, "change": "none"}} */
+.f{transform:none;transition:none}
+.mchev .c.f,.mchev .c.f h3,.mchev .c.f p,.mchev .c.f .m{transition:none}
+@keyframes m-item{} @keyframes m-title{} @keyframes m-label{} @keyframes m-word{} @keyframes m-accent{} @keyframes m-shape{}
+@keyframes m-wipe{} @keyframes m-logo{} @keyframes m-numeral{} @keyframes m-roll{} @keyframes m-figure{} @keyframes m-drift{}
+@keyframes m-bar{} @keyframes m-mark{} @keyframes m-photo{} @keyframes m-rule{} @keyframes m-panel{} @keyframes m-sting{}
+@keyframes m-draw{} @keyframes m-point{} @keyframes mfade{}
+@keyframes m-col{} @keyframes m-pop{} @keyframes m-grow{}

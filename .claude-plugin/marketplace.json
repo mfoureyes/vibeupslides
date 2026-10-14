@@ -1,0 +1,16 @@
+{
+  "name": "vibeupslides",
+  "owner": {
+    "name": "Marvin Goeldner"
+  },
+  "plugins": [
+    {
+      "name": "vibeupslides",
+      "source": "./",
+      "description": "Presentations in the design and the voice of any brand: build the brand library once from a website and existing documents, then create, edit and present decks from its master slides."
+    }
+  ],
+  "metadata": {
+    "description": "VibeUpSlides: presentations in the design and the voice of any brand."
+  }
+}

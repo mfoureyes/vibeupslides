@@ -1,0 +1,13 @@
+<!--vs {"name": "brand_colours", "order": 1, "use": "Preview only: the colours of the brand.", "slots": {}, "sample": {"name": "Colours"}, "preview_only": true} -->
+<section class="slide" {{attrs}}>
+  <div class="kicker">Brand</div><h2>These are the <em>colours</em></h2>
+  <div class="swatches" style="grid-template-columns:repeat(7,1fr)">
+    <div class="swatch anim"><div class="color" style="background:var(--accent)"></div><b>Accent</b><span>{{b.colors.accent}}, emphasis, at most a fifth of a slide</span></div>
+    <div class="swatch anim"><div class="color" style="background:var(--ink)"></div><b>Ink</b><span>{{b.colors.ink}}, text on light slides</span></div>
+    <div class="swatch anim"><div class="color" style="background:var(--deep)"></div><b>Deep</b><span>{{b.colors.deep}}, dark slides</span></div>
+    <div class="swatch anim"><div class="color" style="background:var(--muted)"></div><b>Muted</b><span>{{b.colors.muted}}, secondary text</span></div>
+    <div class="swatch anim"><div class="color" style="background:var(--line)"></div><b>Line</b><span>{{b.colors.line}}, rules and borders</span></div>
+    <div class="swatch anim"><div class="color" style="background:var(--soft)"></div><b>Soft</b><span>{{b.colors.soft}}, quiet areas</span></div>
+    <div class="swatch anim"><div class="color" style="background:var(--paper)"></div><b>Paper</b><span>{{b.colors.paper}}, the base</span></div>
+  </div>
+</section>

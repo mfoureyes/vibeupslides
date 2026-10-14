@@ -1,0 +1,31 @@
+/* Poster: loud and direct. Huge condensed capitals, flat colour, hard contrasts. */
+
+/* ---------- label above titles: a black tab ---------- */
+.kicker{display:inline-block;align-self:flex-start;width:fit-content;background:var(--ink);color:var(--paper);padding:8px 14px 7px;letter-spacing:.14em;font-size:18px}
+.dark .kicker{background:var(--accent);color:var(--on-accent);opacity:1}
+.accent .kicker{background:var(--ink);color:var(--paper)}
+
+/* ---------- titles: the accent word is marked, like with a highlighter ---------- */
+h1,h2,h3{font-family:var(--font-head);font-weight:400}
+h1{font-size:150px;line-height:.96}
+h2{font-size:84px;line-height:1.02;max-width:1600px}
+h3{text-transform:uppercase;letter-spacing:.01em;font-size:1.25em}
+h2 em{color:var(--ink);background:linear-gradient(transparent 12%,var(--accent) 12%,var(--accent) 92%,transparent 92%);padding:0 .12em}
+.dark h1 em,.dark h2 em{color:var(--accent);background:none;padding:0}
+
+/* ---------- cards, figures: thick black frames ---------- */
+.card{border:5px solid var(--ink);background:var(--paper)}
+.card.accent{background:var(--accent);color:var(--on-accent);border-color:var(--ink)}
+.card.accent h3,.card.accent p,.card.accent .n{color:inherit}
+.kpis{border-top:6px solid var(--ink);border-bottom:6px solid var(--ink)}
+.kpi .v,.kpi b{font-family:var(--font-head);font-weight:400;color:var(--ink)}
+#deck .vs-fl-box,#deck .vs-hb-i,#deck .vs-ti-t{border:5px solid var(--ink)}
+#deck .vs-fl-box.vs-fl-accent{border-color:var(--ink)}
+#deck .vs-fl-box small{color:var(--muted)}
+#deck .vs-fl-box+.vs-fl-box::before{background:var(--ink)}
+#deck .vs-fl-box+.vs-fl-box::after{border-color:var(--ink)}
+#deck .vs-fl-box.vs-fl-accent small{color:inherit}
+
+/* ---------- bullets: a block ---------- */
+ul.bullets li{font-weight:500}
+ul.bullets li::before{width:18px;height:18px;top:12px;background:var(--ink)}

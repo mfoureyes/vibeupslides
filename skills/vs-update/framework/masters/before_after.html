@@ -1,0 +1,27 @@
+<!--vs {"name": "before_after", "order": 43, "use": "Two states set against each other: before and after, today and tomorrow, the usual way and ours. The left side is quiet, the right side is the one the slide argues for. Two to four short points each, in the same order, so that they can be read across.", "slots": {"kicker": "small label above the title (optional)", "title": "the title as a full sentence, <em> marks the one accent word", "before": "{tag, title, points}: the state to leave; points is a list of 2 to 4 short sentences", "after": "{tag, title, points}: the state to reach, same number of points in the same order", "note": "one sentence below (optional)"}, "sample": {"kicker": "Before and after", "title": "The same week, planned in two <em>ways</em>", "before": {"tag": "Today", "title": "Each plant plans on paper", "points": ["Every plant keeps its own lists.", "Parts are ordered when a machine stops.", "Nobody sees the week of the other plants."]}, "after": {"tag": "With one system", "title": "One plan for all plants", "points": ["All plants plan in the same system.", "Parts are ordered before they are needed.", "On Monday everyone sees what is due that week."]}}} -->
+<section class="slide vs-baf" {{attrs}}>
+  <style>
+  .vs-baf .vs-ba{display:grid;grid-template-columns:1fr 90px 1fr;align-items:stretch;margin-top:60px}
+  .vs-baf .vs-ba-s{padding:40px 44px 44px;background:var(--soft)}
+  .vs-baf .vs-ba-s.vs-ba-to{background:var(--paper);border:1px solid var(--line);border-top:10px solid var(--accent);padding-top:31px}
+  .vs-baf .vs-ba-s small{display:block;font-weight:700;font-size:18px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+  .vs-baf .vs-ba-s.vs-ba-to small{color:var(--accent-text)}
+  .vs-baf .vs-ba-s h3{font-size:36px;line-height:1.2;font-weight:var(--w-head);margin-bottom:22px}
+  .vs-baf .vs-ba-s ul.bullets{margin-top:0}
+  .vs-baf .vs-ba-s ul.bullets li{font-size:26px;margin-bottom:14px}
+  .vs-baf .vs-ba-s:not(.vs-ba-to) ul.bullets li{color:var(--muted)} .vs-baf .vs-ba-s:not(.vs-ba-to) ul.bullets li::before{background:var(--line)}
+  .vs-baf .vs-ba-a{position:relative}
+  .vs-baf .vs-ba-a::before{content:"";position:absolute;left:18px;right:22px;top:50%;height:4px;margin-top:-2px;background:var(--accent)}
+  .vs-baf .vs-ba-a::after{content:"";position:absolute;right:20px;top:50%;width:20px;height:20px;margin-top:-12px;border-top:4px solid var(--accent);border-right:4px solid var(--accent);transform:rotate(45deg)}
+  .vs-baf .callout{margin-top:40px}
+  </style>
+  {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+  <h2>{{title}}</h2>
+  <div class="vs-ba">
+    {{#before}}<div class="vs-ba-s anim">{{#tag}}<small>{{tag}}</small>{{/tag}}<h3>{{title}}</h3><ul class="bullets">{{#points}}<li>{{.}}</li>{{/points}}</ul></div>{{/before}}
+    <div class="vs-ba-a anim" data-wave="2"></div>
+    {{#after}}<div class="vs-ba-s vs-ba-to anim" data-wave="2">{{#tag}}<small>{{tag}}</small>{{/tag}}<h3>{{title}}</h3><ul class="bullets">{{#points}}<li>{{.}}</li>{{/points}}</ul></div>{{/after}}
+  </div>
+  {{#note}}<p class="callout anim" data-wave="3">{{note}}</p>{{/note}}
+  {{notes}}
+</section>

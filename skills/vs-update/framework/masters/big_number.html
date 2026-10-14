@@ -1,0 +1,16 @@
+<!--vs {"name": "big_number", "order": 45, "use": "One figure very large with one line that says what it means, for the moment a talk rests on a single number. Give the source. For two to four numbers use kpis.", "slots": {"kicker": "small label above the number (optional)", "value": "the figure as it should be read: up to 4 characters at size xl, 7 at l, 11 at m; a whole number counts up from 0 when the slide appears (fast, three seconds at most)", "unit": "short unit set smaller behind the figure (%, x, k, m) (optional); it counts as about half a character", "label": "one line of meaning, up to 90 characters (two lines)", "size": "\"xl\", \"l\" (default) or \"m\", by the length of value", "surface": "\"\" for paper (default), \"dark\" or \"accent\""}, "defaults": {"size": "l", "surface": ""}, "sample": {"kicker": "After twelve months", "value": "34", "unit": "%", "size": "xl", "label": "less unplanned downtime in the pilot plant, one year after the switch", "source": "Sample figure, invented for this preview"}} -->
+<section class="slide {{surface}} vs-num {{size}}" {{attrs}}>
+  <style>
+  .vs-num{display:flex;flex-direction:column;justify-content:center}
+  .vs-num-v{font-family:var(--font-head);font-weight:var(--w-display);font-size:290px;line-height:.9;letter-spacing:-.04em;margin-left:-.05em;white-space:nowrap;color:var(--accent-text)}
+  .vs-num.xl .vs-num-v{font-size:400px}
+  .vs-num.m .vs-num-v{font-size:190px}
+  .vs-num-v small{font-size:.42em;letter-spacing:-.01em;margin-left:.1em;color:var(--ink)}
+  .vs-num.accent .vs-num-v,.vs-num.dark .vs-num-v small,.vs-num.accent .vs-num-v small{color:var(--on)}
+  .vs-num h2{font-size:46px;line-height:1.22;font-weight:500;max-width:1300px;margin:36px 0 0}
+  </style>
+  {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+  <div class="vs-num-v anim"><span class="mcountup">{{value}}</span>{{#unit}}<small>{{unit}}</small>{{/unit}}</div>
+  <h2 class="anim">{{label}}</h2>
+  {{notes}}
+</section>

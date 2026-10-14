@@ -1,0 +1,8 @@
+<!--vs {"name": "scene", "hidden": true, "order": 64, "use": "An animated scene (see `vs.py scenes`): effects slides cannot do themselves. The forward key first runs through the scene's steps, then moves on; R restarts it. A deck with a scene is a folder, not a single file.", "slots": {"scene": "name of the scene", "config": "object with the scene's content, keys as listed by `vs.py scenes`; image paths are relative to the deck folder or brand:<path>", "vars": "object: custom properties of the scene set to a brand token (accent, deep, on_deep, font_head ...) or a CSS value (optional)", "steps": "forward presses the scene takes before the deck moves on (default: what the scene says)", "poster": "still image for PDFs and overviews (default: the scene's own)", "layout": "\"full\" (default) or \"boxed\" with title above", "title": "title; printed in the boxed layout, name of the slide in the outline otherwise", "kicker": "small label above the title (boxed layout, optional)", "caption": "one line under the scene (boxed layout, optional)"}, "sample": {"layout": "boxed", "kicker": "Scene", "title": "An animated scene inside the <em>slide</em>", "caption": "Name the scene in the slot scene; `vs.py scenes` lists them."}, "defaults": {"layout": "full"}, "full_images": true, "title_as_name": true} -->
+<section class="slide media {{#is_boxed}}boxed{{/is_boxed}}{{^is_boxed}}full dark no-header no-footer{{/is_boxed}}" {{attrs}}>
+  {{#is_boxed}}{{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+  {{#title}}<h2>{{title}}</h2>{{/title}}{{/is_boxed}}
+  {{>scene}}
+  {{#is_boxed}}{{#caption}}<p class="caption">{{caption}}</p>{{/caption}}{{/is_boxed}}
+  {{notes}}
+</section>

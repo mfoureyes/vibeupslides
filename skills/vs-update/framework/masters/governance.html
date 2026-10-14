@@ -1,0 +1,21 @@
+<!--vs {"name": "governance", "order": 78, "use": "Who meets how often for what: the meetings or bodies of a project, one per row. Three to five rows. Set at 24 px as a table.", "slots": {"topic": "short label that names the subject, above the title (optional), e.g. \"Schedule\"", "title": "the claim as a full sentence, at most two lines (about 110 characters); <em> marks the one accent word", "head": "list of the four column headings", "meetings": "list of 3 to 5 {title, rhythm, who, purpose}: title up to 22 characters, rhythm up to 16 (\"Weekly, 45 min\"), who and purpose one or two lines each (up to 60 and 75 characters; one line each with five rows)"}, "defaults": {"head": ["Meeting", "Rhythm", "Who takes part", "What it is for"]}, "sample": {"topic": "Governance", "title": "Three regular meetings keep the decisions <em>short</em>", "meetings": [{"title": "Steering committee", "rhythm": "Every 6 weeks", "who": "Operations director, plant managers, our project lead", "purpose": "Releases each phase and decides on scope and budget"}, {"title": "Project meeting", "rhythm": "Weekly, 45 min", "who": "Both project leads, the contact in IT", "purpose": "Tracks progress and risks, prepares the decisions"}, {"title": "Plant round", "rhythm": "Every 2 weeks", "who": "Planners and shift leads of the plant", "purpose": "Collects feedback from daily use and agrees changes"}]}} -->
+<section class="slide vs-doc vs-gvn" {{attrs}}>
+  <style>
+  .vs-doc{display:flex;flex-direction:column;padding-bottom:150px}
+  .vs-topic{flex:none;font-weight:700;font-size:22px;line-height:1.3;color:var(--accent-text);margin-bottom:12px}
+  .vs-doc>h2{flex:none;font-size:46px;line-height:1.14;max-width:1680px;margin-bottom:0}
+  .vs-gov{margin-top:48px}
+  .vs-gov-head,.vs-gov-row{display:grid;grid-template-columns:1.05fr .75fr 1.4fr 1.6fr;gap:44px}
+  .vs-gov-head{font-weight:700;font-size:18px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding-bottom:14px;border-bottom:1px solid var(--ink)}
+  .vs-gov-row{padding:24px 0;border-bottom:1px solid var(--line);font-size:24px;line-height:1.4;color:var(--ink);align-items:baseline}
+  .vs-gov-row b{font-family:var(--font-head);font-size:30px;line-height:1.2}
+  .vs-gov-row em{font-style:normal;font-weight:700;color:var(--accent-text)}
+  </style>
+  {{#topic}}<div class="vs-topic">{{topic}}</div>{{/topic}}{{^topic}}{{#kicker}}<div class="vs-topic">{{kicker}}</div>{{/kicker}}{{/topic}}
+  <h2>{{title}}</h2>
+  <div class="vs-gov">
+    <div class="vs-gov-head">{{#head}}<span>{{.}}</span>{{/head}}</div>
+    {{#meetings}}<div class="vs-gov-row anim"><b>{{title}}</b><em>{{rhythm}}</em><span>{{who}}</span><span>{{purpose}}</span></div>{{/meetings}}
+  </div>
+  {{notes}}
+</section>

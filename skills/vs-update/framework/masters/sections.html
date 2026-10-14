@@ -1,0 +1,21 @@
+<!--vs {"name": "sections", "order": 55, "use": "The sections of a deck as a numbered list, for the start of a proposal or report, or repeated with one section marked as a divider. No page numbers (the reading version builds its own contents page). For a schedule with times use agenda.", "slots": {"topic": "short label that names the subject, above the title (optional), e.g. \"Schedule\"", "title": "a short title, one line", "items": "list of 3 to 10 {title, text, n, current}: title up to 45 characters, text one line about the section (optional), n replaces the running number (optional), current: true marks one. Up to five items stand in one column, six or more in two; with more than eight leave the text out"}, "sample": {"topic": "Contents", "title": "What this proposal <em>covers</em>", "items": [{"title": "Your situation and the brief", "text": "Where the plants stand today and what you asked for"}, {"title": "Our approach", "text": "Three phases from analysis to rollout", "current": true}, {"title": "Team and governance", "text": "Who works on it and how decisions are taken"}, {"title": "Schedule", "text": "Nine months with four milestones"}, {"title": "Price and terms", "text": "Effort, fixed price and conditions"}]}} -->
+<section class="slide vs-doc vs-sec" {{attrs}}>
+  <style>
+  .vs-doc{display:flex;flex-direction:column;padding-bottom:150px}
+  .vs-topic{flex:none;font-weight:700;font-size:22px;line-height:1.3;color:var(--accent-text);margin-bottom:12px}
+  .vs-doc>h2{flex:none;font-size:46px;line-height:1.14;max-width:1680px;margin-bottom:0}
+  .vs-sec-list{margin-top:44px;column-gap:88px;border-bottom:1px solid var(--line)}
+  .vs-sec-list:has(.vs-sec-row:nth-child(6)){column-count:2;border-bottom:0}
+  .vs-sec-row{display:grid;grid-template-columns:100px 1fr;align-items:center;padding:17px 0;border-top:1px solid var(--line);break-inside:avoid}
+  .vs-sec-row i{font-style:normal;font-family:var(--font-head);font-weight:var(--w-display);font-size:46px;line-height:1;letter-spacing:-.03em;color:var(--ghost)}
+  .vs-sec-row b{display:block;font-size:31px;line-height:1.2}
+  .vs-sec-row span{display:block;font-size:24px;line-height:1.3;color:var(--muted);margin-top:5px}
+  .vs-sec-row.cur i,.vs-sec-row.cur b{color:var(--accent-text)}
+  </style>
+  {{#topic}}<div class="vs-topic">{{topic}}</div>{{/topic}}{{^topic}}{{#kicker}}<div class="vs-topic">{{kicker}}</div>{{/kicker}}{{/topic}}
+  <h2>{{title}}</h2>
+  <div class="vs-sec-list">
+    {{#items}}<div class="vs-sec-row{{#current}} cur{{/current}} anim"><i>{{#n}}{{n}}{{/n}}{{^n}}{{@ii}}{{/n}}</i><div><b>{{title}}</b>{{#text}}<span>{{text}}</span>{{/text}}</div></div>{{/items}}
+  </div>
+  {{notes}}
+</section>

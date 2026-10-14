@@ -1,0 +1,26 @@
+<!--vs {"name": "matrix", "order": 53, "use": "Four fields along two questions: a two-by-two matrix with a name on each axis (effort and effect, risk and return). One field is the one the slide is about. Not for four equal things: use cards.", "slots": {"kicker": "small label above the title (optional)", "title": "the title as a full sentence, <em> marks the one accent word", "x": "what the horizontal axis measures", "y": "what the vertical axis measures", "x_low": "left end of the horizontal axis (optional)", "x_high": "right end (optional)", "y_low": "lower end of the vertical axis (optional)", "y_high": "upper end (optional)", "items": "list of exactly 4 {title, text, style}: top left, top right, bottom left, bottom right; style \"accent\" marks one field", "note": "one sentence below (optional)"}, "sample": {"kicker": "Matrix", "title": "What takes little effort and changes much comes <em>first</em>", "x": "Effort", "y": "Effect", "x_low": "low", "x_high": "high", "y_low": "low", "y_high": "high", "items": [{"title": "Do first", "text": "Much effect for little effort.", "style": "accent"}, {"title": "Plan", "text": "Much effect, but it takes time."}, {"title": "Along the way", "text": "Small things that cost nothing."}, {"title": "Leave", "text": "Much effort for little effect."}]}} -->
+<section class="slide vs-mtx" {{attrs}}>
+  <style>
+  .vs-mtx .vs-mx{display:grid;grid-template-columns:70px 1fr;grid-template-rows:1fr 56px;margin-top:40px;max-width:1500px}
+  .vs-mtx .vs-mx-y{writing-mode:vertical-rl;transform:rotate(180deg);display:flex;justify-content:space-between;align-items:center;padding:8px 0}
+  .vs-mtx .vs-mx-x{grid-column:2;display:flex;justify-content:space-between;align-items:center;padding:0 8px}
+  .vs-mtx .vs-mx-y b,.vs-mtx .vs-mx-x b{font-size:22px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink)}
+  .vs-mtx .vs-mx-y span,.vs-mtx .vs-mx-x span{font-size:20px;color:var(--muted)}
+  .vs-mtx .vs-mx-g{display:grid;grid-template-columns:1fr 1fr;gap:10px;border-left:3px solid var(--ink);border-bottom:3px solid var(--ink);padding:0 0 10px 10px}
+  .vs-mtx .vs-mx-q{background:var(--soft);padding:24px 32px 28px;min-height:150px}
+  .vs-mtx .vs-mx-q.vs-mx-accent{background:var(--accent);color:var(--on-accent,var(--on))}
+  .vs-mtx .vs-mx-q h3{font-size:34px;line-height:1.2;font-weight:var(--w-head)}
+  .vs-mtx .vs-mx-q p{font-size:25px;line-height:1.42;margin-top:10px;color:var(--muted)}
+  .vs-mtx .vs-mx-q.vs-mx-accent h3,.vs-mtx .vs-mx-q.vs-mx-accent p{color:inherit}
+  .vs-mtx .callout{margin-top:36px}
+  </style>
+  {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+  <h2>{{title}}</h2>
+  <div class="vs-mx anim">
+    <div class="vs-mx-y"><span>{{y_low}}</span><b>{{y}}</b><span>{{y_high}}</span></div>
+    <div class="vs-mx-g">{{#items}}<div class="vs-mx-q vs-mx-{{style}}"><h3>{{title}}</h3>{{#text}}<p>{{text}}</p>{{/text}}</div>{{/items}}</div>
+    <div class="vs-mx-x"><span>{{x_low}}</span><b>{{x}}</b><span>{{x_high}}</span></div>
+  </div>
+  {{#note}}<p class="callout anim">{{note}}</p>{{/note}}
+  {{notes}}
+</section>

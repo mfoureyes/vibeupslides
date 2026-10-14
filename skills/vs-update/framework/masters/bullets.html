@@ -1,0 +1,10 @@
+<!--vs {"name": "bullets", "order": 40, "use": "A title and three to five points, each a full sentence.", "slots": {"kicker": "small label above the title (optional)", "title": "the title as a full sentence, <em> marks the one accent word", "lead": "one sentence under the title (optional)", "bullets": "list of sentences", "step": "true: the points appear one by one on click"}, "sample": {"kicker": "Text with bullet points", "title": "The key message stands here as a <em>full sentence</em>", "bullets": ["Every point is a full sentence. Three to five are enough.", "With step set, the points appear one by one.", "The source of a number goes into the footer."], "step": true, "source": "Source: where the numbers come from"}} -->
+<section class="slide" {{attrs}}>
+  {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+  <h2>{{title}}</h2>
+  {{#lead}}<p class="lead">{{lead}}</p>{{/lead}}
+  <ul class="bullets main">
+    {{#bullets}}<li class="{{#step}}f{{/step}}{{^step}}anim{{/step}}">{{.}}</li>{{/bullets}}
+  </ul>
+  {{notes}}
+</section>

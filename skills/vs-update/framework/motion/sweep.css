@@ -1,0 +1,35 @@
+/*vs {"name": "sweep", "order": 30, "title": "Sweep",
+ "character": "The accent shape sweeps across the slide at its own angle and uncovers it; words rise out of a mask, hard edges, no overshoot.",
+ "fits": "brands with a strong graphic shape and hard edges: a diagonal, a bar, a block in the accent colour; confident, sporty, campaign-like",
+ "tokens": {"ease": "cubic-bezier(.22,.61,.36,1)", "duration": 0.7, "stagger": 0.1, "travel": 28, "change": "slide"}} */
+/* --m-skew: how far the edge of the sweep leans, as a share of the slide width (0% is a straight edge) */
+.slide{--m-skew:22%;--mw-ease:cubic-bezier(.75,0,.25,1)}
+html[data-motif="block"] .slide{--m-skew:0%}
+.mslide{--mseq:1}
+.mtext .mw{overflow:hidden;padding-bottom:.1em;margin-bottom:-.1em}
+.mtext .maccent em{--m-tint:var(--accent-text);color:transparent;-webkit-background-clip:text;background-clip:text;text-decoration-color:var(--m-tint);
+  background-image:linear-gradient(90deg,var(--m-tint) 0 50%,var(--m-base,var(--ink)) 50% 100%);background-size:200% 100%;background-position:0 0}
+.accent .mtext .maccent em{--m-tint:var(--on)}
+.dark .mtext,.accent .mtext,.fullbleed .mtext{--m-base:var(--on)}
+.active.mcount .ghost{animation:none}
+@keyframes m-item{from{opacity:0;translate:0 var(--mt)}}
+@keyframes m-title{from{opacity:0;translate:0 var(--mt)}}
+@keyframes m-label{from{opacity:0;translate:0 var(--mt)}}
+@keyframes m-word{from{translate:0 110%}}
+@keyframes m-accent{from{background-position:100% 0}}
+@keyframes m-shape{from{clip-path:polygon(100% 0,100% 0,100% 100%,calc(100% - var(--m-skew)) 100%)}}
+@keyframes m-wipe{
+  0%{clip-path:polygon(calc(100% + var(--m-skew)) 0,100% 0,100% 100%,100% 100%)}
+  42%,58%{clip-path:polygon(calc(-3% - var(--m-skew)) 0,100% 0,100% 100%,calc(-3% - 2*var(--m-skew)) 100%)}}
+@keyframes m-logo{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+@keyframes m-numeral{from{opacity:0;translate:0 calc(var(--mt)*1.4)}}
+@keyframes m-roll{from{transform:none}}
+@keyframes m-figure{from{opacity:0;scale:.85}}
+@keyframes m-drift{from{scale:1.08}}
+@keyframes m-bar{from{width:0}}
+@keyframes m-mark{from{opacity:0;scale:2.2;animation-timing-function:cubic-bezier(.55,0,.9,.35)}60%{opacity:1}}
+@keyframes m-photo{from{clip-path:polygon(calc(100% + var(--m-skew)) 0,100% 0,100% 100%,100% 100%)}
+  to{clip-path:polygon(calc(-3% - var(--m-skew)) 0,100% 0,100% 100%,calc(-3% - 2*var(--m-skew)) 100%)}}
+@keyframes m-rule{from{scale:1 0}}
+@keyframes m-panel{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+@keyframes m-sting{from{clip-path:inset(0 100% 0 0);scale:1.03}to{clip-path:inset(0 0 0 0)}}

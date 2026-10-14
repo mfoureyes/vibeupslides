@@ -1,0 +1,10 @@
+<!--vs {"name": "table", "order": 52, "use": "Dates or a comparison, at most nine rows. The first column is set in the accent colour.", "slots": {"kicker": "small label above the title (optional)", "title": "the title as a full sentence, <em> marks the one accent word", "head": "list of column headings", "rows": "list of rows, each a list of cell texts"}, "sample": {"kicker": "Table", "title": "The most important <em>dates</em>", "head": ["Date", "Step"], "rows": [["Month 1", "The first step in one sentence"], ["Month 2", "The date that matters"], ["Month 3", "The third step"]]}} -->
+<section class="slide center" {{attrs}}>
+  <style>.vs-table td:first-child{font-weight:700;color:var(--accent-text);white-space:nowrap}</style>
+  {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+  <h2>{{title}}</h2>
+  <table class="tab vs-table"><tr>{{#head}}<th>{{.}}</th>{{/head}}</tr>
+    {{#rows}}<tr class="anim">{{#.}}<td>{{.}}</td>{{/.}}</tr>{{/rows}}
+  </table>
+  {{notes}}
+</section>

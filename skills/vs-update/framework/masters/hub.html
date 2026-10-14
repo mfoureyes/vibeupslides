@@ -1,0 +1,24 @@
+<!--vs {"name": "hub", "order": 51, "use": "One thing in the middle and what belongs to it around it: four or six parts on both sides of a centre (a system and its building blocks, the product and its users). For a sequence use steps, for a relation with a direction flow.", "slots": {"kicker": "small label above the title (optional)", "title": "the title as a full sentence, <em> marks the one accent word", "center": "the thing in the middle: one to three words", "center_text": "one line under it (optional)", "items": "list of 4 or 6 {title, text}: they fill the left and the right side in turn", "note": "one sentence below (optional)"}, "sample": {"kicker": "Hub", "title": "The new planning rests on four <em>building blocks</em>", "center": "The system", "center_text": "one for all plants", "items": [{"title": "Data", "text": "Every machine, every job and every part in one place."}, {"title": "People", "text": "Planners and shift leads trained by their own colleagues."}, {"title": "Devices", "text": "Tablets at each line that work without a network too."}, {"title": "Routines", "text": "A short planning round every Monday morning."}]}} -->
+<section class="slide vs-hub" {{attrs}}>
+  <style>
+  .vs-hub .vs-hb{display:grid;grid-template-columns:1fr 340px 1fr;column-gap:70px;row-gap:26px;align-items:center;margin-top:60px;grid-auto-flow:dense}
+  .vs-hub .vs-hb-c{grid-column:2;grid-row:1 / span 3;width:340px;height:340px;border-radius:50%;background:var(--accent);color:var(--on-accent,var(--on));display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px;align-self:center}
+  .vs-hub .vs-hb-c b{font-weight:var(--w-head);font-size:40px;line-height:1.15;color:inherit}
+  .vs-hub .vs-hb-c span{font-size:24px;margin-top:10px;opacity:.9}
+  .vs-hub .vs-hb-i{position:relative;border:1px solid var(--line);background:var(--paper);padding:26px 30px 28px}
+  .vs-hub .vs-hb-i:nth-of-type(odd){grid-column:1} .vs-hub .vs-hb-i:nth-of-type(even){grid-column:3}
+  .vs-hub .vs-hb-i::after{content:"";position:absolute;top:50%;width:70px;height:2px;background:var(--line)}
+  .vs-hub .vs-hb-i:nth-of-type(odd)::after{left:100%} .vs-hub .vs-hb-i:nth-of-type(even)::after{right:100%}
+  .vs-hub .vs-hb-i h3{font-size:32px;line-height:1.2;font-weight:var(--w-head)}
+  .vs-hub .vs-hb-i p{font-size:24px;line-height:1.4;margin-top:8px;color:var(--muted)}
+  .vs-hub .callout{margin-top:36px}
+  </style>
+  {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+  <h2>{{title}}</h2>
+  <div class="vs-hb">
+    <div class="vs-hb-c anim"><b>{{center}}</b>{{#center_text}}<span>{{center_text}}</span>{{/center_text}}</div>
+    {{#items}}<article class="vs-hb-i anim" data-wave="2"><h3>{{title}}</h3>{{#text}}<p>{{text}}</p>{{/text}}</article>{{/items}}
+  </div>
+  {{#note}}<p class="callout anim" data-wave="3">{{note}}</p>{{/note}}
+  {{notes}}
+</section>

@@ -1,0 +1,26 @@
+<!--vs {"name": "signature", "order": 83, "use": "The signature block that closes an offer: two parties side by side, each with a line for place and date and one or two lines to sign. For the printed or PDF version of a proposal.", "slots": {"topic": "short label that names the subject, above the title (optional), e.g. \"Schedule\"", "title": "the claim as a full sentence, at most two lines (about 110 characters); <em> marks the one accent word", "lead": "one or two sentences saying what is agreed and which document it refers to (optional, up to 200 characters)", "parties": "list of 2 (at most 3) {org, place_date, signers}: org is the name of the organisation, place_date an optional text printed on the first line (leave it out to have it filled in by hand), signers a list of 1 or 2 {name, role} printed under the lines to sign", "labels": "{place_date, signature}: the words under the lines; give both when you translate them"}, "defaults": {"labels": {"place_date": "Place, date", "signature": "Signature"}}, "sample": {"topic": "Agreement", "title": "With two signatures the project starts on <em>1 March</em>", "lead": "Both parties agree to the scope, schedule, price and terms set out in this proposal of 20 January.", "parties": [{"org": "For the client", "signers": [{"name": "Name in block letters", "role": "Operations director"}]}, {"org": "For the contractor", "place_date": "Hamburg, 20 January", "signers": [{"name": "Alex Morgan", "role": "Managing partner"}, {"name": "Sam Rivera", "role": "Project lead"}]}]}} -->
+<section class="slide vs-doc vs-sgn" {{attrs}}>
+  <style>
+  .vs-doc{display:flex;flex-direction:column;padding-bottom:150px}
+  .vs-topic{flex:none;font-weight:700;font-size:22px;line-height:1.3;color:var(--accent-text);margin-bottom:12px}
+  .vs-doc>h2{flex:none;font-size:46px;line-height:1.14;max-width:1680px;margin-bottom:0}
+  .vs-sig-lead{margin-top:30px;font-size:27px;line-height:1.5;max-width:1400px}
+  .vs-sig{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:120px;margin-top:56px}
+  .vs-sig-org{font-family:var(--font-head);font-weight:var(--w-head);font-size:31px;line-height:1.2;color:var(--ink)}
+  .vs-sig-line{display:flex;align-items:flex-end;height:74px;padding-bottom:8px;border-bottom:2px solid var(--ink);font-size:26px;color:var(--ink)}
+  .vs-sig-line.tall{height:112px}
+  .vs-sig small{display:block;font-size:20px;line-height:1.35;color:var(--muted);margin-top:8px}
+  .vs-sig small b{display:block;font-size:22px}
+  .vs-sig-signers{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:40px}
+  </style>
+  {{#topic}}<div class="vs-topic">{{topic}}</div>{{/topic}}{{^topic}}{{#kicker}}<div class="vs-topic">{{kicker}}</div>{{/kicker}}{{/topic}}
+  <h2>{{title}}</h2>
+  {{#lead}}<p class="vs-sig-lead">{{lead}}</p>{{/lead}}
+  <div class="vs-sig">
+    {{#parties}}<div class="anim"><div class="vs-sig-org">{{org}}</div>
+      <div class="vs-sig-line">{{place_date}}</div><small>{{labels.place_date}}</small>
+      <div class="vs-sig-signers">{{#signers}}<div><div class="vs-sig-line tall"></div><small><b>{{name}}</b>{{role}}</small></div>{{/signers}}{{^signers}}<div><div class="vs-sig-line tall"></div><small>{{labels.signature}}</small></div>{{/signers}}</div>
+    </div>{{/parties}}
+  </div>
+  {{notes}}
+</section>

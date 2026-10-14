@@ -1,0 +1,25 @@
+/* Magazine: quiet and literate. Serif titles, warm paper, fine rules, the accent word in italics. */
+
+/* ---------- label above titles ---------- */
+.kicker{font-family:var(--font);font-weight:600;letter-spacing:.2em;font-size:18px}
+
+/* ---------- titles: the accent word is italic, not only coloured ---------- */
+h1,h2,h3{font-family:var(--font-head)}
+h1{font-size:116px;line-height:1.02;font-weight:500}
+h2{font-weight:500;font-size:66px;line-height:1.12}
+h1 em,h2 em{font-style:italic}
+h3{font-weight:600}
+.lead{font-size:32px}
+
+/* ---------- dark slides: a fine frame set into the slide ---------- */
+.slide.dark::after{content:"";position:absolute;inset:36px;border:1px solid color-mix(in srgb,var(--on) 28%,transparent);pointer-events:none}
+
+/* ---------- cards, figures ---------- */
+.card{border:0;border-top:1px solid var(--ink);background:transparent;padding:28px 0 0;min-height:0}
+.card.accent{background:transparent;color:var(--ink);border-top:3px solid var(--accent)}
+.card.accent h3,.card.accent p{color:inherit}.card.accent .n{color:var(--accent-text)}
+.card .n{font-family:var(--font-head);font-style:italic;font-weight:400}
+.kpi .v,.kpi b{font-family:var(--font-head);font-weight:500}
+
+/* ---------- bullets: a short dash ---------- */
+ul.bullets li::before{width:22px;height:2px;top:21px}

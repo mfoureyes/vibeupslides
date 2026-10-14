@@ -1,0 +1,11 @@
+<!--vs {"name": "cover_photo", "order": 12, "use": "Opening slide over a photo; the photo is darkened and desaturated under the text.", "slots": {"photo": "image file", "kicker": "small label above the title (optional)", "title": "the deck title", "lead": "one sentence", "video": "a video file that plays silently in a loop behind the text while the slide is shown: relative to the deck folder, or brand:videos/<file> for a film of the brand library (optional; a deck with a video is a folder); the photo stays as its still in PDFs and overviews"}, "sample": {"photo": "@photo", "kicker": "Cover with photo", "title": "A title over a <em>photo</em>", "lead": "The photo sits darkened under the text."}, "full_images": true} -->
+<section class="slide dark cover withphoto" {{attrs}}>
+  <div class="photo"><img src="{{photo}}" alt="">{{>bgvideo}}</div>
+  <div class="wedge"></div>
+  <div class="text">
+    {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+    <h1>{{title}}</h1>
+    {{#lead}}<p class="lead">{{lead}}</p>{{/lead}}
+  </div>
+  {{notes}}
+</section>

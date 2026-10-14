@@ -1,0 +1,23 @@
+/*vs {"name": "rise", "order": 10, "title": "Rise",
+ "character": "Fade and short rise: everything arrives quietly from just below, one after the other, nothing draws attention to itself.",
+ "fits": "calm corporate brands, consultancies, institutions, finance, health; the safe choice when the website itself hardly moves",
+ "tokens": {"ease": "cubic-bezier(.22,.61,.36,1)", "duration": 0.6, "stagger": 0.09, "travel": 24, "change": "fade"}} */
+.mslide{--mseq:.35}
+@keyframes m-item{from{opacity:0;translate:0 var(--mt)}}
+@keyframes m-title{from{opacity:0;translate:0 var(--mt)}}
+@keyframes m-label{from{opacity:0;translate:0 calc(var(--mt)*.6)}}
+@keyframes m-word{from{opacity:0;translate:0 .3em}}
+@keyframes m-accent{}
+@keyframes m-shape{from{opacity:0;translate:3% 0}}
+@keyframes m-wipe{from{opacity:0;translate:6% 0}}
+@keyframes m-logo{from{opacity:0;translate:0 var(--mt)}}
+@keyframes m-numeral{from{opacity:0;translate:0 calc(var(--mt)*1.4)}}
+@keyframes m-roll{}
+@keyframes m-figure{from{opacity:0;translate:0 var(--mt)}}
+@keyframes m-drift{from{scale:1.05}}
+@keyframes m-bar{from{width:0}}
+@keyframes m-mark{from{opacity:0;translate:0 var(--mt)}}
+@keyframes m-photo{from{opacity:0;scale:1.03}}
+@keyframes m-rule{from{opacity:0}}
+@keyframes m-panel{from{opacity:0;translate:0 var(--mt)}}
+@keyframes m-sting{from{opacity:0;translate:0 var(--mt)}}

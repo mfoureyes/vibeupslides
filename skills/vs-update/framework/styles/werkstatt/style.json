@@ -1,0 +1,55 @@
+{
+ "name": "werkstatt",
+ "order": 40,
+ "title": {
+  "en": "Workshop",
+  "de": "Werkstatt"
+ },
+ "character": {
+  "en": "Warm and hands-on: earthy colours on a sand ground, a sturdy typeface, thick rules and labels like stamps.",
+  "de": "Warm und handfest: erdige Farben auf sandfarbenem Grund, eine kräftige Schrift, dicke Linien und Etiketten wie Stempel."
+ },
+ "fits": {
+  "en": "crafts, food and hospitality, clubs and associations, local businesses; whenever it should feel made by people",
+  "de": "Handwerk, Gastronomie, Vereine, Läden und Betriebe vor Ort; immer dann, wenn es nach Menschen aussehen soll"
+ },
+ "fonts": [
+  "Work Sans",
+  "Bricolage Grotesque"
+ ],
+ "brand": {
+  "colors": {
+   "accent": "#C2571A",
+   "on_accent": "#FFFFFF",
+   "ink": "#2A211B",
+   "deep": "#3B2A1E",
+   "on_deep": "#F7EEDD",
+   "muted": "#655749",
+   "line": "#D3C3A8",
+   "soft": "#EFE4CF",
+   "ghost": "#E2D4BA",
+   "paper": "#F5ECDB",
+   "accent_text": "#96400F"
+  },
+  "fonts": {
+   "body": {
+    "family": "Work Sans",
+    "fallback": "Helvetica Neue, Arial, sans-serif"
+   },
+   "head": {
+    "family": "Bricolage Grotesque",
+    "fallback": "Helvetica Neue, Arial, sans-serif"
+   },
+   "display_weight": 800,
+   "head_weight": 700
+  },
+  "shape": {
+   "radius": 6,
+   "motif": "block",
+   "head_tracking": "-0.015em"
+  },
+  "motion": {
+   "set": "rise"
+  }
+ }
+}

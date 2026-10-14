@@ -1,0 +1,55 @@
+{
+ "name": "magazin",
+ "order": 20,
+ "title": {
+  "en": "Magazine",
+  "de": "Magazin"
+ },
+ "character": {
+  "en": "Quiet and literate: a large serif for titles, warm paper, fine rules, the accent word set in italics.",
+  "de": "Ruhig und belesen: große Serifenschrift für Titel, warmes Papier, feine Linien, das Akzentwort kursiv."
+ },
+ "fits": {
+  "en": "culture, education, publishing, law, talks with a point of view; decks that are also read",
+  "de": "Kultur, Bildung, Verlage, Recht, Vorträge mit Haltung; Präsentationen, die auch gelesen werden"
+ },
+ "fonts": [
+  "Source Sans 3",
+  "Fraunces"
+ ],
+ "brand": {
+  "colors": {
+   "accent": "#A8472A",
+   "on_accent": "#FFFFFF",
+   "ink": "#1E1B18",
+   "deep": "#22302A",
+   "on_deep": "#F6F1E7",
+   "muted": "#6A625A",
+   "line": "#CFC7BA",
+   "soft": "#EFE9DD",
+   "ghost": "#E6DFD1",
+   "paper": "#F8F4EC",
+   "accent_on_deep": "#E59A72"
+  },
+  "fonts": {
+   "body": {
+    "family": "Source Sans 3",
+    "fallback": "Georgia, serif"
+   },
+   "head": {
+    "family": "Fraunces",
+    "fallback": "Georgia, 'Times New Roman', serif"
+   },
+   "display_weight": 600,
+   "head_weight": 600
+  },
+  "shape": {
+   "radius": 0,
+   "motif": "none",
+   "head_tracking": "-0.01em"
+  },
+  "motion": {
+   "set": "soft"
+  }
+ }
+}

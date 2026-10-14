@@ -1,0 +1,9 @@
+<!--vs {"name": "steps", "order": 48, "use": "A procedure in three or four steps.", "slots": {"kicker": "small label above the title (optional)", "title": "the title as a full sentence, <em> marks the one accent word", "items": "list of {icon, title, text, current}; icon: the name of an icon from the brand's library; current: true fills the circle of the step you are at"}, "sample": {"kicker": "Steps", "title": "How we <em>proceed</em>", "items": [{"title": "First step", "text": "What happens and what is there at the end.", "current": true}, {"title": "Second step", "text": "What happens and what is there at the end."}, {"title": "Third step", "text": "The filled circle shows where you are."}]}} -->
+<section class="slide center" {{attrs}}>
+  {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+  <h2>{{title}}</h2>
+  <div class="steps" data-seq>
+    {{#items}}<div class="step{{#current}} filled{{/current}} anim"><div class="n">{{@i}}</div>{{#icon}}<div class="vs-ic">{{>icon icon}}</div>{{/icon}}<h3>{{title}}</h3><p>{{text}}</p></div>{{/items}}
+  </div>
+  {{notes}}
+</section>

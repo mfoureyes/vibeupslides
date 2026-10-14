@@ -1,0 +1,28 @@
+<!--vs {"name": "share", "order": 69, "prepare": "share", "use": "Parts of a whole: a ring in two to five parts with the one that counts large in the middle (where the money goes, who the customers are). The first part is the one the slide is about and takes the accent colour. The parts add up to 100. Real numbers with a source. For one figure alone use big_number, for a comparison compare.", "slots": {"kicker": "small label above the title (optional)", "title": "the title as a full sentence, <em> marks the one accent word", "items": "list of 2 to 5 {label, value, text}: value is the share in percent, a number; the first is the one the slide is about", "center": "what stands in the ring (default: the first value with %)", "center_label": "a few words below it (optional, default: the first label)", "note": "one sentence below (optional)"}, "sample": {"kicker": "Shares", "title": "Two thirds of the budget go straight into the <em>product</em>", "source": "Sample figures", "items": [{"label": "Product", "value": 64, "text": "Development, design and research."}, {"label": "Sales", "value": 21, "text": "Partners, events and campaigns."}, {"label": "Operations", "value": 15, "text": "Office, tools and administration."}]}} -->
+<section class="slide vs-shr" {{attrs}}>
+  <style>
+  .vs-shr .vs-sh{display:grid;grid-template-columns:480px 1fr;gap:120px;align-items:center;margin-top:36px}
+  .vs-shr .vs-sh-ring{position:relative;width:480px;height:480px;border-radius:50%;animation:vs-sh-in calc(var(--md)*1.6) var(--me) backwards}
+  .vs-shr .vs-sh-ring::after{content:"";position:absolute;inset:84px;border-radius:50%;background:var(--paper)}
+  .vs-shr .vs-sh-mid{position:absolute;inset:84px;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+  .vs-shr .vs-sh-mid b{font-family:var(--font-head);font-weight:var(--w-display);font-size:104px;line-height:.95;color:var(--accent-text)}
+  .vs-shr .vs-sh-mid span{font-size:26px;font-weight:600;margin-top:12px;max-width:300px;line-height:1.25}
+  .vs-shr .vs-sh-list{display:grid;gap:30px}
+  .vs-shr .vs-sh-item{display:grid;grid-template-columns:34px 130px 1fr;column-gap:22px;align-items:baseline}
+  .vs-shr .vs-sh-item i{display:block;width:34px;height:34px;border-radius:50%;background:var(--c);align-self:center}
+  .vs-shr .vs-sh-item em{font-style:normal;font-weight:700;font-size:40px;line-height:1}
+  .vs-shr .vs-sh-item h3{font-size:32px;line-height:1.25;font-weight:var(--w-head)}
+  .vs-shr .vs-sh-item p{font-size:25px;line-height:1.42;color:var(--muted);margin-top:4px}
+  @keyframes vs-sh-in{from{transform:rotate(-90deg) scale(.86);opacity:0}}
+  html.export .vs-shr .vs-sh-ring,html[data-motion="off"] .vs-shr .vs-sh-ring{animation:none}
+  .vs-shr .callout{margin-top:36px}
+  </style>
+  {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+  <h2>{{title}}</h2>
+  <div class="vs-sh">
+    <div class="anim"><div class="vs-sh-ring" style="background:conic-gradient({{#items}}{{_c}} {{_a}}% {{_z}}%,{{/items}}var(--soft) 0)"><div class="vs-sh-mid"><b>{{#center}}{{center}}{{/center}}{{^center}}{{_center}}{{/center}}</b><span>{{#center_label}}{{center_label}}{{/center_label}}{{^center_label}}{{_center_label}}{{/center_label}}</span></div></div></div>
+    <div class="vs-sh-list" data-seq>{{#items}}<div class="vs-sh-item anim" style="--c:{{_c}}"><i></i><em>{{value}}%</em><div><h3>{{label}}</h3>{{#text}}<p>{{text}}</p>{{/text}}</div></div>{{/items}}</div>
+  </div>
+  {{#note}}<p class="callout anim">{{note}}</p>{{/note}}
+  {{notes}}
+</section>

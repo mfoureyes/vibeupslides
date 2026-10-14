@@ -1,0 +1,8 @@
+<!--vs {"name": "free", "order": 74, "use": "Title plus your own HTML body, for one-off content inside the brand's frame. Use tokens (var(--accent) ...), never hex colours.", "slots": {"kicker": "small label above the title (optional)", "title": "the title as a full sentence, <em> marks the one accent word", "lead": "one sentence (optional)", "body": "HTML", "class": "extra classes on the slide (center, dark, accent)"}, "sample": {"kicker": "Free", "title": "A slide with its own <em>body</em>", "body": "<p class=\"lead\" style=\"margin-top:60px\">Anything the masters do not cover goes here, written with the brand tokens.</p>"}} -->
+<section class="slide {{class}}" {{attrs}}>
+  {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+  <h2>{{title}}</h2>
+  {{#lead}}<p class="lead">{{lead}}</p>{{/lead}}
+  {{body}}
+  {{notes}}
+</section>

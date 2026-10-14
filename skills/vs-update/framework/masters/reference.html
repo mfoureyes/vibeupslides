@@ -1,0 +1,37 @@
+<!--vs {"name": "reference", "order": 61, "use": "One reference case: who the client was, the task, what was done and the result, with one or two figures and an optional image. The title states the result as a sentence. For a customer's own words use testimonials or quote.", "slots": {"topic": "short label that names the subject, above the title (optional), e.g. \"Schedule\"", "title": "the claim as a full sentence, at most two lines (about 110 characters); <em> marks the one accent word", "client": "one line on the client or context: industry, size, period (optional); name a client only with permission", "task": "the starting point, one or two sentences (up to 130 characters)", "approach": "what was done, one or two sentences (up to 130 characters)", "result": "what came out, one or two sentences (up to 130 characters); set in bold", "figures": "list of 1 or 2 {value, unit, label}: value up to 4 characters, unit short (%, x), label one line (optional)", "photo": "image of the project, landscape (optional); without it the figures stand larger", "labels": "{task, approach, result}: the three row labels; give all three when you translate them"}, "defaults": {"labels": {"task": "Task", "approach": "What we did", "result": "Result"}}, "sample": {"topic": "Reference", "title": "A packaging manufacturer cut its unplanned downtime by a <em>third</em>", "client": "Packaging manufacturer · 5 plants, 2,100 employees · 2023 to 2024", "task": "Each plant planned its maintenance in its own way, and stoppages were rising year by year.", "approach": "We introduced one planning system, starting with a pilot plant, and trained 46 planners and shift leads.", "result": "After twelve months unplanned downtime was down by 34 percent, and all five plants plan in the same way.", "figures": [{"value": "34", "unit": "%", "label": "less unplanned downtime"}, {"value": "5", "label": "plants on one system"}], "photo": "@wide", "source": "Sample case with invented figures"}} -->
+<section class="slide vs-doc vs-rfc" {{attrs}}>
+  <style>
+  .vs-doc{display:flex;flex-direction:column;padding-bottom:150px}
+  .vs-topic{flex:none;font-weight:700;font-size:22px;line-height:1.3;color:var(--accent-text);margin-bottom:12px}
+  .vs-doc>h2{flex:none;font-size:46px;line-height:1.14;max-width:1680px;margin-bottom:0}
+  .vs-ref{flex:1;display:grid;grid-template-columns:1fr auto;gap:72px;margin-top:36px}
+  .vs-ref-client{font-size:22px;line-height:1.3;font-weight:700;color:var(--muted);padding-bottom:16px}
+  .vs-ref-part{display:grid;grid-template-columns:170px 1fr;gap:20px;padding:17px 0;border-top:1px solid var(--line)}
+  .vs-ref-part small{font-weight:700;font-size:18px;letter-spacing:.14em;text-transform:uppercase;line-height:1.3;color:var(--accent-text);padding-top:9px}
+  .vs-ref-part p{font-size:27px;line-height:1.4;max-width:1150px}
+  .vs-ref-part.res p{font-weight:700}
+  .vs-ref-side{width:580px;display:flex;flex-direction:column;gap:26px}
+  .vs-ref-side:empty{display:none}
+  .vs-ref-img{position:relative;flex:1;min-height:200px;border-radius:var(--radius);overflow:hidden;background:var(--soft)}
+  .vs-ref-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .vs-ref-figs{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:36px}
+  .vs-ref-figs b{display:block;font-family:var(--font-head);font-weight:var(--w-display);font-size:84px;line-height:1;letter-spacing:-.03em;color:var(--accent-text)}
+  .vs-ref-figs b small{font-size:.42em;letter-spacing:0;margin-left:6px;color:var(--ink)}
+  .vs-ref-figs span{display:block;font-size:23px;line-height:1.35;color:var(--ink);margin-top:10px}
+  .vs-ref-figs:first-child{flex:1;grid-auto-flow:row;align-content:center;gap:48px;padding-left:56px;border-left:1px solid var(--line)}
+  .vs-ref-figs:first-child b{font-size:128px}
+  .vs-ref-figs:first-child span{font-size:27px}
+  </style>
+  {{#topic}}<div class="vs-topic">{{topic}}</div>{{/topic}}{{^topic}}{{#kicker}}<div class="vs-topic">{{kicker}}</div>{{/kicker}}{{/topic}}
+  <h2>{{title}}</h2>
+  <div class="vs-ref">
+    <div class="vs-ref-text">
+      {{#client}}<div class="vs-ref-client">{{client}}</div>{{/client}}
+      {{#task}}<div class="vs-ref-part anim"><small>{{labels.task}}</small><p>{{task}}</p></div>{{/task}}
+      {{#approach}}<div class="vs-ref-part anim"><small>{{labels.approach}}</small><p>{{approach}}</p></div>{{/approach}}
+      {{#result}}<div class="vs-ref-part res anim"><small>{{labels.result}}</small><p>{{result}}</p></div>{{/result}}
+    </div>
+    <div class="vs-ref-side anim" data-wave="2">{{#photo}}<div class="vs-ref-img"><img src="{{photo}}" alt=""></div>{{/photo}}{{#figures.0}}<div class="vs-ref-figs">{{/figures.0}}{{#figures}}<div><b>{{value}}{{#unit}}<small>{{unit}}</small>{{/unit}}</b><span>{{label}}</span></div>{{/figures}}{{#figures.0}}</div>{{/figures.0}}</div>
+  </div>
+  {{notes}}
+</section>

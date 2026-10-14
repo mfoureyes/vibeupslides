@@ -1,0 +1,22 @@
+<!--vs {"name": "pyramid", "order": 72, "use": "What rests on what: three or four levels, the narrow one on top, each wider than the one above (vision, strategy, measures; few, some, many). The top level takes the accent colour. For stages in time use stairs or steps.", "slots": {"kicker": "small label above the title (optional)", "title": "the title as a full sentence, <em> marks the one accent word", "items": "list of 3 or 4 {title, text}: from the top level down", "note": "one sentence below (optional)", "step": "true: the levels appear one by one on click"}, "sample": {"kicker": "Pyramid", "title": "Every measure rests on one <em>goal</em>", "items": [{"title": "Goal", "text": "The one thing everything else serves."}, {"title": "Strategy", "text": "The few decisions that lead there."}, {"title": "Measures", "text": "What is done this year, by whom."}, {"title": "Foundations", "text": "People, money and tools that make it possible."}]}} -->
+<section class="slide vs-pyr" {{attrs}}>
+  <style>
+  .vs-pyr .vs-lv{display:grid;gap:10px;margin-top:56px}
+  .vs-pyr .vs-lv-r{display:grid;grid-template-columns:55% 1fr;column-gap:60px;align-items:center}
+  .vs-pyr .vs-lv-b{justify-self:center;width:var(--w);min-height:92px;background:var(--soft);display:flex;align-items:center;justify-content:center;gap:18px;padding:14px 22px;text-align:center}
+  .vs-pyr .vs-lv-b b{font-weight:var(--w-display);font-size:44px;line-height:1;color:inherit}
+  .vs-pyr .vs-lv-b span{font-size:26px;font-weight:700;line-height:1.2}
+  .vs-pyr .vs-lv-r.vs-lv-on .vs-lv-b{background:var(--accent);color:var(--on-accent,var(--on))}
+  .vs-pyr .vs-lv-r p{font-size:25px;line-height:1.4;color:var(--muted)}
+  .vs-pyr .vs-lv-r p strong{display:block;font-size:27px;color:var(--ink)}
+  .vs-pyr .callout{margin-top:36px}
+
+  .vs-pyr .vs-lv-r:first-child .vs-lv-b{background:var(--accent);color:var(--on-accent,var(--on))}
+  .vs-pyr .vs-lv-r:nth-child(1){--w:34%} .vs-pyr .vs-lv-r:nth-child(2){--w:56%} .vs-pyr .vs-lv-r:nth-child(3){--w:78%} .vs-pyr .vs-lv-r:nth-child(4){--w:100%}
+  </style>
+  {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+  <h2>{{title}}</h2>
+  <div class="vs-lv" data-seq>{{#items}}<div class="vs-lv-r {{#step}}{{#@first}}anim{{/@first}}{{^@first}}f{{/@first}}{{/step}}{{^step}}anim{{/step}}"><div class="vs-lv-b"><span>{{title}}</span></div><p>{{text}}</p></div>{{/items}}</div>
+  {{#note}}<p class="callout anim">{{note}}</p>{{/note}}
+  {{notes}}
+</section>

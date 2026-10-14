@@ -1,0 +1,11 @@
+<!--vs {"name": "split", "order": 58, "use": "A photo on half the slide, text on the other half. Holds about a three-line title and three short points.", "slots": {"photo": "image file, portrait format works best", "side": "\"br\" photo right (default) or \"bl\" photo left", "kicker": "small label above the title (optional)", "title": "the title as a full sentence, <em> marks the one accent word", "lead": "one sentence (optional)", "bullets": "list of sentences (optional)"}, "sample": {"photo": "@tall", "kicker": "Photo and text", "title": "Text on one side, a <em>photo</em> on the other", "bullets": ["For places, rooms and situations that belong to the text.", "Set side to bl for the mirrored version."]}, "defaults": {"side": "br"}} -->
+<section class="slide split {{side}}" {{attrs}}>
+  <div class="image">{{#photo}}<img src="{{photo}}" alt="">{{/photo}}{{^photo}}<div class="placeholder" style="height:100%;aspect-ratio:auto">Photo to come</div>{{/photo}}</div>
+  <div class="text">
+    {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+    <h2>{{title}}</h2>
+    {{#lead}}<p class="lead">{{lead}}</p>{{/lead}}
+    {{#bullets.0}}<ul class="bullets main">{{/bullets.0}}{{#bullets}}<li>{{.}}</li>{{/bullets}}{{#bullets.0}}</ul>{{/bullets.0}}
+  </div>
+  {{notes}}
+</section>

@@ -1,0 +1,25 @@
+/* Light: friendly and open. Pastel grounds, round corners, a rounded typeface, circles instead of edges. */
+
+/* ---------- label above titles: a pill ---------- */
+.kicker{display:inline-block;align-self:flex-start;width:fit-content;background:var(--soft);color:var(--accent-text);padding:9px 20px;border-radius:999px;letter-spacing:.1em;font-size:18px}
+.dark .kicker,.accent .kicker{background:color-mix(in srgb,var(--on) 16%,transparent);color:var(--on);opacity:1}
+
+/* ---------- titles ---------- */
+h1,h2,h3{font-family:var(--font-head)}
+h1{font-size:108px;line-height:1.04}
+
+/* ---------- soft circles in the corners ---------- */
+.slide{background-image:radial-gradient(circle 420px at 104% -6%,var(--soft) 99%,transparent 100%)}
+.slide.dark,.slide.accent{background-image:radial-gradient(circle 520px at 100% 0%,color-mix(in srgb,var(--on) 9%,transparent) 99%,transparent 100%),radial-gradient(circle 300px at -2% 104%,color-mix(in srgb,var(--accent) 60%,transparent) 99%,transparent 100%)}
+
+/* ---------- cards, figures ---------- */
+.card{background:var(--soft);border:0;border-radius:var(--radius)}
+.card.accent{background:var(--accent)}
+.kpis{border:0;gap:22px}
+.kpi{background:var(--soft);border-radius:var(--radius);padding:34px 32px;border:0!important}
+#deck .vs-fl-box,#deck .vs-hb-i,#deck .vs-mx-q,#deck .vs-st-b,#deck .vs-lv-b,#deck .vs-ti-t,#deck .vs-ba-s{border-radius:var(--radius)}
+#deck .vs-fl-box,#deck .vs-hb-i,#deck .vs-ti-t{background:var(--soft);border:0}
+#deck .vs-fl-box.vs-fl-accent{background:var(--accent)}
+
+/* ---------- bullets: a dot ---------- */
+ul.bullets li::before{width:14px;height:14px;border-radius:50%;top:15px}

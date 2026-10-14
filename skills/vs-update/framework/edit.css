@@ -1,0 +1,80 @@
+/* Editing mode (vs.py edit): shown in the edit build only. The edit button sits in the deck's button bar; its
+   panel opens above the bar. */
+html.vs-editing #ui{opacity:1!important;pointer-events:auto!important}
+html.vs-editing body{cursor:auto!important}
+html.vs-editing #deck [data-s]{outline:2px dashed transparent;outline-offset:6px;border-radius:4px;cursor:text;transition:outline-color .12s}
+html.vs-editing #deck [data-s]:hover{outline-color:rgba(40,130,255,.55)}
+html.vs-editing #deck [data-s]:focus{outline:2px solid rgb(40,130,255);background:rgba(40,130,255,.07)}
+html.vs-editing #deck span.vs-e{display:inline-block;min-width:.5em}
+html.vs-editing #deck .f{opacity:1!important;transform:none!important}
+#ctl #vse-btn.on{background:rgb(40,130,255);opacity:1}
+#vse{position:absolute;right:0;bottom:62px;display:none;flex-direction:column;align-items:stretch;gap:6px;background:rgba(43,43,45,.96);border-radius:10px;padding:8px;
+  box-shadow:0 10px 30px rgba(0,0,0,.35);color:#fff;font:500 13px/1.2 system-ui,-apple-system,"Segoe UI",sans-serif;letter-spacing:0;max-width:calc(100vw - 40px)}
+html.vs-editing #vse{display:flex}
+#vse .row{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap;justify-content:flex-end}
+#vse .grp{display:flex;flex-direction:column;gap:5px}
+#vse .grp>small{color:#9aa3b2;font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:0 2px;white-space:nowrap}
+#vse .grp>div{display:flex;gap:4px}
+#ctl #vse button,#vsi button{width:auto;height:auto;display:block;font:inherit;color:#fff;background:rgba(255,255,255,.1);border:0;border-radius:6px;padding:8px 11px;cursor:pointer;white-space:nowrap;opacity:1}
+#ctl #vse button:hover,#vsi button:hover{background:rgba(255,255,255,.22)}
+#ctl #vse button:disabled{opacity:.35;cursor:default;background:rgba(255,255,255,.1)}
+#ctl #vse button.danger:hover,#vsi button.danger:hover{background:#b3312d}
+#ctl #vse button.on{background:rgb(40,130,255)}
+#vse .sep{width:1px;height:20px;background:rgba(255,255,255,.2);margin:0 4px}
+#vse-msg{color:#aab1bd;white-space:normal;text-align:right;min-height:16px;padding:0 4px}
+#vse-msg.warn{color:#ffb454} #vse-msg.bad{color:#ff7a70} #vse-msg.good{color:#7fd88a}
+#vsn{display:none;padding:2px 4px;color:#ffb454;text-align:right;line-height:1.4}
+#vsn.on{display:block}
+#vse-notes{display:none;flex-direction:column;gap:6px}
+#vse-notes.on{display:flex}
+#vse-notes label{color:#aab1bd;font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:0 2px}
+#vse-notes textarea{width:100%;min-width:min(560px,80vw);box-sizing:border-box;height:150px;resize:vertical;background:#16181d;color:#f2f3f5;border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:10px;font:400 14px/1.45 system-ui,sans-serif}
+#vsi{position:fixed;z-index:99991;display:none;gap:3px;padding:4px;border-radius:8px;background:rgba(43,43,45,.96);color:#fff;font:500 13px/1 system-ui,sans-serif;box-shadow:0 4px 16px rgba(0,0,0,.35)}
+#vsi.on{display:flex}
+#vsi button{padding:6px 9px}
+html.export #vse,html.export #vsi,html.export #vse-btn{display:none!important}
+@media print{#vse,#vsi{display:none!important}}
+#ctl #vse button.go{background:rgb(40,130,255);font-weight:700}
+#ctl #vse button.go:hover{background:rgb(70,150,255)}
+#vsend{position:fixed;inset:0;z-index:99999;display:grid;place-content:center;justify-items:center;gap:10px;background:rgba(15,16,20,.88);color:#fff;font:400 17px/1.5 system-ui,sans-serif;text-align:center;padding:24px}
+#vsend b{font-size:26px;font-weight:700;color:#fff} #vsend p{max-width:560px;margin:0;color:#c9ced8}
+#vsend .spin{width:34px;height:34px;border-radius:50%;border:3px solid rgba(255,255,255,.25);border-top-color:#fff;animation:vs-spin 1s linear infinite!important;margin-bottom:8px}
+@keyframes vs-spin{to{transform:rotate(360deg)}}
+/* where a hint points: texts that run off the slide, the line they cross, the text a voice finding is about */
+html.vs-editing #deck .vs-over{outline:3px solid #ff9f1a!important;outline-offset:6px;border-radius:4px;background:rgba(255,159,26,.12)}
+html.vs-editing #deck .vs-voice{outline:3px dotted #ff9f1a!important;outline-offset:6px;border-radius:4px}
+#vsl{position:fixed;display:none;height:0;border-top:2px dashed #ff9f1a;z-index:99980;pointer-events:none}
+#vsl.on{display:block}
+#vse-pick{display:none;flex-direction:column;gap:6px}
+#vse-pick.on{display:flex}
+#vse-pick label{color:#aab1bd;font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:0 2px}
+#vse-pick p{margin:0;padding:4px;color:#c9ced8}
+#vse-pick .list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;max-height:46vh;overflow:auto;width:min(720px,84vw)}
+#ctl #vse #vse-pick .list button{display:flex;flex-direction:column;align-items:flex-start;gap:3px;text-align:left;white-space:normal;padding:8px 10px}
+#vse-pick .list button small{font-weight:400;color:#aab1bd;line-height:1.3}
+#vse-pick .list button b{color:#fff;font-weight:700}
+#vse-notes textarea{height:110px}
+
+/* a deck opened as a file: what happens to a slide once the changes are applied */
+html.vs-editing #deck > .slide[data-vs-mark]::after{content:attr(data-vs-mark);position:absolute;left:50%;top:26px;transform:translateX(-50%);z-index:50;padding:12px 22px;border-radius:10px;background:#1d1d1f;color:#fff;font:600 24px/1.2 system-ui,sans-serif;letter-spacing:0;text-transform:none;white-space:nowrap;box-shadow:0 6px 24px rgba(0,0,0,.35)}
+html.export #deck > .slide[data-vs-mark]::after{display:none}
+#vsend button{margin-top:14px;font:600 16px/1 system-ui,sans-serif;color:#111;background:#fff;border:0;border-radius:8px;padding:12px 18px;cursor:pointer}
+#ctl #vse button.good{background:rgba(60,170,110,.35)}
+#vse-report{display:none;flex-direction:column;gap:6px;max-width:min(720px,84vw);max-height:46vh;overflow:auto;padding:10px;border-radius:8px;background:#232325}
+#vse-report.on{display:flex}
+#vse-report label{color:#aab1bd;font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+#vse-report .r{display:flex;flex-direction:column;gap:2px;padding:6px 8px;border-radius:6px;background:rgba(255,255,255,.06);white-space:normal;line-height:1.35}
+#vse-report .r small{color:#8fd3a8} #vse-report .r s{color:#aab1bd} #vse-report .r b{color:#fff;font-weight:600}
+#ctl #vse #vse-report button{align-self:flex-end}
+#vse-btn.news{position:relative} #vse-btn.news::after{content:"";position:absolute;right:6px;top:6px;width:9px;height:9px;border-radius:50%;background:#ff7a59}
+/* typed by the user and not corrected yet: marked wherever the deck is open, strongest while editing */
+#deck .vs-raw{text-decoration:underline wavy #e0a800;text-decoration-thickness:2px;text-underline-offset:.18em}
+html.vs-editing #deck .vs-raw{outline:2px dashed #e0a800;outline-offset:4px}
+html.export #deck .vs-raw,html.presenting #deck .vs-raw{text-decoration:none;outline:0}
+@media print{#deck .vs-raw{text-decoration:none;outline:0}}
+#vse-flag{align-self:center;padding:5px 9px;border-radius:999px;background:#e0a800;color:#1d1d1f;font:700 12px/1 system-ui,sans-serif;white-space:nowrap;margin-right:6px}
+#ctl #vse button:disabled{opacity:.4;cursor:default}
+/* the order of the click steps by hand */
+.vse-badge{position:fixed;z-index:2147483000;min-width:28px;height:28px;padding:0 7px;box-sizing:border-box;border-radius:14px;background:#5b6270;color:#fff;font:700 15px/28px system-ui,sans-serif;text-align:center;pointer-events:none;box-shadow:0 2px 8px rgba(0,0,0,.35)}
+.vse-badge.set{background:rgb(40,130,255)}
+html.vs-editing #deck .vse-part{outline:2px dashed rgba(40,130,255,.7);outline-offset:4px;cursor:pointer}

@@ -1,0 +1,8 @@
+<!--vs {"name": "brand_type", "order": 2, "use": "Preview only: typefaces and logo.", "slots": {}, "sample": {"name": "Type and logo", "logo": "@logo", "logo_inv": "@logo_inv"}, "preview_only": true} -->
+<section class="slide" {{attrs}}>
+  <div class="kicker">Brand</div><h2>Type and <em>logo</em></h2>
+  <div class="typo"><div class="sample anim">{{b.head_font}}<small>Headings, weights {{b.fonts.display_weight}} and {{b.fonts.head_weight}}</small></div>
+  <div class="anim"><p><b>{{b.body_font}}</b> sets the running text. A paragraph on a slide stays short: two or three sentences, large enough to read from the back of the room.</p></div></div>
+  {{#logo}}<div class="logofield"><div class="field anim"><img src="{{logo}}" alt=""></div><div class="field dk anim"><img src="{{logo_inv}}" alt=""></div></div>{{/logo}}
+  {{^logo}}<p class="lead">No logo in the library yet.</p>{{/logo}}
+</section>

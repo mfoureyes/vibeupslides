@@ -1,0 +1,21 @@
+<!--vs {"name": "funnel", "order": 71, "use": "Many become few: three to five stages that narrow from top to bottom, each with its number (leads, meetings, offers, orders). The last stage is the one that counts and takes the accent colour. Real numbers with a source.", "slots": {"kicker": "small label above the title (optional)", "title": "the title as a full sentence, <em> marks the one accent word", "items": "list of 3 to 5 {value, label, text, share}: from the widest to the narrowest; share is the width in percent of the first (the first has 100), not below 25", "note": "one sentence below (optional)", "step": "true: the stages appear one by one on click"}, "sample": {"kicker": "Funnel", "title": "Out of many reports come a few real <em>repairs</em>", "source": "Sample figures", "items": [{"value": "240", "label": "Reports", "text": "Everything the shifts note in a month.", "share": 100}, {"value": "96", "label": "Checked", "text": "A technician looks at each one on site.", "share": 76}, {"value": "33", "label": "Planned", "text": "Work that needs time and parts.", "share": 52}, {"value": "12", "label": "Repairs", "text": "Done before the machine stopped.", "share": 30}]}} -->
+<section class="slide vs-fun" {{attrs}}>
+  <style>
+  .vs-fun .vs-lv{display:grid;gap:10px;margin-top:56px}
+  .vs-fun .vs-lv-r{display:grid;grid-template-columns:55% 1fr;column-gap:60px;align-items:center}
+  .vs-fun .vs-lv-b{justify-self:center;width:var(--w);min-height:92px;background:var(--soft);display:flex;align-items:center;justify-content:center;gap:18px;padding:14px 22px;text-align:center}
+  .vs-fun .vs-lv-b b{font-weight:var(--w-display);font-size:44px;line-height:1;color:inherit}
+  .vs-fun .vs-lv-b span{font-size:26px;font-weight:700;line-height:1.2}
+  .vs-fun .vs-lv-r.vs-lv-on .vs-lv-b{background:var(--accent);color:var(--on-accent,var(--on))}
+  .vs-fun .vs-lv-r p{font-size:25px;line-height:1.4;color:var(--muted)}
+  .vs-fun .vs-lv-r p strong{display:block;font-size:27px;color:var(--ink)}
+  .vs-fun .callout{margin-top:36px}
+
+  .vs-fun .vs-lv-r:last-child .vs-lv-b{background:var(--accent);color:var(--on-accent,var(--on))}
+  </style>
+  {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+  <h2>{{title}}</h2>
+  <div class="vs-lv" data-seq>{{#items}}<div class="vs-lv-r {{#step}}{{#@first}}anim{{/@first}}{{^@first}}f{{/@first}}{{/step}}{{^step}}anim{{/step}}" style="--w:{{share}}%"><div class="vs-lv-b"><b>{{value}}</b><span>{{label}}</span></div><p>{{text}}</p></div>{{/items}}</div>
+  {{#note}}<p class="callout anim">{{note}}</p>{{/note}}
+  {{notes}}
+</section>

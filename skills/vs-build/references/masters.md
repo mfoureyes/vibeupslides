@@ -97,9 +97,12 @@ class of your own so they do not leak.
 Limits that keep slides clean: content ends 150 px above the footer (930 px) and at 1800 px on the
 right; titles are full sentences and get room for three lines on content slides; body text is at
 least 27 px and no text under 18 px, labels and table heads included; text and its ground differ
-by at least 4.5 to 1, from 24 px on (bold from 18 px) by 3 to 1; at most one large movement per slide. `vs preview`
-reports overflow and legibility per master. A numeral that only decorates takes `var(--ghost)`
-or the class `ghost`; an element that is pale on purpose carries `data-quiet`; both are left out.
+by at least 4.5 to 1, from 24 px on (bold from 18 px) by 3 to 1; a ring, an arrow, a bar or a point by 1.5 to 1 or a clearly different colour;
+at most one large movement per slide. `vs preview` reports overflow and legibility per master, in
+the light and the dark scheme. Marks drawn in `--accent` or a fixed colour keep that colour on the
+dark ground: draw them in `--accent-text`, `--ink` or `--line` where they must follow the scheme.
+A numeral that only decorates takes `var(--ghost)` or the class `ghost`; an element that is pale on
+purpose carries `data-quiet`; both are left out.
 
 ## A deck the user already has is the model
 

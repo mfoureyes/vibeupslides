@@ -148,7 +148,7 @@ def derive_colors(ground, ink=None, accent=None, deep=None):
     while _contrast(a, ground) < 4.6 and k < 20: a = _mix(a, ink, .08); k += 1
     if a != accent: out["accent_text"] = a
     a = accent; k = 0
-    while _contrast(a, deep) < 3.2 and k < 20: a = _mix(a, out["on_deep"], .1); k += 1
+    while _contrast(a, deep) < 4.5 and k < 20: a = _mix(a, out["on_deep"], .1); k += 1
     if a != accent: out["accent_on_deep"] = a
     return out
 

@@ -272,7 +272,8 @@ limit that fits the mode), a voice line and the paths of the contact sheets. Ove
 `clean`: shorten the text or split the slide, never shrink type. The legibility line must be
 `clean` as well: it names every text that is hard to read, by slide (`LEGIBILITY slide 4 (…):
 contrast 1.8 to 1 between text and ground …`, type under 18 px, text cut off, at the edge of the
-slide, or on top of another text). A deck is not handed over with such a finding: take another
+slide, or on top of another text), and every ring, arrow, bar or line that hardly stands out; it
+looks at the light and the dark scheme and puts `dark scheme:` or `light scheme:` before what only one shows. A deck is not handed over with such a finding: take another
 picture or master, move the accent word, shorten, or correct the brand's master or theme
 (`pitfalls.md`). Slides flagged as wordy in a live
 deck usually carry text that belongs in the notes. The voice line names every text that breaks a
@@ -311,7 +312,7 @@ belong on one click, set `"order"` (deck-format.md). The user can do the same in
 ("On click", "Order": they click the parts in the new order, with Shift to join one to the step
 before; the strength of movement, "Play").
 
-Name the version in half a sentence when you hand a deck over ("built with VibeUpSlides 0.9.0", from
+Name the version in half a sentence when you hand a deck over ("built with VibeUpSlides 0.9.1", from
 the status line of the setup), so that the user can tell which state they are testing.
 A button (`button: {label, url}` on the closing slide) is a call to action with a real target; a
 cover has none. The last slide credits the person who made the deck (`"author"` in the deck file,

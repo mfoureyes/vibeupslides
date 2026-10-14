@@ -1,18 +1,20 @@
-<!--vs {"name": "venn", "order": 54, "use": "Two or three fields and what they share: overlapping circles with the shared part named in the middle (technology, market and team; what we can and what is needed). The middle is what the slide is about. Not for things that do not overlap: use cards or columns.", "slots": {"kicker": "small label above the title (optional)", "title": "the title as a full sentence, <em> marks the one accent word", "items": "list of 2 or 3 {title, text}: the circles, title one or two words", "center": "what they share, one to three words, stands in the middle", "center_text": "one sentence about what they share (optional)", "note": "one sentence below (optional)"}, "sample": {"kicker": "Overlap", "title": "A company grows where three things <em>meet</em>", "items": [{"title": "Technology", "text": "Something that works and can be built."}, {"title": "Market", "text": "People who need it and pay for it."}, {"title": "Team", "text": "People who can do both."}], "center": "Venture", "center_text": "Only where all three come together does a company grow."}} -->
+<!--vs {"name": "venn", "order": 54, "use": "Two or three fields and what they share: overlapping circles with the shared part named in the middle (technology, market and team; what we can and what is needed). The middle is what the slide is about. Not for things that do not overlap: use cards or columns.", "slots": {"kicker": "small label above the title (optional)", "title": "the title as a full sentence, <em> marks the one accent word", "items": "list of 2 or 3 {title, text}: the circles, title one or two words", "center": "what they share, one to three words, stands in the middle", "center_text": "one sentence about what they share (optional)", "note": "one sentence below (optional)"}, "sample": {"kicker": "Overlap", "title": "Downtime falls where three things <em>meet</em>", "items": [{"title": "Data", "text": "Every machine and its history in one place."}, {"title": "Parts", "text": "The right spare part in stock in time."}, {"title": "People", "text": "Planners who use the plan every day."}], "center": "Fewer stops", "center_text": "Only where all three come together does downtime really fall."}} -->
 <section class="slide vs-ven" {{attrs}}>
   <style>
   .vs-ven .vs-vn{display:grid;grid-template-columns:680px 1fr;gap:90px;align-items:center;margin-top:24px}
   .vs-ven .vs-vn-fig{position:relative;width:680px;height:420px}
   .vs-ven .vs-vn-fig:has(.vs-vn-c3){height:540px}
-  .vs-ven .vs-vn-c{position:absolute;width:380px;height:380px;border-radius:50%;border:5px solid var(--ink);background:color-mix(in srgb,var(--soft) 55%,transparent);display:flex;padding:0 44px}
-  .vs-ven .vs-vn-c b{font-size:28px;line-height:1.15;font-weight:700;max-width:150px}
-  .vs-ven .vs-vn-c1{left:20px;top:20px;align-items:center;justify-content:flex-start}
-  .vs-ven .vs-vn-c2{left:280px;top:20px;align-items:center;justify-content:flex-end;text-align:right}
-  .vs-ven .vs-vn-fig:has(.vs-vn-c3) .vs-vn-c1{top:0;align-items:flex-start;padding-top:100px}
-  .vs-ven .vs-vn-fig:has(.vs-vn-c3) .vs-vn-c2{top:0;align-items:flex-start;padding-top:100px}
-  .vs-ven .vs-vn-c3{left:150px;top:160px;align-items:flex-end;justify-content:center;text-align:center;padding-bottom:56px}
-  .vs-ven .vs-vn-mid{position:absolute;left:340px;top:210px;transform:translate(-50%,-50%);z-index:1;background:var(--accent);color:var(--on-accent,var(--on));font-weight:700;font-size:26px;line-height:1.15;padding:14px 22px;max-width:210px;text-align:center;border-radius:var(--radius,0)}
-  .vs-ven .vs-vn-fig:has(.vs-vn-c3) .vs-vn-mid{top:250px}
+  .vs-ven .vs-vn-c{position:absolute;width:380px;height:380px;border-radius:50%;border:5px solid var(--ink);background:color-mix(in srgb,var(--soft) 55%,transparent);box-sizing:border-box}
+  .vs-ven .vs-vn-c1{left:20px;top:20px} .vs-ven .vs-vn-c2{left:280px;top:20px}
+  .vs-ven .vs-vn-fig:has(.vs-vn-c3) .vs-vn-c1,.vs-ven .vs-vn-fig:has(.vs-vn-c3) .vs-vn-c2{top:0}
+  .vs-ven .vs-vn-c3{left:150px;top:160px}
+  /* labels at the centre of the part of each circle that is its own, the shared word at the centre of what all share (worked out for these circles) */
+  .vs-ven .vs-vn-l{position:absolute;transform:translate(-50%,-50%);max-width:150px;text-align:center;font-size:28px;line-height:1.15;font-weight:700;z-index:1}
+  .vs-ven .vs-vn-l1{left:177px;top:210px} .vs-ven .vs-vn-l2{left:503px;top:210px}
+  .vs-ven .vs-vn-fig:has(.vs-vn-c3) .vs-vn-l1{left:155px;top:151px} .vs-ven .vs-vn-fig:has(.vs-vn-c3) .vs-vn-l2{left:525px;top:151px}
+  .vs-ven .vs-vn-l3{left:340px;top:440px}
+  .vs-ven .vs-vn-mid{position:absolute;left:340px;top:210px;transform:translate(-50%,-50%);z-index:2;background:var(--accent);color:var(--on-accent,var(--on));font-weight:700;font-size:26px;line-height:1.15;padding:12px 20px;max-width:170px;text-align:center;border-radius:var(--radius,0)}
+  .vs-ven .vs-vn-fig:has(.vs-vn-c3) .vs-vn-mid{top:229px;max-width:150px;font-size:24px;padding:10px 16px}
   .vs-ven .vs-vn-list{display:grid;gap:28px}
   .vs-ven .vs-vn-item{display:grid;grid-template-columns:54px 1fr;column-gap:22px}
   .vs-ven .vs-vn-item i{font-style:normal;font-weight:700;font-size:26px;line-height:1.45;color:var(--accent-text)}
@@ -24,7 +26,7 @@
   {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
   <h2>{{title}}</h2>
   <div class="vs-vn">
-    <div class="vs-vn-fig anim">{{#items}}<div class="vs-vn-c vs-vn-c{{@i}}"><b>{{title}}</b></div>{{/items}}{{#center}}<div class="vs-vn-mid">{{center}}</div>{{/center}}</div>
+    <div class="vs-vn-fig anim">{{#items}}<i class="vs-vn-c vs-vn-c{{@i}}"></i>{{/items}}{{#items}}<b class="vs-vn-l vs-vn-l{{@i}}">{{title}}</b>{{/items}}{{#center}}<div class="vs-vn-mid">{{center}}</div>{{/center}}</div>
     <div class="vs-vn-list" data-seq>{{#items}}<div class="vs-vn-item anim"><i>{{@ii}}</i><div><h3>{{title}}</h3>{{#text}}<p>{{text}}</p>{{/text}}</div></div>{{/items}}{{#center_text}}<p class="vs-vn-sum anim">{{center_text}}</p>{{/center_text}}</div>
   </div>
   {{#note}}<p class="callout anim">{{note}}</p>{{/note}}

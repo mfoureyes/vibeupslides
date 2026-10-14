@@ -460,6 +460,36 @@ COMPONENTS_JS = r"""
 }
 """
 
+# The icons of a site that keeps them in an svg sprite: symbols already in the page and the sprite files it points
+# to (<use href="sprite.svg#id">, data-svg-href="…" loaded by script). Every symbol is drawn once inside the page so
+# that the site's own css colours it, and comes back with those colours written into the file (currentColor where
+# it takes the text colour).
+SPRITE_JS = r"""
+async (max) => {
+  const out = { sources: [], symbols: [] }, urls = new Set(), abs = v => { try { return new URL(v, location.href).href; } catch (e) { return null; } };
+  for (const u of document.querySelectorAll('use')) { const f = (u.getAttribute('href') || u.getAttribute('xlink:href') || '').split('#')[0]; if (f && abs(f)) urls.add(abs(f)); }
+  for (const e of document.querySelectorAll('[data-svg-href],[data-sprite],[data-svg-sprite],[data-svg-src],[data-src]')) for (const a of ['data-svg-href', 'data-sprite', 'data-svg-sprite', 'data-svg-src', 'data-src']) {
+    const v = e.getAttribute(a); if (v && /\.(svg|html?)(\?|#|$)/i.test(v) && (a !== 'data-src' || /sprite|icons?\b/i.test(v)) && abs(v)) urls.add(abs(v)); }
+  const host = document.createElement('div'); host.style.cssText = 'position:absolute;left:-10000px;top:0;width:10px;height:10px;overflow:hidden'; document.body.appendChild(host);
+  for (const u of Array.from(urls).slice(0, 4)) { try { const t = await (await fetch(u, { credentials: 'same-origin' })).text(); if (t.length < 4e6 && t.includes('<symbol')) { const d = document.createElement('div'); d.innerHTML = t.replace(/<script[\s\S]*?<\/script>/gi, ''); host.appendChild(d); out.sources.push(u); } } catch (e) {} }
+  const seen = new Set(), SH = 'path,circle,rect,ellipse,polygon,polyline,line';
+  for (const s of document.querySelectorAll('symbol[id]')) {
+    if (out.symbols.length >= max) break; const vb = s.getAttribute('viewBox'); if (!vb || seen.has(s.id)) continue; seen.add(s.id);
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); svg.setAttribute('viewBox', vb); svg.setAttribute('style', 'width:48px;height:48px;color:rgb(1, 2, 3)');
+    for (const c of s.childNodes) svg.appendChild(c.cloneNode(true)); host.appendChild(svg);
+    const shapes = svg.querySelectorAll(SH); if (!shapes.length || shapes.length > 150 || svg.querySelector('image, foreignObject, text')) { svg.remove(); continue; }
+    const colours = new Set(), paint = v => (!v || v === 'none') ? 'none' : (v === 'rgb(1, 2, 3)' || v === 'rgb(0, 0, 0)') ? 'currentColor' : (v.startsWith('url(') ? null : v);
+    let ok = true;
+    for (const e of svg.querySelectorAll(SH)) { const cs = getComputedStyle(e);
+      for (const p of ['fill', 'stroke']) { const v = paint(cs.getPropertyValue(p)); if (v === null) { ok = false; break; } e.setAttribute(p, v); if (v !== 'none' && v !== 'currentColor') colours.add(v); }
+      if (cs.stroke !== 'none') e.setAttribute('stroke-width', cs.strokeWidth); if (cs.opacity !== '1') e.setAttribute('opacity', cs.opacity); if (cs.fillRule === 'evenodd') e.setAttribute('fill-rule', 'evenodd'); }
+    for (const e of svg.querySelectorAll('*')) { e.removeAttribute('class'); e.removeAttribute('style'); } for (const e of svg.querySelectorAll('style, title, desc, script')) e.remove();
+    svg.removeAttribute('style'); svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+    if (ok) { const markup = svg.outerHTML; if (markup.length <= 20000) out.symbols.push({ id: s.id, markup, mono: !colours.size, colours: Array.from(colours).slice(0, 4), n: shapes.length }); }
+    svg.remove(); }
+  host.remove(); return out; }
+"""
+
 # Scrolls the union of some elements into view and returns its viewport rectangle (plus a margin) to clip a screenshot to.
 SHOOT_JS = r"""
 async ([sels, m]) => { const els = sels.map(s => document.querySelector(s)).filter(Boolean); if (!els.length) return null;
@@ -956,13 +986,27 @@ def save_elements(ctx, root, comps, notes):
         except Exception:
             continue
     ranked = sorted(found.values(), key=lambda i: -i["count"])
+    sprite_src, sprite_n = [], 0                          # a sprite of the site: its symbols after the icons seen on the pages
+    LOGO, SOCIAL = re.compile(r"logo|brand|wordmark|signet", re.I), re.compile(r"facebook|twitter|linkedin|instagram|youtube|tiktok|xing|github|mastodon|whatsapp|pinterest|vimeo|bluesky|threads|telegram|spotify|soundcloud|flickr|snapchat|reddit|discord|social", re.I)
+    ARROW = re.compile(r"arrow|pfeil|chevron|caret|angle|next|prev|toplink", re.I)
+    have = {re.sub(r"\s+", "", i.get("markup") or "") for i in ranked}
+    for c in comps:
+        sp = c.get("sprite") or {}
+        sprite_src += [u for u in sp.get("sources") or [] if u not in sprite_src]
+        for s in sp.get("symbols") or []:
+            if LOGO.search(s["id"]) or SOCIAL.search(s["id"]) or re.sub(r"\s+", "", s["markup"]) in have: continue
+            have.add(re.sub(r"\s+", "", s["markup"])); sprite_n += 1
+            hint = re.sub(r"^(icon|ico|svg|sprite)[-_]+|[-_]+(icon|svg)$", "", re.sub(r"^[a-z0-9]+--", "", s["id"].lower()))
+            ranked.append({"markup": s["markup"], "hint": hint, "arrow": "name" if ARROW.search(s["id"]) else None, "count": 0, "width": 48, "height": 48, "mono": s.get("mono"),
+                           "color": (s.get("colours") or [None])[0], "sprite": True})
     def write(kind, items):
         for n, it in enumerate(items, 1):
             tail = re.sub(r"[^a-z0-9]+", "-", (it.get("hint") or "").lower()).strip("-")[:24]
             it["file"] = f"elements/{kind}s/{kind}_{n:02d}{'_' + tail if tail else ''}.svg"
             open(os.path.join(root, it["file"]), "w", encoding="utf-8").write(it["markup"])
         return items
-    sets = {"icon": write("icon", [i for i in ranked if not i.get("arrow")][:40]), "arrow": write("arrow", [i for i in ranked if i.get("arrow")][:12]), "shape": write("shape", list(shapes.values())[:6])}
+    icons = [i for i in ranked if not i.get("arrow") and not i.get("sprite")][:40] + [i for i in ranked if not i.get("arrow") and i.get("sprite")][:160]
+    sets = {"icon": write("icon", icons), "arrow": write("arrow", [i for i in ranked if i.get("arrow")][:12]), "shape": write("shape", list(shapes.values())[:6])}
     checked = {}
     try:                                      # contact sheet: the files are loaded as images, which also proves that they stand alone
         html = ("<meta charset='utf-8'><style>body{margin:0;padding:18px;background:#d6d6d6;font:11px/1.3 Menlo,Consolas,monospace;color:#111}h2{font:600 14px Arial,sans-serif;margin:16px 2px 8px}"
@@ -1001,11 +1045,12 @@ def save_elements(ctx, root, comps, notes):
     facts = _clean({
         "saved": len(sets["icon"]), "style": style, "line": line, "filled": filled, "stroke_width_on_24_grid": _mode(strokes) if style == "line" else None,
         "sizes_px": _count([i["height"] for i in sets["icon"]], 4), "colors": _count([i.get("color") for i in sets["icon"]], 3), "one_colour": sum(1 for i in sets["icon"] if i.get("mono")),
-        "from_img_files": sum(1 for i in sets["icon"] if i.get("linked")), "icon_font": [{"family": f, "count": n} for f, n in sorted(icon_fonts.items(), key=lambda kv: -kv[1])[:2]],
+        "from_img_files": sum(1 for i in sets["icon"] if i.get("linked")), "from_sprite": sum(1 for i in sets["icon"] if i.get("sprite")), "sprite_files": sprite_src[:4], "icon_font": [{"family": f, "count": n} for f, n in sorted(icon_fonts.items(), key=lambda kv: -kv[1])[:2]],
         "skipped_social": social, "skipped_unresolved": unresolved,
         "arrow_files": [{"file": i["file"], "found_by": i["arrow"], "in_button_or_link": i.get("inButton", False), "rotated_by_css": bool(i.get("rotated"))} for i in sets["arrow"]],
         "shape_files": [{"file": i["file"], "width": i["width"], "height": i["height"]} for i in sets["shape"]]})
-    if icon_fonts: notes.append("the site draws icons with an icon font (" + ", ".join(list(icon_fonts)[:2]) + "): those are not saved as svg")
+    if icon_fonts: notes.append("the site draws icons with an icon font (" + ", ".join(list(icon_fonts)[:2]) + "): those are not saved as svg"
+                                + (f"; its svg sprite gave {sum(1 for i in sets['icon'] if i.get('sprite'))} icon(s)" if sprite_n else ""))
     if unresolved: notes.append(f"{unresolved} svg icon(s) point to an external sprite or contain images and were not saved")
     files = {k: [i["file"] for i in v] for k, v in sets.items()}
     return files, facts, (_mode(strokes) if style == "line" else None), style
@@ -1523,6 +1568,9 @@ def extract(url, name=None, pages=4, fonts=True, out=None, max_images=12):
             except Exception as e: look_notes.append(f"{tag}: motion could not be measured: " + str(e)[:100])
             try: comp = pg.evaluate(COMPONENTS_JS, True)
             except Exception as e: comp = {"url": data.get("url"), "notes": ["component capture failed: " + str(e)[:120]]}
+            if tag == "home":                            # icons kept in an svg sprite, also one the page loads by script
+                try: comp["sprite"] = pg.evaluate(SPRITE_JS, 400)
+                except Exception as e: look_notes.append("svg sprite could not be read: " + str(e)[:100])
             look_notes.extend(f"{tag}: {n}" for n in comp.get("notes") or [])
             comps.append(comp)
             pg.screenshot(path=os.path.join(root, "raw/screens", f"{tag}.png"))

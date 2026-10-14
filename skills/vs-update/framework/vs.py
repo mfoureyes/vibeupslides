@@ -347,7 +347,8 @@ def _temporary_note():
               f" `vs.py backup` and give the user the file it writes ({outbox()}); in a new session `vs.py restore <file>` brings everything back.")
 
 def _legible_report(found, lang=None, limit=40):
-    """Print what the look at every slide found: type too small, too little contrast, text cut off, at the edge or on top of other text."""
+    """Print what the look at every slide found, in the light and the dark scheme: type too small, too little contrast, text cut off,
+    at the edge or on top of other text, rings, arrows and lines that hardly stand out."""
     tag = f"[{lang}] " if lang else ""
     hints = [(x, f[6:]) for x in found for f in x["findings"] if f.startswith("hint: ")]
     found = [dict(x, findings=[f for f in x["findings"] if not f.startswith("hint: ")]) for x in found]; found = [x for x in found if x["findings"]]
@@ -637,7 +638,8 @@ def cmd_preview(args):
     for i, s in enumerate(deck["slides"], 1): print(f"  {i:2d} {s['master']}" + ("  (introduction)" if s.get("intro") else ""))
     print("overflow:", problems or "clean")
     if not all([_legible_report(legible[lang], lang if len(langs) > 1 else None) for lang in langs]):
-        print("  Fix these in the brand's masters and theme.css: larger type, a colour that stands out from its ground, more room. A text over a photo needs the photo darkened or a ground of its own.")
+        print("  Fix these in the brand's masters and theme.css: larger type, a colour that stands out from its ground, more room. A text over a photo needs the photo darkened or a ground of its own."
+              " What only the dark scheme shows is fixed in the colours for dark ground (deep, on-deep, accent-on-deep) or in rules for `.slide.vs-dk`; a ring, an arrow or a line drawn in --accent or a fixed colour follows the scheme when drawn in --accent-text, --ink or --line.")
     _voice_report(deck, b, langs, sample=True)
     for w in env["warnings"]: print("WARNING:", w)
     print("contact sheets to look at:"); [print("  " + s) for s in sheets]

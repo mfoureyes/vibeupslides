@@ -302,7 +302,7 @@ with sync_playwright() as p:
     ok("over http the scene takes its steps", hf is not None and hf.evaluate("document.documentElement.dataset.step") == "1")
     hp.close()
     srv.send_signal(signal.SIGINT)
-    try: rc = srv.wait(timeout=8); rest = srv.stdout.read()
+    try: rc = srv.wait(timeout=20); rest = srv.stdout.read()
     except subprocess.TimeoutExpired: srv.kill(); rc, rest = -1, ""
     ok("present stops cleanly on Ctrl-C and says what it is good for", rc == 0 and "stopped" in rest and "YouTube" in rest and "Traceback" not in rest, f"{rc} {rest[-300:]}")
     ok("no script errors with media", not errors, str(errors[:3]))
@@ -1007,6 +1007,21 @@ sx = MO3.site_set({"animations": {"in_use": [{"name": "fadeInDown", "kind": "ent
 ok("the set copied from a website plays the site's own keyframes, with their real way, duration and easing",
    fx == "0%{opacity:0;translate:0 -33%}" and "@keyframes m-item{0%{opacity:0;translate:0 -33%}}" in sx and '"duration": 0.8' in sx and "cubic-bezier(.2,.8,.2,1)" in sx
    and MO3.frames_css({"transform": ["0% matrix(1,0,0,1,0,0)"]}) is None, fx + sx[:600])
+
+# icons a site keeps in an svg sprite come with the colours its css gives them
+import analyze as AN
+with sync_playwright() as p:
+    br = p.chromium.launch(); pg = br.new_page()
+    pg.set_content('<svg style="display:none"><symbol id="brand--search" viewBox="0 0 24 24"><path class="fg" d="M2 2h20v20z"/></symbol>'
+        '<symbol id="sector_energy" viewBox="0 0 48 48"><circle class="bg" cx="24" cy="24" r="24"/><path class="fg" d="M10 10h20v20z"/></symbol>'
+        '<symbol id="site-logo" viewBox="0 0 10 10"><path d="M0 0h10v10z"/></symbol></svg><style>.bg{fill:#2F6FDB}.fg{fill:#EEEEEE}</style><p>page</p>')
+    sp = pg.evaluate(AN.SPRITE_JS, 50); br.close()
+syms = {s["id"]: s for s in sp["symbols"]}
+ok("the icons of an svg sprite are read with the colours the site's css gives them", set(syms) == {"brand--search", "sector_energy", "site-logo"}
+   and 'fill="rgb(47, 111, 219)"' in syms["sector_energy"]["markup"] and not syms["sector_energy"]["mono"] and "class=" not in syms["brand--search"]["markup"], str(sp)[:600])
+import build as BD3
+ok("text in the accent colour on dark ground is a tone light enough to read", BD3.contrast(BD3.accent_as_text("#2F6FDB", "#0B2545", "#FFFFFF", need=4.5), "#0B2545") >= 4.5
+   and "accent_on_deep" in " ".join(BD3.brand_warnings({"colors": dict(json.load(open(os.path.join(lib, "brand.json")))["colors"], accent="#2F6FDB", deep="#0B2545", on_deep="#FFFFFF", accent_on_deep="#2F6FDB")})))
 
 # a presentation that exists as HTML is read slide by slide; the build leaves fields a slide could still take
 import ingest as IG

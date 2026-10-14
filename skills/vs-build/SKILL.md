@@ -261,6 +261,10 @@ slides must look and read like its website. Read `references/library.md` for the
   (`icon_03_energy.svg`), and list the names with their meaning in the style guide. Decks then set
   them by name on cards, columns and steps, and your masters use them (`{{>icon energy}}`,
   `url(el:arrows/...)`). Give the masters' samples real icons where the brand has some.
+  The analysis also reads icons the site keeps in an svg sprite (`from_sprite` in
+  `raw/components.json`), often more than a hundred. A note about an icon font says only that
+  those glyphs are not saved; never tell the user the brand has no icons while the website shows
+  some: look at `raw/elements.png` and the screenshots first.
 - **Motion**: how the brand moves. The analysis measured the website's own motion
   (`raw/motion.json`) and drafted a profile. Compare the motion sets as film strips
   (`vs motion example --strip all`), choose the one whose idea of movement fits the brand's

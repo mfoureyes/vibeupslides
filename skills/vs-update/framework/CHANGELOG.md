@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.9.1
+- Icons from an svg sprite: the analysis reads the symbols a site keeps in a sprite, also one its script loads afterwards (the site of a large IT services company: 159 icons and 5 arrows), each drawn once with the site's own colours.
+- Text in the accent colour on dark ground (dark slides, the dark scheme, key D) is a tone light enough to read (contrast 4.5:1 instead of 2:1). A brand whose `accent_on_deep` is too dark is told so.
+- `venn`: the names stand in the middle of the part of each circle that is its own, the shared word in the middle of what all share.
+- `spectrum`: the scale comes first, then the marks one by one.
+- The sample texts of the masters tell one neutral story (a maintenance system for a manufacturer's plants), with no trace of a start-up programme.
+
+For brand libraries made with an earlier version:
+- Copy the masters `venn` and `spectrum` again and give them the brand's look.
+- Build the preview again: dark slides and the dark scheme may show new legibility findings where the theme puts the accent text on a light box inside a dark slide (for example `.dark .kicker{background:var(--paper);color:var(--accent-text)}`); use `--accent` or `--ink` there.
+- If the website keeps its icons in a sprite and the library has none: `vs.py analyze <url> --brand <name> --again` reads them. It drafts brand.json anew (style guide, theme and masters stay), so keep a copy of brand.json and carry the confirmed values over.
+
+## 0.9.1
+- The legibility check looks at every slide in the dark scheme as well (key D, `?scheme=dark`), in `vs.py preview` and `vs.py build`. What only one scheme shows is labelled (`LEGIBILITY slide 4 (…): dark scheme: contrast 2.1 to 1 …`); what both show is named once. Slides that are dark, accent or photo slides look the same in both and are measured once.
+- The check measures the drawn parts of a slide too: rings, arrows, bars, points, lines in figures and lines drawn in CSS (borders, `::before`, `::after`) that hardly stand out from their ground: below 1.5 to 1 and without a clearly different colour (a strong lime on white stands out, a pale mint on cream does not). A hairline of up to 2 px or a line in `--line`, `--soft` or `--ghost` may stay quiet and only counts when it vanishes (below 1.15 to 1). An element marked `data-quiet` or `ghost` is left out, as with text.
+
+For brand libraries made with an earlier version:
+- Run `vs.py preview <brand>` once and correct what it now names: usually an accent colour that is too pale for rings, bullets and bars on paper, or marks in a fixed colour on the dark ground (draw them in `--accent-text`, `--ink` or `--line` so that they follow the scheme).
+
 ## 0.9.0
 - The project is called **VibeUpSlides** now. The plugin is `vibeupslides`, the repository `mfoureyes/vibeupslides`, the workspace `~/vibeupslides` (`VIBEUPSLIDES_HOME`), the Cowork backup `vibeupslides-workspace.zip`. The skills keep their names (`vs-build`, `vs-create`, `vs-design`, `vs-update`), and so does `vs.py`.
 - The click steps of a slide in an order of their own: `"order": [3, [1, 2]]` shows step 3 first and steps 1 and 2 together on the next click; an entry with a 0 puts steps on the slide from the start. In the editing panel "Order" numbers the steps, the parts are clicked in the new order, with Shift to join one to the step before.

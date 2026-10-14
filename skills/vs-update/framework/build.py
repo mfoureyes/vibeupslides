@@ -122,6 +122,10 @@ def brand_warnings(b):
     if contrast(c["accent"], c["paper"]) < 3 and not c.get("accent_text"):
         out.append(f"accent {c['accent']} is too light for text on paper: titles and labels use a darkened shade "
                    f"({accent_as_text(c['accent'], c['paper'], c['ink'])}). Set colors.accent_text to a brand colour that reads on paper if there is one")
+    aod = c.get("accent_on_deep")                           # the accent as text on dark ground: dark slides and the dark scheme (key D)
+    if aod and contrast(aod, c["deep"]) < 4.5:
+        out.append(f"accent_on_deep {aod} on deep {c['deep']} has contrast {contrast(aod, c['deep']):.1f}, wanted at least 4.5: take a lighter tone of the brand "
+                   f"(computed: {accent_as_text(c['accent'], c['deep'], c['on_deep'], need=4.5)}) or remove it")
     return out
 
 def _mix(a, b, t):
@@ -155,7 +159,7 @@ def tokens_css(b):
     return (":root{"
             f"--accent:{c['accent']};--on-accent:{c['on_accent']};--ink:{c['ink']};--deep:{c['deep']};--on-deep:{c['on_deep']};"
             f"--accent-text:{c.get('accent_text') or accent_as_text(c['accent'], c['paper'], c['ink'])};"
-            f"--accent-on-deep:{c.get('accent_on_deep') or accent_as_text(c['accent'], c['deep'], c['on_deep'], need=2.0)};"
+            f"--accent-on-deep:{c.get('accent_on_deep') or accent_as_text(c['accent'], c['deep'], c['on_deep'], need=4.5)};"
             f"--muted:{c['muted']};--line:{c['line']};--soft:{c['soft']};--ghost:{c['ghost']};--paper:{c['paper']};"
             f"--font:{body};--font-head:{head};--w-display:{f.get('display_weight', 800)};--w-head:{f.get('head_weight', 700)};"
             f"--radius:{radius};"
@@ -411,10 +415,63 @@ _LEGIBLE_JS = """(()=>{const page=document.querySelector('#deck > .slide.active'
     if(isPic&&q.width*q.height>area*.04&&q.width>60&&q.height>60)pics.push([Math.max(q.left,sr.left),Math.max(q.top,sr.top),Math.min(q.right,sr.right),Math.min(q.bottom,sr.bottom)]);});
   return {items:out,sx:sr.left,sy:sr.top,sc:sc,photo:photo||pics.length>0,pics:pics}})()"""
 
+_MARKS_JS = r"""(()=>{const page=document.querySelector('#deck > .slide.active');
+  const s=page.querySelector(':scope > .rs > .slide')||page;
+  const sr=s.getBoundingClientRect(),sc=sr.width/1920,out=[],area=sr.width*sr.height;
+  const skip='.placeholder,.footer,.rbar,.notes,.rt,.ghost,.header,.qopts,[data-quiet],script,style,canvas,video,iframe,img,.image,.photo,.vs-credit,.badge,.biglogo,[aria-hidden=true]';
+  const rgba=c=>{const m=/^rgba?\(/.test(c)?c.match(/[\d.]+/g).map(Number):null;return m?[m[0],m[1],m[2],m.length>3?m[3]:1]:null;};
+  const tok=k=>{const i=document.createElement('i');i.style.color='var(--'+k+')';s.appendChild(i);const c=getComputedStyle(i).color;i.remove();return (rgba(c)||[]).slice(0,3).join();};
+  const faint=new Set(['line','soft','ghost'].map(tok)),paper=tok('paper');      /* lines meant to stay quiet, and the slide's own ground */
+  const op=e=>{let a=1;for(let p=e;p&&p!==page.parentElement;p=p.parentElement)a*=parseFloat(getComputedStyle(p).opacity);return a;};
+  const name=e=>{const c=[...(e.classList||[])].filter(x=>!/^(anim|f|on|in)$/.test(x)).slice(0,2).join('.');return e.tagName.toLowerCase()+(c?'.'+c:'');};
+  const where=e=>(e.parentElement&&e.parentElement!==s?name(e.parentElement)+' > ':'')+name(e);
+  const add=(e,kind,col,w,q,part,own,thin)=>{const c=rgba(col);if(!c||c[3]<.05)return;const key=c.slice(0,3).join();
+    if(key===paper||key===own)return;                    /* a fill in the ground's colour hides what is behind it; a border in the box's own colour is its edge */
+    if(/shape|mark/.test(kind)&&w/sc>120)return;          /* a surface or a picture's stand-in, not a mark */
+    const a=op(e)*c[3];if(a<.05)return;
+    out.push({kind,c:c.slice(0,3),a,box:[q.left,q.top,q.right,q.bottom],d:where(e)+(part||''),faint:faint.has(key)||!!thin});};      /* a hairline is structure, like a line in --line */
+  const borders=cs=>['Top','Right','Bottom','Left'].map(k=>({k:k.toLowerCase(),w:parseFloat(cs['border'+k+'Width'])||0,st:cs['border'+k+'Style'],c:cs['border'+k+'Color']})).filter(b=>b.w>=1&&b.st!=='none'&&b.st!=='hidden');
+  const pbox=(e,cs,p,q)=>{          /* where a pseudo element is drawn: placed absolutely, from its offsets; else on its element */
+    if(p.position!=='absolute'||cs.position==='static')return q;const n=k=>parseFloat(p[k])||0;
+    const w=n('width')+n('paddingLeft')+n('paddingRight')+n('borderLeftWidth')+n('borderRightWidth'),h=n('height')+n('paddingTop')+n('paddingBottom')+n('borderTopWidth')+n('borderBottomWidth');
+    const bl=parseFloat(cs.borderLeftWidth)||0,bt=parseFloat(cs.borderTopWidth)||0,W=q.width/sc-bl-(parseFloat(cs.borderRightWidth)||0),H=q.height/sc-bt-(parseFloat(cs.borderBottomWidth)||0);
+    const x=p.left!=='auto'?n('left'):p.right!=='auto'?W-n('right')-w:0,y=p.top!=='auto'?n('top'):p.bottom!=='auto'?H-n('bottom')-h:0;
+    const l=q.left+(bl+x+n('marginLeft'))*sc,t=q.top+(bt+y+n('marginTop'))*sc;return {left:l,top:t,right:l+w*sc,bottom:t+h*sc,width:w*sc,height:h*sc};};
+  for(const e of s.querySelectorAll('*')){
+    if(e.closest(skip))continue;const cs=getComputedStyle(e);if(cs.display==='none'||cs.visibility==='hidden')continue;
+    const q=e.getBoundingClientRect();if(q.width<1&&q.height<1)continue;
+    if(e instanceof SVGElement){if(!/^(path|circle|ellipse|line|polyline|polygon|rect)$/.test(e.tagName))continue;
+      if(cs.stroke&&cs.stroke!=='none'&&parseFloat(cs.strokeWidth)>0)add(e,'figure line',cs.stroke,0,q);
+      if(e.tagName!=='line'&&cs.fill&&cs.fill!=='none'&&!/url/.test(cs.fill))add(e,'figure shape',cs.fill,Math.min(q.width,q.height),q);continue;}
+    const own=(rgba(cs.backgroundColor)||[]).slice(0,3).join(),bs=borders(cs);
+    if(bs.length===4&&parseFloat(cs.borderTopLeftRadius)>=Math.min(q.width,q.height)*.4&&bs.every(b=>b.c===bs[0].c))add(e,'ring',bs[0].c,0,q,'',own);
+    else for(const b of bs)add(e,'line',b.c,0,q,' border-'+b.k,own,b.w<=2);
+    if(cs.columnRuleStyle!=='none'&&parseFloat(cs.columnRuleWidth)>=1)add(e,'line',cs.columnRuleColor,0,q,' column-rule','',parseFloat(cs.columnRuleWidth)<=2);
+    if(!(e.innerText||'').trim()&&q.width*q.height<area*.25&&!/url\(/.test(cs.backgroundImage))add(e,'shape',cs.backgroundColor,Math.min(q.width,q.height),q);
+    for(const ps of ['::before','::after']){const p=getComputedStyle(e,ps);if(!p.content||p.content==='none'||p.content==='normal'||p.display==='none')continue;
+      const pw=parseFloat(p.width)||0,ph=parseFloat(p.height)||0,pq=pbox(e,cs,p,q);      /* arrows, ticks and bullets drawn in CSS */
+      for(const b of borders(p))add(e,'mark',b.c,0,pq,ps);
+      if(pw*ph<area*.25&&(pw>=1||ph>=1)&&!/url\(/.test(p.backgroundImage))add(e,'mark',p.backgroundColor,Math.min(pw||1e9,ph||1e9)*sc,pq,ps);}}
+  return {marks:out}})()"""
+
 MIN_TYPE = 18            # slide pixels (the slide is 1920 wide): below this nobody in a room reads it
 EDGE = 24                # text closer to the slide's edge than this looks cut
+MARK_MIN = 1.5           # a ring, an arrow, a bar or a point below this contrast to its ground is hardly seen
+MARK_QUIET = 1.15        # a line in a quiet colour (--line, --soft, --ghost) may be faint, below this it is gone
+MARK_HUE = 40            # a mark this far from its ground in colour (CIELAB) stands out even at low contrast: lime on white
 
 _CASCADE = None
+
+def _lum(c):
+    f = lambda v: v / 12.92 if v <= .03928 else ((v + .055) / 1.055) ** 2.4
+    return .2126 * f(c[0] / 255) + .7152 * f(c[1] / 255) + .0722 * f(c[2] / 255)
+
+def _lab(c):
+    f = lambda v: v / 12.92 if v <= .04045 else ((v + .055) / 1.055) ** 2.4
+    r, g, b = (f(v / 255) for v in c)
+    x, y, z = (.4124 * r + .3576 * g + .1805 * b) / .95047, .2126 * r + .7152 * g + .0722 * b, (.0193 * r + .1192 * g + .9505 * b) / 1.08883
+    t = lambda v: v ** (1 / 3) if v > .008856 else 7.787 * v + 16 / 116
+    return 116 * t(y) - 16, 500 * (t(x) - t(y)), 200 * (t(y) - t(z))
 
 def _faces(im):
     """Faces in a picture of a slide: [(x0, y0, x1, y1)]. None when no detector is installed (then the check names
@@ -507,6 +564,31 @@ def _legible(r, shot):
             if hit(a, c): out.append(f'texts on top of each other: "{a["t"]}" and "{c["t"]}"')
     return out
 
+def _marks(r, shot):
+    """Findings about the drawn parts of one slide: rings, arrows, lines, bars and points that hardly stand out from
+    their ground, in brightness and in colour. A colour meant to stay quiet (--line, --soft, --ghost) and a hairline of up to 2 px only count when they vanish."""
+    from PIL import Image
+    import io
+    im = Image.open(io.BytesIO(shot)).convert("RGB"); worst = {}
+    for m in r["marks"]:
+        x0, y0, x1, y1 = m["box"]; pad = 6
+        box = (max(0, int(x0 - pad)), max(0, int(y0 - pad)), min(im.width, int(x1 + pad)), min(im.height, int(y1 + pad)))
+        if box[2] - box[0] < 2 or box[3] - box[1] < 2: continue
+        w, h = box[2] - box[0], box[3] - box[1]; k = max(1, max(w, h) // 64)
+        away = [c for c in im.crop(box).resize((max(1, w // k), max(1, h // k)), Image.NEAREST).getdata() if sum(abs(c[i] - m["c"][i]) for i in range(3)) > 60]
+        if not away: continue                               # nothing else in view: no ground to measure against
+        away.sort(key=_lum); bg = away[len(away) // 2]
+        fg = [bg[i] + (m["c"][i] - bg[i]) * min(1, m["a"]) for i in range(3)]
+        hi, lo = sorted((_lum(fg), _lum(bg)), reverse=True); ratio = (hi + .05) / (lo + .05)
+        if ratio < (MARK_QUIET if m["faint"] else MARK_MIN) and sum((a - b) ** 2 for a, b in zip(_lab(fg), _lab(bg))) ** .5 < MARK_HUE:
+            key = (m["kind"], m["d"], m["faint"]); n, low = worst.get(key, (0, 99)); worst[key] = (n + 1, min(low, ratio))
+    out = []
+    for (kind, d, faint), (n, ratio) in worst.items():
+        times = f" ({n} times)" if n > 1 else ""
+        if faint: out.append(f"{kind} in --line, --soft or --ghost or as a hairline does not show, contrast {ratio:.2f} to 1 against its ground: {d}{times}")
+        else: out.append(f"{kind} hardly stands out, contrast {ratio:.1f} to 1 against its ground, needed are {MARK_MIN:g}: {d}{times}")
+    return out
+
 def check(html, lang=None, bottom=980, right=1820, width=1600):
     """Render every slide and report overflow: content that runs below `bottom` or past `right`
     (in slide pixels, the slide is 1920 x 1080). Returns a list of problems, empty when all is well.
@@ -546,7 +628,27 @@ def shots(html, out_dir, slides=None, lang=None, width=1600, settle=1800):
     return paths
 
 
-def inspect(html, out_dir=None, lang=None, slides=None, bottom=930, right=1800, width=1280, per_sheet=6, stats=None, legible=None):
+def _look(pg, shot):
+    """The legibility findings of the slide on show: its text and its drawn parts."""
+    try: return _legible(pg.evaluate(_LEGIBLE_JS), shot) + _marks(pg.evaluate(_MARKS_JS), shot)
+    except Exception as e: return [f"could not be checked ({type(e).__name__}: {e})"[:160]]
+
+def _by_scheme(seen, titles):
+    """One entry per slide from the findings in each scheme ({scheme: {slide: findings}}): what all schemes show
+    once and as it is, what only one shows with the scheme in front ("dark scheme: ...", after "hint: ")."""
+    out = []
+    for i in sorted(titles):
+        each = {k: v.get(i, []) for k, v in seen.items()}
+        common = [f for f in next(iter(each.values())) if all(f in v for v in each.values())]
+        found = list(common)
+        for k, v in each.items():
+            for f in v:
+                if f not in common:
+                    found.append(("hint: " + k + " scheme: " + f[6:]) if f.startswith("hint: ") else (k + " scheme: " + f) if len(each) > 1 else f)
+        if found: out.append(dict(slide=i, title=titles[i], findings=found))
+    return out
+
+def inspect(html, out_dir=None, lang=None, slides=None, bottom=930, right=1800, width=1280, per_sheet=6, stats=None, legible=None, schemes=True):
     """Fast look at a deck in one browser session: overflow check plus contact sheets.
     Runs in export mode (no animation, all click steps shown), about a tenth of a second per slide.
     Returns (problems, sheet paths). slides: 1-based numbers to look at, None for all.
@@ -555,7 +657,10 @@ def inspect(html, out_dir=None, lang=None, slides=None, bottom=930, right=1800, 
     the deck file), words (visible on the slide, without footer and section bar), read (words of the reader
     text), notes (the reader text is the speaker notes as they are), title.
     legible: a list that receives one dict per slide with findings on legibility (slide, title, findings): type that is
-    too small, text with too little contrast to its ground, text cut off or at the edge, texts on top of each other."""
+    too small, text with too little contrast to its ground, text cut off or at the edge, texts on top of each other,
+    rings, arrows, lines and bars that hardly stand out from their ground.
+    schemes: look at the slides in the other scheme as well (light and dark, key D) and label what only one of them
+    shows ("dark scheme: ..."); a finding both show is named once, without a label."""
     from playwright.sync_api import sync_playwright
     from PIL import Image
     import io
@@ -566,6 +671,9 @@ def inspect(html, out_dir=None, lang=None, slides=None, bottom=930, right=1800, 
         pg.goto("file://" + os.path.abspath(html) + "?export=1" + (f"&lang={lang}" if lang else "")); pg.wait_for_timeout(900)
         n = pg.evaluate("document.querySelectorAll('#deck > .slide:not(.off)').length")
         page_is_reading = pg.evaluate("!!document.querySelector('#deck > .slide > .rs')")      # the reduced slide of a reading version is checked in the live one
+        look = legible is not None and not page_is_reading
+        first = pg.evaluate("document.documentElement.getAttribute('data-scheme')") or "light"
+        seen = {first: {}}; titles = {}
         for i in (slides or range(1, n + 1)):
             if i < 1 or i > n:
                 continue
@@ -579,13 +687,24 @@ def inspect(html, out_dir=None, lang=None, slides=None, bottom=930, right=1800, 
             if stats is not None:
                 stats.append(dict(slide=i, n=r["n"], words=r["words"], read=r["read"], notes=r["notes"], title=" ".join(r["t"].split())[:60]))
             shot = pg.screenshot() if out_dir or legible is not None else None
-            if legible is not None and not page_is_reading:
-                try: found = _legible(pg.evaluate(_LEGIBLE_JS), shot)
-                except Exception as e: found = [f"could not be checked ({type(e).__name__}: {e})"[:160]]
-                if found: legible.append(dict(slide=i, title=" ".join(r["t"].split())[:60], findings=found))
+            if look:
+                titles[i] = " ".join(r["t"].split())[:60]; seen[first][i] = _look(pg, shot)
             if out_dir:
                 shots_.append((i, shot))
+        if look and schemes and seen[first]:                # the same slides in the other scheme: only those that change with it
+            other = "dark" if first == "light" else "light"; seen[other] = {}
+            dk = lambda: pg.evaluate("[...document.querySelectorAll('#deck > .slide:not(.off)')].map(s=>s.classList.contains('vs-dk'))")
+            was = dk()
+            pg.goto("file://" + os.path.abspath(html) + "?export=1&scheme=" + other + (f"&lang={lang}" if lang else "")); pg.wait_for_timeout(900)
+            now = dk()
+            for i in seen[first]:
+                if i - 1 < len(was) and i - 1 < len(now) and was[i - 1] == now[i - 1]:
+                    seen[other][i] = seen[first][i]; continue      # a dark, accent or photo slide looks the same in both
+                pg.evaluate(f"location.hash='#/{i}'"); pg.wait_for_timeout(110)
+                seen[other][i] = _look(pg, pg.screenshot())
         br.close()
+    if look:
+        legible += _by_scheme(seen, titles)
     for e in errors[:3]:
         problems.append(dict(slide=0, error=e[:200]))
     sheets = []

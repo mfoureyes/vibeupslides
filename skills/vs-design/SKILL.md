@@ -215,7 +215,8 @@ Carry out their wishes in the library, where they belong:
 | it should move more, less | `vs motion <name> --compare`, then `--set` |
 
 Run `vs preview <name>`, look at the contact sheets yourself first (overflow and legibility must
-be clean; a light accent colour as text and a dark ground are the usual faults), then give them
+be clean, in the light and the dark scheme; a light accent colour as text or as a ring, arrow or bar,
+and marks in a fixed colour on the dark ground are the usual faults), then give them
 `preview.html`. It introduces itself. When they are content: `vs confirm <name>`.
 
 **Write every decision into `design.md`**, one line each with its date and where it came from:

@@ -157,6 +157,8 @@ text sound like `raw/copy.md`. Then the hard cases: logo on dark and on accent s
 title on cover and chapter, the accent word in a title on paper and on dark, photos with the
 brand's treatment. The overflow line of the preview must say `clean`, and so must the legibility
 line: it measures every text of every master (size, contrast to what is behind it, cut off, at the
-edge, on top of another text) and names what fails. Correct the master or `theme.css` until
+edge, on top of another text) and every drawn mark (ring, arrow, bar, point, line: at least 1.5 to 1
+to its ground or a clearly different colour; a hairline or a line in `--line`, `--soft`, `--ghost` only when it vanishes), in the
+light and in the dark scheme, and names what fails (`dark scheme: …` for what only one scheme shows). Correct the master or `theme.css` until
 nothing is left; a brand colour that is too pale for text is used for surfaces and marks, not for
 words, and small labels are set in the text colour.

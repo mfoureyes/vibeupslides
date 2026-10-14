@@ -16,11 +16,15 @@
   .vs-cyc .vs-cy-item h3{font-size:34px;line-height:1.25;font-weight:var(--w-head)}
   .vs-cyc .vs-cy-item p{font-size:26px;line-height:1.45;color:var(--muted);margin-top:6px}
   .vs-cyc .callout{margin-top:30px}
+  /* the ring is drawn first, then each station appears with its point of the list */
+  .vs-cyc.active .vs-cy-ring::before,.vs-cyc.active .vs-cy-ring::after,.vs-cyc.active .vs-cy-mid{animation:mfade calc(var(--md)*1.1) var(--me) .05s backwards}
+  .vs-cyc.active .vs-cy-dot{animation:m-pop calc(var(--md)*.9) cubic-bezier(.3,1.4,.5,1) backwards;animation-delay:calc(.08s + (var(--k) - 1)*var(--mb))}
+  html.export .vs-cyc .vs-cy-ring *,html.export .vs-cyc .vs-cy-ring::before,html.export .vs-cyc .vs-cy-ring::after,html[data-motion="off"] .vs-cyc .vs-cy-ring *,html[data-motion="off"] .vs-cyc .vs-cy-ring::before,html[data-motion="off"] .vs-cyc .vs-cy-ring::after{animation:none!important}
   </style>
   {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
   <h2>{{title}}</h2>
   <div class="vs-cy">
-    <div class="vs-cy-ring anim">{{#items}}<b class="vs-cy-dot" style="--k:{{@i}}">{{@i}}</b>{{/items}}{{#center}}<div class="vs-cy-mid">{{center}}</div>{{/center}}</div>
+    <div class="vs-cy-ring">{{#items}}<b class="vs-cy-dot" style="--k:{{@i}}">{{@i}}</b>{{/items}}{{#center}}<div class="vs-cy-mid">{{center}}</div>{{/center}}</div>
     <div class="vs-cy-list" data-seq>{{#items}}<div class="vs-cy-item {{#step}}{{#@first}}anim{{/@first}}{{^@first}}f{{/@first}}{{/step}}{{^step}}anim{{/step}}"><i>{{@ii}}</i><div><h3>{{title}}</h3><p>{{text}}</p></div></div>{{/items}}</div>
   </div>
   {{#note}}<p class="callout anim">{{note}}</p>{{/note}}

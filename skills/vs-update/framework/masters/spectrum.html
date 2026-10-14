@@ -16,6 +16,11 @@
   .vs-spc .vs-sp-t p{font-size:24px;line-height:1.4;color:var(--muted);margin-top:6px}
   .vs-spc .vs-sp-m.on .vs-sp-t h3{color:var(--accent-text)}
   .vs-spc .callout{margin-top:24px}
+  /* a mark appears where it stands on the scale: the dot grows out of the line, the text fades in; it never travels */
+  .vs-spc.active .vs-sp-m{animation:mfade calc(var(--md)*.9) var(--me) backwards;animation-delay:calc(.08s + var(--i,0)*var(--mb))}
+  .vs-spc.active .vs-sp-m::before{animation:m-pop calc(var(--md)*.9) cubic-bezier(.3,1.4,.5,1) backwards;animation-delay:inherit}
+  .vs-spc .vs-sp-m.f{transform:none}
+  html.export .vs-spc .vs-sp-m,html.export .vs-spc .vs-sp-m::before,html[data-motion="off"] .vs-spc .vs-sp-m,html[data-motion="off"] .vs-spc .vs-sp-m::before{animation:none!important}
   </style>
   {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
   <h2>{{title}}</h2>

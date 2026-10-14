@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.9.2
+- Every question to the user goes through the question tool (options to click, the recommended one first), in all four skills.
+- Diagrams build up the way they are explained: `venn` circle by circle with its point of the list and the shared word last; `spectrum` the scale first, then each mark where it stands on the line (it no longer travels in with the motion set); `cycle` station by station with its point; `matrix` the axes, then the fields one by one.
+- Every deck folder has the same parts, `sources/`, `research/`, `images/` and `assets/`, and a `README.md` the build writes (what the deck is, its files, how to open it and go on). `vs.py handover <deck>` (or `--brand <name>`) writes one tidy folder for the user; in Cowork this folder goes into the connected folder instead of single files.
+
+For brand libraries made with an earlier version:
+- Copy the masters `venn`, `spectrum`, `cycle` and `matrix` again and give them the brand's look.
+
 ## 0.9.1
 - Icons from an svg sprite: the analysis reads the symbols a site keeps in a sprite, also one its script loads afterwards (the site of a large IT services company: 159 icons and 5 arrows), each drawn once with the site's own colours.
 - Text in the accent colour on dark ground (dark slides, the dark scheme, key D) is a tone light enough to read (contrast 4.5:1 instead of 2:1). A brand whose `accent_on_deep` is too dark is told so.

@@ -84,8 +84,11 @@ change copies the slide in instead of naming it.
 ## The deck's folder
 
 `vs new <deck>` makes `decks/<deck>/` with `deck.json`, `sources/` (what the user supplied),
-`research/` (what was found out, with its origin, and `outline.md`) and `images/`. A build adds the
-HTML, `shots/` and, for decks with video, `assets/`. `vs new <deck> --from <other>`
+`research/` (what was found out, with its origin, and `outline.md`), `images/` and `assets/` (videos
+and files the slides link). A build adds the HTML, `shots/` and `README.md` (what the deck is, its
+files, how to open it and go on, in the deck's first language; written anew each time, never by
+hand). `vs handover <deck>` copies all of it, without the working files, into one tidy folder for
+the user. `vs new <deck> --from <other>`
 copies sources and research of an earlier deck, notes it as `"from"` in the deck file and prints
 that deck's brief.
 

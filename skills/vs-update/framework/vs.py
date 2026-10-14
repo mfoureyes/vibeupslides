@@ -53,6 +53,7 @@
                                                  and into <deck>.edits.json; this brings them into deck.json and builds the deck
     vs.py present <deck> [--port N] [--no-open]  serve the deck folder on this computer (needed for YouTube, better for the presenter view)
     vs.py pack <deck>                            zip of the HTML and the files it links, for sending a deck with video
+    vs.py handover <deck> | --brand <name>       a tidy folder for the user: presentation, README.md, research/, sources/, images/ (in Cowork: into the connected folder)
 
 The workspace is one local folder, $VIBEUPSLIDES_HOME or ~/vibeupslides (in Cowork: a folder the user shared):
     framework/   the engine (replaced on update)      library/<brand>/   brand.json, styleguide.md, voice.md, theme.css, masters/, elements/, fonts/, logos/, images/
@@ -883,11 +884,45 @@ def _deck_dir(name):
 
 DECK_PARTS = {"sources": "what the user supplied for this deck: documents, earlier slides, figures, briefs, e-mails",
               "research": "what was found out for it, with where it comes from, and the agreed line of argument (outline.md)",
-              "images": "pictures of this deck, named in slots as images/<file>"}
+              "images": "pictures of this deck, named in slots as images/<file>",
+              "assets": "videos and other files the slides link"}
 
 def _deck_parts(d):
     """Every deck folder has the same parts, so that a later deck can be made from what an earlier one rests on."""
     for part in DECK_PARTS: os.makedirs(os.path.join(d, part), exist_ok=True)
+
+README = {
+    "de": {"head": "Präsentation", "brand": "Marke", "langs": "Sprachen", "built": "Zuletzt gebaut", "open": "Öffnen",
+           "open_t": "Die HTML-Datei mit einem Doppelklick öffnen. Pfeiltasten blättern, F für Vollbild, M für die Moderationsansicht mit Notizen, L wechselt die Sprache, P speichert ein PDF, E (Stift) zum Bearbeiten.",
+           "files": "Was hier liegt", "more": "Weiterarbeiten",
+           "more_t": "Sag Claude zum Beispiel: „Ändere Folie 3 von {n}“ oder „Mach aus {n} eine Keynote“. Hast du im Browser etwas geändert, sag: „Übernimm meine Änderungen an {n}“.",
+           "parts": {"sources": "was du für diese Präsentation geliefert hast: Dokumente, alte Folien, Zahlen", "research": "was dafür recherchiert wurde, mit Quellen, und die abgestimmte Argumentation (outline.md)",
+                     "images": "die Bilder der Folien", "assets": "Videos und andere Dateien, auf die die Folien verweisen"},
+           "html": "die Präsentation", "pdf": "die PDF-Fassung", "reading": "die Lesefassung zum Verschicken"},
+    "en": {"head": "Presentation", "brand": "Brand", "langs": "Languages", "built": "Last built", "open": "Open",
+           "open_t": "Open the HTML file with a double click. Arrow keys move, F for full screen, M for the presenter view with notes, L switches the language, P saves a PDF, E (pencil) to edit.",
+           "files": "What is in this folder", "more": "Going on",
+           "more_t": "Tell Claude for example: \"Change slide 3 of {n}\" or \"Make a keynote from {n}\". If you changed something in the browser, say: \"Apply my changes to {n}\".",
+           "parts": {"sources": "what you supplied for this presentation: documents, earlier slides, figures", "research": "what was found out for it, with sources, and the agreed line of argument (outline.md)",
+                     "images": "the pictures of the slides", "assets": "videos and other files the slides link"},
+           "html": "the presentation", "pdf": "the PDF version", "reading": "the reading version to send"}}
+
+def _deck_readme(d, deck, files=None):
+    """README.md of a deck folder: what it is, its files, how to open it and go on. Written by every build, in the
+    deck's first language (German or English)."""
+    langs = deck.get("langs") or [deck.get("lang") or "en"]; T = README["de" if langs[0][:2] == "de" else "en"]; n = os.path.basename(d)
+    files = files if files is not None else _deck_html(d) + sorted(f for f in os.listdir(d) if f.lower().endswith(".pdf"))
+    title = re.sub(r"<[^>]+>", "", str(deck.get("title") or n))
+    lines = [f"# {title}", "", f"{T['head']}: `{n}` · {T['brand']}: {deck.get('brand', '')} · {T['langs']}: {', '.join(langs)} · {T['built']}: {time.strftime('%Y-%m-%d %H:%M')}", "",
+             f"## {T['open']}", "", T["open_t"], "", f"## {T['files']}", ""]
+    for f in files:
+        what = T["pdf"] if f.lower().endswith(".pdf") else (T["reading"] if "_reading" in f else T["html"])
+        lines.append(f"- `{f}`: {what}")
+    for part, what in T["parts"].items():
+        if os.path.isdir(os.path.join(d, part)): lines.append(f"- `{part}/`: {what}")
+    lines += ["", f"## {T['more']}", "", T["more_t"].format(n=n), ""]
+    try: open(os.path.join(d, "README.md"), "w", encoding="utf-8").write("\n".join(lines))
+    except OSError: pass
 
 def _lang_gaps(slide, langs):
     """Texts of a slide that are written per language and lack one of the deck's languages: [(path, languages it has)]."""
@@ -1074,6 +1109,7 @@ def cmd_build(args):
             print(f"SHARED: the user changed slide {i} (the shared slide '{s['shared']}') for all presentations. When its texts are corrected (no REVIEW line left for it): "
                   f"vs.py shared {os.path.basename(b['_dir'])} push --from {os.path.basename(d)} --slide {i}")
     for w in env["warnings"]: print("WARNING:", w)
+    _deck_readme(d, deck)
     import media
     media.prune(d)
     if env.get("media"):
@@ -1677,6 +1713,47 @@ def cmd_pack(args):
     if online: print("NEEDS TO BE ONLINE when shown: " + ", ".join(online))
     else: print("Runs offline. Unpack the folder and open the HTML; keep the files together.")
 
+def cmd_handover(args):
+    """vs.py handover <deck> | --brand <name> [--out <folder>]: a tidy folder to give the user (in Cowork: to put into
+    the connected folder as it is). A deck: its presentation files, README.md, research/, sources/, images/ and what the
+    slides link. A brand: its preview, the comparison of the motion sets, style guide, voice profile and README.md."""
+    import media
+    out_root = arg(args, "--out") or outbox(); brand = arg(args, "--brand")
+    def fresh(name):
+        dst = os.path.join(out_root, name)
+        if os.path.isdir(dst): shutil.rmtree(dst)
+        os.makedirs(dst); return dst
+    if brand:
+        import build as B
+        bd = B.brand_dir(brand); dst = fresh(f"{os.path.basename(bd)}-brand"); got = []
+        for src, name in (("preview.html", "preview.html"), ("preview/motion/compare.html", "motion-compare.html"), ("styleguide.md", "styleguide.md"), ("voice.md", "voice.md"), ("design.md", "design.md")):
+            if os.path.exists(os.path.join(bd, src)): shutil.copy(os.path.join(bd, src), os.path.join(dst, name)); got.append(name)
+        b = json.load(open(os.path.join(bd, "brand.json"), encoding="utf-8")); de = (b.get("lang") or "en")[:2] == "de"
+        about = {"preview.html": ("alle Masterfolien der Marke, mit Pfeiltasten durchblättern; D hell/dunkel, L Sprache" if de else "every master slide of the brand; arrow keys move, D light/dark, L language"),
+                 "motion-compare.html": ("die Bewegungssets nebeneinander, zum Auswählen" if de else "the motion sets side by side, to choose from"),
+                 "styleguide.md": ("das Gedächtnis der Marke: Farben, Schriften, Formen, Bilder" if de else "the memory of the brand: colours, type, shapes, imagery"),
+                 "voice.md": ("wie die Marke schreibt" if de else "how the brand writes"), "design.md": ("wie der Look entstanden ist" if de else "how the look came about")}
+        head = (f"# Marke {b.get('name', brand)}\n\nDie Bibliothek liegt in VibeUpSlides; hier sind die Dateien zum Ansehen. Für eine Präsentation sag Claude: „Mach eine Präsentation für {brand} über …“.\n\n## Was hier liegt\n\n" if de else
+                f"# Brand {b.get('name', brand)}\n\nThe library lives in VibeUpSlides; these are the files to look at. For a presentation tell Claude: \"Make a presentation for {brand} about …\".\n\n## What is in this folder\n\n")
+        open(os.path.join(dst, "README.md"), "w", encoding="utf-8").write(head + "".join(f"- `{g}`: {about[g]}\n" for g in got))
+        print(f"{dst}\n  " + "\n  ".join(got + ["README.md"]))
+        return
+    pos = positional(args, ("--out", "--brand"))
+    d = _deck_dir(pos[0] if pos else die("which deck? vs.py handover <deck>, or --brand <name>"))
+    html = _deck_html(d)
+    if not html: die("build the deck first: vs.py build " + os.path.basename(d))
+    deck = json.load(open(os.path.join(d, "deck.json"), encoding="utf-8")); dst = fresh(os.path.basename(d))
+    linked, _ = media.referenced_files(d, html); pdfs = sorted(f for f in os.listdir(d) if f.lower().endswith(".pdf"))
+    for rel in html + pdfs + linked:
+        os.makedirs(os.path.dirname(os.path.join(dst, rel)) or dst, exist_ok=True); shutil.copy(os.path.join(d, rel), os.path.join(dst, rel))
+    for part in ("research", "sources", "images", "assets"):
+        src = os.path.join(d, part)
+        if os.path.isdir(src): shutil.copytree(src, os.path.join(dst, part), dirs_exist_ok=True, ignore=shutil.ignore_patterns(".*"))
+        else: os.makedirs(os.path.join(dst, part), exist_ok=True)      # the same parts in every folder, ready for what comes later
+    _deck_readme(dst, deck, html + pdfs); _deck_readme(d, deck)
+    n = sum(len(fs) for _, _, fs in os.walk(dst))
+    print(f"{dst}  ({n} files)\nPut this folder into the user's folder as it is; the presentation is {html[0]}.")
+
 def cmd_video(args):
     import video_export
     pos = positional(args, ("--slide", "--seconds", "--format", "--lang", "--hide"))
@@ -1876,7 +1953,7 @@ def main():
     import brandtools
     simple = {"init": cmd_init, "status": cmd_status, "update": cmd_update, "permissions": cmd_permissions, "doctor": cmd_doctor, "backup": cmd_backup, "restore": cmd_restore, "analyze": cmd_analyze, "videos": cmd_videos, "voice": cmd_voice, "ingest": cmd_ingest, "preview": cmd_preview,
               "masters": cmd_masters, "elements": cmd_elements, "fonts": cmd_fonts, "new": cmd_new, "build": cmd_build, "titles": cmd_titles,"video": cmd_video,
-              "scenes": cmd_scenes, "motion": cmd_motion, "present": cmd_present, "edit": cmd_edit, "apply": cmd_apply, "shared": cmd_shared, "forms": cmd_forms, "design": cmd_design, "refresh": cmd_refresh, "langs": cmd_langs, "pack": cmd_pack}
+              "scenes": cmd_scenes, "motion": cmd_motion, "present": cmd_present, "edit": cmd_edit, "apply": cmd_apply, "shared": cmd_shared, "forms": cmd_forms, "design": cmd_design, "refresh": cmd_refresh, "langs": cmd_langs, "pack": cmd_pack, "handover": cmd_handover}
     try:
         if cmd in simple: simple[cmd](rest)
         elif cmd == "brands":

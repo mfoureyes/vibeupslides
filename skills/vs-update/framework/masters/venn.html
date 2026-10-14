@@ -22,11 +22,17 @@
   .vs-ven .vs-vn-item p{font-size:25px;line-height:1.45;color:var(--muted);margin-top:4px}
   .vs-ven .vs-vn-sum{border-left:4px solid var(--accent);padding-left:30px;font-size:27px;line-height:1.45;margin-top:8px}
   .vs-ven .callout{margin-top:26px}
+  /* the picture builds as it is explained: circle k with point k of the list, the shared word with the closing sentence */
+  .vs-ven.active .vs-vn-c,.vs-ven.active .vs-vn-l{animation:m-pop calc(var(--md)*1.1) var(--me) backwards;animation-delay:calc(.08s + (var(--k) - 1)*var(--mb))}
+  .vs-ven.active .vs-vn-l{animation-name:mfade;animation-delay:calc(.2s + (var(--k) - 1)*var(--mb))}
+  .vs-ven.active .vs-vn-mid{animation:m-pop calc(var(--md)*.9) var(--me) backwards;animation-delay:calc(.2s + 2*var(--mb))}
+  .vs-ven.active .vs-vn-fig:has(.vs-vn-c3) .vs-vn-mid{animation-delay:calc(.2s + 3*var(--mb))}
+  html.export .vs-ven .vs-vn-fig *,html[data-motion="off"] .vs-ven .vs-vn-fig *{animation:none!important}
   </style>
   {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
   <h2>{{title}}</h2>
   <div class="vs-vn">
-    <div class="vs-vn-fig anim">{{#items}}<i class="vs-vn-c vs-vn-c{{@i}}"></i>{{/items}}{{#items}}<b class="vs-vn-l vs-vn-l{{@i}}">{{title}}</b>{{/items}}{{#center}}<div class="vs-vn-mid">{{center}}</div>{{/center}}</div>
+    <div class="vs-vn-fig">{{#items}}<i class="vs-vn-c vs-vn-c{{@i}}" style="--k:{{@i}}"></i>{{/items}}{{#items}}<b class="vs-vn-l vs-vn-l{{@i}}" style="--k:{{@i}}">{{title}}</b>{{/items}}{{#center}}<div class="vs-vn-mid">{{center}}</div>{{/center}}</div>
     <div class="vs-vn-list" data-seq>{{#items}}<div class="vs-vn-item anim"><i>{{@ii}}</i><div><h3>{{title}}</h3>{{#text}}<p>{{text}}</p>{{/text}}</div></div>{{/items}}{{#center_text}}<p class="vs-vn-sum anim">{{center_text}}</p>{{/center_text}}</div>
   </div>
   {{#note}}<p class="callout anim">{{note}}</p>{{/note}}

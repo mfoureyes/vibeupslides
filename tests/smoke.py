@@ -111,7 +111,7 @@ with sync_playwright() as p:
 
 # ---------------------------------------------------------------- video, embeds, scenes, present, pack
 import shutil, signal, time, zipfile, http.client
-ok("a deck without media stays one file", "this deck is a folder" not in out and not os.path.exists(os.path.join(ws, "decks", "demo", "assets")))
+ok("a deck without media stays one file", "this deck is a folder" not in out and not os.listdir(os.path.join(ws, "decks", "demo", "assets")))
 md = os.path.join(ws, "decks", "media"); os.makedirs(os.path.join(md, "images")); os.makedirs(os.path.join(md, "demo")); os.makedirs(os.path.join(lib, "media"))
 from PIL import Image
 Image.new("RGB", (960, 540), "#224466").save(os.path.join(md, "images", "poster.png"))
@@ -1022,6 +1022,16 @@ ok("the icons of an svg sprite are read with the colours the site's css gives th
 import build as BD3
 ok("text in the accent colour on dark ground is a tone light enough to read", BD3.contrast(BD3.accent_as_text("#2F6FDB", "#0B2545", "#FFFFFF", need=4.5), "#0B2545") >= 4.5
    and "accent_on_deep" in " ".join(BD3.brand_warnings({"colors": dict(json.load(open(os.path.join(lib, "brand.json")))["colors"], accent="#2F6FDB", deep="#0B2545", on_deep="#FFFFFF", accent_on_deep="#2F6FDB")})))
+
+# a tidy folder for the user: the presentation, README.md and the same parts in every deck
+hb = os.path.join(ws, "handover"); os.makedirs(hb, exist_ok=True)
+code, out = vs("handover", "partsa", "--out", hb); code2, out2 = vs("handover", "--brand", "smoke", "--out", hb)
+hd = os.path.join(hb, "partsa")
+ok("handover writes one folder per deck with the presentation, README.md and research, sources, images and assets, and one per brand",
+   code == 0 and os.path.exists(os.path.join(hd, "Parts.html")) and all(os.path.isdir(os.path.join(hd, x)) for x in ("research", "sources", "images", "assets"))
+   and "Parts.html" in open(os.path.join(hd, "README.md"), encoding="utf-8").read() and os.path.exists(os.path.join(ws, "decks", "partsa", "README.md"))
+   and code2 == 0 and os.path.exists(os.path.join(hb, "smoke-brand", "preview.html")) and os.path.exists(os.path.join(hb, "smoke-brand", "README.md")), out + out2)
+ok("every skill asks through the question tool", all("## How to ask" in open(os.path.join(ROOT, "skills", s, "SKILL.md"), encoding="utf-8").read() for s in ("vs-build", "vs-create", "vs-design", "vs-update")))
 
 # a presentation that exists as HTML is read slide by slide; the build leaves fields a slide could still take
 import ingest as IG

@@ -51,9 +51,12 @@ If the script is not at that path (the skill came as a plugin and its files live
     session and run `vs restore <file>`. An uploaded one is restored by the script itself. If
     there is neither and the user has worked with VibeUpSlides before, ask for the file.
   - **After a brand or a deck was made or changed** and the user is content: run `vs backup`, then
-    put the file it writes into the connected folder, replacing the one there, together with what
-    was built (`preview.html`, the deck's HTML, a PDF), so the user opens it on their computer with
-    a double click. Without a connected folder hand the same files over in the chat, and suggest
+    put the file it writes into the connected folder, replacing the one there. Then run
+    `vs handover <deck>` (for a brand `vs handover --brand <name>`) and copy the folder it writes
+    into the connected folder as it is, with all its subfolders: the presentation, `README.md`,
+    `research/`, `sources/`, `images/`, `assets/` (a brand: preview, motion comparison, style guide,
+    voice). No single files loose in the folder: one folder per deck and per brand, next to the
+    backup file. Without a connected folder hand the presentation over in the chat, and suggest
     once to connect a folder ("add folder" in the plus menu) so nothing has to be uploaded again.
   - Say in one sentence, the first time, where their brands and decks are kept.
 
@@ -71,6 +74,16 @@ terminal on their own computer. Editing needs neither: every built deck carries 
   library/<brand>/      brand.json  styleguide.md  voice.md  theme.css  motion.css  masters/  voice/  elements/  fonts/  logos/  images/  sources/  raw/  preview.html
   decks/<deck>/         deck.json, images/, the built HTML
 ```
+
+## How to ask
+
+**Every question goes through the question tool.** Whenever you ask the user something (a round
+of questions, a choice, a yes or no), use the question tool the environment offers
+(`AskUserQuestion` in Claude Code and Cowork): up to four questions per call, two to four short
+options each, the recommended option first and marked "(Recommended)"; the user can always type
+an answer of their own. Plain text only where there is no such tool, or for an answer nobody can
+pick from options (a web address, a name, files to share): ask for that in one short line next to
+the tool's questions. Never write a numbered list of questions into a message instead.
 
 ## The onboarding in six steps
 
@@ -98,7 +111,7 @@ The user's own decisions, each with something to look at, never from a descripti
 
 ### 1. Ask what the slides are for, then for the material, then read it in one run each
 
-Ask in **one** message, in this order, and skip what the request already answers:
+Ask in **one** round of the question tool (see "How to ask"), in this order, and skip what the request already answers:
 
 1. **What for.** Why do they want these slides, and for whom: their own company's presentations,
    a pitch or proposal to a customer in that customer's look, talks, workshops. This is the first

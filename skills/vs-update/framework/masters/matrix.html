@@ -13,12 +13,15 @@
   .vs-mtx .vs-mx-q p{font-size:25px;line-height:1.42;margin-top:10px;color:var(--muted)}
   .vs-mtx .vs-mx-q.vs-mx-accent h3,.vs-mtx .vs-mx-q.vs-mx-accent p{color:inherit}
   .vs-mtx .callout{margin-top:36px}
+  /* the axes stand first, then the fields come one by one in reading order */
+  .vs-mtx.active .vs-mx-y,.vs-mtx.active .vs-mx-x,.vs-mtx.active .vs-mx-g{animation:mfade calc(var(--md)*.8) var(--me) backwards}
+  html.export .vs-mtx .vs-mx *,html[data-motion="off"] .vs-mtx .vs-mx *{animation:none!important}
   </style>
   {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
   <h2>{{title}}</h2>
-  <div class="vs-mx anim">
+  <div class="vs-mx">
     <div class="vs-mx-y"><span>{{y_low}}</span><b>{{y}}</b><span>{{y_high}}</span></div>
-    <div class="vs-mx-g">{{#items}}<div class="vs-mx-q vs-mx-{{style}}"><h3>{{title}}</h3>{{#text}}<p>{{text}}</p>{{/text}}</div>{{/items}}</div>
+    <div class="vs-mx-g" data-seq>{{#items}}<div class="vs-mx-q vs-mx-{{style}} anim"><h3>{{title}}</h3>{{#text}}<p>{{text}}</p>{{/text}}</div>{{/items}}</div>
     <div class="vs-mx-x"><span>{{x_low}}</span><b>{{x}}</b><span>{{x_high}}</span></div>
   </div>
   {{#note}}<p class="callout anim">{{note}}</p>{{/note}}

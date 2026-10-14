@@ -45,9 +45,12 @@ If the script is not at that path (the skill came as a plugin and its files live
     session and run `vs restore <file>`. An uploaded one is restored by the script itself. If
     there is neither and the user has worked with VibeUpSlides before, ask for the file.
   - **After a brand or a deck was made or changed** and the user is content: run `vs backup`, then
-    put the file it writes into the connected folder, replacing the one there, together with what
-    was built (`preview.html`, the deck's HTML, a PDF), so the user opens it on their computer with
-    a double click. Without a connected folder hand the same files over in the chat, and suggest
+    put the file it writes into the connected folder, replacing the one there. Then run
+    `vs handover <deck>` (for a brand `vs handover --brand <name>`) and copy the folder it writes
+    into the connected folder as it is, with all its subfolders: the presentation, `README.md`,
+    `research/`, `sources/`, `images/`, `assets/` (a brand: preview, motion comparison, style guide,
+    voice). No single files loose in the folder: one folder per deck and per brand, next to the
+    backup file. Without a connected folder hand the presentation over in the chat, and suggest
     once to connect a folder ("add folder" in the plus menu) so nothing has to be uploaded again.
   - Say in one sentence, the first time, where their brands and decks are kept.
 
@@ -59,7 +62,17 @@ itself reaches; for editing in the browser and for YouTube the user needs the Co
 terminal on their own computer. Editing needs neither: the deck's own file carries it (vs-create describes it).
 `vs doctor` reports what the session allows.
 
-## 1. One message of questions
+## How to ask
+
+**Every question goes through the question tool.** Whenever you ask the user something (a round
+of questions, a choice, a yes or no), use the question tool the environment offers
+(`AskUserQuestion` in Claude Code and Cowork): up to four questions per call, two to four short
+options each, the recommended option first and marked "(Recommended)"; the user can always type
+an answer of their own. Plain text only where there is no such tool, or for an answer nobody can
+pick from options (a web address, a name, files to share): ask for that in one short line next to
+the tool's questions. Never write a numbered list of questions into a message instead.
+
+## 1. One round of questions
 
 1. **What is the presentation for, and who sees it?** One or two sentences are enough (a pitch in
    front of a jury on Thursday, the annual meeting of the club, a talk at a conference).

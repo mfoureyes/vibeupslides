@@ -40,9 +40,12 @@ If the script is not at that path (the skill came as a plugin and its files live
     session and run `vs restore <file>`. An uploaded one is restored by the script itself. If
     there is neither and the user has worked with VibeUpSlides before, ask for the file.
   - **After a brand or a deck was made or changed** and the user is content: run `vs backup`, then
-    put the file it writes into the connected folder, replacing the one there, together with what
-    was built (`preview.html`, the deck's HTML, a PDF), so the user opens it on their computer with
-    a double click. Without a connected folder hand the same files over in the chat, and suggest
+    put the file it writes into the connected folder, replacing the one there. Then run
+    `vs handover <deck>` (for a brand `vs handover --brand <name>`) and copy the folder it writes
+    into the connected folder as it is, with all its subfolders: the presentation, `README.md`,
+    `research/`, `sources/`, `images/`, `assets/` (a brand: preview, motion comparison, style guide,
+    voice). No single files loose in the folder: one folder per deck and per brand, next to the
+    backup file. Without a connected folder hand the presentation over in the chat, and suggest
     once to connect a folder ("add folder" in the plus menu) so nothing has to be uploaded again.
   - Say in one sentence, the first time, where their brands and decks are kept.
 
@@ -68,6 +71,16 @@ user edits the deck themselves").
 - **The deck exists** (the user wants to change or continue one): read its `deck.json`, its `brief`
   is already answered, go to step 4.
 
+## How to ask
+
+**Every question goes through the question tool.** Whenever you ask the user something (a round
+of questions, a choice, a yes or no), use the question tool the environment offers
+(`AskUserQuestion` in Claude Code and Cowork): up to four questions per call, two to four short
+options each, the recommended option first and marked "(Recommended)"; the user can always type
+an answer of their own. Plain text only where there is no such tool, or for an answer nobody can
+pick from options (a web address, a name, files to share): ask for that in one short line next to
+the tool's questions. Never write a numbered list of questions into a message instead.
+
 ## 1. Read the library
 
 Read `library/<brand>/styleguide.md` and `library/<brand>/voice.md` fully, note the `purpose` the
@@ -85,8 +98,8 @@ say that vs-build can give it a profile, and write from what is there.
 
 ## 2. Ask what the deck is for and how it should look
 
-Before any storyline, ask in **one round** (with the question tool if there is one, otherwise in
-one message). Skip what the request already answers.
+Before any storyline, ask in **one round** of the question tool (see "How to ask"). Skip what
+the request already answers.
 
 1. **Purpose and kind of deck.** What is the deck meant to achieve, and which kind is it: investor
    pitch, keynote, conference talk, company presentation, sales deck, proposal, strategy or
@@ -312,7 +325,7 @@ belong on one click, set `"order"` (deck-format.md). The user can do the same in
 ("On click", "Order": they click the parts in the new order, with Shift to join one to the step
 before; the strength of movement, "Play").
 
-Name the version in half a sentence when you hand a deck over ("built with VibeUpSlides 0.9.1", from
+Name the version in half a sentence when you hand a deck over ("built with VibeUpSlides 0.9.2", from
 the status line of the setup), so that the user can tell which state they are testing.
 A button (`button: {label, url}` on the closing slide) is a call to action with a real target; a
 cover has none. The last slide credits the person who made the deck (`"author"` in the deck file,

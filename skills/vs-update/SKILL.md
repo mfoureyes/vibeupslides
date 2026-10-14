@@ -16,6 +16,16 @@ There are two things that can be old:
 
 Brand libraries and decks are never touched by an update. They live in `library/` and `decks/`.
 
+## How to ask
+
+**Every question goes through the question tool.** Whenever you ask the user something (a round
+of questions, a choice, a yes or no), use the question tool the environment offers
+(`AskUserQuestion` in Claude Code and Cowork): up to four questions per call, two to four short
+options each, the recommended option first and marked "(Recommended)"; the user can always type
+an answer of their own. Plain text only where there is no such tool, or for an answer nobody can
+pick from options (a web address, a name, files to share): ask for that in one short line next to
+the tool's questions. Never write a numbered list of questions into a message instead.
+
 ## 1. See where things stand
 
 ```bash

@@ -1,13 +1,33 @@
 # VibeUpSlides
 
-A set of four agent skills for presentations that look like your company, or like you if you have no company look yet.
+A set of four agent skills for Claude that make presentations look like your company, or like you
+if you have no company look yet.
+
+## Install
+
+**Claude Code and other agents** (as skills):
 
 ```bash
 npx skills add mfoureyes/vibeupslides
 ```
 
-In Claude Code and Cowork it also installs as a plugin: add `mfoureyes/vibeupslides` as a plugin
-marketplace and install `vibeupslides` from it.
+**Claude Code** (as a plugin):
+
+```text
+/plugin marketplace add mfoureyes/vibeupslides
+/plugin install vibeupslides@vibeupslides
+```
+
+**Cowork**: either add the GitHub repository `mfoureyes/vibeupslides` as a plugin marketplace in
+Cowork's plugin settings and install `vibeupslides` from it, or download
+[`vibeupslides.plugin`](https://github.com/mfoureyes/vibeupslides/releases/latest/download/vibeupslides.plugin)
+from the latest release, add it to a chat and ask Claude to install it; Cowork then offers to save
+the plugin.
+
+Updates: the skills check once a day whether a newer version is published and tell you; say
+"update VibeUpSlides" to get it.
+
+## The four skills
 
 | Skill | When | What it does |
 |---|---|---|

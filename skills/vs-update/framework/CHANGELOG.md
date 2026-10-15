@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.9.5
+- Every presentation carries its editing, also one whose main version is the reading version and the second file `build --mode` writes; only handouts (which leave slides out), previews and samples do not.
+
+
 ## 0.9.4
 - The reading version shows the pencil too: pressing it (or E) opens the version to present at the same slide with the editing on. Before, editing was simply missing in the reading version.
 

@@ -943,6 +943,10 @@ with sync_playwright() as p:
     br.close()
 ok("a slide builds up click by click when the deck says so, on any master, and arrives whole when it says no", at0 == "1- 2-" and at1 == "1+ 2-" and flat == ["#/3", "0", 0, 2] and 'data-move="calm"' in mh, f"{at0} | {at1} | {flat}")
 ok("the reading version shows the pencil, and it opens the version to present with the editing on", rd_pen and rd_to == ["live", True, True], str([rd_pen, rd_to]))
+rdk = json.load(open(os.path.join(md, "deck.json"))); rdk["mode"] = "reading"; json.dump(rdk, open(os.path.join(md, "deck.json"), "w"))
+vs("build", "moves", "--no-shots"); rdh = open(os.path.join(md, "Moves.html"), encoding="utf-8").read()
+rdk["mode"] = "live"; json.dump(rdk, open(os.path.join(md, "deck.json"), "w")); vs("build", "moves", "--no-shots")
+ok("a deck whose main version is the reading one carries its editing too", 'data-mode="reading"' in rdh and "window.VS_EDIT=" in rdh)
 ok("the editing panel turns the click steps of a slide on, and the change comes into the deck file", turned[0] == "1" and turned[1] >= 1 and turned[1] == turned[2]
    and E.apply_edits(md, {"ops": [{"a": "anim", "n": 3, "key": "step", "value": True}, {"a": "anim", "n": 2, "key": "move", "value": ""}]})[0] == 2
    and json.load(open(os.path.join(md, "deck.json")))["slides"][2]["step"] is True and "move" not in json.load(open(os.path.join(md, "deck.json")))["slides"][1], str(turned))

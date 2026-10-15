@@ -586,8 +586,9 @@ def _render_and_build(deck, b, out, deck_dir=None, standins=None, title=None, pd
         import motion as M
         if deck["motion_set"] in M.sets(b["_dir"]): b = dict(b, motion=dict(b.get("motion") or {}, set=deck["motion_set"]))
         else: print(f"WARNING: the deck names the motion set '{deck['motion_set']}', which does not exist: the brand's set is used")
-    # a deck carries its own editing (the pencil): the version to present, not handouts, previews or samples
-    own = bool(deck_dir) and not deck.get("sample") and not deck.get("handout") and (mode or deck.get("mode") or "live") == "live" and os.path.exists(os.path.join(deck_dir, "deck.json"))
+    # every presentation carries its own editing (the pencil), in the live and in the reading version: in the reading
+    # one it opens the live version to edit. Not handouts (they leave slides out), previews or samples
+    own = bool(deck_dir) and not deck.get("sample") and not deck.get("handout") and os.path.exists(os.path.join(deck_dir, "deck.json"))
     edit = edit or own
     masters = render.load_masters(b["_dir"])
     env = {"mode": mode or deck.get("mode") or "live", "brand_dir": b["_dir"], "deck_dir": deck_dir, "standins": standins or {}, "brand_name": b.get("name", ""), "brand_info": _brand_info(b),

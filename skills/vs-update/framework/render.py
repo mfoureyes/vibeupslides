@@ -616,8 +616,8 @@ def render_slide(slide, lang, masters, env):
     env["lang"] = lang
     read, env["read_html"] = _prose(s.get("read")), ""
     origin = "read" if read else ("notes" if _prose(s.get("notes")) else "none")
-    if env.get("mode") == "reading":                       # what the build reports for a deck whose main version is the reading one
-        env.setdefault("read_origin", {}).setdefault(origin, set()).add(env.get("slide_no", 0))
+    if env.get("mode") == "reading" and env.get("slide_no"):   # what the build reports for a deck whose main version is the reading one (not the editing's sample slides)
+        env.setdefault("read_origin", {}).setdefault(origin, set()).add(env["slide_no"])
     text = read or _prose(s.get("notes"))                  # reading version: the text for readers goes onto the page, the notes when there is none
     if text and env.get("only") != "live":
         env["read_html"] = f'<aside class="read"{"" if origin == "read" else " data-from=" + chr(34) + "notes" + chr(34)}>{text}</aside>'

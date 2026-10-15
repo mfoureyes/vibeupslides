@@ -38,7 +38,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .slide .image img,.slide .photo img,.slide .pic img,.slide figure img{object-position:var(--focus,center)}
 .slide .image,.slide .photo{background-position:var(--focus,center)}
 .vs-credit{position:absolute;left:96px;bottom:104px;font-size:18px;line-height:1.3;letter-spacing:.01em;color:var(--muted);z-index:2}
-.dark .vs-credit,.accent .vs-credit,.fullbleed .vs-credit{color:var(--on);opacity:.8}
+.dark .vs-credit,.fullbleed .vs-credit{color:var(--on);opacity:.8}
+.accent .vs-credit{color:var(--on)}      /* an accent of middle brightness leaves no room for a paler line (bold where even this is short, see tokens_css) */
 /* a call to action: a link that looks like the brand's button. On closing and call-to-action slides, never on a cover. */
 a.vs-btn{display:inline-block;margin-top:44px;padding:20px 38px;border-radius:var(--radius);background:var(--ink);color:var(--paper);font-weight:700;font-size:28px;line-height:1.1;text-decoration:none;cursor:pointer}
 .accent a.vs-btn{background:var(--on);color:var(--accent)} .dark a.vs-btn,.fullbleed a.vs-btn{background:var(--on);color:var(--deep)}

@@ -156,6 +156,7 @@ def tokens_css(b):
     if s.get("head_tracking"):
         rules.append(f"letter-spacing:{s['head_tracking']}")
     head_rule = ("\nh1,h2,.chapter h2,.statement h2{" + ";".join(rules) + "}") if rules else ""
+    credit_rule = "\n.accent .vs-credit{font-weight:700}" if contrast(c["on_accent"], c["accent"]) < 4.5 else ""   # small type on the accent: bold needs 3 to 1, not 4.5
     return (":root{"
             f"--accent:{c['accent']};--on-accent:{c['on_accent']};--ink:{c['ink']};--deep:{c['deep']};--on-deep:{c['on_deep']};"
             f"--accent-text:{c.get('accent_text') or accent_as_text(c['accent'], c['paper'], c['ink'])};"
@@ -164,7 +165,7 @@ def tokens_css(b):
             f"--font:{body};--font-head:{head};--w-display:{f.get('display_weight', 800)};--w-head:{f.get('head_weight', 700)};"
             f"--radius:{radius};"
             + motion.tokens_css(b) +
-            "}" + head_rule)
+            "}" + head_rule + credit_rule)
 
 _FONT_FORMATS = {".woff2": "woff2", ".woff": "woff", ".ttf": "truetype", ".otf": "opentype"}
 

@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.9.6
+- The six built-in styles build a deck of stock masters without a legibility finding: the credit line on an accent slide is set in the full text colour (bold where the accent leaves less than 4.5 to 1), the accent of **leicht** and **werkstatt** is a shade darker, and the marked word in a **plakat** title takes the text colour that belongs on the accent.
+
+For brand libraries made with an earlier version:
+- A library made from leicht or werkstatt keeps its accent; `vs.py set <brand> colors.accent=#586BDA` (leicht) or `#BC5419` (werkstatt) takes the new one. `vs.py refresh` builds the decks again with the credit line fixed.
+
 ## 0.9.5
 - Every presentation carries its editing, also one whose main version is the reading version and the second file `build --mode` writes; only handouts (which leave slides out), previews and samples do not.
 

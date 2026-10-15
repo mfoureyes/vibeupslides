@@ -1,0 +1,11 @@
+<!--vs {"name": "cover", "order": 10, "use": "Opening slide on a night ground lit by a drifting glow: the title as one or two sentences in bold white, and up to five small labels in a typewriter face that fly in and float.", "slots": {"kicker": "small label above the title (optional)", "title": "what this is about, one sentence of up to 16 words; <em> marks the part set a little dimmer", "lead": "one sentence below (optional)", "chips": "up to five labels of one to three words, each closing with a full stop (optional)"}, "sample": {"title": "Core helps teams plan maintenance with sensor data <em>and AI analysis.</em>", "chips": ["Your plant.", "Visualized.", "Planned.", "Explained."], "notes": "Welcome, one sentence on why we are here."}} -->
+<section class="slide dark cover sc-cov{{#motion}} mslide mcover{{/motion}}" {{attrs}}>
+  <div class="band sc-glow" aria-hidden="true"></div>
+  <div class="text">
+    {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+    <h1{{#motion}} class="mtext"{{/motion}}>{{title}}</h1>
+    {{#lead}}<p class="lead">{{lead}}</p>{{/lead}}
+  </div>
+  <div class="sc-chips">{{#chips}}<span class="sc-chip">{{.}}</span>{{/chips}}</div>
+  {{notes}}
+</section>

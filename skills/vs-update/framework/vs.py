@@ -36,7 +36,7 @@
     vs.py shared <brand> [slide <name> --from <deck> --slide N | fact <key> <value> [--lang de]]
                                                  what the brand's decks share: slides (team, contact) and facts (address, figures); make a slide shared, set a fact
     vs.py design --examine <files, addresses> | <brand> --style <name> [--ground --ink --accent --head --body --radius …] | --gallery [--with <brand>] [--pick a,b,c]
-                                                 a look from nothing: read the examples a user likes, make a look of their own from them (or from one of seven styles), show looks side by side
+                                                 a look from nothing: read the examples a user likes, make a look of their own from them (or from one of eight styles), show looks side by side
     vs.py forms <brand> [--promote <deck> --slide N --name <name>]
                                                  forms of the brand's own: its masters and who uses them, free slides whose form came up again; make such a slide a master
     vs.py refresh [--brand <name>] [--check] [--all] [--except <deck>]

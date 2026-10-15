@@ -231,6 +231,18 @@ def halftone(im, ink="#111111", paper="#FFFFFF", cell=None):
     out = out.resize((w, h), Image.LANCZOS)
     return ImageOps.colorize(out, ink, paper)
 
+def glow(im, colors, deep="#0C0A10"):
+    """A photo lit like the brand's night slides: black and white, darkened, with soft glows of the brand's colours
+    laid over it by light (screen), strongest low and to the right (brands whose shape.photo is "glow")."""
+    from PIL import Image, ImageChops, ImageDraw, ImageEnhance, ImageFilter, ImageOps
+    g = ImageOps.grayscale(im); g = ImageEnhance.Contrast(g).enhance(1.15); g = ImageEnhance.Brightness(g).enhance(.58)
+    base = ImageOps.colorize(g, deep, "#F4F1F2"); w, h = base.size
+    light = Image.new("RGB", (w, h), (0, 0, 0)); spots = ((.70, .78, .34, .2), (.42, .86, .26, .14), (.92, .55, .18, .24), (.06, .05, .4, .34))
+    for (cx, cy, rx, ry), (k, col) in zip(spots, enumerate((colors * 2)[:4])):
+        m = Image.new("L", (w, h), 0); ImageDraw.Draw(m).ellipse((w * (cx - rx), h * (cy - ry), w * (cx + rx), h * (cy + ry)), fill=(230, 170, 120, 60)[k])
+        m = m.filter(ImageFilter.GaussianBlur(min(w * rx, h * ry) * .6)); light.paste(Image.new("RGB", (w, h), col), (0, 0), m)
+    return ImageChops.screen(base, light)
+
 def datauri(path, width=1600, q=82, trim=False, treat=None):
     """Image file as data URI. Photos become JPEG, images with transparency stay PNG, SVG stays SVG.
     trim: the image is a picture on a slide; a thin plain edge is cut off (trim_edges). Logos are never trimmed."""
@@ -254,6 +266,8 @@ def datauri(path, width=1600, q=82, trim=False, treat=None):
     if trim: im = trim_edges(im)
     if im.width > width:
         im = im.resize((width, round(im.height * width / im.width)), Image.LANCZOS)
+    if treat and treat.get("photo") == "glow":
+        im = glow(im, treat.get("glow") or [treat.get("accent", "#FF5B37")], treat.get("deep", "#0C0A10")); q = max(q, 88)
     if treat and treat.get("photo") == "halftone":
         im = halftone(im, treat.get("ink", "#111111"), treat.get("paper", "#FFFFFF")); q = max(q, 90)
     b = io.BytesIO(); im.save(b, "JPEG", quality=q, optimize=True)
@@ -353,7 +367,8 @@ def build(slides_path, out, brand=None, title=None, images=None, footer_left=Non
         print("WARNING (brand):", w)
     master = open(os.path.join(HERE, "master.html"), encoding="utf-8").read()
     slides = slides_text if slides_text is not None else open(slides_path, encoding="utf-8").read()
-    treat = {"photo": b["shape"].get("photo"), "ink": b["colors"]["ink"], "paper": b["colors"]["paper"]} if b["shape"].get("photo") else None
+    treat = {"photo": b["shape"].get("photo"), "ink": b["colors"]["ink"], "paper": b["colors"]["paper"], "deep": b["colors"]["deep"],
+             "accent": b["colors"]["accent"], "glow": b["shape"].get("glow")} if b["shape"].get("photo") else None
     for name, path in (images or {}).items():
         big = any(k in name for k in ("COVER", "FULL"))
         slides = slides.replace("{{IMG_" + name + "}}", datauri(path, 1920 if big else 1400, trim=True, treat=None if "LOGO" in name else treat))

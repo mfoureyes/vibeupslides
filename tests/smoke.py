@@ -1056,7 +1056,7 @@ ok("the build leaves each slide once more with a field it does not use yet, and 
 # a look from nothing: the styles side by side, and a library of the user's own from one of them
 import design as DS
 code, out = vs("design", "--lang", "de"); sty = list(DS.styles())
-ok("seven styles of vibeupslides' own are offered, each with what it is like and what it fits", code == 0 and sty == ["raster", "magazin", "nacht", "werkstatt", "plakat", "manifest", "leicht"] and "Raster." in out and "fits:" in out, out[:300])
+ok("eight styles of vibeupslides' own are offered, each with what it is like and what it fits", code == 0 and sty == ["raster", "magazin", "nacht", "werkstatt", "plakat", "manifest", "schimmer", "leicht"] and "Raster." in out and "fits:" in out, out[:300])
 code, out = vs("design", "--gallery", "--pick", "raster,nacht", "--name", "Nordlicht", "--lang", "de"); gp = os.path.join(ws, "design", "styles.html")
 ok("the styles are shown side by side on the same slides", code == 0 and os.path.exists(gp) and '"name": "nacht"' in open(gp, encoding="utf-8").read() and "Welcher Look passt?" in open(gp, encoding="utf-8").read(), out[-300:])
 code, out = vs("design", "eigen", "--style", "magazin", "--name", "Eigen & Art", "--accent", "#0a7d5a", "--langs", "de,en", "--author", "Ada Lovelace"); el = os.path.join(ws, "library", "eigen")

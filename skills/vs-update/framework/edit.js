@@ -6,7 +6,9 @@
 (function(){
   var FILE=location.protocol.indexOf('http')!==0;            /* opened as a file: no server, see `local` below */
   var root=document.documentElement, DE=(root.lang||'en').slice(0,2)==='de';
-  var T=DE?{edit:'Bearbeiten (E)',earlier:'← nach vorn',later:'nach hinten →',dup:'Duplizieren',del:'Löschen',undo:'Rückgängig',redo:'Wiederholen',notes:'Notizen, Lesetext',
+  function reading(){ return root.getAttribute('data-mode')==='reading'; }      /* asked when needed: the engine sets the version after this script has run */
+  function toLive(){ try{ sessionStorage.setItem('vs-edit','1'); }catch(e){} if(window.vsSwitchMode) window.vsSwitchMode('live'); }
+  var T=DE?{edit:'Bearbeiten (E)',toLive:'Bearbeiten (E): öffnet die Vortragsfassung zum Bearbeiten',earlier:'← nach vorn',later:'nach hinten →',dup:'Duplizieren',del:'Löschen',undo:'Rückgängig',redo:'Wiederholen',notes:'Notizen, Lesetext',
            saved:'Gespeichert',saving:'Speichere …',over:'Der Text läuft über die Folie hinaus: kürzen oder die Folie teilen',up:'↑',down:'↓',idup:'Duplizieren',idel:'Entfernen',
            sure:'Diese Folie löschen? (Rückgängig holt sie zurück)',hint:'Text anklicken und tippen. Enter speichert, Esc verwirft.',voice:'Sprache der Marke: ',
            typing:'Im Textfeld: Enter speichert, Esc verwirft. Danach blättern die Pfeiltasten wieder; Bild↑/Bild↓ blättern immer.',
@@ -20,7 +22,7 @@
            open:'{n} geänderte Text(e) werden nach „Fertig“ korrigiert und übersetzt',end1:'Deine Änderungen sind übernommen',
            end2:'Rechtschreibung und Grammatik der geänderten Texte werden jetzt geprüft und die Texte in die andere Sprache übersetzt. Diese Seite öffnet sich danach von selbst wieder, du musst nichts tun.',back:'Die Seite ist wieder da …',
            gAnim:'Animation',aStep:'Auf Klick',tStep:'Die Teile dieser Folie erscheinen nacheinander per Klick, der erste steht mit der Folie. Noch einmal drücken: alles kommt zusammen',aMove:{'':'Bewegung: wie Deck',calm:'Bewegung: ruhiger',expressive:'Bewegung: kräftiger',off:'Bewegung: keine'},tMove:'Wie viel sich auf dieser einen Folie bewegt: wie in der ganzen Präsentation, ruhiger, kräftiger oder gar nicht',aPlay:'▶ Abspielen',aOrder:'Reihenfolge',aOrderOk:'Reihenfolge speichern',tOrder:'Die Klickschritte dieser Folie in eine eigene Reihenfolge bringen und Teile zusammenfassen',oHint:'Klicken Sie die Teile in der Reihenfolge an, in der sie kommen sollen. Mit gedrückter Umschalttaste kommt ein Teil zusammen mit dem davor. Esc bricht ab.',oNone:'Diese Folie hat keine Klickschritte. Erst „Auf Klick“ wählen.',oSaved:'Reihenfolge gespeichert.',tPlay:'Die Animation dieser Folie ansehen, mit ihren Klickschritten',shared:'Diese Folie teilen sich mehrere Präsentationen („{s}“). Was du hier änderst, gilt nur für diese, außer du drückst „Für alle Präsentationen“.',sharedAll:'Deine Änderungen an dieser Folie („{s}“) gelten für alle Präsentationen: Claude übernimmt sie in die Bibliothek und fragt, ob die anderen Präsentationen aktualisiert werden sollen.',forAll:'Für alle Präsentationen',tForAll:'Was du an dieser geteilten Folie änderst, soll für alle Präsentationen gelten, die sie verwenden. Noch einmal drücken: nur für diese',edge:'Weiter geht es in dieser Richtung nicht.',lastOne:'Die letzte Folie bleibt.',lastItem:'Der letzte Punkt einer Liste bleibt: die Folie löschen oder Claude um einen anderen Aufbau bitten.',noItem:'Diese Liste lässt sich hier nicht umbauen. Sag Claude, was sich ändern soll.',fClose:'Weiter bearbeiten',fEnd1:'Änderungen gesichert',fEnd2:'Die Datei „{f}“ ist gespeichert. Sie gehört in den Ordner, in dem diese Präsentation liegt.',fEnd2d:'Die Datei „{f}“ liegt jetzt in deinem Download-Ordner. Lege sie in den Ordner, in dem diese Präsentation liegt, oder lade sie im Chat hoch.',fEnd3:'Für Korrektur, Übersetzung in die anderen Sprachen und PDF sag Claude: „Übernimm meine Änderungen an {d}“.',fHint:'Text anklicken und tippen. Enter speichert, Esc verwirft.',gSave:'Speichern',fDir:'Ordner wählen …',fDirOk:'Speichert in Datei ✓',tDir:'Einmal den Ordner wählen, in dem deine Präsentationen liegen (oder den dieser Präsentation): danach wird jede Änderung sofort in der Präsentation gespeichert, auch bei künftigen Präsentationen in diesem Ordner',tDirOk:'Jede Änderung wird sofort in „{f}“ gespeichert',fWrong:'„{f}“ liegt weder in diesem Ordner noch darunter. Bitte den Ordner wählen, in dem diese Präsentation liegt.',fSaved:'Gespeichert in „{f}“',fFail:'Speichern nicht möglich: ',fNeed:'Noch nicht in der Datei gespeichert: „Ordner wählen …“ drücken und den Ordner angeben, in dem deine Präsentationen liegen.',fOk:'Schließen',fEndDir:'Deine Änderungen stehen in „{f}“. Du kannst die Datei so zeigen und weitergeben.',fPending:' · {n} Text(e) ungeprüft: Claude korrigiert sie, sobald du ihm schreibst. Bis dahin sind sie gelb markiert.',gCheck:'Prüfung',uKeep:'Text so lassen',tKeep:'Der zuletzt geänderte Text dieser Folie soll genau so bleiben: Er wird nicht korrigiert, nur übersetzt, und gilt als geprüft',uTip:'Ungeprüft: von dir getippt, noch nicht korrigiert',uFlag:'{n} ungeprüft',uTitle:'Texte, die du getippt hast und die noch nicht korrigiert sind. Schreib Claude „Übernimm meine Änderungen“, oder gib sie mit „Text so lassen“ selbst frei.',uKept:'Bleibt genau so und gilt als geprüft.',rHead:'Seit deiner letzten Bearbeitung übernommen',rSlide:'Folie {n}',rFixed:'korrigiert',rSame:'unverändert übernommen',rPending:'Korrektur steht noch aus',rLangs:'übersetzt: {l}'}
-         :{edit:'Edit (E)',earlier:'← forward',later:'back →',dup:'Duplicate',del:'Delete',undo:'Undo',redo:'Redo',notes:'Notes, reader text',
+         :{edit:'Edit (E)',toLive:'Edit (E): opens the version to present for editing',earlier:'← forward',later:'back →',dup:'Duplicate',del:'Delete',undo:'Undo',redo:'Redo',notes:'Notes, reader text',
            saved:'Saved',saving:'Saving …',over:'The text runs off the slide: shorten it or split the slide',up:'↑',down:'↓',idup:'Duplicate',idel:'Remove',
            sure:'Delete this slide? (Undo brings it back)',hint:'Click a text and type. Enter saves, Esc discards.',voice:'Brand voice: ',
            typing:'In the text: Enter saves, Esc discards. After that the arrow keys turn the slides again; Page Up and Page Down always do.',
@@ -571,6 +573,7 @@
   var motionWas=null;
   function steps(){ var s=active(); if(on&&s) s.querySelectorAll('.f').forEach(function(f){ f.classList.add('on'); }); }
   function toggle(to){
+    if(reading()) return toLive();
     on=(to===undefined)?!on:to; try{ sessionStorage.setItem('vs-edit',on?'1':'0'); }catch(e){}
     if(on){ motionWas=root.getAttribute('data-motion'); root.setAttribute('data-motion','off'); }
     else { stopOrder(false); pending(); if(motionWas!==null) root.setAttribute('data-motion',motionWas); items.classList.remove('on'); openNotes(false); openPick(null); overflow(null);
@@ -586,12 +589,12 @@
       .then(function(d){ if(!d||!d.ok||(d.actions||[]).indexOf('all')<0) FILE=true; },function(){ FILE=true; }).then(build);      /* shown by a server that takes no changes: as from a file */
   }
   function build(){
-    if(root.getAttribute('data-mode')==='reading') return;   /* the reading version rearranges the slides into pages: editing is for the version to present (key V) */
     var ctl=document.getElementById('ctl'); if(!ctl) return;
     var fs=ctl.querySelector('[data-act="fs"]');
     btn=el('button',{id:'vse-btn',type:'button',title:T.edit},'<svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg>');
     btn.addEventListener('click',function(e){ e.stopPropagation(); toggle(); });
     ctl.insertBefore(btn,fs); ctl.insertBefore(el('span',{'class':'sep'}),fs);
+    if(reading()){ btn.title=T.toLive; return; }   /* the reading version rearranges the slides into pages: the pencil opens the editing in the version to present */
     var area_label=el('label',{},T.notesFor); area=el('textarea',{spellcheck:'true'}); notesBox.appendChild(area_label); notesBox.appendChild(area);
     area2=el('textarea',{spellcheck:'true'}); notesBox.appendChild(el('label',{},T.readFor)); notesBox.appendChild(area2);
     var nrow=el('div',{'class':'row'}); notesBox.appendChild(nrow); button(nrow,T.notesSave,saveNotes);

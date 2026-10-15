@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.9.4
+- The reading version shows the pencil too: pressing it (or E) opens the version to present at the same slide with the editing on. Before, editing was simply missing in the reading version.
+
+
+## 0.9.4
+- A seventh style, **manifest** (Manifesto): towering ultra-condensed capitals (Six Caps) beside a classic serif in italics (DM Serif Display) and a tight grotesque for everything else (Inter Tight); red, black and cream in hard bands, small capitals, a four-pointed star as ornament, a grain like print. Figures are condensed numerals one storey high with the unit in the serif; bars run under a ruler with their values in the serif; the line chart sits in a frame like an instrument; what a waterfall takes away is hatched.
+- A brand can name a third typeface, `fonts.serif` (family, fallback), beside body and head; it is fetched with the others and reaches the theme as `--font-serif`.
+- The big chapter number counts up again at full size: the rules of the column chart (`.mcol`) had shrunk it to a sliver on every brand since 0.9.0.
+
+For brand libraries made with an earlier version:
+- Nothing to do; `vs.py refresh` builds the decks again with the chapter number fixed.
+
 ## 0.9.3
 - `venn`: what all circles share is filled in the accent colour, and the shared word stands inside it (two short lines with three circles, three with two); a longer word is set in a box over the middle. The circles overlap a little more, so the middle has room.
 - `cycle`: the whole ring stands out on any ground (a tone of the text colour instead of the light surface colour), the accent arc on top of it.

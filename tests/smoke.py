@@ -937,8 +937,12 @@ with sync_playwright() as p:
     pg.evaluate("document.getElementById('vse-btn').click()"); pg.wait_for_timeout(300)
     pg.evaluate("""()=>{[...document.querySelectorAll('#vse button')].find(x=>/^(On click|Auf Klick)$/.test(x.textContent)).click()}"""); pg.wait_for_timeout(300)
     turned = pg.evaluate("(()=>{const s=document.querySelector('#deck > .slide.active'); return [s.getAttribute('data-step'), s.querySelectorAll('.f').length, s.querySelectorAll('.f.on').length];})()")
+    pg.evaluate("sessionStorage.clear()"); pg.goto("file://" + os.path.join(md, "Moves.html") + "?mode=reading#/2"); pg.wait_for_timeout(1500)
+    rd_pen = pg.evaluate("!!document.getElementById('vse-btn') && !document.getElementById('vse')"); pg.keyboard.press("e"); pg.wait_for_timeout(2000)
+    rd_to = [pg.evaluate("document.documentElement.getAttribute('data-mode')"), pg.evaluate("document.documentElement.classList.contains('vs-editing')"), "mode=live" in pg.url]
     br.close()
 ok("a slide builds up click by click when the deck says so, on any master, and arrives whole when it says no", at0 == "1- 2-" and at1 == "1+ 2-" and flat == ["#/3", "0", 0, 2] and 'data-move="calm"' in mh, f"{at0} | {at1} | {flat}")
+ok("the reading version shows the pencil, and it opens the version to present with the editing on", rd_pen and rd_to == ["live", True, True], str([rd_pen, rd_to]))
 ok("the editing panel turns the click steps of a slide on, and the change comes into the deck file", turned[0] == "1" and turned[1] >= 1 and turned[1] == turned[2]
    and E.apply_edits(md, {"ops": [{"a": "anim", "n": 3, "key": "step", "value": True}, {"a": "anim", "n": 2, "key": "move", "value": ""}]})[0] == 2
    and json.load(open(os.path.join(md, "deck.json")))["slides"][2]["step"] is True and "move" not in json.load(open(os.path.join(md, "deck.json")))["slides"][1], str(turned))

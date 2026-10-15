@@ -833,6 +833,7 @@ html[data-motion="off"] #deck .bgvideo video{transition:none!important}
     location.href=location.href.split(/[?#]/)[0]+'?mode='+to+(LANGS.length>1?'&lang='+lang:'')+(nn?'&n='+nn:'')+(thenPdf?'&pdf=1':'');
   }
   function toggleMode(){ switchMode(MODE==='reading'?'live':'reading'); }
+  window.vsSwitchMode=switchMode;      /* the editing opens the live version when asked in the reading one */
   var xmenu=document.getElementById('xmenu');
   function exportMenu(){ xmenu.classList.toggle('on'); wake(); }
   function exportAs(m){ xmenu.classList.remove('on'); if(m===MODE) pdf(); else switchMode(m,true); }

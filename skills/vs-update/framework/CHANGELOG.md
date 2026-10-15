@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.9.3
+- `venn`: what all circles share is filled in the accent colour, and the shared word stands inside it (two short lines with three circles, three with two); a longer word is set in a box over the middle. The circles overlap a little more, so the middle has room.
+- `cycle`: the whole ring stands out on any ground (a tone of the text colour instead of the light surface colour), the accent arc on top of it.
+
+For brand libraries made with an earlier version:
+- Copy the masters `venn` and `cycle` again and give them the brand's look.
+
 ## 0.9.2
 - Every question to the user goes through the question tool (options to click, the recommended one first), in all four skills.
 - Diagrams build up the way they are explained: `venn` circle by circle with its point of the list and the shared word last; `spectrum` the scale first, then each mark where it stands on the line (it no longer travels in with the motion set); `cycle` station by station with its point; `matrix` the axes, then the fields one by one.

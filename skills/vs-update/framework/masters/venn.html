@@ -1,20 +1,33 @@
-<!--vs {"name": "venn", "order": 54, "use": "Two or three fields and what they share: overlapping circles with the shared part named in the middle (technology, market and team; what we can and what is needed). The middle is what the slide is about. Not for things that do not overlap: use cards or columns.", "slots": {"kicker": "small label above the title (optional)", "title": "the title as a full sentence, <em> marks the one accent word", "items": "list of 2 or 3 {title, text}: the circles, title one or two words", "center": "what they share, one to three words, stands in the middle", "center_text": "one sentence about what they share (optional)", "note": "one sentence below (optional)"}, "sample": {"kicker": "Overlap", "title": "Downtime falls where three things <em>meet</em>", "items": [{"title": "Data", "text": "Every machine and its history in one place."}, {"title": "Parts", "text": "The right spare part in stock in time."}, {"title": "People", "text": "Planners who use the plan every day."}], "center": "Fewer stops", "center_text": "Only where all three come together does downtime really fall."}} -->
+<!--vs {"name": "venn", "order": 54, "use": "Two or three fields and what they share: overlapping circles with the shared part named in the middle (technology, market and team; what we can and what is needed). The middle is what the slide is about. Not for things that do not overlap: use cards or columns.", "slots": {"kicker": "small label above the title (optional)", "title": "the title as a full sentence, <em> marks the one accent word", "items": "list of 2 or 3 {title, text}: the circles, title one or two words", "center": "what they share, one to three short words: it stands in the coloured middle where all circles overlap (with three circles up to about 8 letters a word, two words); a longer one is set in a box over the middle", "center_text": "one sentence about what they share (optional)", "note": "one sentence below (optional)"}, "sample": {"kicker": "Overlap", "title": "Downtime falls where three things <em>meet</em>", "items": [{"title": "Data", "text": "Every machine and its history in one place."}, {"title": "Parts", "text": "The right spare part in stock in time."}, {"title": "People", "text": "Planners who use the plan every day."}], "center": "Fewer stops", "center_text": "Only where all three come together does downtime really fall."}, "prepare": "venn"} -->
 <section class="slide vs-ven" {{attrs}}>
   <style>
-  .vs-ven .vs-vn{display:grid;grid-template-columns:680px 1fr;gap:90px;align-items:center;margin-top:24px}
-  .vs-ven .vs-vn-fig{position:relative;width:680px;height:420px}
-  .vs-ven .vs-vn-fig:has(.vs-vn-c3){height:540px}
-  .vs-ven .vs-vn-c{position:absolute;width:380px;height:380px;border-radius:50%;border:5px solid var(--ink);background:color-mix(in srgb,var(--soft) 55%,transparent);box-sizing:border-box}
-  .vs-ven .vs-vn-c1{left:20px;top:20px} .vs-ven .vs-vn-c2{left:280px;top:20px}
-  .vs-ven .vs-vn-fig:has(.vs-vn-c3) .vs-vn-c1,.vs-ven .vs-vn-fig:has(.vs-vn-c3) .vs-vn-c2{top:0}
-  .vs-ven .vs-vn-c3{left:150px;top:160px}
-  /* labels at the centre of the part of each circle that is its own, the shared word at the centre of what all share (worked out for these circles) */
-  .vs-ven .vs-vn-l{position:absolute;transform:translate(-50%,-50%);max-width:150px;text-align:center;font-size:28px;line-height:1.15;font-weight:700;z-index:1}
-  .vs-ven .vs-vn-l1{left:177px;top:210px} .vs-ven .vs-vn-l2{left:503px;top:210px}
-  .vs-ven .vs-vn-fig:has(.vs-vn-c3) .vs-vn-l1{left:155px;top:151px} .vs-ven .vs-vn-fig:has(.vs-vn-c3) .vs-vn-l2{left:525px;top:151px}
-  .vs-ven .vs-vn-l3{left:340px;top:440px}
-  .vs-ven .vs-vn-mid{position:absolute;left:340px;top:210px;transform:translate(-50%,-50%);z-index:2;background:var(--accent);color:var(--on-accent,var(--on));font-weight:700;font-size:26px;line-height:1.15;padding:12px 20px;max-width:170px;text-align:center;border-radius:var(--radius,0)}
-  .vs-ven .vs-vn-fig:has(.vs-vn-c3) .vs-vn-mid{top:229px;max-width:150px;font-size:24px;padding:10px 16px}
+  .vs-ven .vs-vn{display:grid;grid-template-columns:660px 1fr;gap:100px;align-items:center;margin-top:24px}
+  .vs-ven .vs-vn-fig{position:relative;width:660px;height:420px}
+  .vs-ven .vs-vn-fig:has(.vs-vn-c3){height:530px}
+  /* circles of r 190 (border inside); centres 2: (230|210) (450|210), 3: (225|190) (455|190) (340|335) */
+  .vs-ven .vs-vn-c,.vs-ven .vs-vn-o{position:absolute;width:380px;height:380px;border-radius:50%;box-sizing:border-box}
+  .vs-ven .vs-vn-c{background:color-mix(in srgb,var(--soft) 55%,transparent)}
+  .vs-ven .vs-vn-o{border:5px solid var(--ink)}
+  .vs-ven .vs-vn-k1{left:40px;top:20px} .vs-ven .vs-vn-k2{left:260px;top:20px}
+  .vs-ven .vs-vn-fig:has(.vs-vn-c3) .vs-vn-k1{left:35px;top:0} .vs-ven .vs-vn-fig:has(.vs-vn-c3) .vs-vn-k2{left:265px;top:0}
+  .vs-ven .vs-vn-k3{left:150px;top:145px}
+  /* what all circles share, filled in the accent colour: one clip per circle, nested */
+  .vs-ven .vs-vn-x,.vs-ven .vs-vn-x *{position:absolute;inset:0}
+  .vs-ven .vs-vn-x{clip-path:circle(187.5px at 230px 210px)} .vs-ven .vs-vn-x>i{clip-path:circle(187.5px at 450px 210px)}
+  .vs-ven .vs-vn-x>i>i{clip-path:circle(187.5px at 230px 210px);background:var(--accent)}
+  .vs-ven .vs-vn-fig:has(.vs-vn-c3) .vs-vn-x{clip-path:circle(187.5px at 225px 190px)}
+  .vs-ven .vs-vn-fig:has(.vs-vn-c3) .vs-vn-x>i{clip-path:circle(187.5px at 455px 190px)}
+  .vs-ven .vs-vn-fig:has(.vs-vn-c3) .vs-vn-x>i>i{clip-path:circle(187.5px at 340px 335px)}
+  /* names at the centre of the part of each circle that is its own, the shared word in the middle of what all share (worked out for these circles) */
+  .vs-ven .vs-vn-l,.vs-ven .vs-vn-in{position:absolute;transform:translate(-50%,-50%);text-align:center;font-weight:700;line-height:1.15;z-index:2}
+  .vs-ven .vs-vn-l{max-width:150px;font-size:28px}
+  .vs-ven .vs-vn-l1{left:183px;top:210px} .vs-ven .vs-vn-l2{left:497px;top:210px}
+  .vs-ven .vs-vn-fig:has(.vs-vn-c3) .vs-vn-l1{left:161px;top:147px} .vs-ven .vs-vn-fig:has(.vs-vn-c3) .vs-vn-l2{left:519px;top:147px}
+  .vs-ven .vs-vn-l3{left:340px;top:432px}
+  .vs-ven .vs-vn-in{left:340px;top:210px;width:124px;font-size:26px;color:var(--on-accent,var(--on));overflow-wrap:break-word;hyphens:auto}
+  .vs-ven .vs-vn-fig:has(.vs-vn-c3) .vs-vn-in{top:227px;width:106px;font-size:23px}
+  .vs-ven .vs-vn-mid{position:absolute;left:340px;top:210px;transform:translate(-50%,-50%);z-index:3;background:var(--deep);color:var(--on-deep);font-weight:700;font-size:26px;line-height:1.15;padding:12px 20px;max-width:220px;text-align:center;border-radius:var(--radius,0)}
+  .vs-ven .vs-vn-fig:has(.vs-vn-c3) .vs-vn-mid{top:227px;font-size:24px;padding:10px 16px}
   .vs-ven .vs-vn-list{display:grid;gap:28px}
   .vs-ven .vs-vn-item{display:grid;grid-template-columns:54px 1fr;column-gap:22px}
   .vs-ven .vs-vn-item i{font-style:normal;font-weight:700;font-size:26px;line-height:1.45;color:var(--accent-text)}
@@ -22,17 +35,17 @@
   .vs-ven .vs-vn-item p{font-size:25px;line-height:1.45;color:var(--muted);margin-top:4px}
   .vs-ven .vs-vn-sum{border-left:4px solid var(--accent);padding-left:30px;font-size:27px;line-height:1.45;margin-top:8px}
   .vs-ven .callout{margin-top:26px}
-  /* the picture builds as it is explained: circle k with point k of the list, the shared word with the closing sentence */
-  .vs-ven.active .vs-vn-c,.vs-ven.active .vs-vn-l{animation:m-pop calc(var(--md)*1.1) var(--me) backwards;animation-delay:calc(.08s + (var(--k) - 1)*var(--mb))}
-  .vs-ven.active .vs-vn-l{animation-name:mfade;animation-delay:calc(.2s + (var(--k) - 1)*var(--mb))}
-  .vs-ven.active .vs-vn-mid{animation:m-pop calc(var(--md)*.9) var(--me) backwards;animation-delay:calc(.2s + 2*var(--mb))}
-  .vs-ven.active .vs-vn-fig:has(.vs-vn-c3) .vs-vn-mid{animation-delay:calc(.2s + 3*var(--mb))}
+  /* the picture builds as it is explained: circle k with point k of the list, the shared part and its word with the closing sentence */
+  .vs-ven.active .vs-vn-c,.vs-ven.active .vs-vn-o{animation:m-pop calc(var(--md)*1.1) var(--me) backwards;animation-delay:calc(.08s + (var(--k) - 1)*var(--mb))}
+  .vs-ven.active .vs-vn-l{animation:mfade calc(var(--md)*1.1) var(--me) backwards;animation-delay:calc(.2s + (var(--k) - 1)*var(--mb))}
+  .vs-ven.active .vs-vn-x,.vs-ven.active .vs-vn-in,.vs-ven.active .vs-vn-mid{animation:mfade calc(var(--md)*.9) var(--me) backwards;animation-delay:calc(.2s + 2*var(--mb))}
+  .vs-ven.active .vs-vn-fig:has(.vs-vn-c3) :is(.vs-vn-x,.vs-vn-in,.vs-vn-mid){animation-delay:calc(.2s + 3*var(--mb))}
   html.export .vs-ven .vs-vn-fig *,html[data-motion="off"] .vs-ven .vs-vn-fig *{animation:none!important}
   </style>
   {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
   <h2>{{title}}</h2>
   <div class="vs-vn">
-    <div class="vs-vn-fig">{{#items}}<i class="vs-vn-c vs-vn-c{{@i}}" style="--k:{{@i}}"></i>{{/items}}{{#items}}<b class="vs-vn-l vs-vn-l{{@i}}" style="--k:{{@i}}">{{title}}</b>{{/items}}{{#center}}<div class="vs-vn-mid">{{center}}</div>{{/center}}</div>
+    <div class="vs-vn-fig">{{#items}}<i class="vs-vn-c vs-vn-k{{@i}} vs-vn-c{{@i}}" style="--k:{{@i}}"></i>{{/items}}<div class="vs-vn-x"><i><i></i></i></div>{{#items}}<i class="vs-vn-o vs-vn-k{{@i}}" style="--k:{{@i}}"></i>{{/items}}{{#items}}<b class="vs-vn-l vs-vn-l{{@i}}" style="--k:{{@i}}">{{title}}</b>{{/items}}{{#center}}{{#_fits}}<b class="vs-vn-in">{{center}}</b>{{/_fits}}{{^_fits}}<div class="vs-vn-mid">{{center}}</div>{{/_fits}}{{/center}}</div>
     <div class="vs-vn-list" data-seq>{{#items}}<div class="vs-vn-item anim"><i>{{@ii}}</i><div><h3>{{title}}</h3>{{#text}}<p>{{text}}</p>{{/text}}</div></div>{{/items}}{{#center_text}}<p class="vs-vn-sum anim">{{center_text}}</p>{{/center_text}}</div>
   </div>
   {{#note}}<p class="callout anim">{{note}}</p>{{/note}}

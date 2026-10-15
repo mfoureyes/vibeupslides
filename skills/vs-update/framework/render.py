@@ -399,7 +399,15 @@ def _prep_share(slots, env):
     if items:
         slots["_center"] = f"{items[0].get('value')}%"; slots["_center_label"] = items[0].get("label", "")
 
-PREPARE = {"waterfall": _prep_waterfall, "share": _prep_share}
+def _prep_venn(slots, env):
+    """Whether the shared word fits into the coloured middle where all circles overlap (_fits); otherwise it is set in
+    a box over the middle. The middle of three circles holds two short lines, that of two circles three."""
+    words = _plain(str(slots.get("center") or "")).split()
+    three = len([i for i in slots.get("items") or [] if isinstance(i, dict)]) >= 3
+    longest, total = max((len(w) for w in words), default=0), sum(len(w) for w in words) + max(len(words) - 1, 0)
+    slots["_fits"] = bool(words) and (longest <= 8 and len(words) <= 2 and total <= 16 if three else longest <= 10 and len(words) <= 3 and total <= 26)
+
+PREPARE = {"waterfall": _prep_waterfall, "share": _prep_share, "venn": _prep_venn}
 
 HELPERS = {"chapter_number": _h_chapter_number, "bars": _h_bars, "columns": _h_columns, "bgvideo": _h_bgvideo, "chevron_fill": _h_chevron_fill, "line_chart": _h_line_chart,
            "verdict": _h_verdict, "lower_third": _h_lower_third, "el": _h_el, "icon": _h_icon,

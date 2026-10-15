@@ -6,8 +6,8 @@
   "de": "Manifest"
  },
  "character": {
-  "en": "Bold and editorial: towering ultra-condensed capitals next to a classic serif in italics, red, black and cream in hard bands, small capitals for everything else, a grain like print.",
-  "de": "Kühn und redaktionell: hoch aufragende, extrem schmale Versalien neben einer klassischen Serife in Kursiv, Rot, Schwarz und Creme in harten Bändern, kleine Versalien für alles andere, ein Korn wie im Druck."
+  "en": "Bold and editorial: towering condensed capitals next to a classic serif in italics, red, black and cream in hard bands, small capitals for everything else, photos in a coarse print screen.",
+  "de": "Kühn und redaktionell: hohe, schmale Versalien neben einer klassischen Serife in Kursiv, Rot, Schwarz und Creme in harten Bändern, kleine Versalien für alles andere, Fotos im groben Druckraster."
  },
  "fits": {
   "en": "agencies, studios, culture and media, a brand or a programme that wants to take a stand; a talk that is a statement",
@@ -15,12 +15,12 @@
  },
  "fonts": [
   "Inter Tight",
-  "Six Caps",
+  "Anton",
   "DM Serif Display"
  ],
  "brand": {
   "colors": {
-   "accent": "#E8401A",
+   "accent": "#EA4520",
    "on_accent": "#170E0C",
    "ink": "#170E0C",
    "deep": "#170E0C",
@@ -39,8 +39,8 @@
     "fallback": "Helvetica Neue, Arial, sans-serif"
    },
    "head": {
-    "family": "Six Caps",
-    "fallback": "Anton, Impact, 'Arial Narrow', sans-serif"
+    "family": "Anton",
+    "fallback": "Impact, 'Arial Narrow', sans-serif"
    },
    "serif": {
     "family": "DM Serif Display",
@@ -53,10 +53,15 @@
    "radius": 0,
    "motif": "block",
    "head_case": "uppercase",
-   "head_tracking": "0.01em"
+   "head_tracking": "0",
+   "photo": "halftone"
   },
   "motion": {
-   "set": "cut"
+   "set": "rise"
+  },
+  "footer": {
+   "left": "$name",
+   "right": ""
   }
  }
 }

@@ -684,7 +684,16 @@ html[data-motion="off"] #deck .bgvideo video{transition:none!important}
     for(var i=0;i<6;i++){ var k=(lo+hi)/2; set(k); if(fits()) lo=k; else hi=k; }
     set(lo<1.05?1:Math.floor(lo*100)/100); s.classList.remove('vs-measure'); s.vsOrdered=false;
   }
-  window.vsFit=function(s){ if(!s) return; s.vsFit=0; Array.prototype.forEach.call(s.children,function(c){ if(c.style) c.style.zoom=''; }); try{ fitSlide(s); orderBlocks(s); }catch(e){} };
+  /* .vs-fill: a display line as large as its box is wide, the way a poster sets its word from edge to edge. When one line
+     would be smaller than data-min, it breaks into data-lines lines (default 2); never larger than data-max. */
+  function fillWidth(s){ Array.prototype.forEach.call(s.querySelectorAll('.vs-fill'),function(e){
+    var max=parseFloat(e.getAttribute('data-max'))||600, min=parseFloat(e.getAttribute('data-min'))||60, lines=parseInt(e.getAttribute('data-lines'),10)||2;
+    e.style.fontSize=''; e.style.whiteSpace='nowrap'; var cs=getComputedStyle(e), fs=parseFloat(cs.fontSize), sc=e.getBoundingClientRect().width/(e.offsetWidth||1)||1,
+      rg=document.createRange(); rg.selectNodeContents(e); var w=rg.getBoundingClientRect().width/sc, room=e.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight); e.style.whiteSpace='';
+    if(!w||!room) return; var k=fs*room/w*.985;
+    if(k<min&&lines>1) k=fs*room*lines/w*.9;
+    e.style.fontSize=Math.max(Math.min(min,k),Math.min(max,k))+'px'; }); }
+  window.vsFit=function(s){ if(!s) return; s.vsFit=0; Array.prototype.forEach.call(s.children,function(c){ if(c.style) c.style.zoom=''; }); try{ fillWidth(s); fitSlide(s); orderBlocks(s); }catch(e){} };
   if(document.fonts&&document.fonts.ready) document.fonts.ready.then(function(){ setTimeout(function(){ slides.forEach(function(s){ window.vsFit(s); }); },0); });
   /* What the deck says about one slide's click steps, whatever its master does (data-step). 1 on a slide without
      steps: the rows of its blocks come one per click, in reading order (blocks in one single row one by one), and
@@ -744,7 +753,7 @@ html[data-motion="off"] #deck .bgvideo video{transition:none!important}
       setTimeout(function(){old.classList.remove('leave','back');},600);
     }
     var incoming=slides[i];
-    try{ fitSlide(incoming); stepify(incoming); orderBlocks(incoming); }catch(e){}
+    try{ fillWidth(incoming); fitSlide(incoming); stepify(incoming); orderBlocks(incoming); }catch(e){}
     incoming.classList.toggle('back',back); void incoming.offsetWidth; incoming.classList.remove('back'); incoming.classList.add('active');
     frags(incoming).forEach(function(f){f.classList.toggle('on',!!back);});
     cur=i;

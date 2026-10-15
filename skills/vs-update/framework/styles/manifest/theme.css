@@ -1,142 +1,248 @@
-/* Manifesto: bold and editorial. Towering ultra-condensed capitals, a classic serif in italics beside them,
-   red, black and cream in hard bands, small capitals for everything else, a grain like print. */
+/* Manifesto: bold and editorial. Towering condensed capitals (Anton), a classic serif in italics beside them
+   (DM Serif Display), red, black and cream in hard bands, small capitals for everything else (Inter Tight),
+   photos in a coarse print screen, a ruler and a frame like the reading of an instrument.
+   Nothing here moves by itself: the motion set (rise) does that, smooth and short. */
 
 :root{--font-serif:'DM Serif Display',Georgia,'Times New Roman',serif;
-  --mf-grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .3 -.12'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  --mf-stroke:.028em}
+  --mf-grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .22 -.1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 
-/* ---------- ground: a grain like print on every surface ---------- */
-.slide{background-image:var(--mf-grain);background-size:260px}
-.slide.fullbleed,.slide.withphoto{background-image:none}
+/* ---------- a grain like print: one still layer over the whole stage, it does not travel with the slides ---------- */
+#deck::after{content:"";position:absolute;inset:0;z-index:40;pointer-events:none;background:var(--mf-grain) 0 0/240px}
 
-/* ---------- running text: a tight grotesque ---------- */
-body{font-feature-settings:"ss01"}
+/* ---------- type ---------- */
+h1,h2{font-family:var(--font-head);font-weight:400;text-transform:uppercase;letter-spacing:0}
+h1 em,h2 em,.accent h1 em,.accent h2 em{text-decoration:none}
+h1{font-size:200px;line-height:.86}
+h2{font-size:92px;line-height:.92;max-width:1680px;margin-bottom:22px}
+h3{font-family:var(--font);font-weight:700;letter-spacing:-.01em}
 .slide p,.slide li{letter-spacing:-.012em}
+.lead{font-size:26px;line-height:1.28;font-weight:500;text-transform:uppercase;max-width:980px}
+/* the serif: a word or a line in italics, lower case, set into the capitals */
+.statement h2 em,.dark h2 em,.fullbleed h1 em,.fullbleed h2 em,.withphoto h1 em,#deck .vs-stp h2 em,.quote h2 em{font-family:var(--font-serif);font-style:italic;text-transform:none;letter-spacing:-.03em;font-weight:400}
+/* where lines overlap, the serif always lies over the capitals */
+h1 em,h2 em,.mf-display em,.mf-tail em{position:relative;z-index:2}
+.mf-tail em,.mf-tail .maccent{display:block}
+.maccent{position:relative;z-index:2}
 
 /* ---------- label above titles: small capitals behind a four-pointed star ---------- */
-.kicker{font-family:var(--font);font-weight:600;font-size:20px;letter-spacing:.02em;margin-bottom:22px}
-.kicker::before{content:"\2726";margin-right:.55em;font-size:1.05em}
+.kicker{position:relative;z-index:1;font-family:var(--font);font-weight:600;font-size:20px;letter-spacing:.02em;margin-bottom:20px}
+.kicker::before{content:"\2726";margin-right:.55em}
 .dark .kicker{color:var(--accent-on-deep);opacity:1}
 .accent .kicker{color:var(--on-accent)}
 
-/* ---------- titles: towering condensed capitals; the accent word changes colour, as in a two-tone line ---------- */
-h1,h2{font-family:var(--font-head);font-weight:400;-webkit-text-stroke:var(--mf-stroke) currentColor;paint-order:stroke fill}
-h1{font-size:250px;line-height:.84}
-h2{font-size:140px;line-height:.88;max-width:1680px;margin-bottom:18px}
-/* dense slides set their title smaller: the condensed face needs size to be read, it stays narrow */
-#deck .vs-doc>h2,#deck .vs-sum>h2,#deck .vs-vt>h2,#deck .vs-prof h2{font-size:84px;line-height:.9}
-h2 em,h1 em{-webkit-text-stroke-color:currentColor}
-.accent h1 em,.accent h2 em{color:var(--paper);text-decoration:none}
-.dark h2 em{color:var(--accent-on-deep)}
-.withphoto h1 em,.fullbleed h1 em,.fullbleed h2 em,#deck .vs-stp h2 em{color:var(--paper);font-family:var(--font-serif);font-style:italic;text-transform:none;-webkit-text-stroke:0;letter-spacing:-.03em}
-/* the condensed face only where it is large: smaller heads and labels take the grotesque */
-h3{font-family:var(--font);font-weight:700;letter-spacing:-.01em}
+/* ---------- the top line, as in a poster: name of the library, the chapter, the page ---------- */
+.footer{top:58px;bottom:auto;font-family:var(--font);font-size:17px;letter-spacing:.01em;text-transform:uppercase;font-weight:600;color:var(--on-accent)}
+.footer .chap{font-size:17px;letter-spacing:.01em;color:var(--on-accent)}
+.footer .re,.footer .nr{color:var(--on-accent)}
+.footer .source{position:absolute;left:0;top:952px;text-transform:none;font-weight:500;font-size:15px;color:var(--muted)}
+.dark .footer,.dark .footer .chap{color:var(--on-deep)}.dark .footer>div:first-child,.dark .footer .nr{color:var(--accent-on-deep)}
+.accent .footer,.accent .footer .chap,.accent .footer .nr{color:var(--on-accent)}
+.mf-chap .footer .re,.mf-chap .footer .nr,.mf-svc .footer .re,.mf-svc .footer .nr,.mf-big .footer .re,.mf-big .footer .nr,.mf-claim .footer .re,.mf-claim .footer .nr{color:var(--on-deep)}
+.fullbleed .footer,.fullbleed .footer .chap,.fullbleed .footer .nr,.split .footer .chap{color:var(--on)}
+.cover .footer{display:none}
+
+/* ---------- light content slides: the title stands on a red band that runs to the top and both edges ---------- */
+.slide:not(.dark):not(.accent):not(.fullbleed):not(.split):not(.quote):not(.statement):not(.vs-sum)>h2{
+  color:var(--ink);background:var(--accent);box-shadow:0 0 0 100vmax var(--accent);clip-path:inset(-100vmax -100vmax 0 -100vmax);
+  padding-bottom:26px;margin-bottom:40px}
+.slide:not(.dark):not(.accent):not(.fullbleed):not(.split):not(.quote):not(.statement):not(.vs-sum)>h2 em{color:var(--paper)}
+.slide:not(.dark):not(.accent):not(.fullbleed):not(.split):not(.quote):not(.statement):not(.vs-sum)>.kicker{color:var(--on-accent)}
+.slide:not(.dark):not(.accent):not(.fullbleed):not(.split):not(.quote):not(.statement):not(.vs-sum):not(.center):has(>h2){padding-top:138px}
+/* dense slides set their title smaller */
+#deck .vs-doc>h2,#deck .vs-sum>h2,#deck .vs-vt>h2,#deck .vs-prof h2{font-size:62px;line-height:.95}
+#deck .slide:not(.dark):not(.accent):not(.fullbleed):not(.split):not(.quote):not(.statement):not(.vs-sum)>.vs-topic{position:relative;z-index:1;color:var(--on-accent)}
+.slide:not(.dark):not(.accent):not(.fullbleed):not(.split):not(.quote):not(.statement):not(.vs-sum).vs-dk>h2,#deck .slide:not(.dark):not(.accent):not(.fullbleed):not(.split):not(.quote):not(.statement):not(.vs-sum).vs-dk>.vs-topic,.slide:not(.dark):not(.accent):not(.fullbleed):not(.split):not(.quote):not(.statement):not(.vs-sum).vs-dk>.kicker{color:var(--deep)}
+.slide:not(.dark):not(.accent):not(.fullbleed):not(.split):not(.quote):not(.statement):not(.vs-sum).vs-dk>h2 em{color:var(--on-deep)}
+
+/* ---------- smaller heads and labels take the grotesque ---------- */
 #deck .vs-gov-row b,#deck .vs-fig-co aside,#deck .vs-lw-cell span,#deck .vs-pt tfoot tr:last-child td:last-child,#deck .vs-ph-head b,#deck .vs-sig-org,#deck .vs-sum-pts b,.mph b{font-family:var(--font);font-weight:700;text-transform:none}
 #deck .vs-tm figure:only-child blockquote{font-family:var(--font-serif);font-weight:400;letter-spacing:-.01em}
-.lead{font-size:26px;line-height:1.28;font-weight:500;text-transform:uppercase;max-width:960px}
 
-/* the serif: an accent word set into a big line, in italics and lower case, as if written over it */
-.mf-serif,.cover h1 em,.statement h2 em{font-family:var(--font-serif);font-style:italic;text-transform:none;letter-spacing:-.03em;-webkit-text-stroke:0;font-weight:400}
-.cover h1 em{font-size:.62em;line-height:1;color:var(--paper);display:inline-block;margin-top:-.08em}
-.statement h2 em{font-size:.7em;color:var(--on-deep)}
+/* ---------- shared pieces: a ruler, a frame like an instrument, a diamond, a plus, a star ---------- */
+.mf-ruler{display:flex;justify-content:space-between;padding:0 0 26px;font:600 13px/1 var(--font);letter-spacing:.04em;color:currentColor;
+  background:repeating-linear-gradient(90deg,currentColor 0 2px,transparent 2px 24px) 0 100%/100% 12px no-repeat,linear-gradient(currentColor,currentColor) 0 100%/100% 2px no-repeat}
+.mf-inst{position:relative;overflow:hidden;border:2px solid var(--accent-on-deep);color:var(--accent-on-deep)}
+.mf-inst .mf-sphere{position:absolute;width:560px;height:560px;right:-150px;bottom:-190px}
+.mf-tagbox{position:absolute;left:24px;top:22px;border:2px solid var(--on-deep);color:var(--on-deep);font:600 18px/1 var(--font);padding:8px 12px;text-transform:uppercase}
+.mf-diamond{position:absolute;left:26px;bottom:26px;width:18px;height:18px;border:2px solid var(--on-deep);rotate:45deg}
+.mf-plus{font:300 110px/.7 var(--font);color:var(--accent-text)}
+.mf-star{font-size:44px;line-height:1;color:var(--accent)}
 
-/* ---------- cover: red ground, the title in black, a black band at the foot ---------- */
-.slide.cover:not(.withphoto){background-color:var(--accent);--on:var(--on-accent);color:var(--on-accent);padding-top:150px}
-.cover:not(.withphoto) .wedge{clip-path:none;inset:auto 0 0 0;height:170px;background:var(--deep)}
-.cover .text{max-width:1700px}
-.cover h1{margin-top:12px}
-.cover .lead{color:var(--on-accent);margin-top:34px}
-.cover .kicker{color:var(--on-accent)}
+/* ---------- cover and closing: three bands, red, cream, black; the title from edge to edge ---------- */
+.slide.mf-cov{padding:0;display:grid;grid-template-rows:auto 1fr 190px;background:var(--paper)}
+.mf-cov .mf-band{position:relative;min-width:0}
+.mf-cov .mf-red{background:var(--accent);padding:52px 40px 14px}
+.mf-cov h1{margin:0;color:var(--on-accent);line-height:.82;max-width:none;letter-spacing:-.01em;font-size:300px;white-space:normal}
+.mf-cov h1 em{color:var(--paper);font-style:normal;position:static}
+.mf-cov .mf-cream{background:var(--paper);display:grid;grid-template-columns:330px 1fr 70px;gap:50px;padding:46px 64px 40px}
+.mf-cov .mf-side{display:flex;flex-direction:column;justify-content:space-between}
+.mf-cov .mf-date{font:600 40px/1 var(--font);text-transform:uppercase;color:var(--ink);letter-spacing:-.03em}
+.mf-cov .mf-claimline{font:600 26px/1.08 var(--font);text-transform:uppercase;color:var(--accent-text);letter-spacing:-.02em}
+.mf-cov .lead.mf-display{font-family:var(--font-serif);text-transform:none;font-size:180px;line-height:.86;letter-spacing:-.035em;color:var(--ink);font-weight:400;max-width:none;margin:0;align-self:center;min-width:0}
+.mf-cov .lead.mf-display em{font-style:normal;color:var(--accent-text)}
+.mf-cov .lead.mf-tail em{margin-top:-.2em}
+.mf-cov .mf-plus{justify-self:end}
+.mf-cov .mf-black{background:var(--deep);display:grid;grid-template-columns:1fr 110px 380px;align-items:center;gap:20px;padding:0 64px}
+.mf-cov .mf-just{font:500 21px/1.14 var(--font);text-transform:uppercase;text-align:justify;text-align-last:left;color:var(--accent-on-deep);max-width:none;margin:0;letter-spacing:-.02em}
+.mf-cov .mf-star{justify-self:center;color:var(--accent-on-deep);font-size:56px}
+.mf-cov .mf-tag{font:600 30px/1.04 var(--font);text-transform:uppercase;color:var(--on-deep);letter-spacing:-.03em}
+.mf-close .mf-contacts{display:flex;gap:70px;color:var(--on-deep);font:500 30px/1.2 var(--font)}
+.mf-close .mf-contacts small{display:block;font-size:18px;font-weight:600;text-transform:uppercase;color:var(--accent-on-deep);margin-bottom:6px}
+.mf-close a.vs-btn{margin:0;background:var(--accent);color:var(--on-accent);text-transform:uppercase;font-size:24px}
+.mf-close h1{font-size:min(var(--fs,300px),300px)}
 
-/* ---------- statement: black ground, the sentence in red capitals, the accent word in cream italics ---------- */
-.statement .wedge{display:none}
-.statement .text{max-width:1660px!important}
-.statement h2{font-size:190px;line-height:.86;color:var(--accent-on-deep)}
-.statement .who{font-family:var(--font);letter-spacing:.02em;font-weight:600;color:var(--on-deep)}
+/* ---------- statement: a poster on black; red capitals from edge to edge, the closing words in cream italics over them ---------- */
+.slide.mf-stm{display:grid;grid-template-columns:1fr;align-items:center;padding:140px var(--pad) 150px}
+.slide.mf-stm.mf-side{grid-template-columns:1fr 400px;column-gap:90px;padding-right:80px}
+.mf-stm .text{min-width:0}
+.mf-stm h2{text-align:left;line-height:.8;color:var(--accent-on-deep);max-width:none;margin:0;font-size:300px;letter-spacing:-.01em}
+.mf-stm h2 em{color:var(--on-deep);font-size:.86em;line-height:.78}
+.mf-stm h2.mf-tail>em,.mf-stm h2.mf-tail>.maccent{margin-top:-.38em;margin-left:-.04em}
+.mf-stm .mf-col{display:flex;flex-direction:column;gap:30px;align-self:stretch;justify-content:flex-start}
+.mf-stm .mf-col:empty{display:none}
+.mf-stm .mf-stack{font:800 104px/.9 var(--font);letter-spacing:-.05em;color:var(--on-deep)}
+.mf-stm .mf-stack b{color:var(--accent-on-deep);font-weight:800}
+.mf-stm .mf-red-line{font:600 30px/1.08 var(--font);text-transform:uppercase;letter-spacing:-.03em;color:var(--accent-on-deep)}
+.mf-stm .mf-box{background:var(--accent);color:color-mix(in srgb,var(--deep) 70%,#000);padding:30px 30px;font:600 19px/1.3 var(--font);text-transform:uppercase;text-align:justify;text-align-last:left;letter-spacing:.01em;margin-top:auto}
+.mf-stm .mf-foot{position:absolute;left:var(--pad);right:var(--pad);bottom:52px;display:grid;grid-template-columns:auto 120px 1fr;align-items:center;column-gap:30px;font:600 22px/1.05 var(--font);text-transform:uppercase;letter-spacing:-.02em;color:var(--accent-on-deep)}
+.mf-stm .mf-foot .mf-star{color:var(--on-deep);font-size:56px;justify-self:center}
+.mf-stm .mf-mark{font:400 52px/1 var(--font-serif);letter-spacing:-.04em;text-transform:none;color:var(--accent-on-deep)}
 
-/* ---------- chapter: red ground, the number huge and black ---------- */
-.slide.chapter{background-color:var(--accent);--on:var(--on-accent);color:var(--on-accent)}
-.chapter .wedge{display:none}
-.chapter .ghost{font-family:var(--font-head);font-size:900px;line-height:.8;bottom:40px;right:90px;color:var(--ink);-webkit-text-stroke:var(--mf-stroke) currentColor;letter-spacing:0}
-.chapter h2{font-size:170px;line-height:.86}
-.chapter .kicker{color:var(--on-accent)}
-.chapter h2 em{color:var(--paper)}
-.chapter .lead{color:var(--on-accent)}
+/* ---------- chapter: the name on red, the number in the serif on a black panel ---------- */
+.slide.mf-chap{padding:0;display:grid;grid-template-columns:1fr 640px}
+.mf-chap .mf-left{display:flex;flex-direction:column;justify-content:flex-end;padding:150px 70px 100px var(--pad)}
+.mf-chap h2{color:var(--on-accent);line-height:.84;margin:0;max-width:none;font-size:200px}
+.mf-chap h2 em{color:var(--paper);font-family:var(--font-head);font-style:normal;text-transform:uppercase;letter-spacing:0}
+.mf-chap .mf-panel{background:var(--deep);color:var(--on-deep);padding:150px 60px 100px;display:flex;flex-direction:column}
+.mf-chap .mf-num{font-family:var(--font-serif);font-size:400px;line-height:.82;color:var(--accent-on-deep);margin-top:auto;letter-spacing:-.04em;display:flex}
+.mf-chap .mf-num .ghost{position:static;color:inherit;font:inherit;letter-spacing:inherit}
+.mf-chap .mf-num i{font-style:normal}
+.mf-chap .lead{color:var(--on-deep);font-size:24px;margin-top:40px}
 
-/* ---------- quote: the words in the serif, the mark as a red capital ---------- */
-.quote h2{font-family:var(--font-serif);font-size:76px;line-height:1.08;text-transform:none;letter-spacing:-.015em;-webkit-text-stroke:0}
-.quote h2 em{font-style:italic;color:var(--accent-text)}
+/* ---------- key figures on black: the figures in a heavy grotesque, the unit in red ---------- */
+.slide.mf-kpis{display:flex;flex-direction:column;padding:190px var(--pad) 150px}
+.mf-kpis h2{color:var(--accent-on-deep);font-size:132px;margin:0;line-height:.86}
+.mf-kpis h2 em{color:var(--on-deep)}
+.mf-figs{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;margin-top:auto}
+.mf-fig{border-left:2px solid color-mix(in srgb,var(--on-deep) 40%,transparent);padding:0 34px}
+.mf-fig:first-child{border-left:0;padding-left:0}
+.mf-fig .w{font:800 190px/.86 var(--font);letter-spacing:-.06em;color:var(--on-deep);white-space:nowrap}
+.mf-fig .w small{font-size:.55em;color:var(--accent-on-deep);margin-left:4px;letter-spacing:-.03em}
+.mf-fig .b{font:600 23px/1.15 var(--font);text-transform:uppercase;color:var(--accent-on-deep);margin-top:22px;max-width:330px;letter-spacing:-.02em}
+
+/* ---------- one big figure: red panel with the number, black panel with its reading ---------- */
+.slide.mf-big{padding:0;display:grid;grid-template-columns:1fr 680px}
+.mf-big .mf-left{display:flex;align-items:flex-end;padding:150px 50px 150px var(--pad)}
+.mf-big .mf-v{font-family:var(--font-head);font-size:min(var(--fs),460px)!important;line-height:.84;color:var(--on-accent);white-space:nowrap;letter-spacing:-.01em}
+.mf-big .mf-v small{font-family:var(--font-serif);font-style:italic;font-size:.4em;color:var(--paper);letter-spacing:-.03em;margin-left:.06em}
+.mf-big .mf-panel{background:var(--deep);color:var(--on-deep);padding:150px 60px 90px;display:flex;flex-direction:column}
+.mf-big .mf-inst{height:380px}
+.mf-big h2{font-family:var(--font-serif);text-transform:none;font-size:50px;line-height:1.06;letter-spacing:-.02em;color:var(--on-deep);margin:44px 0 0}
+
+/* ---------- numbered rows under the red band ---------- */
+.mf-list{display:grid;border-bottom:2px solid var(--ink)}
+.mf-row{display:grid;grid-template-columns:130px 600px 1fr;align-items:center;gap:30px;border-top:2px solid var(--ink);padding:20px 0}
+.mf-row b{font:400 64px/1 var(--font-serif);letter-spacing:-.03em;color:var(--ink)}
+.mf-row h3{font:400 70px/.9 var(--font-head);text-transform:uppercase;color:var(--accent-text);letter-spacing:0}
+.mf-row p{font:500 21px/1.28 var(--font);text-transform:uppercase;color:var(--ink);max-width:720px}
+.mf-row p small{display:block;font-weight:700;font-size:16px;color:var(--accent-text);margin-bottom:6px}
+.mf-row.accent{background:var(--accent);box-shadow:-120px 0 0 var(--accent),120px 0 0 var(--accent)}
+.mf-row.accent h3,.mf-row.accent b,.mf-row.accent p,.mf-row.accent p small{color:var(--on-accent)}
+.mf-row.muted h3{color:var(--ink)}
+
+/* ---------- the case: red panel with the claim and a photo in its first line, black panel like an instrument, cream band with reasons ---------- */
+.slide.mf-claim{padding:0;display:grid;grid-template-columns:1fr 600px;grid-template-rows:1fr 330px}
+.mf-claim .mf-red{position:relative;background:var(--accent);padding:120px 60px 40px var(--pad);display:flex;flex-direction:column;justify-content:flex-end;min-width:0}
+.mf-claim h2{color:var(--on-accent);line-height:.84;margin:0;max-width:none;font-size:300px;letter-spacing:-.01em}
+.mf-claim h2 em{color:var(--paper);font-style:normal;position:static}
+.mf-claim .mf-photo{display:inline-block;vertical-align:top;width:2.1em;height:.7em;margin:.06em 0 0 .14em;background:var(--deep);overflow:hidden}
+.mf-claim .mf-photo img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.15)}
+.mf-claim .mf-panel{background:var(--deep);color:var(--on-deep);padding:110px 56px 40px;display:flex;flex-direction:column}
+.mf-claim .mf-inst{height:280px}
+.mf-claim .mf-coord{font:400 160px/.86 var(--font-serif);letter-spacing:-.045em;color:var(--accent-on-deep);margin-top:30px}
+.mf-claim .mf-coord small{font-size:.6em}
+.mf-claim .mf-panel p{font:600 26px/1.12 var(--font);text-transform:uppercase;color:var(--on-deep);margin-top:20px;letter-spacing:-.02em}
+.mf-claim .mf-cream{grid-column:1/-1;background:var(--paper);display:grid;grid-template-columns:300px 1fr;gap:50px;padding:34px var(--pad) 70px}
+.mf-addr{font:600 26px/1.05 var(--font);text-transform:uppercase;color:var(--accent-text);letter-spacing:-.03em}
+.mf-reasons{display:grid;gap:14px}
+.mf-reason{display:grid;grid-template-columns:110px auto 1fr;column-gap:34px;align-items:center}
+.mf-reason b{font:400 64px/1 var(--font-serif);letter-spacing:-.04em;color:var(--ink)}
+.mf-reason h3{font:400 106px/.86 var(--font-head);text-transform:uppercase;color:var(--accent-text);letter-spacing:-.01em;white-space:nowrap}
+.mf-reason p{font:500 18px/1.25 var(--font);text-transform:uppercase;color:var(--ink);text-align:justify;text-align-last:left;letter-spacing:.005em}
+
+/* ---------- services: an upright word on the left, serif capitals, a cream box, a red strip with the offers ---------- */
+.slide.mf-svc{padding:0;display:grid;grid-template-columns:300px 1fr 420px}
+.mf-svc .mf-word{position:relative;overflow:hidden}
+.mf-svc .mf-word span{position:absolute;left:50%;top:50%;width:1000px;translate:-50% -50%;rotate:-90deg;font-family:var(--font-head);text-transform:uppercase;color:var(--accent-on-deep);line-height:.8;white-space:nowrap;text-align:center;font-size:300px}
+.mf-svc .mf-mid{display:flex;flex-direction:column;padding:120px 70px 70px 40px;min-width:0}
+.mf-svc .mf-top{display:flex;justify-content:space-between;align-items:center;font:600 28px/1.05 var(--font);text-transform:uppercase;color:var(--on-deep);letter-spacing:-.03em;max-width:620px}
+.mf-svc .mf-top .mf-star{color:var(--accent-on-deep)}
+.mf-svc h2{font-family:var(--font-serif);text-transform:uppercase;font-size:84px;line-height:.94;letter-spacing:-.03em;color:var(--accent-on-deep);margin:56px 0 0;max-width:none}
+.mf-svc h2 em{font-style:normal;color:var(--on-deep);font-family:var(--font-serif);text-transform:uppercase;letter-spacing:-.03em}
+.mf-svc .mf-note{align-self:flex-end;font:500 30px/1 var(--font);color:var(--on-deep);margin-top:20px}
+.mf-svc .mf-box{margin-top:auto;background:var(--paper);color:color-mix(in srgb,var(--accent) 78%,var(--deep));padding:44px 48px;font:600 28px/1.1 var(--font);text-transform:uppercase;letter-spacing:-.02em}
+.mf-svc .mf-strip{list-style:none;background:var(--accent);margin:0;padding:130px 40px 80px;display:flex;flex-direction:column;justify-content:center;gap:10px}
+.mf-svc .mf-strip li{white-space:nowrap;font:400 68px/.9 var(--font-head);text-transform:uppercase;color:var(--on-accent);letter-spacing:-.01em;padding:0;margin:0}
+.mf-svc .mf-strip li::before{content:none}
+.mf-svc .footer .re,.mf-svc .footer .nr{color:var(--on-accent)}
+
+/* ---------- photos everywhere: black and white, hard ---------- */
+.split .image img,.slide figure img{filter:grayscale(1) contrast(1.12)}
+.fullbleed h1 em,.fullbleed h2 em,.withphoto h1 em,#deck .vs-stp h2 em{color:var(--paper)}
+
+/* ---------- quote: the words in the serif, the mark huge and red ---------- */
+.quote h2{font-family:var(--font-serif);font-size:80px;line-height:1.02;text-transform:none;letter-spacing:-.02em}
+.quote h2 em{color:var(--accent-text)}
 .quote .mark{font-family:var(--font-serif);color:var(--accent-text)}
-.dark.quote h2 em{color:var(--accent-on-deep)}
+.dark.quote h2 em,.accent.quote h2 em{color:var(--paper)}
+.quote .who{font-family:var(--font);text-transform:uppercase;font-weight:600;letter-spacing:.01em}
 
 /* ---------- bullets: a star, words in small capitals ---------- */
-ul.bullets li{font-weight:500;font-size:28px;line-height:1.3;text-transform:uppercase;padding-left:46px;margin-bottom:26px}
+ul.bullets li{font-weight:500;font-size:28px;line-height:1.3;text-transform:uppercase;padding-left:48px;margin-bottom:24px}
 ul.bullets li::before{content:"\2726";background:none;width:auto;height:auto;top:-1px;color:var(--accent-text);font-size:26px}
 .dark ul.bullets li::before{color:var(--accent-on-deep)}
 
-/* ---------- cards: a black rule on top, the number in the serif, the head in condensed capitals ---------- */
-.card{border:0;border-top:5px solid var(--ink);background:transparent;padding:26px 0 0;min-height:0}
-.card .n{font-family:var(--font-serif);font-weight:400;font-size:64px;color:var(--ink);letter-spacing:-.03em;margin-bottom:10px}
-.card .n::after{content:"."}
-.card h3{font-family:var(--font-head);font-weight:400;font-size:64px;line-height:.92;text-transform:uppercase;letter-spacing:.01em;color:var(--accent-text);-webkit-text-stroke:var(--mf-stroke) currentColor}
-.card p{font-size:22px;line-height:1.32;text-transform:uppercase;font-weight:500}
-.card.accent{background:var(--accent);border-top-color:var(--ink);padding:26px 30px 30px}
+/* ---------- cards of other masters: a black rule on top, the number in the serif ---------- */
+.card{border:0;border-top:4px solid var(--ink);background:transparent;padding:24px 0 0;min-height:0}
+.card .n{font-family:var(--font-serif);font-weight:400;font-size:60px;color:var(--ink);letter-spacing:-.03em;margin-bottom:10px}
+.card h3{font-family:var(--font-head);font-weight:400;font-size:52px;line-height:.94;text-transform:uppercase;letter-spacing:0;color:var(--accent-text)}
+.card p{font-size:21px;line-height:1.3;text-transform:uppercase;font-weight:500}
+.card.accent{background:var(--accent);padding:24px 28px 28px}
 .card.accent h3,.card.accent p,.card.accent .n{color:var(--on-accent)}
-.dark .card{background:transparent;border-color:var(--on-deep)}
-.dark .card .n{color:var(--on-deep)}.dark .card h3{color:var(--accent-on-deep)}
+.dark .card{background:transparent;border-color:var(--on-deep)}.dark .card .n{color:var(--on-deep)}.dark .card h3{color:var(--accent-on-deep)}
 
-/* ---------- key figures: condensed numerals one storey high, the unit in red ---------- */
-.kpis{border:0;margin-top:56px}
-.kpi{border-right:2px solid var(--ink);padding:10px 40px 6px}
-.kpi:first-child{padding-left:0}
-.kpi .w{font-family:var(--font-head);font-weight:400;font-size:230px;line-height:.82;letter-spacing:0;color:var(--ink);-webkit-text-stroke:var(--mf-stroke) currentColor}
-.kpi .w small{font-size:.62em;color:var(--accent-text);font-weight:400;margin-left:4px}
-.kpi:first-child .w{color:var(--accent-text)}
-.kpi .b{font-size:22px;line-height:1.3;text-transform:uppercase;font-weight:500;margin-top:22px;max-width:340px}
-.dark .kpi{border-color:var(--on-deep)}.dark .kpi .w{color:var(--on-deep)}
-
-/* ---------- one big figure: the number fills the slide, its meaning in small capitals ---------- */
-.vs-num .vs-num-v{font-size:460px;line-height:.8;letter-spacing:0;margin-left:-.02em;-webkit-text-stroke:var(--mf-stroke) currentColor}
-.vs-num.xl .vs-num-v{font-size:600px}
-.vs-num.m .vs-num-v{font-size:330px}
-.vs-num .vs-num-v small{font-family:var(--font-serif);font-style:italic;-webkit-text-stroke:0;font-size:.36em;letter-spacing:-.03em;color:var(--ink);margin-left:.06em}
-.vs-num.dark .vs-num-v small{color:var(--on-deep)}
-.vs-num.accent .vs-num-v{color:var(--ink)}.vs-num.accent .vs-num-v small{color:var(--paper)}
-.vs-num h2{font-family:var(--font);font-size:36px;line-height:1.22;text-transform:uppercase;letter-spacing:-.01em;-webkit-text-stroke:0;font-weight:600;max-width:1100px;margin-top:40px}
-
-/* ---------- bars: a ruler on top, thick black bars, the first in red, the figures in the serif ---------- */
-.mbars{margin-top:46px;gap:26px;max-width:none;padding-top:46px;position:relative;
-  background:repeating-linear-gradient(90deg,var(--ink) 0 2px,transparent 2px 64px) 0 0/100% 16px no-repeat,linear-gradient(var(--ink),var(--ink)) 0 16px/100% 2px no-repeat}
-.mrow{grid-template-columns:300px 1fr 260px;gap:34px}
-.mrow .ml{font-size:24px;font-weight:600;text-transform:uppercase;line-height:1.15}
-.mrow .mbar{height:64px;background:transparent}
+/* ---------- bars: a ruler on top, thick black bars, the first red, the figures in the serif ---------- */
+.mbars{margin-top:20px;gap:24px;max-width:none;padding-top:44px;
+  background:repeating-linear-gradient(90deg,var(--ink) 0 2px,transparent 2px 48px) 0 0/100% 14px no-repeat,linear-gradient(var(--ink),var(--ink)) 0 14px/100% 2px no-repeat}
+.mrow{grid-template-columns:300px 1fr 240px;gap:34px}
+.mrow .ml{font-size:23px;font-weight:600;text-transform:uppercase;line-height:1.15}
+.mrow .mbar{height:60px;background:transparent}
 .mrow .mbar i{background:var(--ink)}
 .mrow:first-child .mbar i{background:var(--accent)}
-.mrow .mvalue{font-family:var(--font-serif);font-weight:400;font-size:96px;letter-spacing:-.03em;color:var(--ink)}
+.mrow .mvalue{font-family:var(--font-serif);font-weight:400;font-size:92px;letter-spacing:-.03em;color:var(--ink)}
 .mrow:first-child .mvalue{color:var(--accent-text)}
 
-/* ---------- columns: black, the one that counts red and boxed like a reading on an instrument ---------- */
+/* ---------- columns: black, the one that counts red and boxed like a reading ---------- */
 .mcols::after{height:2px;background:var(--ink)}
 .mcols .mcol i{background:var(--ink)}
 .mcols .mcol.mk i{background:var(--accent)}
 .mcols .mcol b{font-family:var(--font-serif);font-size:38px;font-weight:400;color:var(--ink);letter-spacing:-.02em}
 .mcols .mcol.mk b{color:var(--accent-text);font-weight:400}
-.mcols .mcol.mk b::after{border-radius:0;border-width:3px;border-color:var(--ink);height:78px}
+.mcols .mcol.mk b::after{border-radius:0;border-width:2px;border-color:var(--ink);height:74px}
 .mcols .mcol>span{text-transform:uppercase;font-size:20px;font-weight:600;color:var(--ink)}
 
-/* ---------- line chart: a frame like an instrument, a ruler on top, the figures in the serif ---------- */
-.mcurve-wrap{position:relative;display:inline-block;border:2px solid var(--ink);padding:22px 34px 4px 6px;margin-top:34px!important}
-.mcurve-wrap::before{content:"";position:absolute;left:-2px;right:-2px;top:-20px;height:18px;
-  background:repeating-linear-gradient(90deg,var(--ink) 0 2px,transparent 2px 48px) 0 0/100% 100% no-repeat}
-.mcurve-wrap svg.mcurve{width:auto;height:430px}
-.mcurve line{stroke:var(--ink);stroke-opacity:.35;stroke-dasharray:2 7}
+/* ---------- line chart: a frame like an instrument with a ruler on top, the figures in the serif ---------- */
+.mcurve-wrap{position:relative;display:inline-block;border:2px solid var(--ink);padding:22px 34px 4px 6px;margin-top:30px!important}
+.mcurve-wrap::before{content:"";position:absolute;left:-2px;right:-2px;top:-18px;height:16px;background:repeating-linear-gradient(90deg,var(--ink) 0 2px,transparent 2px 48px)}
+.mcurve-wrap svg.mcurve{width:auto;height:420px}
+.mcurve line{stroke:var(--ink);stroke-opacity:.3;stroke-dasharray:2 7}
 .mcurve text{fill:var(--ink);font-weight:600}
 .mcurve text.mpoint{font-family:var(--font-serif);font-weight:400!important;font-size:30px}
 .mcurve circle{stroke:var(--paper)}
 
 /* ---------- comparison: the figure condensed, the rows in the serif ---------- */
-#deck .vs-cmp .vs-cm-fig b{font-family:var(--font-head);font-weight:400;font-size:300px;line-height:.82;letter-spacing:0;color:var(--accent-text);-webkit-text-stroke:var(--mf-stroke) currentColor}
-#deck .vs-cmp .vs-cm-fig b span{font-family:var(--font-serif);font-style:italic;-webkit-text-stroke:0;color:var(--ink)}
+#deck .vs-cmp .vs-cm-fig b{font-family:var(--font-head);font-weight:400;font-size:240px;line-height:.86;color:var(--accent-text)}
+#deck .vs-cmp .vs-cm-fig b span{font-family:var(--font-serif);font-style:italic;color:var(--ink)}
 #deck .vs-cmp .vs-cm-fig p,#deck .vs-cmp .vs-cm-row span,#deck .vs-cmp .vs-cm-rows small{text-transform:uppercase;font-weight:600}
 #deck .vs-cmp .vs-cm-row em{font-family:var(--font-serif);font-weight:400;font-size:40px}
 #deck .vs-cmp .vs-cm-row u{background:transparent}
@@ -148,16 +254,16 @@ ul.bullets li::before{content:"\2726";background:none;width:auto;height:auto;top
 #deck .vs-wfl .vs-wf-l{text-transform:uppercase;font-weight:600;font-size:19px}
 
 /* ---------- share: a ring of hard parts, the figure condensed in its middle ---------- */
-#deck .vs-shr .vs-sh-mid b{font-size:200px;line-height:.82;-webkit-text-stroke:var(--mf-stroke) currentColor}
+#deck .vs-shr .vs-sh-mid b{font-size:104px;line-height:.9}
 #deck .vs-shr .vs-sh-mid span{text-transform:uppercase;font-size:20px}
 #deck .vs-shr .vs-sh-item i{border-radius:0}
 #deck .vs-shr .vs-sh-item em{font-family:var(--font-serif);font-weight:400;font-size:58px;letter-spacing:-.03em}
-#deck .vs-shr .vs-sh-item h3{font-family:var(--font-head);font-weight:400;text-transform:uppercase;font-size:52px;line-height:.95;-webkit-text-stroke:var(--mf-stroke) currentColor}
+#deck .vs-shr .vs-sh-item h3{font-family:var(--font-head);font-weight:400;text-transform:uppercase;font-size:46px;line-height:.95}
 #deck .vs-shr .vs-sh-item p{text-transform:uppercase;font-size:20px;font-weight:500;color:var(--ink)}
 
 /* ---------- funnel: black steps, the last red, the figures condensed ---------- */
 #deck .vs-fun .vs-lv-b{background:var(--ink);color:var(--paper)}
-#deck .vs-fun .vs-lv-b b{font-family:var(--font-head);font-weight:400;font-size:76px;-webkit-text-stroke:var(--mf-stroke) currentColor}
+#deck .vs-fun .vs-lv-b b{font-family:var(--font-head);font-weight:400;font-size:64px}
 #deck .vs-fun .vs-lv-b span{text-transform:uppercase;font-size:20px}
 #deck .vs-fun .vs-lv-r p{text-transform:uppercase;font-size:21px;font-weight:500}
 
@@ -166,9 +272,3 @@ ul.bullets li::before{content:"\2726";background:none;width:auto;height:auto;top
 #deck .vs-fl-box.vs-fl-accent{background:var(--accent);border-color:var(--ink)}
 #deck .vs-fl-box+.vs-fl-box::before{background:var(--ink)}
 #deck .vs-fl-box+.vs-fl-box::after{border-color:var(--ink)}
-
-/* ---------- footer: small capitals, a star in the middle ---------- */
-.footer{font-family:var(--font);font-size:15px;letter-spacing:.01em;text-transform:uppercase;font-weight:600;color:var(--ink)}
-.footer .chap{font-size:15px;letter-spacing:.01em}
-.footer .chap:not(:empty)::before{content:"\2726";margin-right:.7em;color:var(--accent-text)}
-.footer .source{text-transform:none;font-weight:500}

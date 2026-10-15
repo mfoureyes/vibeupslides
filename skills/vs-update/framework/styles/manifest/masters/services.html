@@ -1,0 +1,12 @@
+<!--vs {"name": "services", "order": 48, "prepare": "display", "use": "What is on offer, like a poster: one word set upright in red along the left edge, a statement in serif capitals, a short text in a cream box, and the offers as a list of names on a red strip at the right. Three to six offers.", "slots": {"kicker": "small line at the top, cream (optional)", "word": "the word set upright, one or two words (e.g. Our services)", "title": "the statement in serif capitals, up to twelve words; <em> marks the closing words, set in cream", "note": "a short note right below the statement (optional)", "text": "two or three sentences for the cream box", "items": "list of three to six names of offers, one or two words each"}, "sample": {"kicker": "Where planning meets the shop floor", "word": "Our services", "title": "We offer the complete range of services to <em>meet every plant's needs.</em>", "note": "// 2026", "text": "Whether you want to plan a single line or a whole site, engage the shift or cut downtime, we have the tools to get you there.", "items": ["Planning", "Spare parts", "Shift boards", "Training", "Reporting"]}} -->
+<section class="slide dark mf-svc" {{attrs}}>
+  <div class="band mf-word"><span class="vs-fill" data-max="330" data-min="120" data-lines="1">{{word}}</span></div>
+  <div class="band mf-mid">
+    {{#kicker}}<div class="mf-top"><span>{{kicker}}</span><span class="mf-star" aria-hidden="true">&#10022;</span></div>{{/kicker}}
+    <h2 class="anim">{{title}}</h2>
+    {{#note}}<div class="mf-note">{{note}}</div>{{/note}}
+    {{#text}}<p class="mf-box anim">{{text}}</p>{{/text}}
+  </div>
+  <ul class="band mf-strip" data-seq>{{#items}}<li class="anim">{{.}}</li>{{/items}}</ul>
+  {{notes}}
+</section>

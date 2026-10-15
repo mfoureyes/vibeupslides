@@ -1,0 +1,174 @@
+/* Manifesto: bold and editorial. Towering ultra-condensed capitals, a classic serif in italics beside them,
+   red, black and cream in hard bands, small capitals for everything else, a grain like print. */
+
+:root{--font-serif:'DM Serif Display',Georgia,'Times New Roman',serif;
+  --mf-grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .3 -.12'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --mf-stroke:.028em}
+
+/* ---------- ground: a grain like print on every surface ---------- */
+.slide{background-image:var(--mf-grain);background-size:260px}
+.slide.fullbleed,.slide.withphoto{background-image:none}
+
+/* ---------- running text: a tight grotesque ---------- */
+body{font-feature-settings:"ss01"}
+.slide p,.slide li{letter-spacing:-.012em}
+
+/* ---------- label above titles: small capitals behind a four-pointed star ---------- */
+.kicker{font-family:var(--font);font-weight:600;font-size:20px;letter-spacing:.02em;margin-bottom:22px}
+.kicker::before{content:"\2726";margin-right:.55em;font-size:1.05em}
+.dark .kicker{color:var(--accent-on-deep);opacity:1}
+.accent .kicker{color:var(--on-accent)}
+
+/* ---------- titles: towering condensed capitals; the accent word changes colour, as in a two-tone line ---------- */
+h1,h2{font-family:var(--font-head);font-weight:400;-webkit-text-stroke:var(--mf-stroke) currentColor;paint-order:stroke fill}
+h1{font-size:250px;line-height:.84}
+h2{font-size:140px;line-height:.88;max-width:1680px;margin-bottom:18px}
+/* dense slides set their title smaller: the condensed face needs size to be read, it stays narrow */
+#deck .vs-doc>h2,#deck .vs-sum>h2,#deck .vs-vt>h2,#deck .vs-prof h2{font-size:84px;line-height:.9}
+h2 em,h1 em{-webkit-text-stroke-color:currentColor}
+.accent h1 em,.accent h2 em{color:var(--paper);text-decoration:none}
+.dark h2 em{color:var(--accent-on-deep)}
+.withphoto h1 em,.fullbleed h1 em,.fullbleed h2 em,#deck .vs-stp h2 em{color:var(--paper);font-family:var(--font-serif);font-style:italic;text-transform:none;-webkit-text-stroke:0;letter-spacing:-.03em}
+/* the condensed face only where it is large: smaller heads and labels take the grotesque */
+h3{font-family:var(--font);font-weight:700;letter-spacing:-.01em}
+#deck .vs-gov-row b,#deck .vs-fig-co aside,#deck .vs-lw-cell span,#deck .vs-pt tfoot tr:last-child td:last-child,#deck .vs-ph-head b,#deck .vs-sig-org,#deck .vs-sum-pts b,.mph b{font-family:var(--font);font-weight:700;text-transform:none}
+#deck .vs-tm figure:only-child blockquote{font-family:var(--font-serif);font-weight:400;letter-spacing:-.01em}
+.lead{font-size:26px;line-height:1.28;font-weight:500;text-transform:uppercase;max-width:960px}
+
+/* the serif: an accent word set into a big line, in italics and lower case, as if written over it */
+.mf-serif,.cover h1 em,.statement h2 em{font-family:var(--font-serif);font-style:italic;text-transform:none;letter-spacing:-.03em;-webkit-text-stroke:0;font-weight:400}
+.cover h1 em{font-size:.62em;line-height:1;color:var(--paper);display:inline-block;margin-top:-.08em}
+.statement h2 em{font-size:.7em;color:var(--on-deep)}
+
+/* ---------- cover: red ground, the title in black, a black band at the foot ---------- */
+.slide.cover:not(.withphoto){background-color:var(--accent);--on:var(--on-accent);color:var(--on-accent);padding-top:150px}
+.cover:not(.withphoto) .wedge{clip-path:none;inset:auto 0 0 0;height:170px;background:var(--deep)}
+.cover .text{max-width:1700px}
+.cover h1{margin-top:12px}
+.cover .lead{color:var(--on-accent);margin-top:34px}
+.cover .kicker{color:var(--on-accent)}
+
+/* ---------- statement: black ground, the sentence in red capitals, the accent word in cream italics ---------- */
+.statement .wedge{display:none}
+.statement .text{max-width:1660px!important}
+.statement h2{font-size:190px;line-height:.86;color:var(--accent-on-deep)}
+.statement .who{font-family:var(--font);letter-spacing:.02em;font-weight:600;color:var(--on-deep)}
+
+/* ---------- chapter: red ground, the number huge and black ---------- */
+.slide.chapter{background-color:var(--accent);--on:var(--on-accent);color:var(--on-accent)}
+.chapter .wedge{display:none}
+.chapter .ghost{font-family:var(--font-head);font-size:900px;line-height:.8;bottom:40px;right:90px;color:var(--ink);-webkit-text-stroke:var(--mf-stroke) currentColor;letter-spacing:0}
+.chapter h2{font-size:170px;line-height:.86}
+.chapter .kicker{color:var(--on-accent)}
+.chapter h2 em{color:var(--paper)}
+.chapter .lead{color:var(--on-accent)}
+
+/* ---------- quote: the words in the serif, the mark as a red capital ---------- */
+.quote h2{font-family:var(--font-serif);font-size:76px;line-height:1.08;text-transform:none;letter-spacing:-.015em;-webkit-text-stroke:0}
+.quote h2 em{font-style:italic;color:var(--accent-text)}
+.quote .mark{font-family:var(--font-serif);color:var(--accent-text)}
+.dark.quote h2 em{color:var(--accent-on-deep)}
+
+/* ---------- bullets: a star, words in small capitals ---------- */
+ul.bullets li{font-weight:500;font-size:28px;line-height:1.3;text-transform:uppercase;padding-left:46px;margin-bottom:26px}
+ul.bullets li::before{content:"\2726";background:none;width:auto;height:auto;top:-1px;color:var(--accent-text);font-size:26px}
+.dark ul.bullets li::before{color:var(--accent-on-deep)}
+
+/* ---------- cards: a black rule on top, the number in the serif, the head in condensed capitals ---------- */
+.card{border:0;border-top:5px solid var(--ink);background:transparent;padding:26px 0 0;min-height:0}
+.card .n{font-family:var(--font-serif);font-weight:400;font-size:64px;color:var(--ink);letter-spacing:-.03em;margin-bottom:10px}
+.card .n::after{content:"."}
+.card h3{font-family:var(--font-head);font-weight:400;font-size:64px;line-height:.92;text-transform:uppercase;letter-spacing:.01em;color:var(--accent-text);-webkit-text-stroke:var(--mf-stroke) currentColor}
+.card p{font-size:22px;line-height:1.32;text-transform:uppercase;font-weight:500}
+.card.accent{background:var(--accent);border-top-color:var(--ink);padding:26px 30px 30px}
+.card.accent h3,.card.accent p,.card.accent .n{color:var(--on-accent)}
+.dark .card{background:transparent;border-color:var(--on-deep)}
+.dark .card .n{color:var(--on-deep)}.dark .card h3{color:var(--accent-on-deep)}
+
+/* ---------- key figures: condensed numerals one storey high, the unit in red ---------- */
+.kpis{border:0;margin-top:56px}
+.kpi{border-right:2px solid var(--ink);padding:10px 40px 6px}
+.kpi:first-child{padding-left:0}
+.kpi .w{font-family:var(--font-head);font-weight:400;font-size:230px;line-height:.82;letter-spacing:0;color:var(--ink);-webkit-text-stroke:var(--mf-stroke) currentColor}
+.kpi .w small{font-size:.62em;color:var(--accent-text);font-weight:400;margin-left:4px}
+.kpi:first-child .w{color:var(--accent-text)}
+.kpi .b{font-size:22px;line-height:1.3;text-transform:uppercase;font-weight:500;margin-top:22px;max-width:340px}
+.dark .kpi{border-color:var(--on-deep)}.dark .kpi .w{color:var(--on-deep)}
+
+/* ---------- one big figure: the number fills the slide, its meaning in small capitals ---------- */
+.vs-num .vs-num-v{font-size:460px;line-height:.8;letter-spacing:0;margin-left:-.02em;-webkit-text-stroke:var(--mf-stroke) currentColor}
+.vs-num.xl .vs-num-v{font-size:600px}
+.vs-num.m .vs-num-v{font-size:330px}
+.vs-num .vs-num-v small{font-family:var(--font-serif);font-style:italic;-webkit-text-stroke:0;font-size:.36em;letter-spacing:-.03em;color:var(--ink);margin-left:.06em}
+.vs-num.dark .vs-num-v small{color:var(--on-deep)}
+.vs-num.accent .vs-num-v{color:var(--ink)}.vs-num.accent .vs-num-v small{color:var(--paper)}
+.vs-num h2{font-family:var(--font);font-size:36px;line-height:1.22;text-transform:uppercase;letter-spacing:-.01em;-webkit-text-stroke:0;font-weight:600;max-width:1100px;margin-top:40px}
+
+/* ---------- bars: a ruler on top, thick black bars, the first in red, the figures in the serif ---------- */
+.mbars{margin-top:46px;gap:26px;max-width:none;padding-top:46px;position:relative;
+  background:repeating-linear-gradient(90deg,var(--ink) 0 2px,transparent 2px 64px) 0 0/100% 16px no-repeat,linear-gradient(var(--ink),var(--ink)) 0 16px/100% 2px no-repeat}
+.mrow{grid-template-columns:300px 1fr 260px;gap:34px}
+.mrow .ml{font-size:24px;font-weight:600;text-transform:uppercase;line-height:1.15}
+.mrow .mbar{height:64px;background:transparent}
+.mrow .mbar i{background:var(--ink)}
+.mrow:first-child .mbar i{background:var(--accent)}
+.mrow .mvalue{font-family:var(--font-serif);font-weight:400;font-size:96px;letter-spacing:-.03em;color:var(--ink)}
+.mrow:first-child .mvalue{color:var(--accent-text)}
+
+/* ---------- columns: black, the one that counts red and boxed like a reading on an instrument ---------- */
+.mcols::after{height:2px;background:var(--ink)}
+.mcols .mcol i{background:var(--ink)}
+.mcols .mcol.mk i{background:var(--accent)}
+.mcols .mcol b{font-family:var(--font-serif);font-size:38px;font-weight:400;color:var(--ink);letter-spacing:-.02em}
+.mcols .mcol.mk b{color:var(--accent-text);font-weight:400}
+.mcols .mcol.mk b::after{border-radius:0;border-width:3px;border-color:var(--ink);height:78px}
+.mcols .mcol>span{text-transform:uppercase;font-size:20px;font-weight:600;color:var(--ink)}
+
+/* ---------- line chart: a frame like an instrument, a ruler on top, the figures in the serif ---------- */
+.mcurve-wrap{position:relative;display:inline-block;border:2px solid var(--ink);padding:22px 34px 4px 6px;margin-top:34px!important}
+.mcurve-wrap::before{content:"";position:absolute;left:-2px;right:-2px;top:-20px;height:18px;
+  background:repeating-linear-gradient(90deg,var(--ink) 0 2px,transparent 2px 48px) 0 0/100% 100% no-repeat}
+.mcurve-wrap svg.mcurve{width:auto;height:430px}
+.mcurve line{stroke:var(--ink);stroke-opacity:.35;stroke-dasharray:2 7}
+.mcurve text{fill:var(--ink);font-weight:600}
+.mcurve text.mpoint{font-family:var(--font-serif);font-weight:400!important;font-size:30px}
+.mcurve circle{stroke:var(--paper)}
+
+/* ---------- comparison: the figure condensed, the rows in the serif ---------- */
+#deck .vs-cmp .vs-cm-fig b{font-family:var(--font-head);font-weight:400;font-size:300px;line-height:.82;letter-spacing:0;color:var(--accent-text);-webkit-text-stroke:var(--mf-stroke) currentColor}
+#deck .vs-cmp .vs-cm-fig b span{font-family:var(--font-serif);font-style:italic;-webkit-text-stroke:0;color:var(--ink)}
+#deck .vs-cmp .vs-cm-fig p,#deck .vs-cmp .vs-cm-row span,#deck .vs-cmp .vs-cm-rows small{text-transform:uppercase;font-weight:600}
+#deck .vs-cmp .vs-cm-row em{font-family:var(--font-serif);font-weight:400;font-size:40px}
+#deck .vs-cmp .vs-cm-row u{background:transparent}
+
+/* ---------- waterfall: black steps, red totals, what takes away is hatched ---------- */
+#deck .vs-wfl .vs-wf-a{border-bottom:2px solid var(--ink)}
+#deck .vs-wfl .vs-wf-c.down .vs-wf-b{background:repeating-linear-gradient(-45deg,var(--ink) 0 3px,transparent 3px 11px);outline:2px solid var(--ink);outline-offset:-2px}
+#deck .vs-wfl .vs-wf-v{font-family:var(--font-serif);font-weight:400;font-size:44px;letter-spacing:-.02em}
+#deck .vs-wfl .vs-wf-l{text-transform:uppercase;font-weight:600;font-size:19px}
+
+/* ---------- share: a ring of hard parts, the figure condensed in its middle ---------- */
+#deck .vs-shr .vs-sh-mid b{font-size:200px;line-height:.82;-webkit-text-stroke:var(--mf-stroke) currentColor}
+#deck .vs-shr .vs-sh-mid span{text-transform:uppercase;font-size:20px}
+#deck .vs-shr .vs-sh-item i{border-radius:0}
+#deck .vs-shr .vs-sh-item em{font-family:var(--font-serif);font-weight:400;font-size:58px;letter-spacing:-.03em}
+#deck .vs-shr .vs-sh-item h3{font-family:var(--font-head);font-weight:400;text-transform:uppercase;font-size:52px;line-height:.95;-webkit-text-stroke:var(--mf-stroke) currentColor}
+#deck .vs-shr .vs-sh-item p{text-transform:uppercase;font-size:20px;font-weight:500;color:var(--ink)}
+
+/* ---------- funnel: black steps, the last red, the figures condensed ---------- */
+#deck .vs-fun .vs-lv-b{background:var(--ink);color:var(--paper)}
+#deck .vs-fun .vs-lv-b b{font-family:var(--font-head);font-weight:400;font-size:76px;-webkit-text-stroke:var(--mf-stroke) currentColor}
+#deck .vs-fun .vs-lv-b span{text-transform:uppercase;font-size:20px}
+#deck .vs-fun .vs-lv-r p{text-transform:uppercase;font-size:21px;font-weight:500}
+
+/* ---------- boxes and diagrams: black frames, no corners ---------- */
+#deck .vs-fl-box,#deck .vs-hb-i,#deck .vs-ti-t{border:3px solid var(--ink);background:transparent}
+#deck .vs-fl-box.vs-fl-accent{background:var(--accent);border-color:var(--ink)}
+#deck .vs-fl-box+.vs-fl-box::before{background:var(--ink)}
+#deck .vs-fl-box+.vs-fl-box::after{border-color:var(--ink)}
+
+/* ---------- footer: small capitals, a star in the middle ---------- */
+.footer{font-family:var(--font);font-size:15px;letter-spacing:.01em;text-transform:uppercase;font-weight:600;color:var(--ink)}
+.footer .chap{font-size:15px;letter-spacing:.01em}
+.footer .chap:not(:empty)::before{content:"\2726";margin-right:.7em;color:var(--accent-text)}
+.footer .source{text-transform:none;font-weight:500}

@@ -148,6 +148,8 @@ def tokens_css(b):
     body = f"'{f['body']['family']}',{fallback}" if f["body"].get("family") else fallback
     head_family = (f.get("head") or {}).get("family")
     head = f"'{head_family}',{(f['head'].get('fallback') or fallback)}" if head_family else "var(--font)"
+    serif_family = (f.get("serif") or {}).get("family")     # a third face some looks set beside the two (an accent word, a figure in italics)
+    serif = f"--font-serif:'{serif_family}',{f['serif'].get('fallback') or 'Georgia, serif'};" if serif_family else ""
     radius = s.get("radius", 0)
     radius = f"{radius}px" if isinstance(radius, (int, float)) else radius
     rules = []          # heading case and tracking only when the brand sets them, the engine has tuned defaults
@@ -162,7 +164,7 @@ def tokens_css(b):
             f"--accent-on-deep:{c.get('accent_on_deep') or accent_as_text(c['accent'], c['deep'], c['on_deep'], need=4.5)};"
             f"--muted:{c['muted']};--line:{c['line']};--soft:{c['soft']};--ghost:{c['ghost']};--paper:{c['paper']};"
             f"--font:{body};--font-head:{head};--w-display:{f.get('display_weight', 800)};--w-head:{f.get('head_weight', 700)};"
-            f"--radius:{radius};"
+            f"--radius:{radius};" + serif
             + motion.tokens_css(b) +
             "}" + head_rule)
 

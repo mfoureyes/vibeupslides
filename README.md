@@ -32,7 +32,7 @@ Updates: the skills check once a day whether a newer version is published and te
 | Skill | When | What it does |
 |---|---|---|
 | **vs-build** | once per brand | Reads your website, your documents and a few of your texts and builds a brand library: style guide, brand stylesheet, your own master slides, icons, arrows, graphic elements, photo style, typefaces, and a voice profile of how your company writes |
-| **vs-design** | when you have no brand | Develops a look of your own from examples you like (slides, a web page, pictures), or lets you choose one of six styles, shows the options side by side on the same slides and lets the look grow with what you correct and show |
+| **vs-design** | when you have no brand | Develops a look of your own from examples you like (slides, a web page, pictures), or lets you choose one of seven styles, shows the options side by side on the same slides and lets the look grow with what you correct and show |
 | **vs-create** | for every deck | Asks what the deck is for and how it should look, helps with the content, writes it in your company's voice and builds it from the library in seconds |
 | **vs-update** | when there is something new | Updates the skills and the framework and tells you what changed |
 

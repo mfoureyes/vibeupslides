@@ -101,7 +101,7 @@ def make(brand_dir, style, cache, name=None, accent=None, langs=None, author=Non
     os.makedirs(os.path.join(brand_dir, "fonts"), exist_ok=True)
     f = data.setdefault("fonts", {}); f["files"] = []; f["families"] = []
     for fam in meta.get("fonts") or []:
-        roles = [r for r in ("body", "head") if (f.get(r) or {}).get("family") == fam]
+        roles = [r for r in ("body", "head", "serif") if (f.get(r) or {}).get("family") == fam]
         got = fetch_font(fam, cache) if fonts else []
         for g in got:
             shutil.copy(os.path.join(cache, re.sub(r"[^a-z0-9]+", "-", fam.lower()), g["file"]), os.path.join(brand_dir, "fonts", g["file"]))

@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.9.6
+## 0.9.7
 - A seventh style, **manifest** (Manifesto), after a poster series in red, black and cream: towering condensed capitals (Anton) beside a classic serif in italics (DM Serif Display) and a tight grotesque in small capitals for everything else (Inter Tight); hard colour bands, a ruler and a frame like an instrument with a wireframe sphere, a four-pointed star, a plus, a grain like print. Its motion set is `rise`, smooth and short.
 - The style brings masters of its own: `cover` and `closing` in three bands with the title from edge to edge, `statement` like a poster with a side column (a stacked figure, a red line, a red box) and a foot line, `chapter` with the number in the serif on a black panel, `kpis` on black, `big_number` as a red panel with the reading of an instrument beside it, `cards` as numbered rows, and two new ones: `claim_panel` (a claim with a photo set into its first line, a figure, two reasons) and `services` (an upright word, serif capitals, a red strip with the offers). Every other master takes the look through the theme: on light slides the title stands on a red band that runs to the top and both edges.
 - Where lines overlap on purpose (the serif laid over the capitals), the serif always lies on top; such lines carry `vs-overlap`, and the legibility check no longer reports them as texts on top of each other.
@@ -13,6 +13,12 @@
 
 For brand libraries made with an earlier version:
 - Nothing to do; `vs.py refresh` builds the decks again with the chapter number fixed. A library that wants the new look starts from the style: `vs.py design <brand> --style manifest`.
+
+## 0.9.6
+- The six built-in styles build a deck of stock masters without a legibility finding: the credit line on an accent slide is set in the full text colour (bold where the accent leaves less than 4.5 to 1), the accent of **leicht** and **werkstatt** is a shade darker, and the marked word in a **plakat** title takes the text colour that belongs on the accent.
+
+For brand libraries made with an earlier version:
+- A library made from leicht or werkstatt keeps its accent; `vs.py set <brand> colors.accent=#586BDA` (leicht) or `#BC5419` (werkstatt) takes the new one. `vs.py refresh` builds the decks again with the credit line fixed.
 
 ## 0.9.5
 - Every presentation carries its editing, also one whose main version is the reading version and the second file `build --mode` writes; only handouts (which leave slides out), previews and samples do not.

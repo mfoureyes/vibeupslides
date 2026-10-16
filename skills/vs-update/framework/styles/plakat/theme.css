@@ -10,7 +10,7 @@ h1,h2,h3{font-family:var(--font-head);font-weight:400}
 h1{font-size:150px;line-height:.96}
 h2{font-size:84px;line-height:1.02;max-width:1600px}
 h3{text-transform:uppercase;letter-spacing:.01em;font-size:1.25em}
-h2 em{color:var(--ink);background:linear-gradient(transparent 12%,var(--accent) 12%,var(--accent) 92%,transparent 92%);padding:0 .12em}
+h2 em{color:var(--on-accent);background:linear-gradient(transparent 12%,var(--accent) 12%,var(--accent) 92%,transparent 92%);padding:0 .12em}
 .dark h1 em,.dark h2 em{color:var(--accent);background:none;padding:0}
 
 /* ---------- cards, figures: thick black frames ---------- */

@@ -8,9 +8,9 @@ say what the deck is for, and Claude helps with the argument, writes every slide
 builds the deck from your own master slides. No brand yet? It develops a look with you from
 examples you like, or from one of ten styles of its own.
 
-![The same opening slide in the six built-in styles](docs/images/six-styles.png)
+![The same opening slide in six of the built-in styles](docs/images/six-styles.png)
 
-<sub>One deck, six looks: grid, magazine, night, poster, workshop and light. "Northlight" is an
+<sub>One deck, six of its looks: grid, magazine, night, poster, workshop and light (manifest and shimmer are not shown yet). "Northlight" is an
 invented company used for every example here.</sub>
 
 ## What it feels like
@@ -32,11 +32,11 @@ editing mode built in.
 
 Changes go into the deck's content file; the look, the checks and both languages stay in step.
 
-## The same deck in six looks
+## The same deck in six of its looks
 
 Every look is a full set of master slides: the content stays the same, the design carries it.
 
-![Four slides of the same deck in all six styles](docs/images/same-deck-six-looks.png)
+![Four slides of the same deck in six of the styles](docs/images/same-deck-six-looks.png)
 
 <details>
 <summary><b>See the whole example deck in each style</b></summary>

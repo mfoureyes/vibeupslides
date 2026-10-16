@@ -1,0 +1,13 @@
+<!--vs {"name": "chapter", "order": 20, "prepare": "display", "is_chapter": true, "use": "Opens a part of the deck: the name huge on red, the number in the serif on a black panel. Its title becomes the chapter name in outline and top line.", "slots": {"number": "chapter number, 1 to 99", "kicker": "small label above the title (optional)", "title": "name of the chapter, one to four words", "lead": "one sentence that opens it (optional)"}, "sample": {"number": 1, "kicker": "Chapter", "title": "The <em>first</em> part", "lead": "A chapter slide opens each part of the deck."}, "defaults": {"_dw": 1060}} -->
+<section class="slide accent chapter mf-chap{{#motion}} mslide mchap mcount{{/motion}}" {{attrs}}>
+  <div class="band mf-left">
+    {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+    <h2 class="vs-fill{{#motion}} mtext{{/motion}}" data-max="300" data-min="150">{{title}}</h2>
+  </div>
+  <div class="band mf-panel">
+    <div class="mf-ruler" aria-hidden="true"><span>040</span><span>050</span><span>060</span><span>070</span><span>080</span><span>090</span></div>
+    <div class="mf-num">{{#motion}}{{>chapter_number number}}{{/motion}}{{^motion}}<div class="ghost">{{number}}</div>{{/motion}}<i>.</i></div>
+    {{#lead}}<p class="lead">{{lead}}</p>{{/lead}}
+  </div>
+  {{notes}}
+</section>

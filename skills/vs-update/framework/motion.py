@@ -384,24 +384,24 @@ HOOKS_CSS = r'''
    column, the ring on the marked column closes the build */
 .mcols{position:relative;display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:min(44px,3%);width:100%;height:100%;line-height:1.2}
 .mcols::after{content:"";position:absolute;left:0;right:0;bottom:52px;height:3px;background:var(--muted)}
-.mcol{display:grid;grid-template-rows:1fr 52px;min-width:0;min-height:0}
-.mcol .mc{display:flex;flex-direction:column;justify-content:flex-end;align-items:center;min-height:0}
-.mcol b{position:relative;flex:none;height:52px;line-height:52px;font-size:30px;font-weight:500;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
-.mcol i{display:block;flex:none;width:100%;height:calc((100% - 108px)*var(--h));background:color-mix(in srgb,var(--ink) 32%,var(--paper));transform-origin:center bottom}
-.mcol>span{align-self:end;text-align:center;font-size:24px;line-height:36px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.mcol.mk i{background:var(--accent)}
-.mcol.mk b{color:var(--ink);font-weight:700;margin-bottom:30px}
+.mcols .mcol{display:grid;grid-template-rows:1fr 52px;min-width:0;min-height:0}
+.mcols .mcol .mc{display:flex;flex-direction:column;justify-content:flex-end;align-items:center;min-height:0}
+.mcols .mcol b{position:relative;flex:none;height:52px;line-height:52px;font-size:30px;font-weight:500;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.mcols .mcol i{display:block;flex:none;width:100%;height:calc((100% - 108px)*var(--h));background:color-mix(in srgb,var(--ink) 32%,var(--paper));transform-origin:center bottom}
+.mcols .mcol>span{align-self:end;text-align:center;font-size:24px;line-height:36px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mcols .mcol.mk i{background:var(--accent)}
+.mcols .mcol.mk b{color:var(--ink);font-weight:700;margin-bottom:30px}
 /* the ring is drawn around the number itself and centred on it by translate, whatever the number's width */
-.mcol.mk b::after{content:"";box-sizing:border-box;position:absolute;left:50%;top:50%;width:max(96px,calc(100% + 64px));height:96px;translate:-50% -50%;border:6px solid var(--accent);border-radius:50%}      /* as wide as the number needs: the ring never runs through a digit */
-.active .mcol i{animation:m-col calc(var(--md)*1.5) var(--m-bar-ease,cubic-bezier(.2,.7,.2,1)) backwards;animation-delay:calc(var(--md)*.5 + var(--i)*var(--ms)*2.2)}
-.active .mcol b{animation:m-item var(--md) var(--me) backwards;animation-delay:calc(var(--md)*1.3 + var(--i)*var(--ms)*2.2)}
-.active .mcol.mk b::after{animation:m-pop calc(var(--md)*.9) var(--me) backwards;animation-delay:calc(var(--md)*2 + var(--n)*var(--ms)*2.2)}
+.mcols .mcol.mk b::after{content:"";box-sizing:border-box;position:absolute;left:50%;top:50%;width:max(96px,calc(100% + 64px));height:96px;translate:-50% -50%;border:6px solid var(--accent);border-radius:50%}      /* as wide as the number needs: the ring never runs through a digit */
+.active .mcols .mcol i{animation:m-col calc(var(--md)*1.5) var(--m-bar-ease,cubic-bezier(.2,.7,.2,1)) backwards;animation-delay:calc(var(--md)*.5 + var(--i)*var(--ms)*2.2)}
+.active .mcols .mcol b{animation:m-item var(--md) var(--me) backwards;animation-delay:calc(var(--md)*1.3 + var(--i)*var(--ms)*2.2)}
+.active .mcols .mcol.mk b::after{animation:m-pop calc(var(--md)*.9) var(--me) backwards;animation-delay:calc(var(--md)*2 + var(--n)*var(--ms)*2.2)}
 /* with "step": true every column is a click step of its own */
-.mcol.f{transform:none;transition:none}
-.active .mcol.f i,.active .mcol.f b,.active .mcol.f.mk b::after{animation:none}
-.active .mcol.f.on i{animation:m-col calc(var(--md)*1.5) var(--m-bar-ease,cubic-bezier(.2,.7,.2,1)) backwards}
-.active .mcol.f.on b{animation:m-item var(--md) var(--me) calc(var(--md)*.8) backwards}
-.active .mcol.f.on.mk b::after{animation:m-pop calc(var(--md)*.9) var(--me) calc(var(--md)*1.4) backwards}
+.mcols .mcol.f{transform:none;transition:none}
+.active .mcols .mcol.f i,.active .mcols .mcol.f b,.active .mcols .mcol.f.mk b::after{animation:none}
+.active .mcols .mcol.f.on i{animation:m-col calc(var(--md)*1.5) var(--m-bar-ease,cubic-bezier(.2,.7,.2,1)) backwards}
+.active .mcols .mcol.f.on b{animation:m-item var(--md) var(--me) calc(var(--md)*.8) backwards}
+.active .mcols .mcol.f.on.mk b::after{animation:m-pop calc(var(--md)*.9) var(--me) calc(var(--md)*1.4) backwards}
 /* what is said about the chart (the callout beside it) comes when the chart stands */
 .active .mcols~* .anim{animation-delay:calc(var(--md)*2.2 + var(--ms)*14)}
 @keyframes m-col{from{scale:1 0}}

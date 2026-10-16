@@ -1,0 +1,14 @@
+<!--vs {"name": "closing", "order": 90, "prepare": "display", "use": "Last slide in three bands: thanks huge on red, one sentence in the serif on cream, contact details on black.", "slots": {"kicker": "small label in the cream band (optional)", "title": "e.g. Thank you", "lead": "one sentence", "contacts": "list of {label, value}, at most three", "button": "a call to action as a link in the look of the brand's button: {label, url} (optional)"}, "sample": {"kicker": "Closing", "title": "Thank <em>you</em>", "lead": "Questions are <em>welcome.</em>", "contacts": [{"label": "Web", "value": "example.com"}, {"label": "Mail", "value": "hello@example.com"}], "button": {"label": "Get in touch", "url": "https://example.com"}}, "defaults": {"_dw": 1800}} -->
+<section class="slide accent cover mf-cov mf-close" {{attrs}}>
+  <div class="band mf-band mf-red"><h1 style="--fs:{{_fs_title}}px">{{title}}</h1></div>
+  <div class="band mf-band mf-cream">
+    <div class="mf-side">{{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}</div>
+    {{#lead}}<p class="lead mf-display">{{lead}}</p>{{/lead}}
+    <span class="mf-plus" aria-hidden="true">+</span>
+  </div>
+  <div class="band mf-band mf-black">
+    <div class="mf-contacts">{{#contacts}}<div><small>{{label}}</small>{{value}}</div>{{/contacts}}</div><span class="mf-star" aria-hidden="true">&#10022;</span>
+    <div class="mf-tag">{{#button}}{{#url}}<a class="vs-btn" href="{{url}}" target="_blank" rel="noopener" onclick="event.stopPropagation()">{{label}}</a>{{/url}}{{/button}}</div>
+  </div>
+  {{notes}}
+</section>

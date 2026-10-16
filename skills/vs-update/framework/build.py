@@ -148,6 +148,8 @@ def tokens_css(b):
     body = f"'{f['body']['family']}',{fallback}" if f["body"].get("family") else fallback
     head_family = (f.get("head") or {}).get("family")
     head = f"'{head_family}',{(f['head'].get('fallback') or fallback)}" if head_family else "var(--font)"
+    serif_family = (f.get("serif") or {}).get("family")     # a third face some looks set beside the two (an accent word, a figure in italics)
+    serif = f"--font-serif:'{serif_family}',{f['serif'].get('fallback') or 'Georgia, serif'};" if serif_family else ""
     radius = s.get("radius", 0)
     radius = f"{radius}px" if isinstance(radius, (int, float)) else radius
     rules = []          # heading case and tracking only when the brand sets them, the engine has tuned defaults
@@ -163,7 +165,7 @@ def tokens_css(b):
             f"--accent-on-deep:{c.get('accent_on_deep') or accent_as_text(c['accent'], c['deep'], c['on_deep'], need=4.5)};"
             f"--muted:{c['muted']};--line:{c['line']};--soft:{c['soft']};--ghost:{c['ghost']};--paper:{c['paper']};"
             f"--font:{body};--font-head:{head};--w-display:{f.get('display_weight', 800)};--w-head:{f.get('head_weight', 700)};"
-            f"--radius:{radius};"
+            f"--radius:{radius};" + serif
             + motion.tokens_css(b) +
             "}" + head_rule + credit_rule)
 
@@ -213,7 +215,24 @@ def trim_edges(im, share=.02, tolerance=10):
     t, b, l, r = band("t"), band("b"), band("l"), band("r")
     return im.crop((l, t, im.width - r, im.height - b)) if (t or b or l or r) else im
 
-def datauri(path, width=1600, q=82, trim=False):
+def halftone(im, ink="#111111", paper="#FFFFFF", cell=None):
+    """A photo as printed with a coarse screen: grey values become dots of the ink colour on the paper colour,
+    the darker the larger (brands whose shape.photo is "halftone")."""
+    from PIL import Image, ImageDraw, ImageOps
+    g = ImageOps.autocontrast(im.convert("L"), cutoff=2)
+    w, h = g.size; cell = cell or max(5, round(w / 190)); k = 3                    # drawn at three times the size, then reduced: soft edges
+    small = g.resize((max(1, w // cell), max(1, h // cell)), Image.LANCZOS)
+    out = Image.new("L", (w * k, h * k), 255); d = ImageDraw.Draw(out); px = small.load()
+    for y in range(small.height):
+        for x in range(small.width):
+            r = (1 - px[x, y] / 255) ** .85 * cell * k * .72
+            if r > .6:
+                cx, cy = (x + .5) * cell * k, (y + .5) * cell * k
+                d.ellipse((cx - r, cy - r, cx + r, cy + r), fill=0)
+    out = out.resize((w, h), Image.LANCZOS)
+    return ImageOps.colorize(out, ink, paper)
+
+def datauri(path, width=1600, q=82, trim=False, treat=None):
     """Image file as data URI. Photos become JPEG, images with transparency stay PNG, SVG stays SVG.
     trim: the image is a picture on a slide; a thin plain edge is cut off (trim_edges). Logos are never trimmed."""
     if path.lower().endswith(".svg"):
@@ -236,6 +255,8 @@ def datauri(path, width=1600, q=82, trim=False):
     if trim: im = trim_edges(im)
     if im.width > width:
         im = im.resize((width, round(im.height * width / im.width)), Image.LANCZOS)
+    if treat and treat.get("photo") == "halftone":
+        im = halftone(im, treat.get("ink", "#111111"), treat.get("paper", "#FFFFFF")); q = max(q, 90)
     b = io.BytesIO(); im.save(b, "JPEG", quality=q, optimize=True)
     return "data:image/jpeg;base64," + base64.b64encode(b.getvalue()).decode()
 
@@ -333,9 +354,10 @@ def build(slides_path, out, brand=None, title=None, images=None, footer_left=Non
         print("WARNING (brand):", w)
     master = open(os.path.join(HERE, "master.html"), encoding="utf-8").read()
     slides = slides_text if slides_text is not None else open(slides_path, encoding="utf-8").read()
+    treat = {"photo": b["shape"].get("photo"), "ink": b["colors"]["ink"], "paper": b["colors"]["paper"]} if b["shape"].get("photo") else None
     for name, path in (images or {}).items():
         big = any(k in name for k in ("COVER", "FULL"))
-        slides = slides.replace("{{IMG_" + name + "}}", datauri(path, 1920 if big else 1400, trim=True))
+        slides = slides.replace("{{IMG_" + name + "}}", datauri(path, 1920 if big else 1400, trim=True, treat=None if "LOGO" in name else treat))
     left = re.findall(r"\{\{IMG_[A-Z0-9_]+\}\}", slides)
     if left:
         print("WARNING: image placeholders without a file:", sorted(set(left)))
@@ -382,7 +404,7 @@ _CHECK_JS = """(()=>{const page=document.querySelector('#deck > .slide.active');
   const words=e=>e?((e.innerText||'').match(/[^\\s]*[\\p{L}\\p{N}][^\\s]*/gu)||[]).length:0;
   const rt=page.querySelector(':scope > .rt'), chrome=words(page.querySelector(':scope > .footer'))+words(page.querySelector(':scope > .rbar'));
   let maxB=0,maxR=0;
-  const sel='.slide > *:not(.header):not(.footer):not(.rbar):not(.vs-credit):not(.wedge):not(.ghost):not(.image):not(.photo):not(.biglogo):not(.notes):not(.badge):not(canvas)';
+  const sel='.slide > *:not(.header):not(.footer):not(.rbar):not(.vs-credit):not(.wedge):not(.ghost):not(.image):not(.photo):not(.biglogo):not(.notes):not(.badge):not(.band):not(canvas)';     /* .band: a coloured area that fills its part of the slide on purpose */
   (s.querySelector('.text')?s.querySelectorAll('.text > *'):s.querySelectorAll(sel)).forEach(e=>{
     const r=e.getBoundingClientRect();maxB=Math.max(maxB,(r.bottom-sr.top)/sc);maxR=Math.max(maxR,(r.right-sr.left)/sc);});
   return {b:Math.round(maxB),r:Math.round(maxR),t:(s.querySelector('h1,h2')||{}).textContent||'',
@@ -402,7 +424,7 @@ _LEGIBLE_JS = """(()=>{const page=document.querySelector('#deck > .slide.active'
     if(!it){const cs=getComputedStyle(e);if(cs.visibility==='hidden'||cs.color===ghost)continue;   /* the ghost colour is for numerals that only decorate */
       let a=1;for(let p=e;p&&p!==page.parentElement;p=p.parentElement)a*=parseFloat(getComputedStyle(p).opacity);
       const m=/^rgb/.test(cs.color)?cs.color.match(/[\\d.]+/g).map(Number):null;
-      it={t:'',px:parseFloat(cs.fontSize),bold:parseInt(cs.fontWeight,10)>=600,c:m?m.slice(0,3):null,a:a*(m&&m.length>3?m[3]:1),x0:1e9,y0:1e9,x1:-1e9,y1:-1e9,cut:0,q:[]};
+      it={t:'',px:parseFloat(cs.fontSize),bold:parseInt(cs.fontWeight,10)>=600,c:m?m.slice(0,3):null,a:a*(m&&m.length>3?m[3]:1),x0:1e9,y0:1e9,x1:-1e9,y1:-1e9,cut:0,q:[],ov:!!e.closest('.vs-overlap')};
       for(let p=e;p&&p!==s;p=p.parentElement){const ps=getComputedStyle(p);
         if(ps.overflowX!=='visible'||ps.overflowY!=='visible'){const q=p.getBoundingClientRect();it.clip=it.clip?{l:Math.max(it.clip.l,q.left),t:Math.max(it.clip.t,q.top),r:Math.min(it.clip.r,q.right),b:Math.min(it.clip.b,q.bottom)}:{l:q.left,t:q.top,r:q.right,b:q.bottom};}}
       seen.set(e,it);out.push(it);}
@@ -537,7 +559,7 @@ def _legible(r, shot):
             out.append(f"type of {it['px']:.0f} px, the least that reads is {MIN_TYPE}: {q}")
         elif it["px"] < 24 and len(it["t"]) >= 40:          # a sentence, not a label
             out.append(f"hint: running text of {it['px']:.0f} px is small for a room, 24 px and more reads well: {q}")
-        if it["c"]:
+        if it["c"] and not it.get("ov"):                    # .vs-overlap: display lines laid over each other on purpose
             box = (max(0, int(it["x0"]) - 3), max(0, int(it["y0"]) - 3), min(im.width, int(it["x1"]) + 3), min(im.height, int(it["y1"]) + 3))
             if box[2] - box[0] > 2 and box[3] - box[1] > 2:
                 px = list(im.crop(box).resize((min(48, box[2] - box[0]), min(24, box[3] - box[1]))).getdata())
@@ -562,6 +584,7 @@ def _legible(r, shot):
                 if w > 2 and h > 2 and w * h > .3 * min((p[2] - p[0]) * (p[3] - p[1]), (q[2] - q[0]) * (q[3] - q[1])): return True
     for i, a in enumerate(solid):
         for c in solid[i + 1:]:
+            if a.get("ov") and c.get("ov"): continue
             if hit(a, c): out.append(f'texts on top of each other: "{a["t"]}" and "{c["t"]}"')
     return out
 

@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.9.7
+- A seventh style, **manifest** (Manifesto), after a poster series in red, black and cream: towering condensed capitals (Anton) beside a classic serif in italics (DM Serif Display) and a tight grotesque in small capitals for everything else (Inter Tight); hard colour bands, a ruler and a frame like an instrument with a wireframe sphere, a four-pointed star, a plus, a grain like print. Its motion set is `rise`, smooth and short.
+- The style brings masters of its own: `cover` and `closing` in three bands with the title from edge to edge, `statement` like a poster with a side column (a stacked figure, a red line, a red box) and a foot line, `chapter` with the number in the serif on a black panel, `kpis` on black, `big_number` as a red panel with the reading of an instrument beside it, `cards` as numbered rows, and two new ones: `claim_panel` (a claim with a photo set into its first line, a figure, two reasons) and `services` (an upright word, serif capitals, a red strip with the offers). Every other master takes the look through the theme: on light slides the title stands on a red band that runs to the top and both edges.
+- Where lines overlap on purpose (the serif laid over the capitals), the serif always lies on top; such lines carry `vs-overlap`, and the legibility check no longer reports them as texts on top of each other.
+- A style may bring masters of its own (`styles/<name>/masters/`); `vs.py design` copies them into the new library, where they take the place of the framework's.
+- Photos in a coarse print screen: a brand whose `shape.photo` is `halftone` gets every photo of its decks as dots of its ink colour on its paper colour when the deck is built.
+- A display line as large as its box is wide: `class="vs-fill"` (with `data-max`, `data-min`, `data-lines`) sets the size in the browser, the way a poster sets its word from edge to edge. The `display` prepare step works out sizes and whether the accent word closes a line (`_tail_title`, `_tail_text`, `_tail_lead`), and the first word apart from the rest (`_head`, `_rest`).
+- A brand can name a third typeface, `fonts.serif` (family, fallback), beside body and head; it is fetched with the others and reaches the theme as `--font-serif`. A style's footer may say `$name`: the name of the library.
+- Coloured areas that fill their part of a slide on purpose carry `band` and are left out of the overflow check.
+- The big chapter number counts up again at full size: the rules of the column chart (`.mcol`) had shrunk it to a sliver on every brand since 0.9.0.
+
+For brand libraries made with an earlier version:
+- Nothing to do; `vs.py refresh` builds the decks again with the chapter number fixed. A library that wants the new look starts from the style: `vs.py design <brand> --style manifest`.
+
 ## 0.9.6
 - The six built-in styles build a deck of stock masters without a legibility finding: the credit line on an accent slide is set in the full text colour (bold where the accent leaves less than 4.5 to 1), the accent of **leicht** and **werkstatt** is a shade darker, and the marked word in a **plakat** title takes the text colour that belongs on the accent.
 
@@ -13,14 +27,6 @@ For brand libraries made with an earlier version:
 ## 0.9.4
 - The reading version shows the pencil too: pressing it (or E) opens the version to present at the same slide with the editing on. Before, editing was simply missing in the reading version.
 
-
-## 0.9.4
-- A seventh style, **manifest** (Manifesto): towering ultra-condensed capitals (Six Caps) beside a classic serif in italics (DM Serif Display) and a tight grotesque for everything else (Inter Tight); red, black and cream in hard bands, small capitals, a four-pointed star as ornament, a grain like print. Figures are condensed numerals one storey high with the unit in the serif; bars run under a ruler with their values in the serif; the line chart sits in a frame like an instrument; what a waterfall takes away is hatched.
-- A brand can name a third typeface, `fonts.serif` (family, fallback), beside body and head; it is fetched with the others and reaches the theme as `--font-serif`.
-- The big chapter number counts up again at full size: the rules of the column chart (`.mcol`) had shrunk it to a sliver on every brand since 0.9.0.
-
-For brand libraries made with an earlier version:
-- Nothing to do; `vs.py refresh` builds the decks again with the chapter number fixed.
 
 ## 0.9.3
 - `venn`: what all circles share is filled in the accent colour, and the shared word stands inside it (two short lines with three circles, three with two); a longer word is set in a box over the middle. The circles overlap a little more, so the middle has room.

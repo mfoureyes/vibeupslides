@@ -1,0 +1,9 @@
+<!--vs {"name": "kpis", "order": 44, "use": "Two to four large numbers on black: the title in red capitals, the figures in a heavy grotesque in cream, each with its unit in red and a line of meaning. One number per item, ranges go into the label.", "slots": {"kicker": "small label above the title (optional)", "title": "the title as a full sentence, <em> marks the one accent word", "items": "list of {value, unit, label}; unit is short (%, x, k, +)"}, "sample": {"kicker": "Key figures", "title": "The numbers <em>at a glance</em>", "source": "Sample figures", "items": [{"value": "5", "label": "plants on one system"}, {"value": "82", "label": "planners and shift leads trained"}, {"value": "34", "unit": "%", "label": "less unplanned downtime"}, {"value": "3", "unit": "x", "label": "more jobs planned ahead"}]}} -->
+<section class="slide dark mf-kpis" {{attrs}}>
+  {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+  <h2>{{title}}</h2>
+  <div class="mf-figs" data-seq>
+    {{#items}}<div class="mf-fig anim"><div class="w"><span class="mcountup">{{value}}</span>{{#unit}}<small>{{unit}}</small>{{/unit}}</div><div class="b">{{label}}</div></div>{{/items}}
+  </div>
+  {{notes}}
+</section>

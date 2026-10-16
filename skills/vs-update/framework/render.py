@@ -407,7 +407,25 @@ def _prep_venn(slots, env):
     longest, total = max((len(w) for w in words), default=0), sum(len(w) for w in words) + max(len(words) - 1, 0)
     slots["_fits"] = bool(words) and (longest <= 8 and len(words) <= 2 and total <= 16 if three else longest <= 10 and len(words) <= 3 and total <= 26)
 
-PREPARE = {"waterfall": _prep_waterfall, "share": _prep_share, "venn": _prep_venn}
+def _prep_display(slots, env):
+    """Size of a display line set to fill the width (_fs_title, _fs_text, _fs_value in px): the shorter the text,
+    the larger, for one to three lines of a condensed face (about .43 em per character)."""
+    try: width = float(slots.get("_dw") or 1680)          # the width the line has, from the master's defaults
+    except (TypeError, ValueError): width = 1680.0
+    for key, lo, hi in (("title", 110, 300), ("text", 110, 260), ("value", 200, 520)):
+        n = len(_plain(str(slots.get(key) or "")).strip())
+        if not n: continue
+        lines = 1 if n <= 14 else 2 if n <= 34 else 3
+        slots["_fs_" + key] = int(max(lo, min(hi, width * lines / (n * .43))))
+    for key in ("title", "text", "lead"):                   # the accent word closes the line: it can stand on a line of its own
+        v = str(slots.get(key) or "")
+        tail = v.rsplit("</em>", 1)[1] if "</em>" in v else None
+        slots["_tail_" + key] = tail is not None and len(_plain(tail).strip()) <= 1
+    t = str(slots.get("title") or "").strip()               # the first word apart from the rest, for a line that shares its room with a picture
+    m = re.match(r"([^\s<]+)\s+(.+)$", t, re.S)
+    slots["_head"], slots["_rest"] = (m.group(1), m.group(2)) if m else (t, "")
+
+PREPARE = {"display": _prep_display, "waterfall": _prep_waterfall, "share": _prep_share, "venn": _prep_venn}
 
 HELPERS = {"chapter_number": _h_chapter_number, "bars": _h_bars, "columns": _h_columns, "bgvideo": _h_bgvideo, "chevron_fill": _h_chevron_fill, "line_chart": _h_line_chart,
            "verdict": _h_verdict, "lower_third": _h_lower_third, "el": _h_el, "icon": _h_icon,

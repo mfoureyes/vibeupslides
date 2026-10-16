@@ -1,0 +1,9 @@
+<!--vs {"name": "cards", "order": 46, "use": "Two to four similar things as numbered rows under a red band with the title: number in the serif, name in red capitals, two sentences beside it. At most one accent row.", "slots": {"kicker": "small label above the title (optional)", "title": "the title as a full sentence, <em> marks the one accent word", "cols": "kept for decks of other looks (the rows stand one under the other)", "items": "list of {n, tag, title, text, style}; style is \"\", \"accent\" or \"muted\"; n optional (01, 02 …), tag optional"}, "defaults": {"cols": 3}, "sample": {"kicker": "Cards", "title": "Four offers <em>compared</em>", "cols": 4, "items": [{"n": "01", "title": "Card title", "text": "Two sentences that explain the point. They stand beside the name."}, {"n": "02", "title": "Card title", "text": "Two sentences that explain the point."}, {"n": "03", "title": "Quiet card", "text": "The version without anything around it.", "style": "muted"}, {"n": "04", "title": "Accent card", "text": "At most one per slide, it draws the eye.", "style": "accent"}]}} -->
+<section class="slide mf-rows" {{attrs}}>
+  {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+  <h2>{{title}}</h2>
+  <div class="mf-list" data-seq>
+    {{#items}}<div class="mf-row anim {{style}}"><b>{{#n}}{{n}}{{/n}}{{^n}}{{@ii}}{{/n}}.</b><h3>{{title}}</h3><p>{{#tag}}<small>{{tag}}</small>{{/tag}}{{text}}</p></div>{{/items}}
+  </div>
+  {{notes}}
+</section>

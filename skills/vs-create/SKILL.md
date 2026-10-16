@@ -197,8 +197,8 @@ Fill the deck file:
     {"master": "cover", "kicker": "Kickoff", "title": "How we start <em>together</em>", "lead": "What the next twelve weeks look like.", "notes": "Welcome everyone."},
     {"master": "chapter", "number": 1, "title": "The <em>plan</em>"},
     {"master": "kpis", "title": "Three numbers about the <em>project</em>", "source": "Project plan 2025",
-     "items": [{"value": "12", "label": "weeks"}, {"value": "5", "label": "plants"}, {"value": "34", "unit": "%", "label": "less downtime"}]},
-    {"master": "split", "photo": "brand:images/photo_01.jpg", "title": "The pilot starts in <em>plant A</em>", "bullets": ["From the first of March.", "With both shifts."]}
+     "items": [{"value": "12", "label": "weeks"}, {"value": "4", "label": "milestones"}, {"value": "9", "label": "people on the team"}]},
+    {"master": "split", "photo": "brand:images/photo_01.jpg", "title": "Where the work <em>starts</em>", "bullets": ["The first point about this place.", "The second point."]}
   ]
 }
 ```
@@ -336,7 +336,7 @@ belong on one click, set `"order"` (deck-format.md). The user can do the same in
 ("On click", "Order": they click the parts in the new order, with Shift to join one to the step
 before; the strength of movement, "Play").
 
-Name the version in half a sentence when you hand a deck over ("built with VibeUpSlides 0.9.11", from
+Name the version in half a sentence when you hand a deck over ("built with VibeUpSlides 0.9.12", from
 the status line of the setup), so that the user can tell which state they are testing.
 A button (`button: {label, url}` on the closing slide) is a call to action with a real target; a
 cover has none. The last slide credits the person who made the deck (`"author"` in the deck file,

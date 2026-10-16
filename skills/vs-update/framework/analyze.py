@@ -221,8 +221,8 @@ COMPONENTS_JS = r"""
       const s = cs(e), b = bord(s), shd = sh(s.boxShadow), pon = e.parentElement ? on(e.parentElement) : '#ffffff'; let g = bgOf(s); if (g === pon) g = null;
       let frameless = false;
       if (!(g || typeof b === 'string' || shd || (named.has(e) && parseFloat(s.borderTopLeftRadius) > 0))) {      // no frame: still a card if it is an image with a heading below, repeated side by side
-        const pic = e.querySelector('img, picture'), hd = e.querySelector('h2,h3,h4,h5'), sib = e.parentElement ? Array.from(e.parentElement.children).filter(x => x.tagName === e.tagName && cls(x) === cls(e)).length : 0;
-        if (!pic || !hd || sib < 2 || e.querySelectorAll('h2,h3,h4,h5').length > 1) continue; const q = pic.getBoundingClientRect(); if (q.width < r.width * .9 || q.height < 80 || q.top - r.top > 4) continue; frameless = true; }
+        const pic = e.querySelector('img, picture'), hd = e.querySelector('h2,h3,h4,h5'), peers = e.parentElement ? Array.from(e.parentElement.children).filter(x => x.tagName === e.tagName && cls(x) === cls(e)).length : 0;
+        if (!pic || !hd || peers < 2 || e.querySelectorAll('h2,h3,h4,h5').length > 1) continue; const q = pic.getBoundingClientRect(); if (q.width < r.width * .9 || q.height < 80 || q.top - r.top > 4) continue; frameless = true; }
       const t = txt(e, 50); if (t.length < 8 || !e.querySelector('h1,h2,h3,h4,h5,h6,p,strong,span')) continue;
       let image = 'none', imageRadius = null; const bw = parseFloat(s.borderTopWidth) || 0, im = Array.from(e.querySelectorAll('img, picture, video')).find(x => x.getBoundingClientRect().width > 0), ic = e.querySelector('svg');
       if (/url\(/.test(s.backgroundImage)) image = 'background';

@@ -1,0 +1,12 @@
+<!--vs {"name": "kpis", "order": 44, "use": "Two to four results: the title in serif capitals beside a field of glowing ember, the figures large in the serif on white with a sparkle, each with a short note under a thin rule. One number per item.", "slots": {"kicker": "small label above the title (optional)", "title": "short title, up to four words, set in capitals; a closing * or ^ or ~ is set small", "items": "list of {value, unit, label}; label is the note, up to eight words"}, "sample": {"title": "Ten years", "source": "Sample figures", "items": [{"value": "140", "label": "books designed and printed"}, {"value": "38", "label": "exhibitions opened"}, {"value": "6", "label": "countries we have built in"}]}} -->
+<section class="slide hz-res" {{attrs}}>
+  <div class="band hz-ember" aria-hidden="true"></div>
+  <div class="hz-res-text">
+    {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+    <h2>{{title}}</h2>
+    <div class="hz-stats" data-seq>
+      {{#items}}<div class="hz-stat anim"><div class="w"><span class="mcountup">{{value}}</span>{{#unit}}<small>{{unit}}</small>{{/unit}}</div><p>{{label}}</p></div>{{/items}}
+    </div>
+  </div>
+  {{notes}}
+</section>

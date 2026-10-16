@@ -1,0 +1,11 @@
+<!--vs {"name": "closing", "order": 90, "use": "Last slide over the evening horizon: thanks in a large serif, one sentence, a call to action as an outlined pill between two short notes at the foot.", "slots": {"kicker": "small label in the top-left corner (optional)", "title": "e.g. Thank you", "lead": "one sentence", "contacts": "list of {label, value}, at most two, set small on either side of the button", "button": "a call to action: {label, url} (optional)"}, "sample": {"title": "Thank you", "lead": "Come and see the studio, the door is open on Fridays.", "contacts": [{"label": "Web", "value": "example.com"}, {"label": "Mail", "value": "hello@example.com"}], "button": {"label": "Book a visit", "url": "https://example.com"}}} -->
+<section class="slide cover hz-chap hz-close" {{attrs}}>
+  <div class="band hz-sky" aria-hidden="true"></div><i class="hz-figure" aria-hidden="true"></i>
+  {{#kicker}}<div class="hz-tl">{{kicker}}</div>{{/kicker}}
+  <div class="text">
+    <h1 class="vs-fill" data-max="250" data-min="120" data-lines="2">{{title}}</h1>
+    {{#lead}}<p class="lead">{{lead}}</p>{{/lead}}
+  </div>
+  <div class="hz-foot">{{#contacts}}<span><small>{{label}}</small>{{value}}</span>{{/contacts}}{{#button}}{{#url}}<a class="hz-cta" href="{{url}}" target="_blank" rel="noopener" onclick="event.stopPropagation()">{{label}}</a>{{/url}}{{/button}}</div>
+  {{notes}}
+</section>

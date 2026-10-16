@@ -1,0 +1,64 @@
+{
+ "name": "horizont",
+ "order": 57,
+ "title": {
+  "en": "Horizon",
+  "de": "Horizont"
+ },
+ "character": {
+  "en": "Elegant and warm, like a culture magazine on screen: a fine serif set large on white, a spectral arc of light over the cover, a vivid evening horizon with a lake and a small figure behind the chapters, half slides in deep green or glowing ember with app cards floating over them, small photos set into the sentence, thin rules, plus signs and a sparkle beside short notes in a clean grotesque.",
+  "de": "Elegant und warm, wie ein Kulturmagazin auf dem Bildschirm: eine feine Serife groß auf Weiß, ein schillernder Lichtbogen über dem Titel, ein leuchtender Abendhorizont mit See und kleiner Figur hinter den Kapiteln, halbe Folien in tiefem Grün oder glühender Glut mit schwebenden App-Karten, kleine Fotos mitten im Satz, feine Linien, Pluszeichen und ein Funkeln neben kurzen Notizen in klarer Grotesk."
+ },
+ "fits": {
+  "en": "creative platforms, media, music and culture, design and architecture studios, a pitch to investors that should feel premium; whenever words and pictures carry the deck",
+  "de": "Kreativplattformen, Medien, Musik und Kultur, Design- und Architekturbüros, ein Pitch vor Investoren, der hochwertig wirken soll; wann immer Worte und Bilder den Foliensatz tragen"
+ },
+ "fonts": [
+  "Instrument Sans",
+  "Newsreader"
+ ],
+ "brand": {
+  "colors": {
+   "accent": "#F2682A",
+   "on_accent": "#121110",
+   "ink": "#121110",
+   "deep": "#100C0A",
+   "on_deep": "#FFFFFF",
+   "muted": "#5E5A55",
+   "line": "#CFCCC6",
+   "soft": "#F1EFEA",
+   "ghost": "#E9E6E0",
+   "paper": "#FAFAF7",
+   "accent_text": "#B8470E",
+   "accent_on_deep": "#FF9550"
+  },
+  "fonts": {
+   "body": {
+    "family": "Instrument Sans",
+    "fallback": "Helvetica Neue, Arial, sans-serif"
+   },
+   "head": {
+    "family": "Newsreader",
+    "fallback": "Georgia, 'Times New Roman', serif"
+   },
+   "serif": {
+    "family": "Newsreader",
+    "fallback": "Georgia, 'Times New Roman', serif"
+   },
+   "display_weight": 400,
+   "head_weight": 400
+  },
+  "shape": {
+   "radius": 16,
+   "motif": "none",
+   "head_tracking": "-0.025em"
+  },
+  "motion": {
+   "set": "rise"
+  },
+  "footer": {
+   "left": "$name",
+   "right": ""
+  }
+ }
+}

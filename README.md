@@ -6,7 +6,7 @@ VibeUpSlides is a set of four agent skills for Claude. Point it at your website 
 your colours, typefaces, logo, icons, photo style and the way your company writes. From then on you
 say what the deck is for, and Claude helps with the argument, writes every slide in your voice and
 builds the deck from your own master slides. No brand yet? It develops a look with you from
-examples you like, or from one of nine styles of its own.
+examples you like, or from one of ten styles of its own.
 
 ![The same opening slide in six of the built-in styles](docs/images/six-styles.png)
 
@@ -80,7 +80,7 @@ typefaces, your icons, arrows and shapes, your photos, and slides that belong to
 | Skill | When | What it does |
 |---|---|---|
 | **vs-build** | once per brand | Reads your website, your documents (style guide PDF, PowerPoint master, logos, fonts) and a few of your texts, and builds a brand library: style guide, stylesheet, your own master slides, icons, arrows, graphic elements, photo style, typefaces, and a voice profile of how your company writes |
-| **vs-design** | when you have no brand | Develops a look of your own from examples you like (slides, a web page, pictures), or lets you choose one of nine styles, shows the options side by side on the same slides, and lets the look grow with what you correct |
+| **vs-design** | when you have no brand | Develops a look of your own from examples you like (slides, a web page, pictures), or lets you choose one of ten styles, shows the options side by side on the same slides, and lets the look grow with what you correct |
 | **vs-create** | for every deck | Asks what the deck is for, helps with the content on researched structures (pitch, keynote, sales, proposal, consulting, conference talk, workshop), writes it in your voice and builds it from the library in seconds |
 | **vs-update** | when there is something new | Updates the skills and the framework and tells you what changed |
 

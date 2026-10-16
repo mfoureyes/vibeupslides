@@ -8,10 +8,10 @@ say what the deck is for, and Claude helps with the argument, writes every slide
 builds the deck from your own master slides. No brand yet? It develops a look with you from
 examples you like, or from one of ten styles of its own.
 
-![The same opening slide in six of the built-in styles](docs/images/six-styles.png)
+![The same opening slide in the ten built-in styles](docs/images/styles.png)
 
-<sub>One deck, six of its looks: grid, magazine, night, poster, workshop and light (manifest and shimmer are not shown yet). "Northlight" is an
-invented company used for every example here.</sub>
+<sub>One deck, ten looks: grid, magazine, night, poster, workshop, light, manifesto, shimmer, loud
+and horizon. "Northlight" is an invented company used for every example here.</sub>
 
 ## What it feels like
 
@@ -32,11 +32,11 @@ editing mode built in.
 
 Changes go into the deck's content file; the look, the checks and both languages stay in step.
 
-## The same deck in six of its looks
+## The same deck in ten looks
 
 Every look is a full set of master slides: the content stays the same, the design carries it.
 
-![Four slides of the same deck in six of the styles](docs/images/same-deck-six-looks.png)
+![Four slides of the same deck in all ten styles](docs/images/same-deck-all-styles.png)
 
 <details>
 <summary><b>See the whole example deck in each style</b></summary>
@@ -69,6 +69,26 @@ local businesses.
 communities.
 
 ![Example deck in the light style](docs/images/deck-leicht.png)
+
+**Manifesto**: towering condensed capitals beside a classic serif in italics, red, black and cream
+in hard bands. For agencies, studios, culture and media, a talk that takes a stand.
+
+![Example deck in the manifesto style](docs/images/deck-manifest.png)
+
+**Shimmer**: a ribbon of light in coral and magenta on deep night slides, a bold grotesque, figures
+that count up. For apps and digital products, health, product launches.
+
+![Example deck in the shimmer style](docs/images/deck-schimmer.png)
+
+**Loud**: violet, red-orange and powder pink in flat fields, heavy capitals that run off the edge.
+For fashion, lifestyle and consumer brands, music and events.
+
+![Example deck in the loud style](docs/images/deck-laut.png)
+
+**Horizon**: a fine serif set large on white, an arc of light over the cover, an evening horizon
+behind the chapters. For creative platforms, media, design studios, premium pitches.
+
+![Example deck in the horizon style](docs/images/deck-horizont.png)
 
 </details>
 
@@ -156,15 +176,32 @@ you typed.
 ~/vibeupslides/
   framework/            the engine, replaced by updates
   library/<brand>/      brand.json  styleguide.md  voice.md  theme.css  masters/  motion/  shared/  elements/  fonts/  logos/  images/
-  decks/<deck>/         deck.json  sources/  research/  images/  the built HTML
+  decks/<deck>/         deck.json  README.md  sources/  research/  images/  assets/  the built HTML
 ```
 
-In Cowork the session runs in the cloud: brands and decks are kept as one file,
-`vibeupslides-workspace.zip`, in the folder you connect, next to the decks that were built.
+Every deck folder has the same parts: what you supplied (`sources/`), what was found out for it
+with its sources and the agreed line of argument (`research/`), its pictures and files, and a
+`README.md` that says how to open it and go on.
+
+In Cowork the session runs in the cloud. Into the folder you connect go one tidy folder per deck
+and per brand (the presentation, its README and its parts) and one file,
+`vibeupslides-workspace.zip`, that brings your brands and decks back in the next session.
 
 **One command.** Everything the skills do runs through `python3 ~/vibeupslides/vs.py`, so you can
 allow it once instead of confirming every step. The first run creates the folder with its own
 Python environment (Pillow, Playwright, Chromium).
+
+## Privacy and network
+
+Your brands, decks and texts stay in the local folder (in Cowork: in the session and the folder
+you connect). Nothing is sent to VibeUpSlides or any other service. The skills go online only for:
+
+- the website you ask to read, and the documents you name
+- open typefaces from Google Fonts, if a look uses them
+- installing their own tools on the first run: Python packages from PyPI and the Chromium browser
+  Playwright uses for checks and PDFs (about 150 MB)
+- a check, at most once a day, whether a newer version is published on GitHub
+- video players (YouTube, Vimeo) only when a deck embeds one and is shown
 
 ## Typefaces
 

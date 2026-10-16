@@ -113,10 +113,13 @@ a.vs-btn{border-radius:999px;background:var(--ink);color:var(--paper);text-trans
 .lt-cov .lt-foot{position:absolute;left:30px;right:30px;bottom:0;height:380px;display:flex;align-items:flex-end;gap:10px}
 .lt-cov h1{flex:1;min-width:0;margin:0 0 -.12em;padding-right:.08em;color:var(--lt-pink);line-height:.8;letter-spacing:-.06em;white-space:nowrap;max-width:none}
 .lt-cov h1 em{color:var(--accent-on-deep)}
+.lt-cov h1.lt-wrap{white-space:normal;text-wrap:balance;line-height:.86;margin:0 0 64px}      /* a longer title: two lines that stand on the slide, no bleed */
 .lt-cov .lt-foot .lt-star{flex:none;font-size:170px;align-self:flex-start;margin:20px 40px 0 0}
 .lt-close .lt-contacts{display:flex;gap:56px;margin-top:44px;color:var(--on-deep);font:600 26px/1.15 var(--font);text-transform:uppercase;letter-spacing:-.03em}
 .lt-close .lt-contacts small{display:block;font-size:18px;color:var(--accent-on-deep);margin-bottom:6px}
 .lt-close .vs-btn{margin-top:40px}
+/* the credit line has its own place: top right, across from the arrow, away from the thanks at the foot */
+.slide.lt-close .vs-credit{left:auto;right:96px;top:88px;bottom:auto;max-width:560px;text-align:right}
 
 /* ---------- statement: pink; one paragraph in big red capitals, a line in the serif at the top right, a giant asterisk in the back ---------- */
 .slide.lt-stm{background:var(--lt-pink);padding:0;isolation:isolate;overflow:hidden;display:block;text-align:left}

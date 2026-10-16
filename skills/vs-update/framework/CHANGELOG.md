@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.9.11
+- The credit line on the last slide has a place of its own in **manifest**, **schimmer**, **laut** and **horizont** and reads at 4.5 to 1: in manifest at the foot of the black band under the contact details, in schimmer under the floating labels, in laut at the top right across from the arrow, in horizont on a small label of the paper colour over the sky. Before, it lay on the contact details or the thanks, or faded into the ground.
+- A long statement in **manifest** (three lines and more) opens its lines so the capitals no longer lie into each other; a short one keeps the poster look. In **laut** a longer title on the cover and the closing breaks into two lines that stand above the foot; a short one still runs off it.
+- The legibility check measures how close to the edge the letters are drawn, not their line box, so tight display type at the top of a slide is no longer reported as cut. A display line that runs off the slide on purpose carries `vs-bleed` and is left out of that check. Masters with `"prepare": "display"` get `_wrap_<slot>` (more than one line) and `_long_<slot>` (three lines) to set a longer line differently.
+
+For brand libraries made with an earlier version:
+- A library made from manifest, schimmer, laut or horizont takes the fixed masters and theme with `vs.py design <brand> --style <style>` again (this starts the look anew from the style), or keeps its own; `vs.py refresh` builds its decks again.
+
 ## 0.9.10
 - A tenth style, **horizont** (Horizon), elegant and warm like a culture magazine on screen: a fine serif (Newsreader) set large on white, short notes in a clean grotesque (Instrument Sans), a spectral arc of light over the cover, a vivid evening horizon with a lake and a small figure behind chapters and the closing, half slides in deep green or glowing ember, thin rules, plus signs, a sparkle and a brush stroke. The lights are small soft pictures; in the dark scheme the arc glows on night and the horizon turns to dusk, by the same rule.
 - Masters of its own: `cover` (the name inside the arc), `statement`, `chapter` (an outlined pill, the title in two lines with a small underlined word between, a brush stroke), `closing`, `split` (a green or ember field with the photo in it, white app cards floating over it and a call to action in an outlined pill; on white a title in serif capitals over a rule, a sparkle with notes, a black chip, a photo card), `kpis` beside a field of ember, `cards` as a band of coloured tiles along the foot, and a new one, `mission`: lines of serif set flush right with small photos inside them like words and short notes beside them.

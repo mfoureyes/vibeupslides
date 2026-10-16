@@ -439,13 +439,19 @@ _LEGIBLE_JS = """(()=>{const page=document.querySelector('#deck > .slide.active'
     if(!it){const cs=getComputedStyle(e);if(cs.visibility==='hidden'||cs.color===ghost)continue;   /* the ghost colour is for numerals that only decorate */
       let a=1;for(let p=e;p&&p!==page.parentElement;p=p.parentElement)a*=parseFloat(getComputedStyle(p).opacity);
       const m=/^rgb/.test(cs.color)?cs.color.match(/[\\d.]+/g).map(Number):null;
-      it={t:'',px:parseFloat(cs.fontSize),bold:parseInt(cs.fontWeight,10)>=600,c:m?m.slice(0,3):null,a:a*(m&&m.length>3?m[3]:1),x0:1e9,y0:1e9,x1:-1e9,y1:-1e9,cut:0,q:[],ov:!!e.closest('.vs-overlap')};
+      it={t:'',px:parseFloat(cs.fontSize),bold:parseInt(cs.fontWeight,10)>=600,c:m?m.slice(0,3):null,a:a*(m&&m.length>3?m[3]:1),x0:1e9,y0:1e9,x1:-1e9,y1:-1e9,cut:0,q:[],ov:!!e.closest('.vs-overlap'),bleed:!!e.closest('.vs-bleed'),f:cs.fontStyle+' '+cs.fontWeight+' '+cs.fontSize+' '+cs.fontFamily,up:cs.textTransform==='uppercase'};
       for(let p=e;p&&p!==s;p=p.parentElement){const ps=getComputedStyle(p);
         if(ps.overflowX!=='visible'||ps.overflowY!=='visible'){const q=p.getBoundingClientRect();it.clip=it.clip?{l:Math.max(it.clip.l,q.left),t:Math.max(it.clip.t,q.top),r:Math.min(it.clip.r,q.right),b:Math.min(it.clip.b,q.bottom)}:{l:q.left,t:q.top,r:q.right,b:q.bottom};}}
       seen.set(e,it);out.push(it);}
     it.t+=n.nodeValue.trim()+' ';
     for(const q of rects){it.q.push([q.left,q.top+q.height*.2,q.right,q.bottom-q.height*.2]);it.x0=Math.min(it.x0,q.left);it.y0=Math.min(it.y0,q.top);it.x1=Math.max(it.x1,q.right);it.y1=Math.max(it.y1,q.bottom);}}
-  for(const it of out){if(it.clip)it.cut=Math.round(Math.max(it.clip.l-it.x0,it.x1-it.clip.r,it.clip.t-it.y0,it.y1-it.clip.b,0)/sc);delete it.clip;it.t=it.t.trim().slice(0,48);}
+  /* where the letters are drawn: a line box of a tall face at a tight line height reaches far beyond its letters */
+  const cx=document.createElement('canvas').getContext('2d');
+  for(const it of out){if(it.clip)it.cut=Math.round(Math.max(it.clip.l-it.x0,it.x1-it.clip.r,it.clip.t-it.y0,it.y1-it.clip.b,0)/sc);delete it.clip;
+    cx.font=it.f;const m=cx.measureText(it.up?it.t.toUpperCase():it.t);
+    it.iy0=m.fontBoundingBoxAscent>m.actualBoundingBoxAscent?it.y0+(m.fontBoundingBoxAscent-m.actualBoundingBoxAscent)*sc:it.y0;
+    it.iy1=m.fontBoundingBoxDescent>m.actualBoundingBoxDescent?it.y1-(m.fontBoundingBoxDescent-m.actualBoundingBoxDescent)*sc:it.y1;
+    delete it.f;delete it.up;it.t=it.t.trim().slice(0,48);}
   /* is there a photo or a film under the text of this slide: an image or a background image that takes up a good part of it */
   let photo=false;const area=sr.width*sr.height,pics=[];
   s.querySelectorAll('img,video,.image,.photo,[style*="background-image"]').forEach(e=>{if(e.closest('.header,.footer,.vs-ic'))return;const q=e.getBoundingClientRect();
@@ -587,8 +593,8 @@ def _legible(r, shot):
                     out.append(f"contrast {ratio:.1f} to 1 between text and ground, needed are {need:g}: {q}")
         if it["cut"] > 3:
             out.append(f"cut off by {it['cut']} px: {q}")
-        l, t, rr, b = [(it["x0"] - r["sx"]) / sc, (it["y0"] - r["sy"]) / sc, (it["x1"] - r["sx"]) / sc, (it["y1"] - r["sy"]) / sc]
-        if l < EDGE or t < EDGE or rr > 1920 - EDGE or b > 1080 - EDGE:
+        l, t, rr, b = [(it["x0"] - r["sx"]) / sc, (it.get("iy0", it["y0"]) - r["sy"]) / sc, (it["x1"] - r["sx"]) / sc, (it.get("iy1", it["y1"]) - r["sy"]) / sc]
+        if not it.get("bleed") and (l < EDGE or t < EDGE or rr > 1920 - EDGE or b > 1080 - EDGE):     # .vs-bleed: a display line set off the slide's edge on purpose
             out.append(f"at the edge of the slide: {q}")
     import re
     solid = [it for it in items if re.search(r"\w", it["t"])]          # a quotation mark or a bullet may sit behind a text on purpose

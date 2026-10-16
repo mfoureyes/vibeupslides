@@ -92,6 +92,8 @@ h3{font-weight:500;letter-spacing:-.01em}
 .hz-foot{position:absolute;left:var(--pad);right:var(--pad);top:560px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:60px;font:500 22px/1.25 var(--font);color:var(--ink)}
 .hz-foot span{order:1;text-align:right}.hz-foot span:nth-of-type(2){order:3;text-align:left}.hz-foot .hz-cta{order:2;grid-column:2}
 .hz-foot small{display:block;font-size:19px}
+/* the credit line has its own place: a small label of the paper colour over the sky, so it reads on every colour of the horizon */
+.slide.hz-close .vs-credit{bottom:96px;padding:7px 16px 6px;border-radius:999px;background:color-mix(in srgb,var(--paper) 86%,transparent);color:var(--ink);opacity:1}
 .hz-cta{display:inline-block;font:500 22px/1 var(--font);letter-spacing:.01em;text-transform:uppercase;text-decoration:none;color:inherit;padding:22px 46px;border:2px solid currentColor;border-radius:50%;white-space:nowrap}
 
 /* ---------- split: a field of green or ember with the photo and app cards in it, the words on white ---------- */

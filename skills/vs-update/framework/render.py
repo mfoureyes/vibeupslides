@@ -409,7 +409,8 @@ def _prep_venn(slots, env):
 
 def _prep_display(slots, env):
     """Size of a display line set to fill the width (_fs_title, _fs_text, _fs_value in px): the shorter the text,
-    the larger, for one to three lines of a condensed face (about .43 em per character)."""
+    the larger, for one to three lines of a condensed face (about .43 em per character). _wrap_<key> is set when
+    the line needs more than one line, _long_<key> when it needs three."""
     try: width = float(slots.get("_dw") or 1680)          # the width the line has, from the master's defaults
     except (TypeError, ValueError): width = 1680.0
     for key, lo, hi in (("title", 110, 300), ("text", 110, 260), ("value", 200, 520)):
@@ -417,6 +418,7 @@ def _prep_display(slots, env):
         if not n: continue
         lines = 1 if n <= 14 else 2 if n <= 34 else 3
         slots["_fs_" + key] = int(max(lo, min(hi, width * lines / (n * .43))))
+        slots["_wrap_" + key], slots["_long_" + key] = lines > 1, lines > 2      # for a master that sets a longer line differently
     for key in ("title", "text", "lead"):                   # the accent word closes the line: it can stand on a line of its own
         v = str(slots.get(key) or "")
         tail = v.rsplit("</em>", 1)[1] if "</em>" in v else None

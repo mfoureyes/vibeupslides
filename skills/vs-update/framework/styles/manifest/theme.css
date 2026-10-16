@@ -90,6 +90,9 @@ h1 em,h2 em,.mf-display em,.mf-tail em{position:relative;z-index:2}
 .mf-close .mf-contacts small{display:block;font-size:18px;font-weight:600;text-transform:uppercase;color:var(--accent-on-deep);margin-bottom:6px}
 .mf-close a.vs-btn{margin:0;background:var(--accent);color:var(--on-accent);text-transform:uppercase;font-size:24px}
 .mf-close h1{font-size:min(var(--fs,300px),300px)}
+.mf-close .mf-black{align-items:start;padding-top:40px}
+/* the credit line has its own place: at the foot of the black band, under the contact details */
+.slide.mf-close .vs-credit{left:64px;bottom:30px;color:var(--on-deep);opacity:.8}
 
 /* ---------- statement: a poster on black; red capitals from edge to edge, the closing words in cream italics over them ---------- */
 .slide.mf-stm{display:grid;grid-template-columns:1fr;align-items:center;padding:140px var(--pad) 150px}
@@ -98,6 +101,9 @@ h1 em,h2 em,.mf-display em,.mf-tail em{position:relative;z-index:2}
 .mf-stm h2{text-align:left;line-height:.8;color:var(--accent-on-deep);max-width:none;margin:0;font-size:300px;letter-spacing:-.01em}
 .mf-stm h2 em{color:var(--on-deep);font-size:.86em;line-height:.78}
 .mf-stm h2.mf-tail>em,.mf-stm h2.mf-tail>.maccent{margin-top:-.38em;margin-left:-.04em}
+/* short, the capitals lie into each other like the poster; a statement of three lines and more opens its lines so it reads */
+.mf-stm h2.mf-long{line-height:.94}
+.mf-stm h2.mf-long.mf-tail>em,.mf-stm h2.mf-long.mf-tail>.maccent{margin-top:-.26em}
 .mf-stm .mf-col{display:flex;flex-direction:column;gap:30px;align-self:stretch;justify-content:flex-start}
 .mf-stm .mf-col:empty{display:none}
 .mf-stm .mf-stack{font:800 104px/.9 var(--font);letter-spacing:-.05em;color:var(--on-deep)}

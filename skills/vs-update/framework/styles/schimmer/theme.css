@@ -64,7 +64,9 @@ h3{letter-spacing:-.02em}
 .sc-cov .text{max-width:1560px}
 .sc-cov h1{margin:0}
 .sc-cov .lead{color:rgba(255,255,255,.72);margin-top:30px;max-width:1100px}
-.sc-close .sc-chips{bottom:120px}
+.sc-close .sc-chips{bottom:150px}
+/* the credit line has its own place: under the floating labels, never behind them */
+.slide.sc-close .vs-credit{left:var(--pad);bottom:66px;color:#fff;opacity:.78}
 .sc-close a.vs-btn{background:#fff;color:var(--ink);border-radius:999px}
 .slide.sc-stm{display:flex;align-items:center;justify-content:flex-start;text-align:left;padding:150px var(--pad)}
 .sc-stm .text{max-width:1500px;position:relative}

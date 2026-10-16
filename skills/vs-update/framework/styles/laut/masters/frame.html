@@ -1,0 +1,14 @@
+<!--vs {"name": "frame", "order": 47, "use": "The signature slide of this look, for the one point that makes the case: a photo in a red frame with a question over it and a figure or year set upright at its right edge, below a red band with the answer, a short line in the serif, a note and a button. Question up to 14 words, answer up to 40.", "slots": {"name": "a short name at the top left of the photo, two words; <em> marks the second in red (optional)", "title": "the question or claim over the photo, up to 14 words; <em> marks words set in red", "photo": "a photo, wide format, light and calm on the left where the question stands", "mark": "a year or a figure set upright at the right edge, up to four characters (optional)", "text": "the answer in capitals on the red band, up to 40 words", "tag": "a short line in the serif under the sun, up to five words (optional)", "aside": "one or two sentences in small capitals at the top right of the band (optional)", "button": "a call to action as a link: {label, url} (optional)"}, "sample": {"name": "Studio <em>Nord.</em>", "title": "What sets our plans apart is a relentless commitment to <em>clarity?</em>", "photo": "@wide", "mark": "2016", "text": "We use real data from the floor, careful drawing and plain words to make plans that not only look clear but also hold for a whole year.", "tag": "Is not just a planning studio.", "aside": "Every detail, from the shift board to the parts list, is checked with the people who use it.", "button": {"label": "Learn more?", "url": "https://example.com"}}} -->
+<section class="slide accent lt-frame" {{attrs}}>
+  <div class="band lt-photo">{{#photo}}<img src="{{photo}}" alt="">{{/photo}}
+    {{#name}}<div class="lt-name anim">{{name}}</div>{{/name}}
+    <div class="lt-q"><i class="lt-star lt-spin" aria-hidden="true"></i><h2 class="anim">{{title}}</h2></div>
+    {{#mark}}<div class="lt-mark" aria-hidden="true"><span class="lt-up">{{mark}}</span></div>{{/mark}}
+  </div>
+  <div class="band lt-band">
+    <div class="lt-left"><i class="lt-sun" aria-hidden="true"></i>{{#tag}}<p class="lt-serif lt-tag anim">{{tag}}</p>{{/tag}}</div>
+    <p class="lt-text anim">{{text}}</p>
+    <div class="lt-right">{{#aside}}<p class="lt-small lt-aside anim">{{aside}}</p>{{/aside}}{{#button}}{{#url}}<a class="vs-btn anim" href="{{url}}" target="_blank" rel="noopener" onclick="event.stopPropagation()">{{label}}</a>{{/url}}{{/button}}</div>
+  </div>
+  {{notes}}
+</section>

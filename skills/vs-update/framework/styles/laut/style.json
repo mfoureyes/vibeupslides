@@ -1,0 +1,65 @@
+{
+ "name": "laut",
+ "order": 59,
+ "title": {
+  "en": "Loud",
+  "de": "Laut"
+ },
+ "character": {
+  "en": "Loud and self-assured, like a streetwear campaign: violet, a hot red-orange and powder pink in flat fields, heavy tight capitals that run off the edge, a giant word in a darker tone behind the text, a flared serif for small lines, a spinning asterisk, a striped sun and round chips, all under a fine print grain.",
+  "de": "Laut und selbstbewusst, wie eine Streetwear-Kampagne: Violett, ein heißes Rotorange und Puderrosa in flachen Feldern, schwere, eng gesetzte Versalien, die über den Rand laufen, ein riesiges Wort in dunklerem Ton hinter dem Text, eine ausgestellte Serife für kleine Zeilen, ein drehender Asterisk, eine gestreifte Sonne und runde Chips, alles unter feinem Druckkorn."
+ },
+ "fits": {
+  "en": "fashion, lifestyle and consumer brands, music, events and culture, a shop or a label, a pitch that should be remembered; whenever confidence matters more than restraint",
+  "de": "Mode, Lifestyle und Konsummarken, Musik, Events und Kultur, ein Laden oder ein Label, ein Pitch, an den man sich erinnern soll; wann immer Selbstbewusstsein mehr zählt als Zurückhaltung"
+ },
+ "fonts": [
+  "Inter Tight",
+  "Gloock"
+ ],
+ "brand": {
+  "colors": {
+   "accent": "#F54B2F",
+   "on_accent": "#1A123F",
+   "ink": "#2B1F6B",
+   "deep": "#2F2268",
+   "on_deep": "#FFFFFF",
+   "muted": "#574E86",
+   "line": "#2B1F6B",
+   "soft": "#FAD3E4",
+   "ghost": "#FCE3EE",
+   "paper": "#F3F8F8",
+   "accent_text": "#C42D12",
+   "accent_on_deep": "#FF6E52"
+  },
+  "fonts": {
+   "body": {
+    "family": "Inter Tight",
+    "fallback": "Helvetica Neue, Arial, sans-serif"
+   },
+   "head": {
+    "family": "Inter Tight",
+    "fallback": "Helvetica Neue, Arial, sans-serif"
+   },
+   "serif": {
+    "family": "Gloock",
+    "fallback": "Georgia, 'Times New Roman', serif"
+   },
+   "display_weight": 800,
+   "head_weight": 800
+  },
+  "shape": {
+   "radius": 22,
+   "motif": "none",
+   "head_case": "uppercase",
+   "head_tracking": "-0.045em"
+  },
+  "motion": {
+   "set": "rise"
+  },
+  "footer": {
+   "left": "$name",
+   "right": ""
+  }
+ }
+}

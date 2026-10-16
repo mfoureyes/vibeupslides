@@ -1,0 +1,9 @@
+<!--vs {"name": "cards", "order": 46, "use": "Two to four similar things as flat fields in pink, with a number chip, a name in capitals and two short sentences. At most one accent card (red) and one muted card (violet).", "slots": {"kicker": "small label in a red chip above the title (optional)", "title": "the title as a full sentence, <em> marks the words in red", "cols": "2, 3 or 4", "items": "list of {n, tag, title, text, style}; style is \"\", \"accent\" or \"muted\"; n optional (01, 02 …), tag optional, set in the chip after the number"}, "defaults": {"cols": 3}, "sample": {"kicker": "Cards", "title": "Four offers <em>compared</em>", "cols": 4, "items": [{"n": "01", "title": "Card title", "text": "Two sentences that explain the point. They stand under the name."}, {"n": "02", "title": "Card title", "text": "Two sentences that explain the point."}, {"n": "03", "title": "Muted card", "text": "The violet field, for the one that stands apart.", "style": "muted"}, {"n": "04", "title": "Accent card", "text": "At most one per slide, it draws the eye.", "style": "accent"}]}} -->
+<section class="slide lt-cards" {{attrs}}>
+  {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+  <h2>{{title}}</h2>
+  <div class="lt-grid" style="--c:{{cols}}" data-seq>
+    {{#items}}<div class="lt-card anim {{style}}"><i class="lt-sun" aria-hidden="true"></i><span class="lt-chip">{{#n}}{{n}}{{/n}}{{^n}}{{@ii}}{{/n}}{{#tag}} · {{tag}}{{/tag}}</span><h3>{{title}}</h3><p>{{text}}</p></div>{{/items}}
+  </div>
+  {{notes}}
+</section>

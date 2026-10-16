@@ -1,0 +1,196 @@
+/* Loud: like a streetwear campaign. Violet, a hot red-orange and powder pink in flat fields, heavy tight capitals
+   (Inter Tight 800) that run off the edge, a giant word in a darker tone behind the text, a flared serif (Gloock)
+   for small lines, an asterisk, a striped sun and round chips, all under one still print grain.
+   What moves is in motion.css: transform and opacity only. */
+
+:root{--font-serif:'Gloock',Georgia,'Times New Roman',serif;
+  --lt-pink:#FAD3E4;--lt-shade:#1E1550;--lt-red:#CC2F12;
+  --lt-star:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%22-50 -50 100 100%22%3E%3Cg stroke=%22%23000%22 stroke-width=%2219%22%3E%3Cpath d=%22M0-48V48%22/%3E%3Cpath d=%22M0-48V48%22 transform=%22rotate%2860%29%22/%3E%3Cpath d=%22M0-48V48%22 transform=%22rotate%28120%29%22/%3E%3C/g%3E%3C/svg%3E");
+  --lt-sun:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3CclipPath id=%22c%22%3E%3Ccircle cx=%2250%22 cy=%2250%22 r=%2250%22/%3E%3C/clipPath%3E%3Cg clip-path=%22url%28%23c%29%22%3E%3Crect width=%22100%22 height=%2250%22/%3E%3Crect x=%220%22 y=%2255%22 width=%22100%22 height=%228%22/%3E%3Crect x=%220%22 y=%2267%22 width=%22100%22 height=%226.5%22/%3E%3Crect x=%220%22 y=%2277.5%22 width=%22100%22 height=%225%22/%3E%3Crect x=%220%22 y=%2286.5%22 width=%22100%22 height=%223.8%22/%3E%3Crect x=%220%22 y=%2294%22 width=%22100%22 height=%223%22/%3E%3C/g%3E%3C/svg%3E");
+  --lt-grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .2 -.09'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+/* dark scheme: the pink and the red on pink take the night's tones */
+.slide.vs-dk{--lt-pink:color-mix(in srgb,var(--on-deep) 12%,var(--deep));--lt-red:var(--accent-on-deep)}
+
+/* ---------- one still grain over the whole stage, like print; it does not travel with the slides ---------- */
+#deck::after{content:"";position:absolute;inset:0;z-index:40;pointer-events:none;background:var(--lt-grain) 0 0/240px}
+
+/* ---------- shared pieces: the asterisk, the striped sun, round chips ---------- */
+.lt-star{display:inline-block;width:1em;height:1em;background:var(--accent);-webkit-mask:var(--lt-star) center/contain no-repeat;mask:var(--lt-star) center/contain no-repeat}
+.dark .lt-star{background:var(--accent-on-deep)}
+.lt-sun{display:inline-block;width:150px;height:150px;background:currentColor;-webkit-mask:var(--lt-sun) center/contain no-repeat;mask:var(--lt-sun) center/contain no-repeat}
+.lt-chip{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;padding:0 34px;height:64px;font:600 20px/1 var(--font);text-transform:uppercase;letter-spacing:-.01em;background:var(--accent);color:var(--on-accent);white-space:nowrap}
+.lt-chip.ink{background:var(--ink);color:var(--paper)}
+.lt-arrow{width:220px;height:96px;padding:0;background:var(--lt-pink);color:var(--deep)}
+.lt-arrow svg{width:64px;height:40px}
+.lt-small{font:600 19px/1.1 var(--font);text-transform:uppercase;letter-spacing:-.02em}
+.lt-serif{font-family:var(--font-serif);font-weight:400;text-transform:uppercase;letter-spacing:-.035em}
+
+/* ---------- type: heavy, tight capitals; the serif for small lines ---------- */
+h1,h2{font-family:var(--font-head);font-weight:800;text-transform:uppercase;letter-spacing:-.045em}
+h1 em,h2 em{font-style:normal;text-decoration:none;color:var(--accent-text)}
+.dark h1 em,.dark h2 em{color:var(--accent-on-deep)}
+.accent h1 em,.accent h2 em{color:var(--paper)}
+.fullbleed h1 em,.fullbleed h2 em,.withphoto h1 em,#deck .vs-stp h2 em{color:#FAD3E4}
+h1{font-size:180px;line-height:.84}
+h2{font-size:72px;line-height:.9;max-width:1620px;margin-bottom:22px}
+h3{font-family:var(--font);font-weight:800;text-transform:uppercase;letter-spacing:-.035em}
+.lead{font-weight:700;font-size:34px;line-height:1;text-transform:uppercase;letter-spacing:-.035em;max-width:1000px}
+.slide p,.slide li{letter-spacing:-.015em}
+h1 em,h2 em,.vs-overlap em,.maccent{position:relative;z-index:2}
+
+/* ---------- label above titles: a round red chip ---------- */
+.kicker{display:inline-flex;align-items:center;align-self:flex-start;width:max-content;height:44px;padding:0 26px;border-radius:999px;background:var(--accent);color:var(--on-accent);opacity:1;
+  font:600 18px/1 var(--font);letter-spacing:-.005em;margin-bottom:22px}
+.dark .kicker,.accent .kicker{color:var(--on-accent)}
+.accent .kicker{background:var(--ink);color:var(--paper)}
+.center .kicker{align-self:center}
+
+/* ---------- the top line: name, chapter, page in small capitals; not on cover and closing, where the title runs off the foot ---------- */
+.lt-cov .footer{display:none}
+.lt-frame .footer,.lt-frame .footer .chap,.lt-frame .footer .nr,.lt-frame .footer .re{color:var(--on-accent)}
+.footer{font-family:var(--font);font-size:16px;font-weight:600;text-transform:uppercase;letter-spacing:-.01em}
+.footer .chap{font-size:16px;letter-spacing:-.01em}
+
+/* ---------- bullets: a red asterisk, words in small capitals ---------- */
+ul.bullets li{font-weight:600;font-size:30px;line-height:1.12;text-transform:uppercase;letter-spacing:-.03em;padding-left:50px;margin-bottom:22px}
+ul.bullets li::before{content:"";width:28px;height:28px;top:2px;border-radius:0;background:var(--accent);-webkit-mask:var(--lt-star) center/contain no-repeat;mask:var(--lt-star) center/contain no-repeat}
+
+/* ---------- cards of other masters: flat fields, pink, red or violet ---------- */
+.card{border:0;background:var(--lt-pink);border-radius:var(--radius);padding:34px 34px 38px}
+.card .n{font-family:var(--font-serif);font-weight:400;font-size:56px;color:var(--accent-text);letter-spacing:-.04em;margin-bottom:12px}
+.card .m{text-transform:uppercase;font-weight:600;letter-spacing:-.01em}
+.card h3{font-size:44px;line-height:.9;color:var(--ink)}
+.card p{font-size:21px;line-height:1.18;text-transform:uppercase;font-weight:600;letter-spacing:-.02em}
+.card.accent{background:var(--accent)}
+.card.accent h3,.card.accent p,.card.accent .n,.card.accent .m{color:var(--on-accent)}
+.card.muted{background:transparent;box-shadow:inset 0 0 0 3px var(--ink)}
+.dark .card{background:color-mix(in srgb,var(--on-deep) 10%,var(--deep))}.dark .card h3{color:var(--on-deep)}.dark .card .n{color:var(--accent-on-deep)}
+
+/* ---------- button: a violet pill ---------- */
+a.vs-btn{border-radius:999px;background:var(--ink);color:var(--paper);text-transform:uppercase;font-weight:600;font-size:24px;letter-spacing:-.02em;padding:22px 44px}
+.dark a.vs-btn{background:var(--accent);color:var(--on-accent)}
+.accent a.vs-btn{background:var(--deep);color:var(--on-deep)}
+
+/* ---------- quote: the words in the serif, the mark an asterisk-red ---------- */
+.quote h2{font-family:var(--font-serif);font-weight:400;font-size:84px;line-height:.98;letter-spacing:-.035em}
+.quote .mark{font-family:var(--font-serif);color:var(--accent-text)}
+.quote .who{text-transform:uppercase;font-weight:600;letter-spacing:-.01em}
+
+/* ---------- charts: violet bars, the first red, the figures heavy ---------- */
+.mrow .ml{font-size:23px;font-weight:600;text-transform:uppercase;letter-spacing:-.02em;line-height:1.1}
+.mrow .mbar{height:56px;border-radius:999px;background:var(--lt-pink)}
+.mrow .mbar i{background:var(--ink);border-radius:999px}
+.mrow:first-child .mbar i{background:var(--accent)}
+.mrow .mvalue{font-weight:800;font-size:72px;letter-spacing:-.05em;color:var(--ink)}
+.mrow:first-child .mvalue{color:var(--accent-text)}
+.mcols .mcol i{background:var(--ink);border-radius:18px 18px 0 0}
+.mcols .mcol.mk i{background:var(--accent)}
+.mcols .mcol b{font-weight:800;letter-spacing:-.04em}
+.mcols .mcol>span{text-transform:uppercase;font-weight:600;letter-spacing:-.02em}
+.mcurve text.mpoint{font-weight:800!important}
+.kpi .w{font-weight:800;letter-spacing:-.06em}
+.kpi .b{text-transform:uppercase;font-weight:600;letter-spacing:-.02em}
+#deck .vs-fl-box,#deck .vs-hb-i,#deck .vs-ti-t{border:3px solid var(--ink);border-radius:var(--radius);background:transparent}
+#deck .vs-fl-box.vs-fl-accent{background:var(--accent);border-color:var(--accent)}
+
+/* ====================================================================================================
+   masters of this look
+   ==================================================================================================== */
+
+/* ---------- cover and closing: violet; a giant word in a darker tone, red capitals over it, the title in pink running off the foot ---------- */
+.slide.lt-cov{padding:0;isolation:isolate;overflow:hidden}
+.lt-ghost{position:absolute;left:24px;right:24px;top:300px;z-index:-1;color:var(--lt-shade)}
+.lt-ghost span{display:block;font-family:var(--font-head);font-weight:800;text-transform:uppercase;letter-spacing:-.06em;line-height:.8;white-space:nowrap}
+.lt-cov .lt-top{position:absolute;left:96px;top:74px;display:flex;align-items:flex-start;gap:70px}
+.lt-cov .lt-tag{font-size:40px;line-height:.92;color:var(--on-deep);max-width:520px;margin:6px 0 0}
+.lt-cov .lt-side{position:absolute;left:1290px;top:66px;width:500px}
+.lt-cov .lt-since{font-size:96px;line-height:.84;color:var(--on-deep);margin:0 0 50px}
+.lt-cov .lt-since em{font-style:normal;color:var(--accent-on-deep)}
+.lt-cov .lt-about{color:var(--on-deep);max-width:470px}
+.lt-cov .lt-lead{position:absolute;left:200px;top:300px;width:820px}
+.lt-cov .lead{font-weight:700;font-size:62px;line-height:.92;letter-spacing:-.045em;color:var(--accent-on-deep);max-width:none;margin:0}
+.lt-cov .lt-lead .kicker{margin-bottom:26px}
+.lt-cov .lt-foot{position:absolute;left:30px;right:30px;bottom:0;height:380px;display:flex;align-items:flex-end;gap:10px}
+.lt-cov h1{flex:1;min-width:0;margin:0 0 -.12em;padding-right:.08em;color:var(--lt-pink);line-height:.8;letter-spacing:-.06em;white-space:nowrap;max-width:none}
+.lt-cov h1 em{color:var(--accent-on-deep)}
+.lt-cov .lt-foot .lt-star{flex:none;font-size:170px;align-self:flex-start;margin:20px 40px 0 0}
+.lt-close .lt-contacts{display:flex;gap:56px;margin-top:44px;color:var(--on-deep);font:600 26px/1.15 var(--font);text-transform:uppercase;letter-spacing:-.03em}
+.lt-close .lt-contacts small{display:block;font-size:18px;color:var(--accent-on-deep);margin-bottom:6px}
+.lt-close .vs-btn{margin-top:40px}
+
+/* ---------- statement: pink; one paragraph in big red capitals, a line in the serif at the top right, a giant asterisk in the back ---------- */
+.slide.lt-stm{background:var(--lt-pink);padding:0;isolation:isolate;overflow:hidden;display:block;text-align:left}
+.lt-stm .lt-bg{position:absolute;right:-260px;top:-180px;width:1100px;height:1100px;z-index:-1;font-size:1100px}
+.lt-stm .lt-bg .lt-star{background:color-mix(in srgb,var(--paper) 55%,var(--lt-pink))}
+.lt-stm .lt-head{position:absolute;left:96px;right:96px;top:70px;display:grid;grid-template-columns:70px 560px 1fr;column-gap:24px;align-items:start}
+.lt-stm .lt-head .lt-star{font-size:58px}
+.lt-stm .lt-note{color:var(--ink);margin:12px 0 0}
+.lt-stm .lt-aside{grid-column:3;justify-self:end;text-align:right;font-size:50px;line-height:.92;color:var(--ink);margin:0;max-width:820px}
+.lt-stm .text{position:absolute;left:96px;right:96px;top:330px;max-width:none}
+.lt-stm h2{color:var(--lt-red);font-size:86px;line-height:.9;letter-spacing:-.05em;margin:0;max-width:1600px}
+.lt-stm h2 em{color:var(--ink)}
+.lt-stm .lt-base{position:absolute;left:96px;right:96px;bottom:120px;display:flex;justify-content:space-between;align-items:flex-end;color:var(--ink)}
+.lt-stm .lt-base .lt-sun{width:130px;height:130px}
+.lt-stm .lt-who{max-width:520px;margin:0;color:var(--ink)}
+
+/* ---------- chapter: paper; the name huge in violet and red, the number giant in pink behind ---------- */
+.slide.lt-chap{padding:0;isolation:isolate;overflow:hidden}
+.lt-chap .lt-num{position:absolute;right:-40px;bottom:-200px;z-index:-1;font:800 980px/.8 var(--font-head);letter-spacing:-.08em;color:var(--lt-pink);display:flex}
+.lt-chap .lt-num .ghost{position:static;color:inherit;font:inherit;letter-spacing:inherit;opacity:1}
+.lt-chap .lt-head{position:absolute;left:96px;right:96px;top:70px;display:grid;grid-template-columns:600px 140px 1fr;align-items:start}
+.lt-chap .lt-head .kicker{margin:0}
+.lt-chap .lt-head .lt-star{font-size:64px}
+.lt-chap .lt-lead{color:var(--ink);max-width:560px;justify-self:end;margin:0}
+.lt-chap .text{position:absolute;left:96px;right:96px;bottom:110px}
+.lt-chap h2{color:var(--ink);font-size:220px;line-height:.82;letter-spacing:-.06em;margin:0;max-width:1500px}
+.lt-chap h2 em{color:var(--accent-text)}
+
+/* ---------- the frame: a photo in a red frame, the question over it, a vertical figure, a red band with the answer ---------- */
+.slide.lt-frame{background:var(--accent);padding:0;isolation:isolate;overflow:hidden;display:grid;grid-template-rows:640px 1fr}
+.lt-frame .lt-photo{position:relative;margin:22px 22px 0;background:var(--paper);overflow:hidden;min-height:0}
+.lt-frame .lt-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.lt-frame .lt-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,color-mix(in srgb,var(--paper) 72%,transparent) 0,color-mix(in srgb,var(--paper) 30%,transparent) 62%,transparent 80%)}
+.lt-frame .lt-q{position:absolute;left:74px;bottom:56px;z-index:1;display:grid;grid-template-columns:110px 1fr;align-items:start;max-width:1250px}
+.lt-frame .lt-q .lt-star{font-size:62px;margin-top:6px}
+.lt-frame h2{color:var(--ink);font-size:84px;line-height:.88;letter-spacing:-.05em;margin:0}
+.lt-frame h2 em{color:var(--accent-text);text-decoration:none}
+.lt-frame .lt-name{position:absolute;left:74px;top:50px;z-index:1;font:800 40px/.82 var(--font);text-transform:uppercase;letter-spacing:-.05em;color:var(--ink)}
+.lt-frame .lt-name em{display:block;font-style:normal;color:var(--accent-text)}
+.lt-frame .lt-mark{position:absolute;right:30px;top:24px;bottom:24px;z-index:1;width:300px;display:flex;align-items:center;justify-content:center}
+.lt-frame .lt-mark span{display:block;rotate:-90deg;font:800 270px/.8 var(--font-head);letter-spacing:-.07em;color:var(--accent);white-space:nowrap}
+.lt-frame .lt-band{display:grid;grid-template-columns:200px 1fr 360px;column-gap:40px;padding:40px 96px 96px 74px;color:var(--paper);min-height:0}
+.lt-frame .lt-left{display:flex;flex-direction:column;justify-content:space-between}
+.lt-frame .lt-left .lt-sun{color:var(--paper);width:130px;height:130px}
+.lt-frame .lt-tag{font-size:26px;line-height:.92;color:var(--on-accent);margin:0}
+.lt-frame .lt-text{font:700 40px/.98 var(--font);text-transform:uppercase;letter-spacing:-.04em;color:var(--on-accent);margin:0;max-width:1000px}
+.lt-frame .lt-right{display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start}
+.lt-frame .lt-aside{color:var(--on-accent);margin:0}
+.lt-frame .vs-btn{margin:0;background:var(--deep);color:var(--on-deep)}
+
+/* ---------- key figures: violet; the figures huge in pink, the unit red, a line of small capitals ---------- */
+.slide.lt-kpis{display:flex;flex-direction:column;padding:150px var(--pad) 170px;isolation:isolate;overflow:hidden}
+.lt-kpis h2{color:var(--on-deep);font-size:110px;margin:0;max-width:1300px}
+.lt-kpis>.lt-star{position:absolute;right:130px;top:120px;font-size:150px}
+.lt-figs{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;column-gap:40px;margin-top:auto}
+.lt-fig{border-top:3px solid var(--lt-pink);padding-top:26px}
+.lt-fig .w{font:800 200px/.82 var(--font-head);letter-spacing:-.075em;color:var(--lt-pink);white-space:nowrap}
+.lt-fig .w small{font-size:.5em;color:var(--accent-on-deep);margin-left:6px;letter-spacing:-.04em}
+.lt-fig .b{margin-top:22px;max-width:340px;color:var(--on-deep);font-size:22px}
+
+/* ---------- cards: paper; flat fields in pink, red and violet, a chip with the number ---------- */
+.slide.lt-cards{display:flex;flex-direction:column}
+.lt-cards h2{font-size:84px;margin-bottom:36px}
+.lt-grid{display:grid;grid-template-columns:repeat(var(--c,3),1fr);gap:26px;flex:1;max-height:540px}
+.lt-card{position:relative;border-radius:var(--radius);background:var(--lt-pink);padding:34px 36px 40px;display:flex;flex-direction:column;overflow:hidden;isolation:isolate}
+.lt-card .lt-chip{align-self:flex-start;height:50px;padding:0 24px;font-size:19px}
+.lt-card h3{font-size:50px;line-height:.88;color:var(--ink);margin:auto 0 16px}
+.lt-card p{font:600 20px/1.14 var(--font);text-transform:uppercase;letter-spacing:-.02em;color:var(--ink);margin:0}
+.lt-card.accent{background:var(--accent)}
+.lt-card.accent .lt-chip{background:var(--deep);color:var(--on-deep)}
+.lt-card.accent h3,.lt-card.accent p{color:var(--on-accent)}
+.lt-card.muted{background:var(--deep)}
+.lt-card.muted h3,.lt-card.muted p{color:var(--on-deep)}
+.vs-dk .lt-card.muted{background:color-mix(in srgb,var(--on-deep) 22%,var(--deep))}
+.lt-card .lt-sun{position:absolute;right:-30px;top:-30px;width:170px;height:170px;z-index:-1;color:color-mix(in srgb,var(--paper) 45%,transparent)}
+.lt-card.accent .lt-sun{color:color-mix(in srgb,var(--paper) 30%,transparent)}
+.lt-card.muted .lt-sun{color:color-mix(in srgb,var(--on-deep) 14%,transparent)}

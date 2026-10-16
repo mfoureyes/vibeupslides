@@ -100,7 +100,9 @@ A library made from a style may have masters of its own, marked `[brand]` in the
 `manifest`: a poster-like `cover`, `statement` and `closing`, and `claim_panel` and `services`; the style
 `schimmer`: `kpis` as results with notes and a cursor, `cards` stepping down, `progress` and `goals`; the style
 `laut`: `cover` and `closing` with a giant word behind and the title running off the foot, `statement` on pink,
-`chapter` with a giant number, `kpis`, `cards` as flat fields, and `frame`, a photo in a red frame with a question).
+`chapter` with a giant number, `kpis`, `cards` as flat fields, and `frame`, a photo in a red frame with a question; the style
+`horizont`: `cover` under an arc of light, `chapter` and `closing` over a horizon, `statement`, `split` as a field with app
+cards, `kpis` beside ember, `cards` as a band of tiles, and `mission`, lines of serif with small photos set into them).
 Their `use` and slots say how short a text must be: a title set from edge to edge takes one to four
 words, a statement two to six, and the accent word closes the line when the slot says so. Keep to
 it; a long sentence there makes the type small and loses the look.
@@ -334,7 +336,7 @@ belong on one click, set `"order"` (deck-format.md). The user can do the same in
 ("On click", "Order": they click the parts in the new order, with Shift to join one to the step
 before; the strength of movement, "Play").
 
-Name the version in half a sentence when you hand a deck over ("built with VibeUpSlides 0.9.9", from
+Name the version in half a sentence when you hand a deck over ("built with VibeUpSlides 0.9.10", from
 the status line of the setup), so that the user can tell which state they are testing.
 A button (`button: {label, url}` on the closing slide) is a call to action with a real target; a
 cover has none. The last slide credits the person who made the deck (`"author"` in the deck file,

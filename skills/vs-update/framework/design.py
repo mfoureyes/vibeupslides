@@ -120,6 +120,11 @@ def make(brand_dir, style, cache, name=None, accent=None, langs=None, author=Non
         os.makedirs(os.path.join(brand_dir, "masters"), exist_ok=True)
         for fn in os.listdir(sm):
             if fn.endswith(".html"): shutil.copy(os.path.join(sm, fn), os.path.join(brand_dir, "masters", fn))
+    si = os.path.join(s["dir"], "images")                     # a style may bring sample photos for its masters (brand:samples/…): never the brand's photos
+    if os.path.isdir(si):
+        os.makedirs(os.path.join(brand_dir, "samples"), exist_ok=True)
+        for fn in os.listdir(si):
+            if not fn.startswith("."): shutil.copy(os.path.join(si, fn), os.path.join(brand_dir, "samples", fn))
     return notes
 
 def _rgb(h):

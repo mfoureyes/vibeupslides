@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.9.10
+- A tenth style, **horizont** (Horizon), elegant and warm like a culture magazine on screen: a fine serif (Newsreader) set large on white, short notes in a clean grotesque (Instrument Sans), a spectral arc of light over the cover, a vivid evening horizon with a lake and a small figure behind chapters and the closing, half slides in deep green or glowing ember, thin rules, plus signs, a sparkle and a brush stroke. The lights are small soft pictures; in the dark scheme the arc glows on night and the horizon turns to dusk, by the same rule.
+- Masters of its own: `cover` (the name inside the arc), `statement`, `chapter` (an outlined pill, the title in two lines with a small underlined word between, a brush stroke), `closing`, `split` (a green or ember field with the photo in it, white app cards floating over it and a call to action in an outlined pill; on white a title in serif capitals over a rule, a sparkle with notes, a black chip, a photo card), `kpis` beside a field of ember, `cards` as a band of coloured tiles along the foot, and a new one, `mission`: lines of serif set flush right with small photos inside them like words and short notes beside them.
+- Its own moves in `motion.css`: the arc breathes, the horizon drifts, the ember flickers, the sparkle turns, the plus signs twinkle, photos in the sentence open, the pill drops in, the brush stroke is drawn, the tiles rise from the foot. Transform and opacity only; export, motion off and reduced motion show everything at rest.
+- A style may now bring sample photos (`styles/<name>/images/`): they are copied into the library's `samples/` and shown only in the samples of its masters (`brand:samples/…`), never as the brand's photos. Horizont brings seven from Unsplash, credited in `CREDITS.md`.
+
+For brand libraries made with an earlier version:
+- Nothing to do. A library that wants the new look starts from the style: `vs.py design <brand> --style horizont`.
+
 ## 0.9.9
 - A ninth style, **laut** (Loud), loud and self-assured like a streetwear campaign: violet, a hot red-orange and powder pink in flat fields, heavy tight capitals (Inter Tight 800) that run off the edge, a giant word in a darker tone behind the text, a flared serif (Gloock) for small lines, an asterisk, a striped sun and round chips, all under one still print grain. Light slides turn violet in the dark scheme, by the same rule.
 - Masters of its own: `cover` and `closing` (a giant word behind, a paragraph in red capitals over it, the title in pink from edge to edge running off the foot), `statement` (a paragraph in big red capitals on pink, a serif line, a giant asterisk turning in the back), `chapter` (the name huge, the number giant in pink behind), `kpis` on violet, `cards` as flat fields with a number chip, and a new one, `frame`: a photo in a red frame with a question over it and a year set upright, a red band with the answer and a button.

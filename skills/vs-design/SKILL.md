@@ -1,6 +1,6 @@
 ---
 name: vs-design
-description: "VS-Design, the VibeUpSlides skill for people without a brand: develops a look for presentations from nothing. Asks what the slides are for and for examples the user likes (slides, a web page, pictures), reads them, develops a look of the user's own from what they share and shows it next to two alternatives; without examples it offers nine styles of its own (grid, magazine, night, workshop, poster, manifesto, shimmer, loud, light). Then builds the first deck at once. The look grows with what the user corrects, with further examples and with the decks they build. Use when someone needs a good presentation quickly and has no corporate design, no website to take one from, or says they have no brand, no logo, no style yet; also for a personal talk, a club, a school project, a new venture before it has a design. German: kein Corporate Design, keine Marke, ohne Logo, Design von null, Look entwickeln, Stil aus Beispielen, Stil auswählen, schnell eine gute Präsentation, eigener Stil, Folien gestalten ohne Vorlage."
+description: "VS-Design, the VibeUpSlides skill for people without a brand: develops a look for presentations from nothing. Asks what the slides are for and for examples the user likes (slides, a web page, pictures), reads them, develops a look of the user's own from what they share and shows it next to two alternatives; without examples it offers ten styles of its own (grid, magazine, night, workshop, poster, manifesto, horizon, shimmer, loud, light). Then builds the first deck. The look grows with what the user corrects, with further examples and with the decks they build. Use when someone needs a good presentation quickly and has no corporate design, no website to take one from, or says they have no brand, no logo, no style yet; also for a personal talk, a club, a school project, a new venture before it has a design. German: kein Corporate Design, keine Marke, ohne Logo, Design von null, Look entwickeln, Stil aus Beispielen, Stil auswählen, schnell eine gute Präsentation, eigener Stil, Folien gestalten ohne Vorlage."
 ---
 
 # VS-Design: a look from nothing
@@ -11,7 +11,7 @@ the user likes and lets it grow; both end in the same thing, a library in `libra
 **vs-create** builds decks from it. If the user has a website or a corporate design of their own,
 this is the wrong skill: hand over to vs-build.
 
-**The way is: examples in, a look of their own out.** The nine styles VibeUpSlides carries are the
+**The way is: examples in, a look of their own out.** The ten styles VibeUpSlides carries are the
 fallback for a user who has nothing to show, and the alternatives a developed look is shown next
 to. They are never the first answer when there are examples.
 
@@ -193,7 +193,7 @@ change; change it in the library (step 4) and show again.
 vs design --lang de
 ```
 
-lists the nine styles with what each is like and what it fits. Choose three for this user: the one
+lists the ten styles with what each is like and what it fits. Choose three for this user: the one
 you would pick for what they told you, one that is clearly bolder, one that is clearly quieter.
 Never three of a kind.
 
@@ -280,7 +280,7 @@ vs design <name> --style <nearest> --ground "#…" --ink "#…" --accent "#…" 
                  [--motif none|wedge|block] [--motion <set>] [--head-case uppercase] [--head-weight N]
                  [--name "…"] [--langs de,en] [--author "…"]         a look of their own
 vs design --gallery [--with <name>] [--pick a,b,c] [--name "…"] [--topic "…"] [--lang de]
-vs design [--lang de]                                   the nine styles (the fallback)
+vs design [--lang de]                                   the ten styles (the fallback)
 vs design <name> --style <style> [--accent "#hex"] …    a library from a style as it is
 vs preview <name>        vs confirm <name>        vs set <name> key=value
 vs fonts google <name> "Family" [--role body|head]

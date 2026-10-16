@@ -1,0 +1,11 @@
+<!--vs {"name": "cover", "order": 10, "use": "Opening slide on white under a spectral arc of light: the name or title in a large serif inside the arc (one to three words), a small line under it, one sentence at the foot, a small label in the top corner.", "slots": {"kicker": "small label in the top-left corner, two to five words (optional)", "title": "the name or the title, one to three words", "sub": "a small line right under the title, up to five words, e.g. Studio ~ Profile (optional)", "lead": "one sentence at the foot of the slide, up to twelve words"}, "sample": {"kicker": "Books, rooms and exhibitions.", "title": "Nordlicht", "sub": "Studio ~ Profile", "lead": "Places where ideas can be read, walked through and kept", "notes": "Welcome, one sentence on why we are here."}} -->
+<section class="slide cover hz-cov{{#motion}} mslide mcover{{/motion}}" {{attrs}}>
+  <div class="band hz-arc" aria-hidden="true"></div>
+  {{#kicker}}<div class="hz-tl">{{kicker}}</div>{{/kicker}}
+  <div class="text">
+    <h1 class="vs-fill" data-max="270" data-min="120" data-lines="2">{{title}}</h1>
+    {{#sub}}<p class="hz-sub">{{sub}}</p>{{/sub}}
+  </div>
+  {{#lead}}<p class="lead">{{lead}}</p>{{/lead}}
+  {{notes}}
+</section>

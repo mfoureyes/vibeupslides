@@ -1,0 +1,38 @@
+/* Horizon: the moves of the look. Only transform and opacity move, so everything stays smooth on a projector.
+   Each move runs only on the slide on show; "motion": "off", the export and a system that asks for less motion
+   get the picture at rest. */
+
+/* the arc of light breathes, the horizon drifts, the ember flickers slowly */
+.active .hz-arc{animation:hz-breathe 16s ease-in-out infinite alternate}
+@keyframes hz-breathe{from{transform:scale(1)}to{transform:scale(1.045) translate3d(0,-1%,0)}}
+.active .hz-sky{animation:hz-drift 20s ease-in-out infinite alternate}
+@keyframes hz-drift{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(0,-2.5%,0) scale(1.05)}}
+.active .hz-ember{animation:hz-flicker 9s ease-in-out infinite alternate}
+@keyframes hz-flicker{from{transform:scaleY(1)}to{transform:scaleY(1.06)}}
+
+/* the sparkle turns slowly, the plus signs twinkle */
+.active .hz-spark,.active .hz-res-text::after{animation:hz-turn 40s linear infinite}
+@keyframes hz-turn{to{transform:rotate(360deg)}}
+.active .hz-plus,.active .hz-line::before{animation:hz-twinkle 4s ease-in-out infinite;animation-delay:calc(var(--k,0)*1.3s)}
+.hz-plus.p2,.hz-line:nth-child(2)::before{--k:1}.hz-plus.p3,.hz-line:nth-child(3)::before{--k:2}
+@keyframes hz-twinkle{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(.55) rotate(45deg);opacity:.55}}
+
+/* photos in the sentence open like a window, one after the other */
+.active .hz-pic{animation:hz-open .9s cubic-bezier(.2,.8,.2,1) backwards;animation-delay:calc(.5s + var(--k,0)*.22s)}
+.hz-line:nth-child(2) .hz-pic{--k:1}.hz-line:nth-child(3) .hz-pic{--k:2}.hz-line:nth-child(4) .hz-pic{--k:3}
+@keyframes hz-open{from{opacity:0;transform:scale(.4)}}
+
+/* the pill drops in, the brush stroke is drawn under the title */
+.active .hz-pill:not(.hz-btn){animation:hz-drop .8s cubic-bezier(.3,1.3,.5,1) .15s backwards}
+@keyframes hz-drop{from{opacity:0;transform:translateY(-24px)}}
+.active .hz-stroke{animation:hz-draw 1s cubic-bezier(.6,0,.2,1) .9s backwards}
+@keyframes hz-draw{from{transform:scaleX(0)}}
+
+/* tiles rise from the foot one after the other, figures from just below */
+.active .hz-tile{animation:hz-up 1s cubic-bezier(.2,.8,.2,1) backwards;animation-delay:calc(.3s + var(--k,0)*.12s)}
+.hz-tile:nth-child(2){--k:1}.hz-tile:nth-child(3){--k:2}.hz-tile:nth-child(4){--k:3}
+@keyframes hz-up{from{transform:translateY(100%)}}
+
+/* at rest: the export, motion off, a system that asks for less motion */
+html.export .hz-arc,html.export .hz-sky,html.export .hz-ember,html.export .hz-spark,html.export .hz-res-text::after,html.export .hz-plus,html.export .hz-line::before,html.export .hz-pic,html.export .hz-pill,html.export .hz-stroke,html.export .hz-tile{animation:none!important}
+@media (prefers-reduced-motion:reduce){#deck .hz-arc,#deck .hz-sky,#deck .hz-ember,#deck .hz-spark,#deck .hz-res-text::after,#deck .hz-plus,#deck .hz-line::before,#deck .hz-pic,#deck .hz-pill,#deck .hz-stroke,#deck .hz-tile{animation:none!important}}

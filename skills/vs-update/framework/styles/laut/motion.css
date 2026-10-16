@@ -1,0 +1,40 @@
+/* Loud: the moves of the look. Only transform and opacity move, so everything stays smooth on a projector.
+   Each move runs only on the slide on show; "motion": "off", the export and a system that asks for less motion
+   get the picture at rest. */
+
+/* the giant word behind drifts slowly sideways, like a poster seen from a passing tram */
+.active .lt-ghost span{animation:lt-in 1.4s cubic-bezier(.16,.84,.3,1) backwards,lt-drift 16s ease-in-out 1.4s infinite alternate}
+@keyframes lt-in{from{opacity:0;transform:translate3d(-6%,0,0)}}
+@keyframes lt-drift{from{transform:translate3d(0,0,0)}to{transform:translate3d(-2.5%,0,0)}}
+
+/* the title rises from below the edge it runs off */
+.active.lt-cov .lt-foot h1{animation:lt-rise 1.1s cubic-bezier(.2,.8,.2,1) .25s backwards}
+@keyframes lt-rise{from{opacity:0;transform:translate3d(0,40%,0)}}
+
+/* the asterisks turn: the small ones briskly after they pop in, the giant one in the back very slowly */
+.active .lt-spin{animation:lt-pop .7s cubic-bezier(.3,1.5,.5,1) .5s backwards,lt-spin 14s linear 1.2s infinite}
+.active .lt-turn{animation:lt-spin 60s linear infinite}
+@keyframes lt-pop{from{opacity:0;transform:scale(.3) rotate(-90deg)}}
+@keyframes lt-spin{to{transform:rotate(360deg)}}
+
+/* the arrow chip slides in from the left, the arrow nudges forward now and then */
+.active .lt-arrow{animation:lt-slide .9s cubic-bezier(.16,.84,.3,1) backwards}
+.active .lt-arrow svg{animation:lt-nudge 3.2s ease-in-out 1.2s infinite}
+@keyframes lt-slide{from{opacity:0;transform:translate3d(-160px,0,0)}}
+@keyframes lt-nudge{0%,70%,100%{transform:none}82%{transform:translate3d(12px,0,0)}}
+
+/* the sun rolls in */
+.active .lt-roll{animation:lt-roll 1.2s cubic-bezier(.2,.8,.2,1) .4s backwards}
+@keyframes lt-roll{from{opacity:0;transform:translate3d(-200px,0,0) rotate(-180deg)}}
+
+/* the upright figure slides up its edge */
+.active .lt-up{animation:lt-upr 1.2s cubic-bezier(.2,.8,.2,1) .3s backwards}
+@keyframes lt-upr{from{opacity:0;transform:translate3d(-60%,0,0)}}
+
+/* the chapter number rises giant from the floor */
+.active.lt-chap .lt-num{animation:lt-num 1.3s cubic-bezier(.2,.8,.2,1) backwards}
+@keyframes lt-num{from{opacity:0;transform:translate3d(0,22%,0)}}
+
+/* at rest: the export, a system that asks for less motion */
+html.export .lt-ghost span,html.export .lt-foot h1,html.export .lt-spin,html.export .lt-turn,html.export .lt-arrow,html.export .lt-arrow svg,html.export .lt-roll,html.export .lt-up,html.export .lt-num{animation:none!important}
+@media (prefers-reduced-motion:reduce){#deck .lt-ghost span,#deck .lt-foot h1,#deck .lt-spin,#deck .lt-turn,#deck .lt-arrow,#deck .lt-arrow svg,#deck .lt-roll,#deck .lt-up,#deck .lt-num{animation:none!important}}

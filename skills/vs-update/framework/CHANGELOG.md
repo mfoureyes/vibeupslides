@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.9.9
+- A ninth style, **laut** (Loud), loud and self-assured like a streetwear campaign: violet, a hot red-orange and powder pink in flat fields, heavy tight capitals (Inter Tight 800) that run off the edge, a giant word in a darker tone behind the text, a flared serif (Gloock) for small lines, an asterisk, a striped sun and round chips, all under one still print grain. Light slides turn violet in the dark scheme, by the same rule.
+- Masters of its own: `cover` and `closing` (a giant word behind, a paragraph in red capitals over it, the title in pink from edge to edge running off the foot), `statement` (a paragraph in big red capitals on pink, a serif line, a giant asterisk turning in the back), `chapter` (the name huge, the number giant in pink behind), `kpis` on violet, `cards` as flat fields with a number chip, and a new one, `frame`: a photo in a red frame with a question over it and a year set upright, a red band with the answer and a button.
+- Its own moves in `motion.css`: the giant word drifts, the title rises from the edge it runs off, asterisks pop in and turn, the arrow chip slides in and nudges, the sun rolls in, the upright figure slides up. Transform and opacity only; export, motion off and reduced motion show everything at rest.
+
+For brand libraries made with an earlier version:
+- Nothing to do. A library that wants the new look starts from the style: `vs.py design <brand> --style laut`.
+
 ## 0.9.8
 - An eighth style, **schimmer** (Shimmer), calm and a little playful like a product launch: night slides lit by a ribbon of light in coral and magenta, light slides with the same light as a soft wash rising from the floor, Inter in bold, small labels in JetBrains Mono that fly in and float. The light is the main theme on every slide; only slides dense with text, a table, an agenda or a team show it through frosted glass at the right edge. Light and dark scheme follow the same rule.
 - Masters of its own: `cover` with floating labels, `statement`, `chapter`, `kpis` as results (figures that count up, notes in floating bubbles, a name tag that flies in like a cursor), `cards` that step down with icons, `progress` (a score as rounded columns, the one that counts in the accent), `goals` (cards hanging from a line), `closing`.

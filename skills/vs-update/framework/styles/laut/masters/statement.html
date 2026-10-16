@@ -1,0 +1,8 @@
+<!--vs {"name": "statement", "order": 30, "use": "One belief on powder pink: a paragraph in big red capitals, a line in the serif at the top right, a small note beside an asterisk, a striped sun at the foot and a giant asterisk turning slowly in the back. The paragraph up to 30 words.", "slots": {"text": "the statement, up to 30 words; <em> marks words set in violet", "aside": "a line in the serif at the top right, up to ten words (optional)", "note": "a short note in small capitals beside the asterisk at the top (optional)", "who": "attribution or two sentences in small capitals at the foot, right (optional)"}, "sample": {"text": "We believe a plan is more than a schedule. It is a way to let people <em>tell their teams</em> what matters and to share it with everyone who works on it.", "aside": "Planning that truly represents the spirit of the shop floor.", "note": "The studio quickly gained a loyal following among plant managers.", "who": "Our tools are shaped by the energy of the shop floor, by the night shift and the morning meeting."}} -->
+<section class="slide statement lt-stm{{#motion}} mslide mstatement{{/motion}}" {{attrs}}>
+  <div class="lt-bg" aria-hidden="true"><i class="lt-star lt-turn"></i></div>
+  <div class="lt-head"><i class="lt-star lt-spin" aria-hidden="true"></i><p class="lt-small lt-note">{{note}}</p>{{#aside}}<p class="lt-serif lt-aside anim">{{aside}}</p>{{/aside}}</div>
+  <div class="text"><h2{{#motion}} class="mtext"{{/motion}}>{{text}}</h2></div>
+  <div class="lt-base"><i class="lt-sun lt-roll" aria-hidden="true"></i>{{#who}}<p class="lt-small lt-who anim">{{who}}</p>{{/who}}</div>
+  {{notes}}
+</section>

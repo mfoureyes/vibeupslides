@@ -1,0 +1,62 @@
+{
+ "name": "schimmer",
+ "order": 58,
+ "title": {
+  "en": "Shimmer",
+  "de": "Schimmer"
+ },
+ "character": {
+  "en": "Calm and a little playful, like a good product launch: a ribbon of light in coral and magenta on deep night slides, the same light rising from the floor as a soft wash on light slides, a bold grotesque, small labels in a typewriter face that fly in and float, figures that count up with notes beside them.",
+  "de": "Ruhig und ein wenig verspielt, wie ein guter Produktlaunch: ein Lichtband in Koralle und Magenta auf tiefen Nachtfolien, dasselbe Licht als weicher Schleier vom Boden auf hellen Folien, eine kräftige Grotesk, kleine Etiketten in Schreibmaschinenschrift, die hereinfliegen und schweben, Zahlen, die hochzählen, mit Notizen daneben."
+ },
+ "fits": {
+  "en": "apps and digital products, health and wellbeing, start-ups in front of investors, product launches and keynotes; whenever data should feel friendly",
+  "de": "Apps und digitale Produkte, Gesundheit und Wohlbefinden, Start-ups vor Investoren, Produktlaunches und Keynotes; wann immer Daten freundlich wirken sollen"
+ },
+ "fonts": [
+  "Inter",
+  "JetBrains Mono"
+ ],
+ "brand": {
+  "colors": {
+   "accent": "#FF5B37",
+   "on_accent": "#121015",
+   "ink": "#121015",
+   "deep": "#0C0A10",
+   "on_deep": "#FFFFFF",
+   "muted": "#4F4B52",
+   "line": "#E4E0DD",
+   "soft": "#F5F3F2",
+   "ghost": "#EEEBE9",
+   "paper": "#FFFFFF",
+   "accent_text": "#B32E10",
+   "accent_on_deep": "#FF7A59"
+  },
+  "fonts": {
+   "body": {
+    "family": "Inter",
+    "fallback": "Helvetica Neue, Arial, sans-serif"
+   },
+   "head": {
+    "family": "Inter",
+    "fallback": "Helvetica Neue, Arial, sans-serif"
+   },
+   "display_weight": 800,
+   "head_weight": 700
+  },
+  "shape": {
+   "radius": 18,
+   "motif": "glow",
+   "head_tracking": "-0.035em",
+   "photo": "glow",
+   "glow": [
+    "#FF2E8A",
+    "#FF5B37",
+    "#B4287A"
+   ]
+  },
+  "motion": {
+   "set": "rise"
+  }
+ }
+}

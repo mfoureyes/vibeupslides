@@ -1,0 +1,7 @@
+<!--vs {"name": "goals", "order": 72, "use": "Goals or next steps on a night ground: dark glass cards hanging from one line at different heights, gently floating. Three to five goals.", "slots": {"title": "short title, e.g. 2027 goals:", "items": "list of {title, text}; title up to six words, text optional"}, "sample": {"title": "2027 goals:", "items": [{"title": "Partnership with machine makers"}, {"title": "Plain-language reports for every shift"}, {"title": "All plants on one system", "text": "From the pilot to five sites."}, {"title": "Planning on the phone"}]}} -->
+<section class="slide dark sc-goals" {{attrs}}>
+  <div class="band sc-glow" aria-hidden="true"></div>
+  <h2>{{title}}</h2>
+  <div class="sc-hang">{{#items}}<div class="sc-goal anim" style="--i:{{@i}}"><h3>{{title}}</h3>{{#text}}<p>{{text}}</p>{{/text}}</div>{{/items}}</div>
+  {{notes}}
+</section>

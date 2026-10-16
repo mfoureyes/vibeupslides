@@ -1,0 +1,11 @@
+<!--vs {"name": "kpis", "order": 44, "use": "Two to four results on a night ground: large figures that count up, set at different heights, each with a short note in a floating bubble; optionally a name tag flies across like a cursor and stops at the second figure. One number per item.", "slots": {"kicker": "small label above the title (optional)", "title": "short title, up to six words", "items": "list of {value, unit, label}; label is the note, up to eight words", "who": "a first name for the cursor that flies to the second figure (optional)"}, "sample": {"title": "Results from the pilot", "who": "Thomas", "source": "Sample figures", "items": [{"value": "+42", "unit": "%", "label": "daily check-ins after one week"}, {"value": "78", "unit": "%", "label": "said they understand their plant better"}, {"value": "63", "unit": "%", "label": "changed at least one routine within 14 days"}]}} -->
+<section class="slide dark sc-res" {{attrs}}>
+  <div class="band sc-glow" aria-hidden="true"></div><div class="band sc-columns" aria-hidden="true"></div>
+  {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+  <h2>{{title}}</h2>
+  <div class="sc-stats">
+    {{#items}}<div class="sc-stat"><span class="sc-note"><i></i>{{label}}</span><div class="w"><span class="mcountup">{{value}}</span>{{unit}}</div></div>{{/items}}
+  </div>
+  {{#who}}<span class="sc-cursor" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 2l7.5 19 2.6-7.9L21 10.5z"/></svg><b>{{who}}</b></span>{{/who}}
+  {{notes}}
+</section>

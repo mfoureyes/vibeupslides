@@ -1,0 +1,11 @@
+<!--vs {"name": "chapter", "order": 20, "is_chapter": true, "use": "Opens a part of the deck on a night ground with a drifting glow; the number as a small floating label.", "slots": {"number": "chapter number, 1 to 99", "kicker": "small label above the title (optional)", "title": "name of the chapter", "lead": "one sentence that opens it (optional)"}, "sample": {"number": 1, "title": "The first part", "lead": "A chapter slide opens each part of the deck."}} -->
+<section class="slide dark chapter sc-chap{{#motion}} mslide mchap{{/motion}}" {{attrs}}>
+  <div class="band sc-glow" aria-hidden="true"></div>
+  <div class="text">
+    <span class="sc-chip sc-num">Chapter {{number}}.</span>
+    {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+    <h2{{#motion}} class="mtext"{{/motion}}>{{title}}</h2>
+    {{#lead}}<p class="lead">{{lead}}</p>{{/lead}}
+  </div>
+  {{notes}}
+</section>

@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.9.8
+- An eighth style, **schimmer** (Shimmer), calm and a little playful like a product launch: night slides lit by a ribbon of light in coral and magenta, light slides with the same light as a soft wash rising from the floor, Inter in bold, small labels in JetBrains Mono that fly in and float. The light is the main theme on every slide; only slides dense with text, a table, an agenda or a team show it through frosted glass at the right edge. Light and dark scheme follow the same rule.
+- Masters of its own: `cover` with floating labels, `statement`, `chapter`, `kpis` as results (figures that count up, notes in floating bubbles, a name tag that flies in like a cursor), `cards` that step down with icons, `progress` (a score as rounded columns, the one that counts in the accent), `goals` (cards hanging from a line), `closing`.
+- A style may bring its own `motion.css` (here: drifting light, flying and floating labels, the cursor, growing columns); `vs.py design` copies it into the library. Only transform and opacity move, the light is a small soft picture: smooth on a projector. Export, motion off and reduced motion show everything at rest.
+- Photos lit like the night slides: a brand whose `shape.photo` is `glow` gets its photos in black and white, darkened, with soft light of its colours (`shape.glow`) laid in when the deck is built; nothing is mixed while presenting.
+
+For brand libraries made with an earlier version:
+- Nothing to do. A library that wants the new look starts from the style: `vs.py design <brand> --style schimmer`.
+
 ## 0.9.7
 - A seventh style, **manifest** (Manifesto), after a poster series in red, black and cream: towering condensed capitals (Anton) beside a classic serif in italics (DM Serif Display) and a tight grotesque in small capitals for everything else (Inter Tight); hard colour bands, a ruler and a frame like an instrument with a wireframe sphere, a four-pointed star, a plus, a grain like print. Its motion set is `rise`, smooth and short.
 - The style brings masters of its own: `cover` and `closing` in three bands with the title from edge to edge, `statement` like a poster with a side column (a stacked figure, a red line, a red box) and a foot line, `chapter` with the number in the serif on a black panel, `kpis` on black, `big_number` as a red panel with the reading of an instrument beside it, `cards` as numbered rows, and two new ones: `claim_panel` (a claim with a photo set into its first line, a figure, two reasons) and `services` (an upright word, serif capitals, a red strip with the offers). Every other master takes the look through the theme: on light slides the title stands on a red band that runs to the top and both edges.

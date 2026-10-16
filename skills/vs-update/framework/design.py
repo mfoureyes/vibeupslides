@@ -113,6 +113,8 @@ def make(brand_dir, style, cache, name=None, accent=None, langs=None, author=Non
         if not got: notes.append(f"typeface {fam} could not be fetched: a system typeface stands in until `vs.py fonts google {os.path.basename(brand_dir)} \"{fam}\" --role {roles[0] if roles else 'body'}` has run")
     json.dump(data, open(os.path.join(brand_dir, "brand.json"), "w", encoding="utf-8"), indent=2, ensure_ascii=False)
     shutil.copy(os.path.join(s["dir"], "theme.css"), os.path.join(brand_dir, "theme.css"))
+    if os.path.exists(os.path.join(s["dir"], "motion.css")):    # a style may bring its own moves (floating, drifting): the library's motion.css
+        shutil.copy(os.path.join(s["dir"], "motion.css"), os.path.join(brand_dir, "motion.css"))
     sm = os.path.join(s["dir"], "masters")                    # a style may bring masters of its own: they take the place of the framework's
     if os.path.isdir(sm):
         os.makedirs(os.path.join(brand_dir, "masters"), exist_ok=True)

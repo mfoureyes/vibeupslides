@@ -1,0 +1,12 @@
+<!--vs {"name": "closing", "order": 90, "use": "Last slide on a night ground with a drifting glow: thanks, one sentence, contact details as floating labels.", "slots": {"kicker": "small label above the title (optional)", "title": "e.g. Thank you", "lead": "one sentence", "contacts": "list of {label, value}, at most three", "button": "a call to action: {label, url} (optional)"}, "sample": {"title": "Thank you.", "lead": "Questions are welcome, now or later.", "contacts": [{"label": "Web", "value": "example.com"}, {"label": "Mail", "value": "hello@example.com"}], "button": {"label": "Get in touch", "url": "https://example.com"}}} -->
+<section class="slide dark cover sc-cov sc-close" {{attrs}}>
+  <div class="band sc-glow" aria-hidden="true"></div>
+  <div class="text">
+    {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+    <h1>{{title}}</h1>
+    {{#lead}}<p class="lead">{{lead}}</p>{{/lead}}
+    {{#button}}{{#url}}<div><a class="vs-btn" href="{{url}}" target="_blank" rel="noopener" onclick="event.stopPropagation()">{{label}}</a></div>{{/url}}{{/button}}
+  </div>
+  <div class="sc-chips">{{#contacts}}<span class="sc-chip">{{label}}: {{value}}</span>{{/contacts}}</div>
+  {{notes}}
+</section>

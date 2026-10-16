@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.9.12
+- The sample texts of all masters, of the styles' own masters (manifest, schimmer, laut, horizont), of the style gallery and of the examples in the references are generic placeholders that say what belongs in each slot; no sample tells a story of its own any more.
+
+For brand libraries made with an earlier version:
+- Nothing to do. A library keeps the sample texts it was built with; `vs.py preview <brand>` shows them as they are.
+
 ## 0.9.11
 - The credit line on the last slide has a place of its own in **manifest**, **schimmer**, **laut** and **horizont** and reads at 4.5 to 1: in manifest at the foot of the black band under the contact details, in schimmer under the floating labels, in laut at the top right across from the arrow, in horizont on a small label of the paper colour over the sky. Before, it lay on the contact details or the thanks, or faded into the ground.
 - A long statement in **manifest** (three lines and more) opens its lines so the capitals no longer lie into each other; a short one keeps the poster look. In **laut** a longer title on the cover and the closing breaks into two lines that stand above the foot; a short one still runs off it.
@@ -82,7 +88,7 @@ For brand libraries made with an earlier version:
 - Text in the accent colour on dark ground (dark slides, the dark scheme, key D) is a tone light enough to read (contrast 4.5:1 instead of 2:1). A brand whose `accent_on_deep` is too dark is told so.
 - `venn`: the names stand in the middle of the part of each circle that is its own, the shared word in the middle of what all share.
 - `spectrum`: the scale comes first, then the marks one by one.
-- The sample texts of the masters tell one neutral story (a maintenance system for a manufacturer's plants), with no trace of a start-up programme.
+- The sample texts of the masters are neutral.
 
 For brand libraries made with an earlier version:
 - Copy the masters `venn` and `spectrum` again and give them the brand's look.

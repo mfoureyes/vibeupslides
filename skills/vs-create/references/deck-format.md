@@ -106,7 +106,7 @@ Any text can be an object with one entry per language; everything else is shared
 {"master": "kpis",
  "title": {"de": "Drei Zahlen zum <em>Projekt</em>", "en": "Three numbers about the <em>project</em>"},
  "items": [{"value": "12", "label": {"de": "Wochen", "en": "weeks"}},
-           {"value": "5", "label": {"de": "Werke", "en": "plants"}}]}
+           {"value": "48", "label": {"de": "Kunden", "en": "clients"}}]}
 ```
 
 Lists can be per language as a whole: `"bullets": {"de": ["...", "..."], "en": ["...", "..."]}`.
@@ -248,9 +248,9 @@ centred clock for breaks. Timers are left out of handouts and reading versions.
 **quiz_choice**, **quiz_true_false**, **quiz_estimate**: questions to the audience.
 
 ```json
-{"master": "quiz_choice", "question": "How many repairs were planned ahead last year?",
+{"master": "quiz_choice", "question": "How many visitors come back for a second visit?",
  "answers": ["A quarter", "A third", "More than half"], "correct": 2,
- "explanation": "Sixty percent were planned ahead.", "source": "Maintenance report 2025"}
+ "explanation": "Sixty percent come back.", "source": "Visitor survey 2025"}
 {"master": "quiz_true_false", "statement": "Slides carry their own logos.", "is_true": false, "explanation": "The framework places them."}
 {"master": "quiz_estimate", "question": "How many pixels wide is a slide?", "number": 1920, "unit": "pixels", "explanation": "1920 by 1080."}
 ```
@@ -267,9 +267,9 @@ the look will be needed again.
 ## Figures and charts
 
 ```json
-{"master": "bars", "title": "Most stoppages come from a few <em>causes</em>", "source": "Report 2025",
- "rows": [{"label": "Late maintenance", "value": 240, "share": 100}, {"label": "Operating errors", "value": 33, "share": 14}]}
-{"master": "line_chart", "title": "Planned repairs grow every <em>year</em>", "source": "Report 2025",
+{"master": "bars", "title": "The first cause is twice as large as the <em>next</em>", "source": "Report 2025",
+ "rows": [{"label": "Cause A", "value": 240, "share": 100}, {"label": "Cause B", "value": 120, "share": 50}]}
+{"master": "line_chart", "title": "The figure grows every <em>year</em>", "source": "Report 2025",
  "axis": ["2022", "2023", "2024"], "ymax": 300,
  "series": [{"values": [120, 180, 240], "color": "var(--accent)", "labels": true}]}
 ```
@@ -280,9 +280,9 @@ A finding with a column chart is the master `figure` with numbers instead of an 
 come up one after the other from left to right; `mark` names the column that carries the point:
 
 ```json
-{"master": "figure", "topic": "Finding", "title": "Downtime has fallen in every quarter since the <em>switch</em>",
+{"master": "figure", "topic": "Finding", "title": "The figure has fallen in every quarter since the <em>change</em>",
  "columns": [{"label": "Q1", "value": 310}, {"label": "Q2", "value": 300}, {"label": "Q3", "value": 241}],
- "mark": 3, "callout": "The drop begins when the pilot plant went live.", "source": "Plant log 2025"}
+ "mark": 3, "callout": "The drop begins in the quarter of the change.", "source": "Report 2025"}
 ```
 
 A chart that exists as an image file (`image`) cannot build up: it is a picture. Use `columns`,

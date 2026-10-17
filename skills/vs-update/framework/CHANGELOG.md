@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.9.13
+- The plugin carries its display name, VibeUpSlides, for the plugin directory; nothing changes in the skills or the framework.
+
+For brand libraries made with an earlier version:
+- Nothing to do.
+
 ## 0.9.12
 - The sample texts of all masters, of the styles' own masters (manifest, schimmer, laut, horizont), of the style gallery and of the examples in the references are generic placeholders that say what belongs in each slot; no sample tells a story of its own any more.
 

@@ -1,0 +1,69 @@
+{
+ "name": "zine",
+ "order": 54,
+ "title": {
+  "en": "Zine",
+  "de": "Zine"
+ },
+ "character": {
+  "en": "Black and white like a photocopied zine with streetwear brutalism: titles in wide heavy capitals with one word in pale mint blackletter, a wireframe globe cut by the edge, grid floors, registration crosses, rulers and barcodes; photos as coarse one-bit prints with labels stuck on them, statements in black bars, figures in narrow heavy numerals inside hard ruled grids, labels in a typewriter mono.",
+  "de": "Schwarz-weiß wie ein kopiertes Zine mit Streetwear-Brutalismus: Titel in breiten, schweren Versalien mit einem Wort in blassem Mint als Fraktur, eine angeschnittene Drahtgitter-Kugel, Rasterböden, Passerkreuze, Lineale und Barcodes; Fotos als grobe 1-Bit-Drucke mit aufgeklebten Labels, Statements in schwarzen Balken, Zahlen in schmalen, schweren Ziffern in harten Linienrastern, Labels in Schreibmaschinen-Mono."
+ },
+ "fits": {
+  "en": "creative studios, fashion and music, agencies, events and launches, a pitch or keynote that should look bold and current; whenever a deck may be loud in black and white",
+  "de": "Kreativstudios, Mode und Musik, Agenturen, Events und Launches, ein Pitch oder eine Keynote, die mutig und aktuell aussehen soll; wann immer ein Foliensatz laut in Schwarz-Weiß sein darf"
+ },
+ "fonts": [
+  "Archivo",
+  "Grenze Gotisch",
+  "Space Mono"
+ ],
+ "font_axes": {
+  "Archivo": "ital,wdth,wght@0,62..125,100..900;1,62..125,100..900"
+ },
+ "brand": {
+  "colors": {
+   "accent": "#B7E1C0",
+   "on_accent": "#0C0C0C",
+   "ink": "#0C0C0C",
+   "deep": "#0A0A0A",
+   "on_deep": "#FFFFFF",
+   "muted": "#5C5C5C",
+   "line": "#DADADA",
+   "soft": "#F2F2F2",
+   "ghost": "#E4E4E4",
+   "paper": "#FFFFFF",
+   "accent_text": "#2F7A48",
+   "accent_on_deep": "#B7E1C0"
+  },
+  "fonts": {
+   "body": {
+    "family": "Archivo",
+    "fallback": "Helvetica Neue, Arial, sans-serif"
+   },
+   "head": {
+    "family": "Archivo",
+    "fallback": "Arial Black, Helvetica Neue, Arial, sans-serif"
+   },
+   "serif": {
+    "family": "Grenze Gotisch",
+    "fallback": "Georgia, serif"
+   },
+   "display_weight": 800,
+   "head_weight": 700
+  },
+  "shape": {
+   "radius": 0,
+   "motif": "none",
+   "head_tracking": "-0.02em",
+   "photo": "dither"
+  },
+  "motion": {
+   "set": "rise"
+  },
+  "footer": {
+   "left": "$name",
+   "right": ""
+  }
+ }
+}

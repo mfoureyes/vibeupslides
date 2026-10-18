@@ -1,0 +1,8 @@
+<!--vs {"name": "lineup", "order": 41, "use": "Three to five short points in narrow heavy capitals on black, the first filled mint, the others outlined, each with its number in a small box, coming one after another once the print has landed: the things a talk will cover, what is included, the order of a day. On the left the title in wide capitals and a tilted one-bit print. Each point up to two words.", "slots": {"kicker": "small label above the title (optional)", "title": "a short title, up to four words", "photo": "a photo shown as a tilted print (optional)", "items": "list of three to five points, each up to two words (about 14 characters)"}, "sample": {"kicker": "Small line above", "title": "Five points", "photo": "brand:samples/sb-hall.jpg", "items": ["First point", "Second point", "Third point", "Fourth point", "Fifth point"]}} -->
+<section class="slide dark sb-lu" {{attrs}}>
+  {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+  <h2>{{title}}</h2>
+  {{#photo}}<div class="sb-print anim"><img src="{{photo}}" alt=""></div>{{/photo}}
+  <ol data-seq>{{#items}}<li class="anim" data-wave="2"><small>{{@ii}}</small><span>{{.}}</span></li>{{/items}}</ol>
+  {{notes}}
+</section>

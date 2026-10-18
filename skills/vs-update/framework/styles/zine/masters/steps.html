@@ -1,0 +1,8 @@
+<!--vs {"name": "steps", "order": 48, "use": "Three or four steps on black: the title in wide capitals at the top, below a grid of ruled cells, one per step, each with its number in narrow heavy figures, a short title in capitals and one line; the current step is filled mint. Titles up to three words, texts up to fourteen words.", "slots": {"kicker": "small label above the title (optional)", "title": "the title, up to eight words; <em> marks the accent word", "items": "list of three or four {icon, title, text, current}; icon is not shown in this look; current: true fills the cell in mint"}, "sample": {"kicker": "Small line above", "title": "Three steps, <em>one</em> after another", "items": [{"title": "First step", "text": "One line on what happens in this step and why."}, {"title": "Second step", "text": "One line on what happens in this step and why.", "current": true}, {"title": "Third step", "text": "One line on what happens in this step and why."}]}} -->
+<section class="slide dark sb-steps" {{attrs}}>
+  <div class="text">{{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}<h2>{{title}}</h2></div>
+  <div class="sb-list" data-seq>
+    {{#items}}<div class="sb-li anim{{#current}} current{{/current}}"><div class="n sb-num">{{@ii}}</div><h3>{{title}}</h3>{{#text}}<p>{{text}}</p>{{/text}}</div>{{/items}}
+  </div>
+  {{notes}}
+</section>

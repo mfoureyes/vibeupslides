@@ -1,0 +1,11 @@
+<!--vs {"name": "venn", "order": 54, "prepare": "venn", "use": "Two or three fields and what they share, drawn as hard squares laid over each other: each square hatched with its name in a box, the part all share filled solid with the shared word in it (technology, market and team; what we can and what is needed). The middle is what the slide is about. Not for things that do not overlap: use cards or columns.", "slots": {"kicker": "small label above the title (optional)", "title": "the title as a full sentence, <em> marks the one accent word", "items": "list of 2 or 3 {title, text}: the squares, title one or two words", "center": "what they share, one to three short words: it stands in the solid middle where all squares overlap; a longer one is set in a box over the middle", "center_text": "one sentence about what they share (optional)", "note": "one sentence below (optional)"}, "sample": {"kicker": "Overlap", "title": "It works where three things <em>meet</em>", "items": [{"title": "First", "text": "One sentence about this square."}, {"title": "Second", "text": "One sentence about this square."}, {"title": "Third", "text": "One sentence about this square."}], "center": "The overlap", "center_text": "What only all three together achieve."}} -->
+<section class="slide sb-ven" {{attrs}}>
+  {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+  <h2>{{title}}</h2>
+  <div class="sb-vn">
+    <div class="sb-vn-fig">{{#items}}<i class="sb-vn-q sb-vn-q{{@i}}" style="--k:{{@i}}"></i>{{/items}}<i class="sb-vn-x"></i>{{#items}}<b class="sb-vn-l sb-vn-l{{@i}}" style="--k:{{@i}}">{{title}}</b>{{/items}}{{#center}}{{#_fits}}<b class="sb-vn-in">{{center}}</b>{{/_fits}}{{^_fits}}<div class="sb-vn-mid">{{center}}</div>{{/_fits}}{{/center}}</div>
+    <div class="sb-vn-list" data-seq>{{#items}}<div class="sb-vn-item anim"><i>{{@ii}}</i><div><h3>{{title}}</h3>{{#text}}<p>{{text}}</p>{{/text}}</div></div>{{/items}}{{#center_text}}<p class="sb-vn-sum anim">{{center_text}}</p>{{/center_text}}</div>
+  </div>
+  {{#note}}<p class="callout anim">{{note}}</p>{{/note}}
+  {{notes}}
+</section>

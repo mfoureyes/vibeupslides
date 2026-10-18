@@ -1,0 +1,8 @@
+<!--vs {"name": "statement_photo", "order": 31, "use": "One short sentence over a photo printed in one bit, set at the lower left in wide heavy capitals standing in black bars like cut-out labels; <em> marks one word set in mint blackletter. Up to eight words.", "slots": {"text": "the sentence, up to eight words (about 45 characters); <em> marks the accent word", "photo": "image file, at least 1600 px wide; people or a place (optional)", "surface": "kept for decks of other looks", "credit": "photo credit, set small in a box in the corner (optional)", "video": "a video file that plays silently in a loop behind the text (optional)"}, "defaults": {"surface": "dark"}, "sample": {"photo": "brand:samples/sb-meeting.jpg", "text": "The quiet hours <em>count</em>"}, "full_images": true} -->
+<section class="slide dark sb-stp{{#motion}} mslide mstatement{{/motion}}" {{attrs}}>
+  {{#photo}}<div class="band sb-photo" aria-hidden="true"><img src="{{photo}}" alt=""></div>{{/photo}}
+  {{>bgvideo}}
+  <h2><span>{{text}}</span></h2>
+  {{#credit}}<div class="vs-stp-credit">{{credit}}</div>{{/credit}}
+  {{notes}}
+</section>

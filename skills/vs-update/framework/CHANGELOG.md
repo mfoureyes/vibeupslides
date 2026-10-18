@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.9.14
+- Two new styles from one brutalist look, an eleventh and a twelfth: **silber** (Silver), calm enough for a board, and **zine**, loud on purpose. Both in black and white with one pale mint on the black slides: titles in Archivo from very narrow to extra wide and heavy, labels in a typewriter mono (Space Mono) in black boxes, a wireframe globe cut by the edge of the cover, grid floors under chapters and the closing, registration crosses in the corners, rulers, barcodes and stars, figures in narrow heavy numerals inside ruled grids. Silber keeps the accent word in Archivo italic, content titles in bold mixed case and photos in clean black and white. Zine sets the accent word in blackletter (Grenze Gotisch), prints every photo as a coarse one-bit pattern, lays hazard tape across corners and graph paper under the white slides, puts the statement on mint and tilts its prints.
+- Masters of their own: `cover`, `chapter`, `closing`, `statement`, `statement_photo` (the lines in black bars in zine), `steps` and `kpis` as ruled grids, `agenda`, `split`, `cards`, `quote`, and three charts drawn anew: `share` as one bar cut into blocks instead of a ring, `venn` with squares laid over each other instead of circles, and `lineup`, three to five points set very large. The bars, columns, comparison, funnel and pyramid of the framework are drawn as blocks: the one that counts solid, the others grey (hatched in zine).
+- Their moves in `motion.css`: the globe rolls in and turns like a dial, the grid floor glides, rulers run in, the big numbers rise, prints drop onto the page in the beat of their row. Everything enters in reading order: top to bottom, a print in a card with its card, square k of the venn with point k of its list.
+- A new photo treatment, `shape.photo: "dither"`: every photo of a deck is printed as a coarse one-bit pattern of the ink and paper colours when it is built (as from a copier).
+- A style may ask Google Fonts for axes it leaves out by default (`font_axes` in style.json, e.g. every width of Archivo); the family is then cached and embedded with those axes.
+- The twelve styles are listed in vs-design, the README and the smoke test.
+
+For brand libraries made with an earlier version:
+- Nothing to do. A library that wants one of the new looks starts from the style: `vs.py design <brand> --style silber` or `--style zine`.
+
 ## 0.9.13
 - The plugin carries its display name, VibeUpSlides, for the plugin directory; nothing changes in the skills or the framework.
 

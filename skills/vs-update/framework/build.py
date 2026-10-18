@@ -232,6 +232,15 @@ def halftone(im, ink="#111111", paper="#FFFFFF", cell=None):
     out = out.resize((w, h), Image.LANCZOS)
     return ImageOps.colorize(out, ink, paper)
 
+def dither(im, ink="#111111", paper="#FFFFFF", block=None):
+    """A photo as from a copier or a one-bit screen: grey values become a coarse pattern of ink and paper pixels
+    (Floyd-Steinberg), each pixel a small square block (brands whose shape.photo is "dither")."""
+    from PIL import Image, ImageEnhance, ImageOps
+    g = ImageEnhance.Contrast(ImageOps.autocontrast(im.convert("L"), cutoff=2)).enhance(1.35)
+    w, h = g.size; block = block or max(2, round(w / 560))
+    small = g.resize((max(1, w // block), max(1, h // block)), Image.LANCZOS).convert("1")
+    return ImageOps.colorize(small.convert("L").resize((w, h), Image.NEAREST), ink, paper)
+
 def glow(im, colors, deep="#0C0A10"):
     """A photo lit like the brand's night slides: black and white, darkened, with soft glows of the brand's colours
     laid over it by light (screen), strongest low and to the right (brands whose shape.photo is "glow")."""
@@ -271,6 +280,8 @@ def datauri(path, width=1600, q=82, trim=False, treat=None):
         im = glow(im, treat.get("glow") or [treat.get("accent", "#FF5B37")], treat.get("deep", "#0C0A10")); q = max(q, 88)
     if treat and treat.get("photo") == "halftone":
         im = halftone(im, treat.get("ink", "#111111"), treat.get("paper", "#FFFFFF")); q = max(q, 90)
+    if treat and treat.get("photo") == "dither":
+        im = dither(im, treat.get("ink", "#111111"), treat.get("paper", "#FFFFFF")); q = max(q, 90)
     b = io.BytesIO(); im.save(b, "JPEG", quality=q, optimize=True)
     return "data:image/jpeg;base64," + base64.b64encode(b.getvalue()).decode()
 

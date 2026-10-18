@@ -1,0 +1,11 @@
+<!--vs {"name": "cover", "order": 10, "use": "Opening slide on black: the title in wide heavy capitals (up to six words; <em> marks one word set in mint blackletter) over a wireframe globe cut by the right edge, a grid floor below, a label in a box at the top, a line in mono running up the right edge, one sentence in a framed box at the foot and a barcode.", "slots": {"tag": "a short label in a box at the top left, up to three words, e.g. Vol. 01 (optional)", "kicker": "a line in mono capitals running up the right edge, up to six words (optional)", "title": "the deck title, up to six words; <em> marks the accent word (optional)", "lead": "one sentence in a framed box at the foot, up to fourteen words"}, "sample": {"tag": "Vol. 01", "kicker": "A short line on the subject", "title": "A title that says what this is <em>about</em>", "lead": "One sentence that tells the audience what they will take away.", "notes": "Welcome, one sentence on why we are here."}} -->
+<section class="slide dark cover sb-cov{{#motion}} mslide mcover{{/motion}}" {{attrs}}>
+  <div class="band sb-globe" aria-hidden="true"></div><div class="band sb-floor" aria-hidden="true"></div>
+  {{#tag}}<b class="sb-tag anim">{{tag}}</b>{{/tag}}
+  <div class="text"><h1 class="vs-fill" data-max="170" data-min="80" data-lines="4">{{title}}</h1></div>
+  {{#kicker}}<div class="sb-side">{{kicker}}</div>{{/kicker}}
+  {{#lead}}<p class="lead anim">{{lead}}</p>{{/lead}}
+  <span class="band sb-bar" aria-hidden="true"></span>
+  <i class="band sb-tape" aria-hidden="true"><b></b></i>
+  {{notes}}
+</section>

@@ -1,0 +1,9 @@
+<!--vs {"name": "cards", "order": 46, "use": "Two to four similar things side by side on white, each a slightly tilted one-bit print in a heavy frame with its number stuck on as a label (or a grey field with the number large), a short title in wide capitals and one line under it. At most one accent card (a black field). Titles up to three words, texts up to fourteen words.", "slots": {"kicker": "small label above the title (optional)", "title": "the title as a full sentence; <em> marks the accent word", "cols": "kept for decks of other looks", "items": "list of {photo, icon, n, tag, title, text, style}; photo optional; icon, n and tag are not shown in this look; style is \"\" or \"accent\""}, "defaults": {"cols": 3}, "sample": {"kicker": "Three parts", "title": "Three things side by <em>side</em>", "items": [{"title": "First item", "text": "One short line that says what the first one is.", "photo": "brand:samples/sb-office.jpg"}, {"title": "Second item", "text": "One short line that says what the second one is."}, {"title": "Third item", "text": "One short line that says what the third one is.", "photo": "brand:samples/sb-street.jpg"}]}} -->
+<section class="slide sb-cards" {{attrs}}>
+  {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+  <h2>{{title}}</h2>
+  <div class="sb-crow" data-seq>
+    {{#items}}<div class="sb-card anim {{style}}"><div class="sb-print">{{#photo}}<img src="{{photo}}" alt=""><b class="sb-tag">{{@ii}}</b>{{/photo}}{{^photo}}<span class="sb-num sb-big" aria-hidden="true">{{@ii}}</span>{{/photo}}</div><h3>{{title}}</h3>{{#text}}<p>{{text}}</p>{{/text}}</div>{{/items}}
+  </div>
+  {{notes}}
+</section>

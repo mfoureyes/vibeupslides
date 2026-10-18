@@ -1,0 +1,10 @@
+<!--vs {"name": "agenda", "order": 54, "use": "The schedule of a day or a session on white: the title in wide heavy capitals at the top left, the number of the current item in narrow heavy figures below it, the items on the right in a ruled box with square counters, the current row filled black. Title up to four words, three to five items of up to four words.", "slots": {"kicker": "small label above the title (optional)", "title": "a short title, up to four words; <em> marks the accent word", "items": "list of three to five {title, text, time, current}; title up to four words; text optional, up to eight words; current: true marks the active item and shows its number large"}, "sample": {"title": "How the day goes", "items": [{"title": "First item", "time": "10:00", "current": true}, {"title": "Second item", "time": "11:30"}, {"title": "Third item", "time": "14:00"}, {"title": "Fourth item", "time": "16:00"}]}} -->
+<section class="slide agenda sb-ag" {{attrs}}>
+  {{#items}}{{#current}}<div class="band sb-num sb-big" aria-hidden="true">{{@ii}}</div>{{/current}}{{/items}}
+  {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+  <h2>{{title}}</h2>
+  <div class="sb-ag-list" data-seq>
+    {{#items}}<div class="sb-ag-row anim{{#current}} current{{/current}}"><span class="sb-dot">{{@i}}</span><div class="t">{{title}}{{#text}}<small>{{text}}</small>{{/text}}</div><div class="z">{{time}}</div></div>{{/items}}
+  </div>
+  {{notes}}
+</section>

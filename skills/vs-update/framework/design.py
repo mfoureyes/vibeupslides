@@ -37,18 +37,26 @@ def _lum(h):
     r, g, b = (int(h[i:i + 2], 16) / 255 for i in (0, 2, 4)); lin = lambda c: c / 12.92 if c <= .03928 else ((c + .055) / 1.055) ** 2.4
     return .2126 * lin(r) + .7152 * lin(g) + .0722 * lin(b)
 
-def fetch_font(family, cache):
+def _font_key(family, spec=None):
+    """The cache folder and file prefix of a family; a family fetched with axes of its own gets a key of its own."""
+    import hashlib
+    return re.sub(r"[^a-z0-9]+", "-", family.lower()) + ("-" + hashlib.md5(spec.encode()).hexdigest()[:6] if spec else "")
+
+def fetch_font(family, cache, spec=None):
     """An open typeface from Google Fonts, kept in the workspace's cache. Returns [{"weight", "style", "file" (path), "unicode_range"}],
-    empty without a network or when the family is not there."""
+    empty without a network or when the family is not there. spec: the axes to ask Google for, as in its css2 address
+    after the family (e.g. "ital,wdth,wght@0,62..125,100..900" for every width, "opsz,wght@60,400" for a display cut);
+    without it Google keeps only the weights and fixes the other axes at their default."""
     import urllib.request, urllib.parse
-    d = os.path.join(cache, re.sub(r"[^a-z0-9]+", "-", family.lower())); idx = os.path.join(d, "index.json")
+    d = os.path.join(cache, _font_key(family, spec)); idx = os.path.join(d, "index.json")
     if os.path.exists(idx):
         try: return json.load(open(idx, encoding="utf-8"))
         except ValueError: pass
     q = urllib.parse.quote_plus(family); css = None
-    for spec in (f"{q}:ital,wght@0,100..900;1,100..900", f"{q}:wght@100..900", f"{q}:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600", f"{q}:wght@300;400;500;600;700;800;900", f"{q}:wght@400;700", q):
+    pinned = (f"{q}:{spec}",) if spec else ()
+    for ask in pinned + (f"{q}:ital,wght@0,100..900;1,100..900", f"{q}:wght@100..900", f"{q}:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600", f"{q}:wght@300;400;500;600;700;800;900", f"{q}:wght@400;700", q):
         try:
-            css = urllib.request.urlopen(urllib.request.Request(f"https://fonts.googleapis.com/css2?family={spec}&display=block", headers={"User-Agent": UA}), timeout=15).read().decode(); break
+            css = urllib.request.urlopen(urllib.request.Request(f"https://fonts.googleapis.com/css2?family={ask}&display=block", headers={"User-Agent": UA}), timeout=15).read().decode(); break
         except Exception: continue
     if not css: return []
     blocks = re.findall(r"/\*\s*([\w-]+)\s*\*/\s*@font-face\s*\{([^}]*)\}", css)
@@ -57,7 +65,7 @@ def fetch_font(family, cache):
     try:
         for subset, blk in keep:
             u = re.search(r"url\(([^)]+)\)", blk).group(1); w = re.search(r"font-weight:\s*([^;]+)", blk).group(1).strip(); st = re.search(r"font-style:\s*([^;]+)", blk).group(1).strip()
-            fn = f"{re.sub(r'[^a-z0-9]+', '-', family.lower())}-{w.replace(' ', '-')}-{st}-{subset}.woff2"
+            fn = f"{_font_key(family, spec)}-{w.replace(' ', '-')}-{st}-{subset}.woff2"
             open(os.path.join(d, fn), "wb").write(urllib.request.urlopen(u, timeout=30).read())
             rng = re.search(r"unicode-range:\s*([^;]+)", blk)
             out.append({"weight": w, "style": st, "file": fn, **({"unicode_range": rng.group(1).strip()} if rng else {})})
@@ -104,9 +112,10 @@ def make(brand_dir, style, cache, name=None, accent=None, langs=None, author=Non
     f = data.setdefault("fonts", {}); f["files"] = []; f["families"] = []
     for fam in meta.get("fonts") or []:
         roles = [r for r in ("body", "head", "serif") if (f.get(r) or {}).get("family") == fam]
-        got = fetch_font(fam, cache) if fonts else []
+        spec = (meta.get("font_axes") or {}).get(fam)        # a style may ask for axes Google leaves out by default (width, optical size)
+        got = fetch_font(fam, cache, spec) if fonts else []
         for g in got:
-            shutil.copy(os.path.join(cache, re.sub(r"[^a-z0-9]+", "-", fam.lower()), g["file"]), os.path.join(brand_dir, "fonts", g["file"]))
+            shutil.copy(os.path.join(cache, _font_key(fam, spec), g["file"]), os.path.join(brand_dir, "fonts", g["file"]))
             f["files"].append({"family": fam, "weight": g["weight"], "style": g["style"], "file": "fonts/" + g["file"], **({"unicode_range": g["unicode_range"]} if g.get("unicode_range") else {})})
         f["families"].append({"family": fam, "roles": roles, "source": "google", "licence": "open", "status": "embedded" if got else "missing", "files": len(got), "weights": [],
                               "note": "open typeface from Google Fonts" if got else "could not be fetched (no network?): the system's typeface stands in; `vs.py fonts google <brand> \"" + fam + "\"` fetches it later"})

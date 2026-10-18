@@ -1,0 +1,14 @@
+<!--vs {"name": "closing", "order": 90, "use": "Last slide on black: a label in a mint box, thanks in wide heavy capitals, one sentence, the contacts in a ruled box, a grid floor or a darkened photo behind, a large outlined mark at the lower right (a year or a short word).", "slots": {"kicker": "the label in the mint box (optional)", "title": "e.g. Thank you for your time, up to six words", "lead": "one sentence", "contacts": "list of {label, value}, at most three", "button": "a call to action: {label, url} (optional)", "mark": "a large outlined mark at the lower right, e.g. a year, up to four characters (optional)", "photo": "a photo behind, it is darkened (optional)"}, "sample": {"kicker": "Small line above", "title": "Thank you for your time", "lead": "Questions are welcome.", "mark": "2027", "contacts": [{"label": "Web", "value": "example.com"}, {"label": "Mail", "value": "hello@example.com"}]}} -->
+<section class="slide dark cover sb-chap sb-close" {{attrs}}>
+  {{#photo}}<div class="band sb-photo" aria-hidden="true"><img src="{{photo}}" alt=""></div>{{/photo}}{{^photo}}<div class="band sb-floor" aria-hidden="true"></div>{{/photo}}
+  {{#mark}}<div class="band sb-ghost" aria-hidden="true">{{mark}}</div>{{/mark}}
+  <div class="text">
+    {{#kicker}}<div class="sb-tag anim">{{kicker}}</div>{{/kicker}}
+    <h1 class="vs-fill" data-max="160" data-min="90" data-lines="2">{{title}}</h1>
+    {{#lead}}<p class="lead anim">{{lead}}</p>{{/lead}}
+    {{#button}}{{#url}}<div><a class="vs-btn" href="{{url}}" target="_blank" rel="noopener" onclick="event.stopPropagation()">{{label}}</a></div>{{/url}}{{/button}}
+    {{#contacts.0}}<div class="meta anim">{{/contacts.0}}{{#contacts}}<div><small>{{label}}</small>{{value}}</div>{{/contacts}}{{#contacts.0}}</div>{{/contacts.0}}
+  </div>
+  <i class="band sb-tape" aria-hidden="true"><b></b></i>
+  {{notes}}
+</section>

@@ -1,0 +1,9 @@
+<!--vs {"name": "quote", "order": 56, "use": "A quotation in heavy capitals on a black band beside a big mint star, the portrait as a tilted one-bit print hanging from the band into a white foot, the name in wide capitals and the role in mono in the foot; <em> marks the closing phrase set in mint. Up to 18 words.", "slots": {"text": "the quotation without quotation marks, up to 18 words; <em> marks the closing phrase", "who": "the name", "role": "role or where it comes from (optional)", "photo": "a portrait, upright (optional)", "surface": "kept for decks of other looks"}, "sample": {"text": "A quote stands alone on its slide and says <em>one thing</em> clearly.", "who": "First Last", "role": "Role, organisation", "photo": "brand:samples/sb-portrait.jpg"}} -->
+<section class="slide quote sb-q{{^photo}} noph{{/photo}}{{#motion}} mslide mquote{{/motion}}" {{attrs}}>
+  <div class="band sb-q-band" aria-hidden="true"></div>
+  {{#photo}}<div class="sb-print anim"><img src="{{photo}}" alt=""></div>{{/photo}}
+  <i class="sb-mark sb-star" aria-hidden="true"></i>
+  <h2{{#motion}} class="mtext"{{/motion}}>{{text}}</h2>
+  {{#who}}<div class="who anim">{{who}}{{#role}}<small>{{role}}</small>{{/role}}</div>{{/who}}
+  {{notes}}
+</section>

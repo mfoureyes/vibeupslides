@@ -1,0 +1,11 @@
+<!--vs {"name": "share", "order": 69, "prepare": "share", "use": "Parts of a whole as one long bar cut into blocks, like a ruler: two to five parts side by side, the first (the one that counts) solid and large as a figure beside the title, the others in grey, hatched and outlined; under the bar each part with its share, name and one sentence. The parts add up to 100. Real numbers with a source. For one figure alone use big_number, for a comparison compare.", "slots": {"kicker": "small label above the title (optional)", "title": "the title as a full sentence, <em> marks the one accent word", "items": "list of 2 to 5 {label, value, text}: value is the share in percent, a number; the first is the one the slide is about; label up to two words, text up to twelve words", "center": "the large figure beside the title (default: the first value with %)", "center_label": "a few words under it (optional, default: the first label)", "note": "one sentence below (optional)"}, "sample": {"kicker": "Shares", "title": "Most of the whole goes into the first <em>part</em>", "source": "Sample figures", "items": [{"label": "Part A", "value": 60, "text": "One sentence about this share."}, {"label": "Part B", "value": 25, "text": "One sentence about this share."}, {"label": "Part C", "value": 15, "text": "One sentence about this share."}]}} -->
+<section class="slide sb-shr" {{attrs}}>
+  {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+  <h2>{{title}}</h2>
+  <div class="sb-shr-big anim"><b class="sb-num">{{#center}}{{center}}{{/center}}{{^center}}{{_center}}{{/center}}</b><span>{{#center_label}}{{center_label}}{{/center_label}}{{^center_label}}{{_center_label}}{{/center_label}}</span></div>
+  <div class="sb-shr-bar anim">{{#items}}<i class="p{{@i}}" style="left:{{_a}}%;width:calc({{_z}}% - {{_a}}%)"></i>{{/items}}</div>
+  <div class="sb-shr-scale" aria-hidden="true"><span>0</span><span>25</span><span>50</span><span>75</span><span>100 %</span></div>
+  <div class="sb-shr-list" data-seq>{{#items}}<div class="sb-shr-i anim"><i class="p{{@i}}"></i><em class="sb-num">{{value}}<small>%</small></em><h3>{{label}}</h3>{{#text}}<p>{{text}}</p>{{/text}}</div>{{/items}}</div>
+  {{#note}}<p class="callout anim">{{note}}</p>{{/note}}
+  {{notes}}
+</section>

@@ -1,0 +1,13 @@
+<!--vs {"name": "chapter", "order": 20, "is_chapter": true, "use": "Opens a part of the deck on black: the chapter number in narrow heavy figures as tall as the slide on the left, beside it a label in a mint box and the title in wide capitals (up to four words; <em> marks one word set in mint blackletter), a grid floor or a darkened photo behind.", "slots": {"number": "chapter number, 1 to 99", "kicker": "the label in the mint box above the title (optional, default: Chapter and its number)", "title": "name of the chapter, up to four words; <em> marks the accent word", "lead": "one sentence that opens it (optional)", "photo": "a photo behind, it is printed in one bit and darkened (optional)", "video": "a video file that plays silently in a loop behind the text (optional)"}, "sample": {"number": 1, "title": "The <em>first</em> part", "lead": "A chapter slide opens each part of the deck."}} -->
+<section class="slide dark chapter sb-chap{{#motion}} mslide mchap{{/motion}}" {{attrs}}>
+  {{#photo}}<div class="band sb-photo" aria-hidden="true"><img src="{{photo}}" alt=""></div>{{/photo}}{{^photo}}<div class="band sb-floor" aria-hidden="true"></div>{{/photo}}
+  {{>bgvideo}}
+  <div class="band sb-num sb-big" aria-hidden="true">{{number}}</div>
+  <div class="text">
+    <div class="sb-tag anim">{{#kicker}}{{kicker}}{{/kicker}}{{^kicker}}Chapter {{number}}{{/kicker}}</div>
+    <h2{{#motion}} class="mtext"{{/motion}}>{{title}}</h2>
+    {{#lead}}<p class="lead anim">{{lead}}</p>{{/lead}}
+  </div>
+  <i class="band sb-tape" aria-hidden="true"><b></b></i>
+  {{notes}}
+</section>

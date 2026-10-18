@@ -1,0 +1,8 @@
+<!--vs {"name": "statement", "order": 30, "use": "One sentence alone on black in wide heavy capitals, centred between two rulers with ticks, two mint stars; <em> marks one word set in mint blackletter. Up to ten words.", "slots": {"text": "the sentence, up to ten words; <em> marks the accent word", "who": "attribution, set in a white box (optional)"}, "sample": {"text": "Sometimes a <em>single</em> sentence is enough."}} -->
+<section class="slide dark statement sb-stm{{#motion}} mslide mstatement{{/motion}}" {{attrs}}>
+  <i class="band sb-ruler top" aria-hidden="true"></i><i class="band sb-ruler bot" aria-hidden="true"></i>
+  <i class="sb-star s1" aria-hidden="true"></i><i class="sb-star s2" aria-hidden="true"></i>
+  <div class="text"><h2{{#motion}} class="mtext"{{/motion}}>{{text}}</h2>{{#who}}<div class="who">{{who}}</div>{{/who}}</div>
+  <i class="band sb-tape" aria-hidden="true"><b></b></i>
+  {{notes}}
+</section>

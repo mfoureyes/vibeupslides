@@ -1,0 +1,13 @@
+<!--vs {"name": "split", "order": 58, "use": "A page on white like a zine spread: a label in a box, the title in wide heavy capitals (<em> marks a closing word set in blackletter), a one-bit print tilted in the upper corner, below a ruled box with a black label cell and two short columns of text, a barcode. Title up to eight words, each column up to 45 words.", "slots": {"photo": "image file, landscape or square works best", "side": "\"br\" photo right (default) or \"bl\" photo left", "kicker": "small label above the title (optional)", "title": "the title, up to eight words; <em> marks the closing word", "label": "the label in the black cell, up to three words (optional)", "lead": "the first column, up to 45 words (optional)", "bullets": "the second column as two to four short points (optional)"}, "sample": {"photo": "brand:samples/sb-talk.jpg", "kicker": "Small line above", "title": "A title in two lines that ends in <em>style</em>", "label": "What it is", "lead": "A first column of text that says what this is about, in a few plain sentences. It holds about forty-five words, enough for a short paragraph that gives the context the title only hints at.", "bullets": ["A first point in one short sentence.", "A second point in one short sentence.", "A third point in one short sentence."]}, "defaults": {"side": "br"}} -->
+<section class="slide sb-spl {{side}}" {{attrs}}>
+  {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+  <h2>{{title}}</h2>
+  <div class="sb-print anim">{{#photo}}<img src="{{photo}}" alt="">{{/photo}}{{^photo}}<div class="placeholder" style="height:100%;aspect-ratio:auto">Photo to come</div>{{/photo}}<b class="sb-tag">Fig. 01</b></div>
+  <div class="sb-spl-body" data-seq>
+    {{#label}}<b class="sb-tag anim">{{label}}</b>{{/label}}{{^label}}<span></span>{{/label}}
+    {{#lead}}<p class="anim">{{lead}}</p>{{/lead}}
+    {{#bullets.0}}<ul class="anim">{{/bullets.0}}{{#bullets}}<li>{{.}}</li>{{/bullets}}{{#bullets.0}}</ul>{{/bullets.0}}
+  </div>
+  <span class="band sb-bar" aria-hidden="true"></span>
+  {{notes}}
+</section>

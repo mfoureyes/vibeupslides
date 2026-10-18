@@ -1,0 +1,9 @@
+<!--vs {"name": "kpis", "order": 44, "use": "Two to four figures on white in narrow heavy numerals inside a ruled grid, the first cell filled black, each with a short note in mono capitals. One number per item, ranges go into the label.", "slots": {"kicker": "small label above the title (optional)", "title": "the title as a full sentence, up to two lines; <em> marks the accent word", "items": "list of two to four {value, unit, label}; value up to four characters; unit is short (%, x, k); label up to eight words"}, "sample": {"kicker": "Key figures", "title": "The numbers <em>at a glance</em>", "source": "Sample figures", "items": [{"value": "12", "label": "what the first figure means"}, {"value": "80", "label": "what the second figure means"}, {"value": "40", "unit": "%", "label": "what the third figure means"}, {"value": "3", "unit": "x", "label": "what the fourth figure means"}]}} -->
+<section class="slide sb-kp" {{attrs}}>
+  {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+  <h2>{{title}}</h2>
+  <div class="sb-kp-row" data-seq>
+    {{#items}}<div class="sb-kp-i anim"><div class="w sb-num"><span class="mcountup">{{value}}</span>{{#unit}}<small>{{unit}}</small>{{/unit}}</div><p>{{label}}</p></div>{{/items}}
+  </div>
+  {{notes}}
+</section>

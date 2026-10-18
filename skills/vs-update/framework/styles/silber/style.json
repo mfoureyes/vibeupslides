@@ -1,0 +1,67 @@
+{
+ "name": "silber",
+ "order": 56,
+ "title": {
+  "en": "Silver",
+  "de": "Silber"
+ },
+ "character": {
+  "en": "Black and white with the hard edges of brutalist print, calm enough for a board: titles in wide heavy capitals on black over a wireframe globe and a grid floor, content on white in bold Archivo with labels in a typewriter mono in black boxes, figures in narrow heavy numerals inside ruled grids, charts as blocks, registration crosses and rulers, one word in pale mint on the black slides.",
+  "de": "Schwarz-weiß mit den harten Kanten brutalistischer Drucksachen, ruhig genug für den Vorstand: Titel in breiten, schweren Versalien auf Schwarz über einer Drahtgitter-Kugel und einem Rasterboden, Inhalte auf Weiß in kräftiger Archivo mit Labels in Schreibmaschinen-Mono in schwarzen Kästen, Zahlen in schmalen, schweren Ziffern in Linienrastern, Diagramme aus Blöcken, Passerkreuze und Lineale, ein Wort in blassem Mint auf den schwarzen Folien."
+ },
+ "fits": {
+  "en": "consulting and strategy, finance, architecture and engineering, a board meeting or a pitch that should look current without shouting; whenever black and white and clear structure carry the deck",
+  "de": "Beratung und Strategie, Finanzen, Architektur und Technik, eine Vorstandssitzung oder ein Pitch, der aktuell wirken soll, ohne zu schreien; wann immer Schwarz-Weiß und klare Struktur den Foliensatz tragen"
+ },
+ "fonts": [
+  "Archivo",
+  "Space Mono"
+ ],
+ "font_axes": {
+  "Archivo": "ital,wdth,wght@0,62..125,100..900;1,62..125,100..900"
+ },
+ "brand": {
+  "colors": {
+   "accent": "#B7E1C0",
+   "on_accent": "#0C0C0C",
+   "ink": "#0C0C0C",
+   "deep": "#0A0A0A",
+   "on_deep": "#FFFFFF",
+   "muted": "#5C5C5C",
+   "line": "#DADADA",
+   "soft": "#F2F2F2",
+   "ghost": "#E4E4E4",
+   "paper": "#FFFFFF",
+   "accent_text": "#2F7A48",
+   "accent_on_deep": "#B7E1C0"
+  },
+  "fonts": {
+   "body": {
+    "family": "Archivo",
+    "fallback": "Helvetica Neue, Arial, sans-serif"
+   },
+   "head": {
+    "family": "Archivo",
+    "fallback": "Arial Black, Helvetica Neue, Arial, sans-serif"
+   },
+   "serif": {
+    "family": "Archivo",
+    "fallback": "Helvetica Neue, Arial, sans-serif"
+   },
+   "display_weight": 800,
+   "head_weight": 700
+  },
+  "shape": {
+   "radius": 0,
+   "motif": "none",
+   "head_tracking": "-0.02em"
+  },
+  "motion": {
+   "set": "rise"
+  },
+  "footer": {
+   "left": "$name",
+   "right": ""
+  }
+ }
+}

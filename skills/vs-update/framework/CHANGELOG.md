@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.16
+- Guidance from the first message, after the first test as a new user. A new user who says "VibeUpSlides" gets a welcome before anything runs: what VibeUpSlides does, the way in three steps, what is set up now, and what the next question decides. The question of the route carries no recommendation unless the user's words make one obvious, and every option says what it leads to.
+- Every skill explains before it asks: where the user is, why the question, what happens with the answer. What was answered once is never asked again, also across skills (vs-design hands purpose, audience, name and languages to vs-create).
+- vs-design shows the styles in the chat: `vs design --gallery` also writes `design/styles.png`, one picture with a title slide and a content slide per style, numbered. Without examples all twelve styles are shown, three proposed with a reason each, and the choice and what should change are asked in one round. vs-design opens with the way in four lines.
+- vs-create reads the structure for the kind of deck before its first question, so one round is enough, and asks for the core message as three formulated proposals or as a line of free text, never as a list of topics.
+- The browser for the checks installs without progress bars in the chat.
+
+For brand libraries made with an earlier version:
+- Nothing to do.
+
 ## 0.9.15
 - A clearer way in. vs-create is now also the start for anyone who says only "VibeUpSlides", asks what it can do, where to start, or for help: it introduces VibeUpSlides in three sentences and asks the one question that decides the route (a corporate design or website → vs-build, no brand → vs-design, "show me first" → the styles of vs-design). Users with a brand who ask for help get a short map of what they can say.
 - The first start is announced: when the user is new, Claude says before the setup what it makes (one folder, its own Python environment, a browser for the checks, one to two minutes, once). The setup prints `FIRST SETUP` and `FIRST SETUP DONE`; `vs.py status` prints `NEW HERE` with the two routes while there is no brand and no deck.

@@ -332,7 +332,7 @@ def cmd_init(args):
     probe = "from playwright.sync_api import sync_playwright as s\nwith s() as p:\n    b=p.chromium.launch(); b.close()"
     if subprocess.call([py, "-c", probe], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL) != 0:
         print("installing Chromium for Playwright (about 150 MB, once) ...")
-        if subprocess.call([py, "-m", "playwright", "install", "chromium"]) != 0:
+        if subprocess.call([py, "-m", "playwright", "install", "chromium"], stdout=subprocess.DEVNULL) != 0:      # no progress bars in the chat; errors still show
             print("the browser could not be installed here")
     ok = subprocess.call([py, "-c", probe], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL) == 0
     print("python:", py, "| browser:", "ready" if ok else "NOT WORKING, run: " + py + " -m playwright install chromium")
@@ -1420,6 +1420,7 @@ def cmd_design(args):
                 notes.update(design.make(bd, s, cache, name=arg(args, "--name"), langs=[lang]))
                 _render_and_build({"title": s, "langs": [lang], "sample": True, "motion": "standard", "slides": slides}, B.load_brand(bd), os.path.join(tmp, s + ".html"))
                 decks[s] = base64.b64encode(open(os.path.join(tmp, s + ".html"), "rb").read()).decode()
+            sheet = _style_sheet(tmp, ([mine] if mine else []) + [k for k in pick if k != mine], all_styles, lang, mb.get("name") if mine else None)
         finally:
             shutil.rmtree(tmp, ignore_errors=True)
         out_dir = os.path.join(home(), "design"); os.makedirs(out_dir, exist_ok=True); out = os.path.join(out_dir, "styles.html")
@@ -1432,8 +1433,9 @@ def cmd_design(args):
             .replace("__SLIDES__", json.dumps([("Titel", "Aussage", "Liste", "Zahlen", "Zusammenhang", "Karten") if de else ("Cover", "Statement", "List", "Figures", "Flow", "Cards")][0]))
             .replace("__DECKS__", json.dumps(decks)))
         print(f"styles side by side: {out} ({os.path.getsize(out) / 2**20:.1f} MB)")
+        if sheet: print(f"styles at a glance: {sheet}  (show this picture in the chat: a title slide and a content slide per style, numbered)")
         for nline in sorted(notes): print("NOTE:", nline.replace(os.path.basename(tmp), "<brand>"))
-        print("Give the page to the user. When they have chosen: vs.py design <brand> --style <name> [--name \"…\"] [--accent \"#hex\"]"); return
+        print("Show the picture in the chat, give the page to the user for a closer look. When they have chosen: vs.py design <brand> --style <name> [--name \"…\"] [--accent \"#hex\"]"); return
     if not pos or not arg(args, "--style"):
         print(design.catalog(lang)); print("\nshow them side by side: vs.py design --gallery [--pick a,b,c] [--name \"Name\"] [--lang de]   make one the user's own: vs.py design <brand> --style <name>"); return
     name, style = pos[0], arg(args, "--style")
@@ -1644,6 +1646,31 @@ def cmd_refresh(args):
         return
     print(f"\n{done} deck(s) brought up to date." + ("" if done else " Every deck is as new as its brand (--all builds every deck anyway)."))
     if done: print("The files from before are kept in each deck's .history/built/. Decks that were sent out as files do not change by themselves: send the new file where it matters.")
+
+def _style_sheet(tmp, names, all_styles, lang, mine_title=None):
+    """One picture of the styles for the chat: per style its title slide and a content slide, numbered and named.
+    Written to design/styles.png; None when no browser is at hand (the page alone still works)."""
+    import build as B, design
+    from PIL import Image, ImageDraw, ImageFont
+    tiles = []
+    try:
+        for s in names:
+            got = B.shots(os.path.join(tmp, (("_mine" if s == names[0] and mine_title else s)) + ".html"), os.path.join(tmp, "_shots", s), slides=[1, 3], lang=lang, width=960, settle=900)
+            title = mine_title if (mine_title and s == names[0]) else design._t(all_styles[s]["meta"].get("title"), lang)
+            tiles.append((title, [Image.open(p).convert("RGB").resize((480, 270)) for p in got]))
+    except Exception as e:
+        print("NOTE: the picture of the styles could not be made here (" + str(e).splitlines()[0][:120] + "); give the page instead"); return None
+    cols = 3 if len(tiles) > 4 else min(len(tiles), 2) or 1; rows = -(-len(tiles) // cols)
+    gap, label = 24, 54; tw = 2 * 480 + 8; th = 270 + label
+    sheet = Image.new("RGB", (cols * tw + (cols + 1) * gap, rows * th + (rows + 1) * gap), "#f4f3ef"); d = ImageDraw.Draw(sheet)
+    try: font = ImageFont.load_default(size=30)
+    except TypeError: font = ImageFont.load_default()
+    for i, (title, imgs) in enumerate(tiles):
+        x = gap + (i % cols) * (tw + gap); y = gap + (i // cols) * (th + gap)
+        d.text((x, y + 8), f"{i + 1}  {title}", fill="#1d1d1b", font=font)
+        for j, im in enumerate(imgs): sheet.paste(im, (x + j * 488, y + label))
+    out = os.path.join(home(), "design", "styles.png"); os.makedirs(os.path.dirname(out), exist_ok=True); sheet.save(out, optimize=True)
+    return out
 
 def _scene_gallery(name, bd, scenes):
     """One file that shows every scene of the catalogue with its still, and plays it on a click: for the user to choose from."""

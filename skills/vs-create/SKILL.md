@@ -76,27 +76,35 @@ user edits the deck themselves").
 This skill is the way in: for the first run after installing, and whenever someone says only
 "VibeUpSlides", asks what it can do, where to start, or for help.
 
-**Before the first setup.** When the user is new (they just installed it, ask where to start, or
-say it is their first time), say in one sentence before you run the script what the first start
-does: it makes one folder `vibeupslides` for their brands and decks, with its own Python
-environment, and a browser for the checks (about 150 MB); this takes one to two minutes, once.
-In Claude Code they will be asked to allow commands.
+**Welcome first.** When the user is new or says only "VibeUpSlides" (or "help", "where do I
+start"), your first message, before any command, is a welcome in their language. It leads them
+and says what happens and why, in this order:
 
-**`FIRST SETUP DONE` or `NEW HERE` in the output.** Introduce VibeUpSlides in three short
-sentences at most, in their language: it builds presentations in the look and the voice of a
-brand; the look is made once, then every deck takes minutes; decks open in the browser, where they
-can change every text themselves. Then ask the one question that decides the route, as options:
+1. What VibeUpSlides is, in two sentences: presentations in the look and the voice of a brand or
+   of a look of their own; Claude helps with the content, writes every slide and builds the deck.
+2. How it goes, in three numbered lines: (1) the look, made once (from their corporate design or
+   website, or developed with them from examples or styles); (2) what the deck is for, then a
+   proposed storyline; (3) the deck in the browser, where they can change every text themselves
+   and present it.
+3. What happens right now, if the workspace is new: one folder `vibeupslides` for their brands
+   and decks, its own Python environment and a browser for the checks (about 150 MB); one to two
+   minutes, once. In Claude Code they will be asked to allow commands.
+4. That the next question decides the way, and what each answer leads to.
 
-- "I have a corporate design or a website" → vs-build (the look and voice of their company, made
-  once, with their checks along the way).
-- "I have no brand yet" → vs-design (a look from examples they like, or one of its styles, in a
-  few minutes).
-- "Show me first" → vs-design without examples: its page of styles shows what decks look like;
-  they can choose one there or stop.
+Then run the script, and when it is done (`FIRST SETUP DONE`, `NEW HERE` or a status with no
+brand), ask the one question that decides the route, without a recommendation unless their words
+make one obvious. The descriptions say what follows:
+
+- "I have a corporate design or a website" → vs-build: reads their website and documents and
+  builds the look and the voice of their company, once, with their checks along the way.
+- "I have no brand yet" → vs-design: a look of their own from examples they like, or one of the
+  twelve styles; first deck in a few minutes.
+- "Show me the styles first" → vs-design without examples: the styles are shown in the chat as a
+  picture, nothing is decided yet.
 
 When the request already answers the question (a website named, "for my club"), skip it and say
-in one sentence which way you take. Name the route in four lines at most (for example: "1. the
-look, 2. what the deck is for, 3. I build it, 4. you look at it and change what you like").
+in one sentence which way you take and why. A user who is not new and asks for nothing in
+particular gets no welcome: go by `status`.
 
 **Help later.** When a user with a brand asks for help or what they can do, answer with a short
 map of what they can say, five lines at most, from their situation: a new deck ("Make a
@@ -109,10 +117,17 @@ browser), present it (**M** presenter view, **P** PDF), a new look or brand (vs-
 **Every question goes through the question tool.** Whenever you ask the user something (a round
 of questions, a choice, a yes or no), use the question tool the environment offers
 (`AskUserQuestion` in Claude Code and Cowork): up to four questions per call, two to four short
-options each, the recommended option first and marked "(Recommended)"; the user can always type
+options each, a recommended option first and marked "(Recommended)" only when it follows from what the user said (otherwise no mark); the user can always type
 an answer of their own. Plain text only where there is no such tool, or for an answer nobody can
 pick from options (a web address, a name, files to share): ask for that in one short line next to
 the tool's questions. Never write a numbered list of questions into a message instead.
+
+**Explain before you ask.** Every round of questions comes after a short message that says where
+the user is ("Step 2 of 4: the look"), why you ask, and what happens with the answer. Every
+option's description says what it leads to, not only what it is ("Twelve styles to choose from,
+first deck in a few minutes"), so the user can choose without knowing VibeUpSlides. What the user
+answered once counts for the whole conversation, also across skills: never ask it again.
+
 
 ## 1. Read the library
 
@@ -146,7 +161,17 @@ it; a long sentence there makes the type small and loses the look.
 ## 2. Ask what the deck is for and how it should look
 
 Before any storyline, ask in **one round** of the question tool (see "How to ask"). Skip what
-the request already answers.
+the request or the conversation already answers: coming from vs-design or vs-build, purpose,
+audience, sender and languages are known. **Read the section of `references/structures.md` for
+the kind of deck before the first question**, every time, so that its questions go into this
+one round and no second round is needed.
+
+**The core message is never an option list of topics.** A deck hangs on one idea (a thesis for a
+keynote, the promise for a pitch, the recommendation for a consulting deck). When what you know
+is enough, offer three formulated proposals as the options, each a full sentence the user could
+say on stage, your pick first; they can write their own. When it is not enough, ask for it in one
+short line of plain text next to the tool's questions ("Your one idea in a sentence or two"),
+since nobody can pick their own thesis from a list.
 
 1. **Purpose and kind of deck.** What is the deck meant to achieve, and which kind is it: investor
    pitch, keynote, conference talk, company presentation, sales deck, proposal, strategy or
@@ -372,7 +397,7 @@ belong on one click, set `"order"` (deck-format.md). The user can do the same in
 ("On click", "Order": they click the parts in the new order, with Shift to join one to the step
 before; the strength of movement, "Play").
 
-Name the version in half a sentence when you hand a deck over ("built with VibeUpSlides 0.9.15", from
+Name the version in half a sentence when you hand a deck over ("built with VibeUpSlides 0.9.16", from
 the status line of the setup), so that the user can tell which state they are testing.
 A button (`button: {label, url}` on the closing slide) is a call to action with a real target; a
 cover has none. The last slide credits the person who made the deck (`"author"` in the deck file,

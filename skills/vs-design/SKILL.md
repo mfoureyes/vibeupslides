@@ -17,7 +17,8 @@ to. They are never the first answer when there are examples.
 
 The user is in a hurry. From the first message to the first deck there is one message of
 questions and one choice of theirs. Everything else is decided by you and said in a sentence, so
-that they can object.
+that they can object. The styles are always shown once, as a picture in the chat, so the user sees
+what is possible before they decide.
 
 ## Start
 
@@ -32,8 +33,7 @@ python3 SKILL_DIR/scripts/bootstrap.py
 **The first start.** When the user is new (they just installed it or say it is their first time),
 say in one sentence before you run the script what it does: one folder `vibeupslides` for their
 brands and decks, with its own Python environment, and a browser for the checks (about 150 MB);
-one to two minutes, once. After `FIRST SETUP DONE`, go on with the route below; the user came
-here with a purpose, so no tour.
+one to two minutes, once.
 
 If the script is not at that path (the skill came as a plugin and its files live elsewhere), find it:
 `find ~/.claude /mnt/skills -path '*vs-update/scripts/bootstrap.py' 2>/dev/null | head -1`.
@@ -73,12 +73,27 @@ terminal on their own computer. Editing needs neither: the deck's own file carri
 **Every question goes through the question tool.** Whenever you ask the user something (a round
 of questions, a choice, a yes or no), use the question tool the environment offers
 (`AskUserQuestion` in Claude Code and Cowork): up to four questions per call, two to four short
-options each, the recommended option first and marked "(Recommended)"; the user can always type
+options each, a recommended option first and marked "(Recommended)" only when it follows from what the user said (otherwise no mark); the user can always type
 an answer of their own. Plain text only where there is no such tool, or for an answer nobody can
 pick from options (a web address, a name, files to share): ask for that in one short line next to
 the tool's questions. Never write a numbered list of questions into a message instead.
 
+**Explain before you ask.** Every round of questions comes after a short message that says where
+the user is ("Step 2 of 4: the look"), why you ask, and what happens with the answer. Every
+option's description says what it leads to, not only what it is ("Twelve styles to choose from,
+first deck in a few minutes"), so the user can choose without knowing VibeUpSlides. What the user
+answered once counts for the whole conversation, also across skills: never ask it again.
+
+
 ## 1. One round of questions
+
+**Open with what happens.** Before the first question, tell the user in their language what this
+skill does and the way, in four short numbered lines: (1) you say what the slides are for and
+whose name goes on them; (2) you see the styles in the chat, and examples you like if you have
+any; (3) you choose one and say what should be different; (4) the first deck follows at once.
+Say that the questions below are all that is needed before they see the styles. Skip what the
+conversation already answered (a welcome from vs-create, the purpose they named).
+
 
 1. **What is the presentation for, and who sees it?** One or two sentences are enough (a pitch in
    front of a jury on Thursday, the annual meeting of the club, a talk at a conference).
@@ -188,27 +203,35 @@ Show it next to two alternatives, so that the choice is real:
 vs design --gallery --with nordlicht --pick magazin,nacht --lang de
 ```
 
-writes `design/styles.html`: their developed look first, then two of the styles (one bolder, one
-quieter than what you made), all on the same six slides with their name on the cover. Give them
-the file with one sentence on what you took from which example. They say what fits and what to
+writes `design/styles.png` and `design/styles.html`: their developed look first, then two of the
+styles (one bolder, one quieter than what you made), all on the same slides with their name on the
+cover. Show the picture in the chat as in step 3, with one sentence on what you took from which
+example, and give them the page for a closer look. They say what fits and what to
 change; change it in the library (step 4) and show again.
 
-## 3. Without examples: three styles to choose from
+## 3. Without examples: the styles in the chat
 
 ```bash
-vs design --lang de
+vs design --gallery --name "Their name" --topic "Their title" --lang de
 ```
 
-lists the twelve styles with what each is like and what it fits. Choose three for this user: the one
-you would pick for what they told you, one that is clearly bolder, one that is clearly quieter.
-Never three of a kind.
+shows all twelve styles on the same slides with their name on the cover and writes two files:
+`design/styles.png`, one picture with a title slide and a content slide per style, numbered, and
+`design/styles.html`, the page to click through six slides per style. It takes about two minutes;
+say so before you run it. `vs design --lang de` lists what each style is like and what it fits.
 
-```bash
-vs design --gallery --pick raster,nacht,plakat --name "Their name" --lang de
-```
+**Show the picture in the chat** (send the file so it appears in the conversation; in Cowork put
+it into the connected folder as well). Under it, in a few lines:
 
-Give them the page and one sentence per style on why it could fit, your recommendation first.
-They answer with a name and, often, a wish ("the dark one, but in our green"):
+- what they see: every style with the same title slide and content slide, the number above each;
+- your three proposals for what they told you, with one sentence each on why: the one you would
+  pick, one clearly bolder, one clearly quieter (never three of a kind);
+- that `styles.html` shows six slides per style if they want a closer look.
+
+Then ask in one round: **which style** (your three as options, the one you would pick first; they
+can name any number from the picture instead) and **what should be different** (as it is,
+another accent colour, calmer, bolder; or in their own words). They answer with a name and,
+often, a wish ("the dark one, but in our green"):
 
 ```bash
 vs design nordlicht --style nacht --name "Nordlicht" --accent "#2FBF71" --langs de,en --author "First Last"
@@ -248,8 +271,9 @@ decided once.
 ## 5. The first deck, at once
 
 Do not stop at the library. Hand over to **vs-create** in the same conversation with what you
-know already (what the deck is for, who sees it, the name): it asks what is still missing,
-proposes the storyline and builds. The user came for a presentation, not for a design system.
+know already (what the deck is for, who sees it, the name, the languages): it asks only what is
+still missing, proposes the storyline and builds. Say the step in one sentence ("The look stands;
+now the content of your keynote"), never ask again what the user answered here. The user came for a presentation, not for a design system.
 
 ## How the look grows
 

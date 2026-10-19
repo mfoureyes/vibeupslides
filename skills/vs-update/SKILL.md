@@ -21,10 +21,17 @@ Brand libraries and decks are never touched by an update. They live in `library/
 **Every question goes through the question tool.** Whenever you ask the user something (a round
 of questions, a choice, a yes or no), use the question tool the environment offers
 (`AskUserQuestion` in Claude Code and Cowork): up to four questions per call, two to four short
-options each, the recommended option first and marked "(Recommended)"; the user can always type
+options each, a recommended option first and marked "(Recommended)" only when it follows from what the user said (otherwise no mark); the user can always type
 an answer of their own. Plain text only where there is no such tool, or for an answer nobody can
 pick from options (a web address, a name, files to share): ask for that in one short line next to
 the tool's questions. Never write a numbered list of questions into a message instead.
+
+**Explain before you ask.** Every round of questions comes after a short message that says where
+the user is ("Step 2 of 4: the look"), why you ask, and what happens with the answer. Every
+option's description says what it leads to, not only what it is ("Twelve styles to choose from,
+first deck in a few minutes"), so the user can choose without knowing VibeUpSlides. What the user
+answered once counts for the whole conversation, also across skills: never ask it again.
+
 
 ## 1. See where things stand
 

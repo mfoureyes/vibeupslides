@@ -13,6 +13,24 @@ examples you like, or from one of twelve styles of its own.
 <sub>One deck, ten looks: grid, magazine, night, poster, workshop, light, manifesto, shimmer, loud
 and horizon. "Northlight" is an invented company used for every example here.</sub>
 
+## Quick start
+
+1. **Install** it in the app you use: Claude Code, Cowork or another agent ([Install](#install)
+   has the command for each).
+2. **Say one sentence.** With a corporate design or a website:
+   > Set up our slides in the design of https://example.com.
+
+   Without a brand:
+   > I need a presentation for my running club and have no design yet.
+
+   Not sure? Say "VibeUpSlides" or "where do I start?" and Claude asks the one question that decides.
+3. **Look and correct.** Claude shows you the master slides, then builds your first deck. It opens
+   in the browser, where you can change every text yourself (pencil or **E**) and present it (**M**).
+
+The first start sets up one folder, `~/vibeupslides`, with its own Python environment and a
+browser for the checks; this takes one to two minutes, once. You need Python 3 and an internet
+connection for that first run (see [Privacy and network](#privacy-and-network)).
+
 ## What it feels like
 
 > Take our design from https://example.com and set up our slides.
@@ -96,6 +114,10 @@ With your own brand, the masters come from your website and documents instead: y
 typefaces, your icons, arrows and shapes, your photos, and slides that belong to your brand.
 
 ## The four skills
+
+You do not have to pick one: say what you want and the right skill starts. As a rule:
+**you have a brand** → vs-build, once; **you have none** → vs-design, once; **then every deck** →
+vs-create; **something new is out** → vs-update.
 
 | Skill | When | What it does |
 |---|---|---|

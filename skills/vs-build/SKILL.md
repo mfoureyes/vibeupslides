@@ -35,6 +35,12 @@ Written `vs` below. On first setup in Claude Code, offer the user once to allow 
 folder permanently (the setup prints the rules; `vs permissions` prints them again), so they are
 not asked at every step. Add them to the user's settings only if they say yes.
 
+**The first start.** When the user is new (they just installed it or say it is their first time),
+say in one sentence before you run the script what it does: one folder `vibeupslides` for their
+brands and decks, with its own Python environment, and a browser for the checks (about 150 MB);
+one to two minutes, once. After `FIRST SETUP DONE`, go on with the route below; the user came
+here with a purpose, so no tour.
+
 If the script is not at that path (the skill came as a plugin and its files live elsewhere), find it:
 `find ~/.claude /mnt/skills -path '*vs-update/scripts/bootstrap.py' 2>/dev/null | head -1`.
 
@@ -347,7 +353,9 @@ list. Apply the answers, rebuild, then:
 vs confirm example
 ```
 
-The library is now the base for every deck. Say so, and that decks are created with vs-create.
+The library is now the base for every deck. Say so, and end with the next step as a question the
+user can answer at once: "Shall we build the first presentation? Tell me what it is for and who
+will see it." If they say yes, hand over to vs-create in the same conversation.
 
 ## Changing a library later
 

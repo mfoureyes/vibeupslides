@@ -443,7 +443,7 @@ def cmd_status(args):
         own = len([f for f in os.listdir(os.path.join(d, "masters")) if f.endswith(".html")]) if os.path.isdir(os.path.join(d, "masters")) else 0
         state = "confirmed" if b.get("confirmed") else "NOT YET CONFIRMED by the user"
         print(f"  {os.path.basename(d):22s} {b.get('name', ''):28s} {own} masters, {state}, framework {b.get('framework', '?')}")
-    if not B.list_brands(): print("  none yet: run the vs-build skill")
+    if not B.list_brands(): print("  none yet")
     print("\ndecks:")
     root = os.path.join(ws, "decks")
     for n in sorted(os.listdir(root)) if os.path.isdir(root) else []:
@@ -451,6 +451,8 @@ def cmd_status(args):
         if os.path.exists(p):
             try: d = json.load(open(p, encoding="utf-8")); print(f"  {n:22s} {d.get('title', ''):28s} brand {d.get('brand')}, {len(d.get('slides', []))} slides")
             except ValueError: print(f"  {n:22s} deck.json is not valid JSON")
+    if not B.list_brands() and not any(os.path.exists(os.path.join(root, n, "deck.json")) for n in (os.listdir(root) if os.path.isdir(root) else [])):
+        print("\nNEW HERE: no brand and no deck yet. With a corporate design or a website: vs-build. Without a brand: vs-design.")
 
 def cmd_update(args):
     ws = home(); cur = version(os.path.join(ws, "framework"))

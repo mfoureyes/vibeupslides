@@ -1,6 +1,6 @@
 ---
 name: vs-create
-description: "VS-Create, the everyday skill of VibeUpSlides: creates presentations from a brand library made with vs-build. Asks what the deck is for, helps develop the content on researched structures (pitch, keynote, company, sales, proposal, consulting, conference talk, workshop), writes every text in the company's voice, builds the deck in seconds as HTML from the brand's master slides and opens it for editing in the browser. Presenter view with notes, video, timer and quiz slides, PDF export, one or two languages, a reading and a live version. Use for: presentation, slide deck, slides, pitch deck, keynote, workshop slides, investor pitch, sales deck, speaker notes, handout, change a slide, edit slides myself, add slides, translate a deck, convert a PowerPoint. German: Präsentation, Foliensatz, Folien, Pitch-Deck, Vortrag, Workshop-Folien, Folie ändern, Folien selbst bearbeiten, Text ändern."
+description: "VS-Create, the everyday skill of VibeUpSlides: creates presentations from a brand library made with vs-build. Asks what the deck is for, helps develop the content on researched structures (pitch, keynote, company, sales, proposal, consulting, conference talk, workshop), writes every text in the company's voice, builds the deck in seconds as HTML from the brand's master slides and opens it for editing in the browser. Presenter view with notes, video, timer and quiz slides, PDF export, one or two languages, a reading and a live version. Use for: presentation, slide deck, slides, pitch deck, keynote, workshop slides, investor pitch, sales deck, speaker notes, handout, change a slide, edit slides myself, add slides, translate a deck, convert a PowerPoint. Also the way in: VibeUpSlides, help, what can it do, where do I start. German: Hilfe, wo fange ich an, Präsentation, Foliensatz, Folien, Pitch-Deck, Vortrag, Workshop-Folien, Folie ändern, Folien selbst bearbeiten, Text ändern."
 ---
 
 # VS-Create: decks from the brand library
@@ -70,6 +70,39 @@ user edits the deck themselves").
 - **Several brands**: ask which one, unless the request makes it obvious.
 - **The deck exists** (the user wants to change or continue one): read its `deck.json`, its `brief`
   is already answered, go to step 4.
+
+## New here
+
+This skill is the way in: for the first run after installing, and whenever someone says only
+"VibeUpSlides", asks what it can do, where to start, or for help.
+
+**Before the first setup.** When the user is new (they just installed it, ask where to start, or
+say it is their first time), say in one sentence before you run the script what the first start
+does: it makes one folder `vibeupslides` for their brands and decks, with its own Python
+environment, and a browser for the checks (about 150 MB); this takes one to two minutes, once.
+In Claude Code they will be asked to allow commands.
+
+**`FIRST SETUP DONE` or `NEW HERE` in the output.** Introduce VibeUpSlides in three short
+sentences at most, in their language: it builds presentations in the look and the voice of a
+brand; the look is made once, then every deck takes minutes; decks open in the browser, where they
+can change every text themselves. Then ask the one question that decides the route, as options:
+
+- "I have a corporate design or a website" → vs-build (the look and voice of their company, made
+  once, with their checks along the way).
+- "I have no brand yet" → vs-design (a look from examples they like, or one of its styles, in a
+  few minutes).
+- "Show me first" → vs-design without examples: its page of styles shows what decks look like;
+  they can choose one there or stop.
+
+When the request already answers the question (a website named, "for my club"), skip it and say
+in one sentence which way you take. Name the route in four lines at most (for example: "1. the
+look, 2. what the deck is for, 3. I build it, 4. you look at it and change what you like").
+
+**Help later.** When a user with a brand asks for help or what they can do, answer with a short
+map of what they can say, five lines at most, from their situation: a new deck ("Make a
+presentation about …"), change a deck ("On slide 4 …"), edit it themselves (pencil or **E** in the
+browser), present it (**M** presenter view, **P** PDF), a new look or brand (vs-build, vs-design),
+"update VibeUpSlides" (vs-update). Then ask what they want to do.
 
 ## How to ask
 
@@ -339,7 +372,7 @@ belong on one click, set `"order"` (deck-format.md). The user can do the same in
 ("On click", "Order": they click the parts in the new order, with Shift to join one to the step
 before; the strength of movement, "Play").
 
-Name the version in half a sentence when you hand a deck over ("built with VibeUpSlides 0.9.14", from
+Name the version in half a sentence when you hand a deck over ("built with VibeUpSlides 0.9.15", from
 the status line of the setup), so that the user can tell which state they are testing.
 A button (`button: {label, url}` on the closing slide) is a call to action with a real target; a
 cover has none. The last slide credits the person who made the deck (`"author"` in the deck file,
@@ -353,6 +386,11 @@ language. `references/presenting.md` has the rest. PDFs only when asked: `vs bui
 A deck with video or embeds is a folder, not a single file: present it with
 `vs present kickoff` (a local address in the browser, which also lets YouTube play and removes the
 pop-up and full-screen limits of the presenter view) and send it with `vs pack kickoff`.
+
+**End with the next step.** The last lines of the hand-over say what the user can do now, from
+their situation, two or three at most: change something ("tell me, e.g. 'On slide 4 …'", or the
+pencil / **E** in the browser), present it (**M**), or the other version or a PDF if it fits. With
+their first deck, add that the next one is a sentence away ("Make a presentation about …").
 
 ## The other version
 

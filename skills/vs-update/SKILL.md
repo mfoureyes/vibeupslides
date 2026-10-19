@@ -91,7 +91,8 @@ and whether anything needs doing:
   the old deck builder. Install the set again (`npx skills add mfoureyes/vibeupslides`) and remove the
   leftover `vs-style` folder from the skills directory, with the user's consent.
 
-Then rebuild one preview or deck to confirm the update works, and say that it does.
+Then rebuild one preview or deck to confirm the update works, and say that it does. End with one
+thing they can try now that is new, as a sentence they can say ("Try: …").
 
 ## Rules
 

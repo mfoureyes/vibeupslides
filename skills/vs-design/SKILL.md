@@ -29,6 +29,12 @@ python3 SKILL_DIR/scripts/bootstrap.py
 `VIBEUPSLIDES_HOME` says otherwise), sets it up if it is missing, prints the command, from then on
 `python3 ~/vibeupslides/vs.py <command>`, written `vs` below, and runs `vs status`.
 
+**The first start.** When the user is new (they just installed it or say it is their first time),
+say in one sentence before you run the script what it does: one folder `vibeupslides` for their
+brands and decks, with its own Python environment, and a browser for the checks (about 150 MB);
+one to two minutes, once. After `FIRST SETUP DONE`, go on with the route below; the user came
+here with a purpose, so no tour.
+
 If the script is not at that path (the skill came as a plugin and its files live elsewhere), find it:
 `find ~/.claude /mnt/skills -path '*vs-update/scripts/bootstrap.py' 2>/dev/null | head -1`.
 

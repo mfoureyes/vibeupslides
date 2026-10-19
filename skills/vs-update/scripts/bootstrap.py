@@ -64,9 +64,14 @@ if is_ws(ws) and any(e and os.path.exists(os.path.join(e, b)) for e in envs for 
     sys.exit(subprocess.call([sys.executable, launcher, "status"]))
 if not payload:
     sys.exit("The framework was not found next to this skill. Install the whole set: npx skills add mfoureyes/vibeupslides")
+first = not is_ws(ws)
+if first:
+    print(f"FIRST SETUP: making the workspace {ws} with its own Python environment and a browser for the checks (one to two minutes, once) ...", flush=True)
 code = subprocess.call([sys.executable, os.path.join(payload, "vs.py"), "init"] + (["--no-venv"] if os.environ.get("VS_NO_VENV") else []))
 if code == 0:
     print("command: python3", launcher, flush=True)
+    if first:
+        print("FIRST SETUP DONE: VibeUpSlides is ready. Brands and decks are kept in", ws, flush=True)
     if sandbox and not os.listdir(os.path.join(ws, "library")):   # a new session: brands and decks come from the backup the user uploaded
         ups = [f for d in (os.environ.get("VIBEUPSLIDES_UPLOADS"), "/mnt/user-data/uploads", os.path.join(user, "mnt", "uploads")) if d and os.path.isdir(d)
                for f in glob.glob(os.path.join(d, "*slides-workspace*.zip"))]

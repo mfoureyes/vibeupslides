@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.9.15
+- A clearer way in. vs-create is now also the start for anyone who says only "VibeUpSlides", asks what it can do, where to start, or for help: it introduces VibeUpSlides in three sentences and asks the one question that decides the route (a corporate design or website → vs-build, no brand → vs-design, "show me first" → the styles of vs-design). Users with a brand who ask for help get a short map of what they can say.
+- The first start is announced: when the user is new, Claude says before the setup what it makes (one folder, its own Python environment, a browser for the checks, one to two minutes, once). The setup prints `FIRST SETUP` and `FIRST SETUP DONE`; `vs.py status` prints `NEW HERE` with the two routes while there is no brand and no deck.
+- Every run ends with the next step: vs-build offers the first deck at once, vs-create closes the hand-over with two or three things to do now, vs-update with one new thing to try.
+- README: a quick start at the top (install, one sentence with or without a brand, look and correct), what the first start needs, and which skill when.
+
+For brand libraries made with an earlier version:
+- Nothing to do.
+
 ## 0.9.14
 - Two new styles from one brutalist look, an eleventh and a twelfth: **silber** (Silver), calm enough for a board, and **zine**, loud on purpose. Both in black and white with one pale mint on the black slides: titles in Archivo from very narrow to extra wide and heavy, labels in a typewriter mono (Space Mono) in black boxes, a wireframe globe cut by the edge of the cover, grid floors under chapters and the closing, registration crosses in the corners, rulers, barcodes and stars, figures in narrow heavy numerals inside ruled grids. Silber keeps the accent word in Archivo italic, content titles in bold mixed case and photos in clean black and white. Zine sets the accent word in blackletter (Grenze Gotisch), prints every photo as a coarse one-bit pattern, lays hazard tape across corners and graph paper under the white slides, puts the statement on mint and tilts its prints.
 - Masters of their own: `cover`, `chapter`, `closing`, `statement`, `statement_photo` (the lines in black bars in zine), `steps` and `kpis` as ruled grids, `agenda`, `split`, `cards`, `quote`, and three charts drawn anew: `share` as one bar cut into blocks instead of a ring, `venn` with squares laid over each other instead of circles, and `lineup`, three to five points set very large. The bars, columns, comparison, funnel and pyramid of the framework are drawn as blocks: the one that counts solid, the others grey (hatched in zine).

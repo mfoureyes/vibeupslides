@@ -109,6 +109,54 @@ with sync_playwright() as p:
     ok("no script errors", not errors, str(errors[:3]))
     br.close()
 
+# ---------------------------------------------------------------- time plan, deepenings, presenter panels
+code, out = vs("new", "talk", "--brand", "smoke", "--langs", "en")
+td = os.path.join(ws, "decks", "talk")
+json.dump({"title": "Talk", "brand": "smoke", "langs": ["en"], "minutes": 6, "slides": [
+    {"master": "cover", "title": "A talk"},
+    {"master": "chapter", "number": 1, "title": "First part"},
+    {"master": "bullets", "title": "Three points", "bullets": ["One.", "Two.", "Three."], "weight": 2},
+    {"master": "statement", "text": "A detail.", "deepen": "Details"},
+    {"master": "statement", "text": "Another detail.", "deepen": "Details"},
+    {"master": "statement", "text": "The point.", "plan": 30},
+    {"master": "closing", "title": "Thanks"}]}, open(os.path.join(td, "deck.json"), "w"))
+code, out = vs("build", "talk", "--no-shots")
+ok("a deck with deepenings and a length builds, and its checks look at every slide", code == 0 and "7 slides" in out, out[-500:])
+code, out = vs("plan", "talk")
+ok("vs plan spreads the length by weight and lists the deepening", code == 0 and "Length 6:00" in out and "deepening 'Details': slides 4, 5" in out and "  0:30    6" in out, out)
+with sync_playwright() as p:
+    br = p.chromium.launch(); pg = br.new_page(viewport={"width": 1280, "height": 720}); errors = []
+    pg.on("pageerror", lambda e: errors.append(str(e)))
+    thtml = "file://" + os.path.join(td, "Talk.html")
+    pg.goto(thtml + "?deepen=all"); pg.wait_for_timeout(1000)
+    every = pg.evaluate("document.querySelectorAll('#deck > .slide:not(.off)').length")
+    pg.goto(thtml); pg.wait_for_timeout(1000)
+    ok("deepenings are left out of the short version and opened by the address", every == 7 and pg.evaluate("document.querySelectorAll('#deck > .slide:not(.off)').length") == 5)
+    with pg.expect_popup() as pop: pg.keyboard.press("m")
+    w = pop.value; w.set_viewport_size({"width": 1500, "height": 950}); w.wait_for_timeout(900)
+    ok("the presenter view starts at Ready and does not run the time", w.evaluate("document.getElementById('m-rb').textContent") == "Ready" and not pg.evaluate("JSON.parse(localStorage.getItem('vs-clock:'+location.pathname)||'{}').start"))
+    ok("the film strip shows every slide, the deepening grey", w.evaluate("document.querySelectorAll('.m-th').length") == 7 and w.evaluate("document.querySelectorAll('.m-th.skip').length") == 2)
+    w.keyboard.press("ArrowRight"); w.wait_for_timeout(300); w.keyboard.press("ArrowRight"); w.wait_for_timeout(300)
+    ok("the first step forward starts the time, the plan follows the weights", w.evaluate("document.getElementById('m-rl').textContent") == "left on this slide"
+       and w.evaluate("document.querySelectorAll('#m-line .m-seg').length") == 5 and w.evaluate("!!document.querySelector('#m-line .m-soll')"))
+    ok("a yellow button offers the deepening that follows", "Details" in w.evaluate("document.getElementById('m-deep').innerText") and "show" in w.evaluate("document.getElementById('m-deep').className"))
+    w.click("#m-deep"); w.wait_for_timeout(600)
+    ok("taking the deepening in goes to its first slide", w.evaluate("document.getElementById('m-nr').textContent") == "04 / 07")
+    w.locator(".m-th").nth(5).locator("input").uncheck(); w.wait_for_timeout(400)
+    ok("the box under a slide leaves it out without going there, kept in the browser", w.evaluate("document.getElementById('m-nr').textContent") == "04 / 06"
+       and pg.evaluate("localStorage.getItem('vs-show:'+location.pathname)") == '{"6":false}')
+    hb = w.locator(".m-panel[data-panel=notes] .m-ph").bounding_box()
+    w.mouse.move(hb["x"] + 30, hb["y"] + 8); w.mouse.down(); w.mouse.move(400, 500, steps=6); w.mouse.move(20, 500, steps=6); w.mouse.up(); w.wait_for_timeout(300)
+    ok("a panel dragged by its header moves to that edge, and the layout is kept", w.evaluate("document.querySelector('.m-panel[data-panel=notes]').parentNode.getAttribute('data-dock')") == "left"
+       and json.loads(pg.evaluate("localStorage.getItem('vs-presenter-layout')"))["pos"]["notes"] == "left")
+    with w.expect_download() as dl: w.click("#m-report")
+    rep = open(dl.value.path(), encoding="utf-8-sig").read()
+    ok("the report holds plan and actual per slide and every change of slide", dl.value.suggested_filename.startswith("Talk_report_") and rep.startswith("No.,Slide,Chapter,Plan,Actual") and "Changes of slide" in rep, rep[:300])
+    pg.reload(); pg.wait_for_timeout(900)
+    ok("reloading the deck keeps the time", pg.evaluate("JSON.parse(localStorage.getItem('vs-clock:'+location.pathname)).start") > 0)
+    ok("no script errors with deepenings and schedule", not errors, str(errors[:3]))
+    br.close()
+
 # ---------------------------------------------------------------- video, embeds, scenes, present, pack
 import shutil, signal, time, zipfile, http.client
 ok("a deck without media stays one file", "this deck is a folder" not in out and not os.listdir(os.path.join(ws, "decks", "demo", "assets")))

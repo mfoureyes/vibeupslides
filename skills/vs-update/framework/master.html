@@ -544,8 +544,8 @@ html[data-motion="off"] #deck .bgvideo video{transition:none!important}
       ov=document.getElementById('ov'), np=document.getElementById('np'), npt=document.getElementById('npt'),
       toc=document.getElementById('toc'), timer=null, W=1920, H=1080,
       A=JSON.parse(document.getElementById('assets').textContent||'{}');
-  var T={de:{toc:'Gliederung',ov:'Übersicht, Klick öffnet die Folie, Esc schließt',notes:'Notizen',none:'Keine Notizen zu dieser Folie.',hint:'← → Navigation · M Moderation · G Gliederung · O Übersicht · L Sprache · A Animationen · D Dunkel · V Fassung · F Vollbild · S Bildschirme tauschen · N Notizen · P PDF-Export',mOn:'Animationen an',mOff:'Animationen aus',mNone:'Dieses Deck wurde ohne Animationen gebaut.',sDark:'Dunkle Folien',sLight:'Helle Folien',vLive:'LIVE',vRead:'LESEN',xLive:'PDF der Live-Fassung',xLiveS:'Folien wie im Vortrag',xRead:'PDF der Lesefassung',xReadS:'Folien mit Lesetext, Inhalt und Kapitelleiste',slide:'Folie',exK:'PDF-Export',exT:'PDF wird erstellt',exP:'Folie {i} von {n}. Animationen sind ausgeschaltet, alle Klickschritte und Quiz-Lösungen sind sichtbar.',exError:'Der PDF-Export ist fehlgeschlagen:',exMissing:'Für den PDF-Export fehlen die eingebauten Bibliotheken. Bitte das Deck mit dem aktuellen Master neu bauen.',mFile:'YouTube spielt nicht in einem Deck, das als Datei geöffnet wurde.',mOpen:'Video im Browser öffnen',mServe:'Im Deck läuft es, wenn das Deck mit „vs present“ gestartet wird.',mOffline:'Diese Folie braucht eine Internetverbindung.',mError:'Das Video lässt sich nicht abspielen.',mMuted:'Das Video läuft ohne Ton: Der Browser erlaubt Ton erst nach einem Klick oder Tastendruck. K schaltet ihn ein.',pbT:'Chrome hat das Moderationsfenster blockiert.',pbOpen:'Moderationsansicht öffnen',pbCancel:'Abbrechen',pbP:'Damit das nicht bei jedem Deck wieder passiert: in Chrome <code>chrome://settings/content/popups</code> öffnen und unter „Dürfen Pop-ups senden und Weiterleitungen verwenden“ den Eintrag <code>file:///*</code> hinzufügen. Für eine einzelne Datei reicht das Pop-up-Symbol rechts in der Adresszeile und „Immer zulassen“.'},
-         en:{toc:'Outline',ov:'Overview, click opens the slide, Esc closes',notes:'Notes',none:'No notes for this slide.',hint:'← → navigate · M presenter view · G outline · O overview · L language · A animations · D dark · V version · F full screen · S swap screens · N notes · P PDF export',mOn:'Animations on',mOff:'Animations off',mNone:'This deck was built without animations.',sDark:'Dark slides',sLight:'Light slides',vLive:'LIVE',vRead:'READ',xLive:'PDF of the live version',xLiveS:'slides as presented',xRead:'PDF of the reading version',xReadS:'slides with reader text, contents and section bar',slide:'Slide',exK:'PDF export',exT:'Creating the PDF',exP:'Slide {i} of {n}. Animations are off, all click steps and quiz answers are shown.',exError:'The PDF export failed:',exMissing:'The built-in libraries for the PDF export are missing. Please rebuild the deck with the current master.',mFile:'YouTube does not play in a deck that was opened as a file.',mOpen:'Open the video in the browser',mServe:'It plays inside the deck when the deck is started with “vs present”.',mOffline:'This slide needs an internet connection.',mError:'The video cannot be played.',mMuted:'The video plays without sound: the browser allows sound only after a click or key press. K turns it on.',pbT:'Chrome blocked the presenter window.',pbOpen:'Open presenter view',pbCancel:'Cancel',pbP:'To stop this from happening with every deck: open <code>chrome://settings/content/popups</code> in Chrome and add <code>file:///*</code> under “Allowed to send pop-ups and use redirects”. For a single file, the pop-up icon on the right of the address bar and “Always allow” is enough.'}};
+  var T={de:{toc:'Gliederung',ov:'Übersicht, Klick öffnet die Folie, Esc schließt',notes:'Notizen',none:'Keine Notizen zu dieser Folie.',hint:'← → Navigation · M Moderation · G Gliederung · O Übersicht · L Sprache · A Animationen · D Dunkel · V Fassung · X Vertiefungen · F Vollbild · S Bildschirme tauschen · N Notizen · P PDF-Export',mOn:'Animationen an',mOff:'Animationen aus',mNone:'Dieses Deck wurde ohne Animationen gebaut.',sDark:'Dunkle Folien',sLight:'Helle Folien',vLive:'LIVE',vRead:'LESEN',xLive:'PDF der Live-Fassung',xLiveS:'Folien wie im Vortrag',xRead:'PDF der Lesefassung',xReadS:'Folien mit Lesetext, Inhalt und Kapitelleiste',slide:'Folie',exK:'PDF-Export',exT:'PDF wird erstellt',exP:'Folie {i} von {n}. Animationen sind ausgeschaltet, alle Klickschritte und Quiz-Lösungen sind sichtbar.',exError:'Der PDF-Export ist fehlgeschlagen:',exMissing:'Für den PDF-Export fehlen die eingebauten Bibliotheken. Bitte das Deck mit dem aktuellen Master neu bauen.',mFile:'YouTube spielt nicht in einem Deck, das als Datei geöffnet wurde.',mOpen:'Video im Browser öffnen',mServe:'Im Deck läuft es, wenn das Deck mit „vs present“ gestartet wird.',mOffline:'Diese Folie braucht eine Internetverbindung.',mError:'Das Video lässt sich nicht abspielen.',mMuted:'Das Video läuft ohne Ton: Der Browser erlaubt Ton erst nach einem Klick oder Tastendruck. K schaltet ihn ein.',pbT:'Chrome hat das Moderationsfenster blockiert.',pbOpen:'Moderationsansicht öffnen',pbCancel:'Abbrechen',pbP:'Damit das nicht bei jedem Deck wieder passiert: in Chrome <code>chrome://settings/content/popups</code> öffnen und unter „Dürfen Pop-ups senden und Weiterleitungen verwenden“ den Eintrag <code>file:///*</code> hinzufügen. Für eine einzelne Datei reicht das Pop-up-Symbol rechts in der Adresszeile und „Immer zulassen“.'},
+         en:{toc:'Outline',ov:'Overview, click opens the slide, Esc closes',notes:'Notes',none:'No notes for this slide.',hint:'← → navigate · M presenter view · G outline · O overview · L language · A animations · D dark · V version · X deepenings · F full screen · S swap screens · N notes · P PDF export',mOn:'Animations on',mOff:'Animations off',mNone:'This deck was built without animations.',sDark:'Dark slides',sLight:'Light slides',vLive:'LIVE',vRead:'READ',xLive:'PDF of the live version',xLiveS:'slides as presented',xRead:'PDF of the reading version',xReadS:'slides with reader text, contents and section bar',slide:'Slide',exK:'PDF export',exT:'Creating the PDF',exP:'Slide {i} of {n}. Animations are off, all click steps and quiz answers are shown.',exError:'The PDF export failed:',exMissing:'The built-in libraries for the PDF export are missing. Please rebuild the deck with the current master.',mFile:'YouTube does not play in a deck that was opened as a file.',mOpen:'Open the video in the browser',mServe:'It plays inside the deck when the deck is started with “vs present”.',mOffline:'This slide needs an internet connection.',mError:'The video cannot be played.',mMuted:'The video plays without sound: the browser allows sound only after a click or key press. K turns it on.',pbT:'Chrome blocked the presenter window.',pbOpen:'Open presenter view',pbCancel:'Cancel',pbP:'To stop this from happening with every deck: open <code>chrome://settings/content/popups</code> in Chrome and add <code>file:///*</code> under “Allowed to send pop-ups and use redirects”. For a single file, the pop-up icon on the right of the address bar and “Always allow” is enough.'}};
   /* languages of the deck, in order of first appearance; a deck may have one or several */
   var LANGS=[]; all.forEach(function(s){ var l=s.getAttribute('lang'); if(l&&LANGS.indexOf(l)<0) LANGS.push(l); });
   var LKEY='vs-lang:'+location.pathname;
@@ -560,10 +560,26 @@ html[data-motion="off"] #deck .bgvideo video{transition:none!important}
   root.setAttribute('data-mode',MODE);
   if(MODE!=='reading'){ var mst=document.getElementById('mode-style'); if(mst) mst.parentNode.removeChild(mst); }
   function inVersion(s){ var o=s.getAttribute('data-only'); return !o||o===MODE; }
+  /* Deepenings and the choice of slides. A slide with data-deepen belongs to a deepening: it is left out of the short
+     version and taken in while presenting, from the film strip of the presenter view or all at once with X.
+     data-show is the presenter's own choice for one slide; it is saved into the deck file when the deck runs on the
+     local server of vs.py, opened as a file it is kept in this browser. ?deepen=all (or names) opens deepenings. */
+  var SHKEY='vs-show:'+location.pathname, showLocal={}, opened={}, deepOpen={}, deepAll=false;
+  var dq=location.search.match(/[?&]deepen=([^&#]*)/);
+  if(dq){ decodeURIComponent(dq[1]).split(',').forEach(function(g){ if(g==='all') deepAll=true; else if(g) deepOpen[g]=true; }); }
+  else { try{ showLocal=JSON.parse(localStorage.getItem(SHKEY)||'{}')||{}; }catch(e){ showLocal={}; } }
+  function slideKey(s){ var k=s.getAttribute('data-n'); return k!==null?k:'#'+all.indexOf(s); }
+  function inLang(s){ var l=s.getAttribute('lang'); return !l||l===lang; }
+  function shownByDeck(s){ var v=s.getAttribute('data-show'); return v!==null?v==='1':!s.getAttribute('data-deepen'); }
+  function planned(s){ var k=slideKey(s); return showLocal[k]!==undefined?!!showLocal[k]:shownByDeck(s); }      /* in the talk as prepared */
+  function inTalk(s){
+    if(MODE==='reading'||root.classList.contains('vs-editing')||deepAll||planned(s)) return true;
+    var g=s.getAttribute('data-deepen'); return !!opened[slideKey(s)]||!!(g&&deepOpen[g]);
+  }
   function langLabel(sep,cur,other){ return LANGS.map(function(l){ return l===lang?cur(l.toUpperCase()):other(l.toUpperCase()); }).join(sep); }
   function locale(){ try{ (1).toLocaleString(lang); return lang; }catch(e){ return 'en'; } }
   function applyLanguage(){
-    slides=all.filter(function(s){ var l=s.getAttribute('lang'); return (!l||l===lang)&&inVersion(s); });
+    slides=all.filter(function(s){ return inLang(s)&&inVersion(s)&&inTalk(s); });
     all.forEach(function(s){ s.classList.toggle('off', slides.indexOf(s)<0); });
     n=slides.length;
     document.documentElement.setAttribute('data-lang',lang); document.documentElement.lang=lang;
@@ -758,6 +774,7 @@ html[data-motion="off"] #deck .bgvideo video{transition:none!important}
     incoming.classList.toggle('back',back); void incoming.offsetWidth; incoming.classList.remove('back'); incoming.classList.add('active');
     frags(incoming).forEach(function(f){f.classList.toggle('on',!!back);});
     cur=i;
+    clockSlide(incoming);
     place(i);
     mediaEnter(incoming);
     presenterRender();
@@ -771,7 +788,7 @@ html[data-motion="off"] #deck .bgvideo video{transition:none!important}
     var ab=document.getElementById('about'), at=slides[i].getAttribute('data-about')||'';      /* a master preview says what each master is for */
     if(ab){ ab.textContent=at; ab.classList.toggle('on',!!at); }
   }
-  function next(){ if(sceneStep(1)) return; var g=stepGroups(slides[cur]).filter(stepOpen); if(g.length){g[0].els.forEach(function(x){x.classList.add('on');});presenterRender();return;} go(cur+1,1); }
+  function next(){ if(cur===0&&!clock.start) clockStart(); if(sceneStep(1)) return; var g=stepGroups(slides[cur]).filter(stepOpen); if(g.length){g[0].els.forEach(function(x){x.classList.add('on');});presenterRender();return;} go(cur+1,1); }
   function prev(){ if(sceneStep(-1)) return; var g=stepGroups(slides[cur]).filter(stepShown); if(g.length){g[g.length-1].els.forEach(function(x){x.classList.remove('on');});presenterRender();return;} go(cur-1,-1); }
 
   /* Build the outline */
@@ -795,6 +812,63 @@ html[data-motion="off"] #deck .bgvideo video{transition:none!important}
     go(Math.min(pos,n-1),1);
   }
   function toggleToc(){ toc.classList.toggle('on'); }
+  /* The slides of the talk changed (a deepening opened, a slide taken in or left out): the slide shown stays shown */
+  function reslide(to){
+    var was=slides[cur], ai=was?all.indexOf(was):0;
+    applyLanguage(); buildToc(); built=false; stripKey='';
+    if(!n) return;
+    var i=to?slides.indexOf(to):-1;
+    if(i<0&&was) i=slides.indexOf(was);
+    if(i>=0&&slides[i]===was){ cur=i; place(i); presenterRender(); return; }
+    if(i<0){ i=0; slides.forEach(function(s,k){ if(all.indexOf(s)<=ai) i=k; }); }
+    if(was){ mediaLeave(was); was.classList.remove('active'); }
+    cur=-1; go(i,1);
+  }
+  window.vsDeepenSync=function(){ reslide(); };      /* the editing shows every slide */
+  function deepenToggle(){ deepAll=!deepAll; if(!deepAll){ opened={}; deepOpen={}; } reslide(); }
+  /* the presenter's choice: a slide is part of the talk or not, without going there */
+  function choose(s,v){
+    var k=slideKey(s), save=canSave&&k.charAt(0)!=='#';
+    if(save){
+      delete showLocal[k];
+      all.forEach(function(x){ if(slideKey(x)!==k) return; if(v===!x.getAttribute('data-deepen')) x.removeAttribute('data-show'); else x.setAttribute('data-show',v?'1':'0'); });
+      vsPost('show',{n:parseInt(k,10)||0,value:v}).then(function(d){ if(!d||!d.ok) toast((d&&d.error)||'error',4000); }).catch(function(){});
+    } else { if(v===shownByDeck(s)) delete showLocal[k]; else showLocal[k]=v; }
+    try{ if(Object.keys(showLocal).length) localStorage.setItem(SHKEY,JSON.stringify(showLocal)); else localStorage.removeItem(SHKEY); }catch(e){}
+    if(!v) delete opened[k];
+    reslide();
+  }
+  function chooseReset(){ showLocal={}; try{ localStorage.removeItem(SHKEY); }catch(e){} opened={}; reslide(); }
+
+  /* ---------- Time of the talk ----------
+     The time runs from the start of the talk: the first step forward from the first slide, or Start in the presenter
+     view. Opening or loading the deck starts nothing. Kept in this browser, so reloading the deck keeps it; after
+     eight hours without a change it starts afresh. spent: time per slide (data-n), log: every change of slide with
+     the time of day and the elapsed time (for the report, later for a transcript). */
+  var CKEY='vs-clock:'+location.pathname, clock;
+  function clockBlank(){ return {start:0,pause:0,held:0,spent:{},at:null,since:0,log:[],target:clock?clock.target:0,touch:0}; }
+  clock=clockBlank();
+  try{ var cst=JSON.parse(localStorage.getItem(CKEY)||'null'); if(cst&&typeof cst==='object'){ for(var ck in cst) clock[ck]=cst[ck]; } }catch(e){}
+  if(clock.start&&Date.now()-(clock.touch||0)>8*3600000) clock=clockBlank();
+  function clockSave(){ clock.touch=Date.now(); try{ localStorage.setItem(CKEY,JSON.stringify(clock)); }catch(e){} }
+  function clockLive(){ return MODE==='live'&&!root.classList.contains('vs-editing')&&!root.classList.contains('export'); }
+  function running(){ return !!clock.start&&!clock.pause; }
+  function elapsed(){ return clock.start?(clock.pause||Date.now())-clock.start-clock.held:0; }
+  function spentOn(k){ return (clock.spent[k]||0)+(running()&&clock.at===k?Date.now()-clock.since:0); }
+  function clockBook(){ var now=Date.now(); if(running()&&clock.at!==null) clock.spent[clock.at]=(clock.spent[clock.at]||0)+(now-clock.since); clock.since=now; }
+  function clockStart(){
+    if(clock.start||!clockLive()) return;
+    var now=Date.now(), target=clock.target; clock=clockBlank(); clock.target=target; clock.start=now; clock.since=now;
+    if(slides[cur]){ clock.at=slideKey(slides[cur]); clock.log.push([clock.at,now,0]); }
+    clockSave(); presenterRender();
+  }
+  function clockReset(){ clock=clockBlank(); clockSave(); presenterRender(); }
+  function clockPause(){
+    if(!clock.start) return; clockBook();
+    if(clock.pause){ clock.held+=Date.now()-clock.pause; clock.pause=0; clock.since=Date.now(); } else clock.pause=Date.now();
+    clockSave(); presenterClock();
+  }
+  function clockSlide(s){ if(!clock.start) return; clockBook(); clock.at=slideKey(s); clock.log.push([clock.at,Date.now(),elapsed()]); clockSave(); }
 
   /* Animations on or off (key A). Off means: everything stands, slides and click steps cut. A deck built with
      "motion": "off" carries no motion set and cannot be switched on. */
@@ -877,6 +951,7 @@ html[data-motion="off"] #deck .bgvideo video{transition:none!important}
       case 's': case 'S': if(!fromPresenter) swapScreens(); break;
       case 't': case 'T': timerCommand('toggle'); break;
       case 'k': case 'K': mediaToggle(); break;
+      case 'x': case 'X': deepenToggle(); break;
       case 'r': case 'R': mediaReload(); break;
       case 'Escape': if(xmenu.classList.contains('on')) xmenu.classList.remove('on'); else if(toc.classList.contains('on')) toggleToc(); else if(np.classList.contains('on')) np.classList.remove('on'); break;
     }
@@ -1218,7 +1293,7 @@ html[data-motion="off"] #deck .bgvideo video{transition:none!important}
      A second window for the laptop: current slide, next slide, notes, clock, elapsed time and the
      controls for timer slides. Apart from a small gesture script the window has no script of its own,
      it is built and updated entirely from this window. While it is open, all buttons disappear here. */
-  var pwin=null, pdoc=null, presenterTick=null, presenterStart=0, presenterPause=0, notesFontSize=26;
+  var pwin=null, pdoc=null, presenterTick=null, notesFontSize=30;
   /* Notes can be written in the presenter view when the deck comes from the local server of vs.py (present, edit):
      they are saved into the deck file and stand on the slide from then on. */
   var canSave=false, noteFor=-1;
@@ -1240,60 +1315,375 @@ html[data-motion="off"] #deck .bgvideo video{transition:none!important}
          en:{title:'Presenter view',current:'Current slide',next:'Up next',end:'End of presentation',notes:'Notes',none:'No notes for this slide.',
               clicks:function(k){return k===1?'One more click on this slide':k+' more clicks on this slide';},
               back:'Back',forward:'Next',elapsed:'Elapsed',clock:'Time',timer:'Timer',start:'Start',pause:'Pause',finish:'End now',reset:'Reset',timeup:'Time is up',close:'Close presenter view',fullscreen:'Deck full screen',exitFullscreen:'Exit full screen',pressAgain:'Second screen allowed. Press M once more and the deck starts there in full screen.',clickHere:'Click here once for full screen',clickSub:'The browser only allows full screen from this window.',clickPresenter:'Click once in the deck window and it goes full screen.',swap:'Swap screens',swapHere:'Click here once to swap the screens',swapPresenter:'Click once in the deck window, then deck and presenter view swap screens.',swapNoPresenter:'Open the presenter view with M first, then swap the screens with S.',swapOneScreen:'Only one screen was found, swapping needs a second one.',swapManual:'This browser cannot move the windows itself. Please drag the deck and the presenter view to the other screen by hand.',video:'Video',embed:'Website',scene:'Scene',play:'Play',restart:'From the start',reload:'Reload',step:'Step',quiz:'Quiz',reveal:'Reveal',qreset:'Reset',answer:'Answer',qhelp:'Click the audience guess, wrong ones shake, the right one reveals',blocked:'The presenter window was blocked. Please allow pop-ups for this file and press M again.'}};
+  var MX={de:{time:'Zeitplan',strip:'Folien',view:'Ansicht',viewReset:'Ansicht zurücksetzen',viewHint:'Bereiche an ihrer Kopfzeile an einen Rand ziehen, Größen an den Kanten.',
+              ready:'Bereit',startTalk:'Start',resetTime:'Zeit zurücksetzen',resetAsk:'Wirklich zurücksetzen?',planned:'geplant',measure:'ohne Plan, die Zeit wird gemessen',
+              slideLeft:'Rest dieser Folie',onSlide:'auf dieser Folie',inPlan:'Im Plan',over:'drüber',ahead:'Vorsprung',endAt:'Ende voraussichtlich',length:'Dauer',
+              target:'Ziel',minutes:'Min.',report:'Auswertung',skipped:'übersprungen',slidesN:function(k){return k===1?'1 Folie':k+' Folien';},of:'von',
+              savedDeck:'Auswahl wird im Deck gespeichert',savedLocal:'Auswahl gilt nur in diesem Browser',selReset:'Auswahl zurücksetzen',
+              take:'In den Vortrag aufnehmen oder herausnehmen',pos:{top:'oben',left:'links',right:'rechts',bottom:'unten'},
+              colNr:'Nr.',colTitle:'Folie',colChap:'Kapitel',colPlan:'Plan',colActual:'Ist',colDiff:'Abweichung',colFrom:'von',colTo:'bis',total:'Gesamt',changes:'Folienwechsel'},
+         en:{time:'Schedule',strip:'Slides',view:'View',viewReset:'Reset view',viewHint:'Drag a panel by its header to an edge, sizes at the edges.',
+              ready:'Ready',startTalk:'Start',resetTime:'Reset time',resetAsk:'Really reset?',planned:'planned',measure:'no plan, the time is measured',
+              slideLeft:'left on this slide',onSlide:'on this slide',inPlan:'On time',over:'over',ahead:'ahead',endAt:'Expected end',length:'Length',
+              target:'Target',minutes:'min',report:'Report',skipped:'skipped',slidesN:function(k){return k===1?'1 slide':k+' slides';},of:'of',
+              savedDeck:'The choice is saved in the deck',savedLocal:'The choice holds in this browser only',selReset:'Reset choice',
+              take:'Take into the talk or leave out',pos:{top:'top',left:'left',right:'right',bottom:'bottom'},
+              colNr:'No.',colTitle:'Slide',colChap:'Chapter',colPlan:'Plan',colActual:'Actual',colDiff:'Difference',colFrom:'from',colTo:'to',total:'Total',changes:'Changes of slide'}};
+  Object.keys(MX).forEach(function(l){ for(var k in MX[l]) MT[l][k]=MX[l][k]; });
   var MCSS=
-    'html,body{margin:0;height:100%;overflow:hidden;background:#1A1A1C;color:#fff;font-family:var(--font)}'+
-    'html body{display:grid;grid-template-rows:auto 1fr;cursor:default!important}'+
-    '#m-top{display:flex;align-items:center;gap:28px;padding:14px 24px;background:#2B2B2D;font-size:15px;letter-spacing:.06em}'+
-    '#m-top .m-brand{font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-text);font-size:13px}'+
+    'html,body{margin:0;height:100%;overflow:hidden;background:#141416;color:#fff;font-family:var(--font)}'+
+    'html body{display:grid;grid-template-rows:auto minmax(0,1fr);cursor:default!important}'+
+    '#m-top{position:relative;z-index:5;display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:10px 16px;background:#2B2B2D;font-size:14px;letter-spacing:.04em}'+
+    '#m-top .m-brand{font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-text);font-size:12px}'+
     '#m-top .m-nr{font-weight:700;font-size:20px;letter-spacing:.08em}#m-top .m-nr span{opacity:.5}'+
-    '#m-top .m-chap{opacity:.6;text-transform:uppercase;letter-spacing:.14em;font-size:12px;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}'+
+    '#m-top .m-chap{opacity:.6;text-transform:uppercase;letter-spacing:.14em;font-size:12px;flex:1;min-width:40px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}'+
     '#m-top .m-time{display:flex;flex-direction:column;align-items:flex-end;line-height:1.1}'+
     '#m-top .m-time small{font-size:10px;letter-spacing:.2em;text-transform:uppercase;opacity:.55}'+
+    '#m-top .m-time b{font-size:22px;font-variant-numeric:tabular-nums}'+
     '#m-top,#m-main{color:#fff}#m-top b,#m-npt b,#m-npt strong{color:#fff}'+
-    '#m-top .m-time b{font-size:24px;font-variant-numeric:tabular-nums}'+
     '.m-btn{font:inherit;font-weight:700;font-size:14px;letter-spacing:.04em;color:#fff;background:transparent;border:1.5px solid rgba(255,255,255,.35);padding:8px 12px;cursor:pointer;line-height:1;border-radius:4px}'+
     '.m-btn:hover{background:rgba(255,255,255,.12);border-color:#fff}.m-btn.accent{background:var(--accent);border-color:var(--accent)}.m-btn.accent:hover{background:color-mix(in srgb,var(--accent) 84%,#000)}'+
-    '#m-main{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:22px;padding:22px 24px;min-height:0}'+
-    '#m-left,#m-right{display:flex;flex-direction:column;gap:14px;min-height:0}'+
-    '.m-label{font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.55)}'+
-    '.m-frame{position:relative;width:100%;aspect-ratio:16/9;background:#fff;overflow:hidden;flex:none}'+
+    '.m-btn.warn{border-color:#F2C14E;color:#F2C14E}.m-btn.ask{background:#A3262A;border-color:#A3262A;color:#fff}'+
+    '#m-nav{display:flex;gap:8px;align-items:stretch}#m-nav .m-btn{font-size:18px;padding:11px 18px}#m-forward{min-width:150px}'+
+    '#m-forward small{display:block;font-size:11px;font-weight:500;letter-spacing:.02em;opacity:.9;margin-top:4px}'+
+    '#m-deep{display:none;background:#F2C14E;border-color:#F2C14E;color:#1A1A1C;font-size:14px!important;max-width:320px;text-align:left}#m-deep.show{display:block}'+
+    '#m-deep small{display:block;font-size:11px;font-weight:500;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}'+
+    '#m-menu{position:absolute;right:16px;top:100%;margin-top:6px;display:none;min-width:300px;padding:12px 14px;background:#2B2B2D;border:1px solid rgba(255,255,255,.2);border-radius:8px;box-shadow:0 12px 40px rgba(0,0,0,.5);z-index:30}'+
+    '#m-menu.on{display:block}.m-mrow{display:flex;align-items:center;gap:6px;padding:5px 0}.m-mrow label{flex:1;display:flex;gap:8px;align-items:center;font-size:14px;cursor:pointer}'+
+    '.m-mrow .m-btn{padding:5px 8px;font-size:12px}.m-mrow .m-btn.on{background:var(--accent);border-color:var(--accent)}.m-mhint{font-size:12px;opacity:.6;margin:8px 0;max-width:300px;line-height:1.4}'+
+    '#m-main{display:grid;grid-template-areas:"top top top" "left center right" "bottom bottom bottom";min-height:0;padding:10px}'+
+    '.m-dock{position:relative;display:flex;min-width:0;min-height:0}.m-dock.empty{display:none}'+
+    '.m-dock[data-dock=top]{grid-area:top;padding-bottom:12px}.m-dock[data-dock=bottom]{grid-area:bottom;padding-top:12px}'+
+    '.m-dock[data-dock=left]{grid-area:left;flex-direction:column;padding-right:12px}.m-dock[data-dock=right]{grid-area:right;flex-direction:column;padding-left:12px}'+
+    '.m-grip{position:absolute;z-index:3}.m-grip::after{content:"";position:absolute;background:var(--accent);opacity:0;transition:opacity .15s}.m-grip:hover::after,.m-grip.on::after{opacity:1}'+
+    '.m-dock[data-dock=top]>.m-grip{left:0;right:0;bottom:0;height:12px;cursor:row-resize}.m-dock[data-dock=bottom]>.m-grip{left:0;right:0;top:0;height:12px;cursor:row-resize}'+
+    '.m-dock[data-dock=left]>.m-grip{top:0;bottom:0;right:0;width:12px;cursor:col-resize}.m-dock[data-dock=right]>.m-grip{top:0;bottom:0;left:0;width:12px;cursor:col-resize}'+
+    '.m-dock[data-dock=top]>.m-grip::after,.m-dock[data-dock=bottom]>.m-grip::after{left:0;right:0;top:5px;height:3px}.m-dock[data-dock=left]>.m-grip::after,.m-dock[data-dock=right]>.m-grip::after{top:0;bottom:0;left:5px;width:3px}'+
+    '.m-split{flex:none;position:relative}.m-dock[data-dock=top]>.m-split,.m-dock[data-dock=bottom]>.m-split{width:10px;cursor:col-resize}.m-dock[data-dock=left]>.m-split,.m-dock[data-dock=right]>.m-split{height:10px;cursor:row-resize}'+
+    '.m-split:hover{background:color-mix(in srgb,var(--accent) 50%,transparent)}'+
+    '#m-center{grid-area:center;display:flex;flex-direction:column;gap:10px;min-width:0;min-height:0}'+
+    '#m-curwrap{flex:1;min-height:0;display:grid;place-items:center;overflow:hidden}'+
+    '.m-panel{position:relative;display:flex;flex-direction:column;min-width:0;min-height:0;flex:var(--g,1) 1 0;background:#1E1E20;border-radius:6px;overflow:hidden}'+
+    '.m-panel.m-moving{outline:2px dashed var(--accent);opacity:.6}'+
+    '.m-ph{display:flex;align-items:center;gap:8px;padding:6px 10px;cursor:grab;user-select:none;-webkit-user-select:none;border-bottom:1px solid rgba(255,255,255,.07)}'+
+    '.m-ph .m-btn{padding:4px 9px;font-size:12px}.m-pb{flex:1;min-height:0;position:relative;display:flex;flex-direction:column}'+
+    '.m-label{font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.6);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}'+
+    '.m-frame{position:relative;background:#fff;overflow:hidden;flex:none}'+
     '#m-cur{outline:3px solid var(--accent)}'+
     '.m-mini{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;pointer-events:none}'+
     '.m-mini .slide{opacity:1!important;visibility:visible!important;transform:none!important;transition:none!important}'+
     '.m-mini *,.m-mini *::before,.m-mini *::after{animation:none!important;transition:none!important}'+
     '.m-mini .tbuttons,.m-mini .tsmall-row{visibility:hidden}'+
     '.m-empty{position:absolute;inset:0;display:grid;place-items:center;background:#2B2B2D;color:rgba(255,255,255,.6);font-size:18px;letter-spacing:.1em;text-transform:uppercase}'+
-    '#m-nav{display:flex;gap:10px;align-items:center}#m-nav .m-btn{font-size:16px;padding:12px 22px}'+
-    '#m-click{font-size:14px;color:var(--accent-text);font-weight:700;letter-spacing:.04em;min-height:1em}'+
-    '#m-nexttitle{font-size:15px;opacity:.8;margin-top:-6px}'+
-    '#m-timer{display:none;align-items:center;gap:10px;flex-wrap:wrap;padding:12px 14px;background:#2B2B2D;border-left:4px solid var(--accent)}'+
-    '#m-timer.show{display:flex}#m-timer .m-tz{font-weight:900;font-size:34px;font-variant-numeric:tabular-nums;min-width:118px}'+
-    '#m-timer.timeup .m-tz{color:var(--accent-text)}'+
-    '#m-quiz{display:none;align-items:center;gap:10px;flex-wrap:wrap;padding:12px 14px;background:#2B2B2D;border-left:4px solid var(--accent)}'+
-    '#m-media{display:none;align-items:center;gap:10px;flex-wrap:wrap;padding:12px 14px;background:#2B2B2D;border-left:4px solid var(--accent)}'+
-    '#m-media.show{display:flex}#m-media .m-ql{font-size:15px;opacity:.85;font-variant-numeric:tabular-nums}'+
-    '#m-quiz.show{display:flex}#m-quiz .m-btn.q{min-width:54px;font-size:18px}#m-quiz .m-btn.q.r{border-color:var(--accent);color:#fff}'+
+    '#m-nextbox{flex:1;min-height:0;display:grid;place-items:center;padding:8px;overflow:hidden}#m-nexttitle{padding:0 10px 8px;font-size:14px;opacity:.8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}'+
+    '#m-npt{flex:1;overflow:auto;line-height:1.45;font-weight:400;color:#fff;padding:12px 16px;background:#0E0E10}'+
+    '#m-npt i{opacity:.5}#m-npt b,#m-npt strong{font-weight:700}#m-npt p{margin:0 0 .6em}'+
+    '#m-npt[contenteditable]{outline:none;cursor:text}#m-npt[contenteditable]:focus{background:#19191B}#m-npt[contenteditable]:empty::before{content:attr(data-ph);opacity:.5;font-style:italic}'+
+    '#m-click{font-size:14px;color:var(--accent-text);font-weight:700;letter-spacing:.04em;min-height:0}#m-click:empty{display:none}'+
+    '#m-timer,#m-quiz,#m-media{display:none;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 14px;background:#2B2B2D;border-left:4px solid var(--accent)}'+
+    '#m-timer.show,#m-quiz.show,#m-media.show{display:flex}#m-timer .m-tz{font-weight:900;font-size:34px;font-variant-numeric:tabular-nums;min-width:118px}'+
+    '#m-timer.timeup .m-tz{color:var(--accent-text)}#m-timer .m-label,#m-quiz .m-label,#m-media .m-label{flex:none}'+
+    '#m-media .m-ql{font-size:15px;opacity:.85;font-variant-numeric:tabular-nums}'+
+    '#m-quiz .m-btn.q{min-width:54px;font-size:18px}#m-quiz .m-btn.q.r{border-color:var(--accent);color:#fff}'+
     '#m-quiz .m-btn.q.r::after{content:" ✓";color:var(--accent-text)}#m-quiz .m-btn.q.gone{opacity:.35;text-decoration:line-through}'+
     '#m-quiz .m-ql{font-size:15px;opacity:.85}#m-quiz .m-qh{flex-basis:100%;font-size:12px;opacity:.55;letter-spacing:.04em}'+
-    '#m-notes{flex:1;min-height:0;display:flex;flex-direction:column;gap:8px}'+
-    '#m-npt{flex:1;overflow:auto;line-height:1.5;font-weight:300;padding-right:8px}'+
-    '#m-npt i{opacity:.5}#m-npt b,#m-npt strong{font-weight:700}'+
-    '#m-npt[contenteditable]{outline:none;cursor:text;border-radius:6px;padding:8px 10px;margin:-8px -10px}#m-npt[contenteditable]:hover{background:#232325}#m-npt[contenteditable]:focus{background:#2B2B2D}'+
-    '#m-npt[contenteditable]:empty::before{content:attr(data-ph);opacity:.5;font-style:italic}'+
-    '.m-header{display:flex;justify-content:space-between;align-items:center}'+
-    '.m-header .m-btn{padding:4px 9px;font-size:13px}';
+    /* schedule */
+    '#m-tl{flex:1;min-height:0;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:18px;align-items:center;padding:8px 14px}'+
+    '.m-dock[data-dock=left] #m-tl,.m-dock[data-dock=right] #m-tl{grid-template-columns:minmax(0,1fr);align-content:start}'+
+    '.m-rem{display:grid;grid-template-columns:auto auto;align-items:center;gap:6px 12px;min-width:150px}#m-rb{grid-row:span 2}'+
+    '#m-rb{color:#fff;font-size:38px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1;padding:6px 10px;border-radius:6px;white-space:nowrap}'+
+    '#m-rb.g{background:#1F6F3A}#m-rb.y{background:#8A6A12}#m-rb.r{background:#A3262A}#m-rl{font-size:11px;letter-spacing:.14em;text-transform:uppercase;opacity:.65;align-self:end}'+
+    '#m-go{display:none;justify-self:start;align-self:start}#m-go.show{display:inline-block}'+
+    '#m-line{position:relative;height:66px;min-width:0}'+
+    '.m-segs{position:absolute;left:0;right:0;top:24px;height:18px;display:flex;gap:2px}'+
+    '.m-seg{flex:none;min-width:2px;height:100%;background:rgba(255,255,255,.18);border-radius:2px;cursor:pointer}.m-seg:hover{background:rgba(255,255,255,.4)}'+
+    '.m-seg.ok{background:#3FA35E}.m-seg.over{background:#D9473F}.m-seg.cur{background:#fff}'+
+    '.m-chm{position:absolute;top:0;bottom:0;border-left:1px solid rgba(255,255,255,.4);padding-left:4px;font-size:11px;line-height:1.25;color:rgba(255,255,255,.75);white-space:nowrap;pointer-events:none}'+
+    '.m-chm b{display:block;font-weight:700;max-width:180px;overflow:hidden;text-overflow:ellipsis;color:#fff}.m-chm i{position:absolute;top:46px;left:4px;font-style:normal;font-variant-numeric:tabular-nums}'+
+    '.m-chm i.over{color:#FF8A80}.m-chm i.ok{color:#8FE0A3}'+
+    '.m-soll,.m-ist{position:absolute;top:18px;height:30px;pointer-events:none}.m-soll{width:2px;background:#F2C14E}.m-ist{width:3px;background:#fff;box-shadow:0 0 0 1px #141416}'+
+    '.m-stat{display:grid;grid-template-columns:auto auto;justify-items:end;align-items:center;gap:4px 10px;min-width:200px;font-size:13px}#m-st,#m-end{grid-column:span 2}'+
+    '.m-dock[data-dock=left] .m-stat,.m-dock[data-dock=right] .m-stat{justify-items:start}'+
+    '#m-st{color:#fff;font-size:19px;font-weight:800}#m-st.ok{color:#8FE0A3}#m-st.over{color:#FF8A80}#m-st.ahead{color:#8FD3FF}#m-end{opacity:.8;font-variant-numeric:tabular-nums}'+
+    '.m-target{display:flex;align-items:center;gap:6px;opacity:.85}.m-target input{width:56px;font:inherit;font-weight:700;background:#0E0E10;color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:4px;padding:4px 6px}'+
+    '#m-report{padding:5px 9px;font-size:12px}'+
+    /* film strip */
+    '#m-strip{flex:1;min-height:0;display:flex;gap:10px;overflow:auto;padding:8px 10px}'+
+    '.m-dock[data-dock=left] #m-strip,.m-dock[data-dock=right] #m-strip{flex-direction:column}'+
+    '.m-th{flex:none;display:flex;flex-direction:column;gap:4px;cursor:pointer}'+
+    '.m-thf{position:relative;overflow:hidden;background:#fff;outline:1px solid rgba(255,255,255,.15)}.m-th:hover .m-thf{outline-color:rgba(255,255,255,.6)}'+
+    '.m-th.cur .m-thf{outline:3px solid var(--accent)}.m-th.skip .m-thf{opacity:.32;filter:grayscale(1)}'+
+    '.m-thl{display:flex;align-items:center;gap:6px;font-size:12px;font-variant-numeric:tabular-nums;color:rgba(255,255,255,.75);white-space:nowrap;overflow:hidden}'+
+    '.m-thl input{margin:0;accent-color:var(--accent);cursor:pointer}.m-thl b{color:#fff;font-weight:700;overflow:hidden;text-overflow:ellipsis}.m-th.skip .m-thl b{color:#F2C14E;font-weight:500}'+
+    '.m-tt{margin-left:auto}.m-th.done .m-tt{color:#8FE0A3}.m-th.over .m-tt{color:#FF8A80}'+
+    '.m-sel{font-size:11px;opacity:.6;white-space:nowrap}'+
+    '#m-drop{position:fixed;inset:0;z-index:20;display:none;pointer-events:none}#m-drop.on{display:block}'+
+    '#m-drop div{position:absolute;background:color-mix(in srgb,var(--accent) 25%,transparent);border:2px dashed var(--accent);opacity:.3;border-radius:8px}#m-drop div.hot{opacity:1}'+
+    'body.m-drag,body.m-drag *{cursor:grabbing!important;user-select:none!important}';
 
   function presenterText(){ return MT[lang]||MT.en; }
   function pad2(v){ return String(v).padStart(2,'0'); }
+  function mmss(ms){ var neg=ms<0, t=Math.round(Math.abs(ms)/1000); return (neg?'−':'')+Math.floor(t/60)+':'+pad2(t%60); }
+  function dayTime(ms){ var d=new Date(ms); return pad2(d.getHours())+':'+pad2(d.getMinutes()); }
+  function slideTitle(s){ return s.getAttribute('data-title')||(s.querySelector('h1,h2')?s.querySelector('h1,h2').textContent.trim():''); }
   function presenterClone(s,asNext){
     var k=mediaStill(s.cloneNode(true)); k.classList.add('active'); k.classList.remove('leave','back','off');
     if(asNext) k.querySelectorAll('.f').forEach(function(f){f.classList.remove('on');});
     return k;
   }
+  /* planned time per slide of the talk in ms, or null when there is no plan and the time is only measured.
+     data-plan (seconds) and timer slides stand as they are; the length of the talk (typed in, or "minutes" of the
+     deck) is spread over the other slides by their data-weight (chapter slides less). */
+  function talkPlan(){
+    var tgt=(clock.target||parseFloat(root.getAttribute('data-minutes'))||0)*60000, fixed=0, wsum=0, nf=0;
+    var base=slides.map(function(s){
+      var p=parseFloat(s.getAttribute('data-plan')); if(!(p>=0)&&s.getAttribute('data-timer')) p=parseFloat(s.getAttribute('data-timer'))*60;
+      if(p>=0){ fixed+=p*1000; nf++; return {f:p*1000}; }
+      var w=parseFloat(s.getAttribute('data-weight')); if(!(w>=0)) w=s.classList.contains('chapter')?.4:(s.classList.contains('cover')?.6:1);
+      wsum+=w; return {w:w};
+    });
+    if(!tgt&&!nf) return null;
+    if(tgt&&!wsum) return base.map(function(b){ return fixed?b.f*tgt/fixed:0; });
+    var per=tgt?Math.max(0,tgt-fixed)/wsum:fixed/nf;
+    return base.map(function(b){ return b.f!==undefined?b.f:b.w*per; });
+  }
+  function frameFit(fr,box){
+    if(!fr||!box) return; var w=box.clientWidth, h=box.clientHeight; if(!w||!h) return;
+    var cs=pwin.getComputedStyle(box), pw=w-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight), ph=h-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom);
+    var fw=Math.max(40,Math.min(pw,ph*16/9)); fr.style.width=fw+'px'; fr.style.height=(fw*9/16)+'px';
+    var m=fr.querySelector('.m-mini'); if(m) m.style.transform='scale('+(fw/W)+')';
+  }
   function presenterScale(){
     if(!pdoc) return;
-    pdoc.querySelectorAll('.m-frame').forEach(function(r){ var m=r.querySelector('.m-mini'); if(m) m.style.transform='scale('+(r.clientWidth/W)+')'; });
+    frameFit(pdoc.getElementById('m-cur'),pdoc.getElementById('m-curwrap'));
+    frameFit(pdoc.getElementById('m-next'),pdoc.getElementById('m-nextbox'));
+    var box=pdoc.getElementById('m-strip'); if(!box||!box.offsetParent) return;
+    var side=lay.pos.strip==='left'||lay.pos.strip==='right', tw, th;
+    if(side){ tw=Math.max(80,box.clientWidth-22); th=tw*9/16; } else { th=Math.max(36,box.clientHeight-16-24); tw=th*16/9; }
+    box.querySelectorAll('.m-thf').forEach(function(f){ f.style.width=tw+'px'; f.style.height=th+'px'; f.firstChild.style.transform='scale('+(tw/W)+')'; });
+    box.querySelectorAll('.m-th').forEach(function(t){ t.style.width=tw+'px'; });
   }
+
+  /* ---------- Panels of the presenter view ----------
+     Schedule, next slide, notes and the film strip are panels; each stands at one edge of the current slide, which
+     takes the rest. Drag a panel by its header to another edge, its size at the inner edge, two panels at one edge
+     against each other at the line between them. The menu View hides them and resets the layout. Kept in the browser. */
+  var PANELS=['time','next','notes','strip'], LAYKEY='vs-presenter-layout',
+      LAYDEF={pos:{time:'top',next:'right',notes:'right',strip:'bottom'},hide:{},size:{top:150,left:380,right:540,bottom:176},grow:{}}, lay;
+  function layDefault(){ return JSON.parse(JSON.stringify(LAYDEF)); }
+  lay=layDefault();
+  try{ var lgs=JSON.parse(localStorage.getItem(LAYKEY)||'null');
+    if(lgs&&lgs.pos){ ['pos','hide','size','grow'].forEach(function(k){ for(var x in (lgs[k]||{})) lay[k][x]=lgs[k][x]; }); if(lgs.font) notesFontSize=lgs.font; } }catch(e){}
+  function laySave(){ lay.font=notesFontSize; try{ localStorage.setItem(LAYKEY,JSON.stringify(lay)); }catch(e){} }
+  function dockOf(z){ return pdoc.querySelector('#m-main > .m-dock[data-dock='+z+']'); }
+  function layout(){
+    if(!pdoc) return;
+    var hold=pdoc.getElementById('m-panels'), main=pdoc.getElementById('m-main');
+    PANELS.forEach(function(p){ hold.appendChild(pdoc.querySelector('.m-panel[data-panel='+p+']')); });
+    ['top','left','right','bottom'].forEach(function(z){ dockOf(z).innerHTML=''; });
+    PANELS.forEach(function(p){
+      if(lay.hide[p]) return;
+      var el=pdoc.querySelector('.m-panel[data-panel='+p+']'), d=dockOf(lay.pos[p]||LAYDEF.pos[p]);
+      if(d.querySelector('.m-panel')){ var sp=pdoc.createElement('div'); sp.className='m-split'; d.appendChild(sp); splitDrag(sp); }
+      el.style.setProperty('--g',lay.grow[p]||1); d.appendChild(el);
+    });
+    function sz(z){ var d=dockOf(z), has=!!d.querySelector('.m-panel'); d.classList.toggle('empty',!has);
+      if(has){ var g=pdoc.createElement('div'); g.className='m-grip'; d.appendChild(g); gripDrag(g,z); }
+      return has?Math.round(lay.size[z])+'px':'0px'; }
+    main.style.gridTemplateRows=sz('top')+' minmax(0,1fr) '+sz('bottom');
+    main.style.gridTemplateColumns=sz('left')+' minmax(0,1fr) '+sz('right');
+    stripKey=''; presenterRender();
+  }
+  function dragging(e,move,done,cls){
+    e.preventDefault(); var b=pdoc.body; b.classList.add('m-drag'); if(cls) cls.classList.add('on');
+    function mv(ev){ move(ev); presenterScale(); }
+    function up(ev){ pdoc.removeEventListener('mousemove',mv); pdoc.removeEventListener('mouseup',up); b.classList.remove('m-drag'); if(cls) cls.classList.remove('on'); if(done) done(ev); laySave(); presenterScale(); }
+    pdoc.addEventListener('mousemove',mv); pdoc.addEventListener('mouseup',up);
+  }
+  function gripDrag(g,z){
+    g.addEventListener('dblclick',function(){ lay.size[z]=LAYDEF.size[z]; laySave(); layout(); });
+    g.addEventListener('mousedown',function(e){
+      var x0=e.clientX, y0=e.clientY, s0=lay.size[z], main=pdoc.getElementById('m-main'), r=main.getBoundingClientRect();
+      dragging(e,function(ev){
+        var v=z==='top'?s0+ev.clientY-y0:z==='bottom'?s0-(ev.clientY-y0):z==='left'?s0+ev.clientX-x0:s0-(ev.clientX-x0);
+        var max=(z==='top'||z==='bottom'?r.height:r.width)*.7;
+        lay.size[z]=Math.max(70,Math.min(max,v));
+        main.style.gridTemplateRows=(dockOf('top').classList.contains('empty')?0:lay.size.top)+'px minmax(0,1fr) '+(dockOf('bottom').classList.contains('empty')?0:lay.size.bottom)+'px';
+        main.style.gridTemplateColumns=(dockOf('left').classList.contains('empty')?0:lay.size.left)+'px minmax(0,1fr) '+(dockOf('right').classList.contains('empty')?0:lay.size.right)+'px';
+      },null,g);
+    });
+  }
+  function splitDrag(sp){
+    sp.addEventListener('mousedown',function(e){
+      var a=sp.previousElementSibling, b=sp.nextElementSibling; if(!a||!b) return;
+      var row=sp.parentNode.getAttribute('data-dock')==='top'||sp.parentNode.getAttribute('data-dock')==='bottom';
+      var ra=a.getBoundingClientRect(), rb=b.getBoundingClientRect(), sa=row?ra.width:ra.height, sb=row?rb.width:rb.height, p0=row?e.clientX:e.clientY;
+      dragging(e,function(ev){
+        var d=(row?ev.clientX:ev.clientY)-p0, na=Math.max(60,Math.min(sa+sb-60,sa+d)), nb=sa+sb-na;
+        lay.grow[a.getAttribute('data-panel')]=na; lay.grow[b.getAttribute('data-panel')]=nb;
+        a.style.setProperty('--g',na); b.style.setProperty('--g',nb);
+      });
+    });
+  }
+  function panelDrag(el){
+    var p=el.getAttribute('data-panel');
+    el.querySelector('.m-ph').addEventListener('mousedown',function(e){
+      if(e.button!==0||e.target.closest('button,input,label')) return;
+      if(pdoc.activeElement&&pdoc.activeElement.blur) pdoc.activeElement.blur();      /* a click on a header ends writing the notes */
+      var x0=e.clientX, y0=e.clientY, moving=false, hot=null, drop=pdoc.getElementById('m-drop'), main=pdoc.getElementById('m-main');
+      function zones(){ var r=main.getBoundingClientRect(), k=.24;
+        var z={top:[r.left,r.top,r.width,r.height*k],bottom:[r.left,r.bottom-r.height*k,r.width,r.height*k],
+               left:[r.left,r.top+r.height*k,r.width*k,r.height*(1-2*k)],right:[r.right-r.width*k,r.top+r.height*k,r.width*k,r.height*(1-2*k)]};
+        drop.querySelectorAll('div').forEach(function(d){ var v=z[d.getAttribute('data-z')]; d.style.left=v[0]+'px'; d.style.top=v[1]+'px'; d.style.width=v[2]+'px'; d.style.height=v[3]+'px'; }); }
+      function zoneAt(x,y){ var r=main.getBoundingClientRect(), fx=(x-r.left)/r.width, fy=(y-r.top)/r.height, d={top:fy,bottom:1-fy,left:fx,right:1-fx}, best='top';
+        for(var k in d) if(d[k]<d[best]) best=k; return best; }
+      dragging(e,function(ev){
+        if(!moving&&Math.abs(ev.clientX-x0)+Math.abs(ev.clientY-y0)>6){ moving=true; zones(); drop.classList.add('on'); el.classList.add('m-moving'); }
+        if(!moving) return; hot=zoneAt(ev.clientX,ev.clientY);
+        drop.querySelectorAll('div').forEach(function(d){ d.classList.toggle('hot',d.getAttribute('data-z')===hot); });
+      },function(){
+        drop.classList.remove('on'); el.classList.remove('m-moving');
+        if(moving&&hot&&hot!==lay.pos[p]){ lay.pos[p]=hot; delete lay.grow[p]; laySave(); layout(); }
+      });
+    });
+  }
+  function viewMenu(open){
+    if(!pdoc) return;
+    var m=pdoc.getElementById('m-menu'), t=presenterText();
+    if(open===undefined) open=!m.classList.contains('on');
+    m.classList.toggle('on',open); if(!open) return;
+    m.innerHTML='';
+    PANELS.forEach(function(p){
+      var r=pdoc.createElement('div'); r.className='m-mrow';
+      r.innerHTML='<label><input type="checkbox"'+(lay.hide[p]?'':' checked')+'> '+t[p==='time'?'time':p==='next'?'next':p==='notes'?'notes':'strip']+'</label>';
+      r.querySelector('input').addEventListener('change',function(){ if(this.checked) delete lay.hide[p]; else lay.hide[p]=true; laySave(); layout(); });
+      ['top','left','right','bottom'].forEach(function(z){
+        var b=pdoc.createElement('button'); b.className='m-btn'+(lay.pos[p]===z?' on':''); b.textContent=({top:'↑',left:'←',right:'→',bottom:'↓'})[z]; b.title=t.pos[z];
+        b.addEventListener('click',function(){ lay.pos[p]=z; delete lay.hide[p]; delete lay.grow[p]; laySave(); layout(); viewMenu(true); });
+        r.appendChild(b);
+      });
+      m.appendChild(r);
+    });
+    var h=pdoc.createElement('div'); h.className='m-mhint'; h.textContent=t.viewHint; m.appendChild(h);
+    var rs=pdoc.createElement('button'); rs.className='m-btn'; rs.textContent=t.viewReset;
+    rs.addEventListener('click',function(){ lay=layDefault(); laySave(); layout(); viewMenu(false); });
+    m.appendChild(rs);
+  }
+
+  /* ---------- Film strip: every slide of the deck, also those left out of the talk ---------- */
+  var stripKey='', stripCur=null;
+  function pool(){ return all.filter(function(s){ return inLang(s)&&inVersion(s); }); }
+  function stripBuild(){
+    var box=pdoc.getElementById('m-strip'), p=pool(), key=lang+'|'+p.length+'|'+n;
+    if(key===stripKey&&box.children.length) return; stripKey=key; stripCur=null; box.innerHTML='';
+    var t=presenterText();
+    p.forEach(function(s){
+      var th=pdoc.createElement('div'); th.className='m-th'; th.vsSlide=s;
+      th.innerHTML='<div class="m-thf"><div class="m-mini"></div></div><div class="m-thl"><input type="checkbox"><b></b><span class="m-tt"></span></div>';
+      var k=presenterClone(s,false); k.querySelectorAll('.f').forEach(function(f){ f.classList.add('on'); });
+      th.querySelector('.m-mini').appendChild(pdoc.importNode(k,true));
+      var cb=th.querySelector('input'); cb.title=t.take;
+      cb.addEventListener('click',function(e){ e.stopPropagation(); choose(s,cb.checked); });
+      th.addEventListener('click',function(){ var i=slides.indexOf(s); if(i<0){ opened[slideKey(s)]=true; reslide(s); } else go(i); });
+      box.appendChild(th);
+    });
+    presenterScale();
+  }
+  function stripUpdate(plan){
+    var box=pdoc.getElementById('m-strip'); if(!box) return; stripBuild();
+    var t=presenterText(), s0=slides[cur];
+    box.querySelectorAll('.m-th').forEach(function(th){
+      var s=th.vsSlide, i=slides.indexOf(s), k=slideKey(s), sp=spentOn(k), pl=plan&&i>=0?plan[i]:0, g=s.getAttribute('data-deepen');
+      th.classList.toggle('cur',s===s0); th.classList.toggle('skip',i<0);
+      th.classList.toggle('over',!!(pl&&sp>pl+10000)); th.classList.toggle('done',sp>0&&!(pl&&sp>pl+10000)&&s!==s0);
+      th.querySelector('input').checked=planned(s);
+      th.querySelector('b').textContent=i>=0?pad2(i+1)+(g?'  '+g:''):(g||t.skipped);
+      th.querySelector('b').title=slideTitle(s);
+      th.querySelector('.m-tt').textContent=sp>=1000?(mmss(sp)+(pl?' / '+mmss(pl):'')):(pl?mmss(pl):'');
+      if(s===s0&&stripCur!==s0){ stripCur=s0; try{ th.scrollIntoView({block:'nearest',inline:'center'}); }catch(e){} }
+    });
+    var sel=pdoc.getElementById('m-sel'), rs=pdoc.getElementById('m-selreset');
+    sel.textContent=canSave?t.savedDeck:t.savedLocal;
+    rs.textContent=t.selReset; rs.style.display=(!canSave&&Object.keys(showLocal).length)?'':'none';
+  }
+
+  /* ---------- Schedule: the time of the talk against its plan ---------- */
+  function timeRender(){
+    if(!pdoc||cur<0) return;
+    var t=presenterText(), plan=talkPlan(), el=elapsed(), now=Date.now(), started=!!clock.start;
+    var keys=slides.map(slideKey), spent=keys.map(spentOn), total=0, starts=[];
+    if(plan) plan.forEach(function(p){ starts.push(total); total+=p; });
+    var rb=pdoc.getElementById('m-rb'), rl=pdoc.getElementById('m-rl'), go2=pdoc.getElementById('m-go'), st=pdoc.getElementById('m-st'), en=pdoc.getElementById('m-end');
+    if(!started){
+      rb.textContent=t.ready; rb.className=''; rl.textContent=plan?mmss(total)+' '+t.planned:t.measure;
+      go2.textContent=t.startTalk; go2.className='m-btn accent show';
+    } else {
+      if(plan){ var left=plan[cur]-spent[cur]; rb.textContent=(left<0?'+':'')+mmss(Math.abs(left)); rb.className=left<0?'r':(spent[cur]>=.8*plan[cur]?'y':'g'); rl.textContent=t.slideLeft; }
+      else { rb.textContent=mmss(spent[cur]); rb.className=''; rl.textContent=t.onSlide; }
+      go2.textContent=t.resetTime; go2.className='m-btn warn'+(cur===0?' show':'');
+    }
+    var line=pdoc.getElementById('m-line'), h='<div class="m-segs">', chap=null;
+    if(plan&&total>0){
+      slides.forEach(function(s,i){
+        var c=i===cur?' cur':(i<cur&&spent[i]>0?(spent[i]>plan[i]+10000?' over':' ok'):'');
+        h+='<div class="m-seg'+c+'" data-i="'+i+'" style="width:calc('+(plan[i]/total*100)+'% - 2px)" title="'+pad2(i+1)+'  '+slideTitle(s).replace(/"/g,'&quot;')+'  '+mmss(plan[i])+'"></div>';
+      });
+      h+='</div>';
+      slides.forEach(function(s,i){
+        var c=s.dataset.chapterName||''; if(!c||c===chap){ chap=c||chap; return; } chap=c;
+        var at=(clock.log.filter(function(e){ return e[0]===keys[i]; })[0]), d=at?at[2]-starts[i]:0;
+        h+='<div class="m-chm" style="left:'+(starts[i]/total*100)+'%"><b>'+c.replace(/</g,'&lt;')+'</b><i class="'+(at?(d>10000?'over':'ok'):'')+'">'+
+          (started?dayTime(clock.start+clock.held+starts[i]):mmss(starts[i]))+(at?' · '+dayTime(at[1])+' ('+(d>=0?'+':'')+mmss(d)+')':'')+'</i></div>';
+      });
+      if(started){
+        var ist=starts[cur]+Math.min(spent[cur],plan[cur]);
+        h+='<div class="m-soll" style="left:'+Math.min(100,el/total*100)+'%"></div><div class="m-ist" style="left:'+Math.min(100,ist/total*100)+'%"></div>';
+        var dlt=el-ist;
+        st.textContent=dlt>10000?t.over+' +'+mmss(dlt):(dlt<-10000?t.ahead+' '+mmss(-dlt):t.inPlan); st.className=dlt>10000?'over':(dlt<-10000?'ahead':'ok');
+        var rest=Math.max(0,plan[cur]-spent[cur]); for(var j=cur+1;j<plan.length;j++) rest+=plan[j];
+        en.textContent=t.endAt+' '+dayTime(now+rest);
+      } else { st.textContent=''; st.className=''; en.textContent=t.length+' '+mmss(total); }
+    } else {
+      var seen=slides.map(function(s,i){ return spent[i]; }), sum=seen.reduce(function(a,b){ return a+b; },0);
+      slides.forEach(function(s,i){ if(!seen[i]&&i!==cur) return;
+        h+='<div class="m-seg'+(i===cur?' cur':' ok')+'" data-i="'+i+'" style="width:calc('+(sum?Math.max(seen[i],500)/sum*100:100/n)+'% - 2px)" title="'+pad2(i+1)+'  '+mmss(seen[i])+'"></div>'; });
+      h+='</div>';
+      st.textContent=started?mmss(el):''; st.className=''; en.textContent=(T[lang]||T.en).slide+' '+(cur+1)+' '+t.of+' '+n;
+    }
+    line.innerHTML=h;
+    var ti=pdoc.getElementById('m-target');
+    if(pdoc.activeElement!==ti){ ti.value=clock.target?String(clock.target):''; ti.placeholder=root.getAttribute('data-minutes')||'–'; }
+    pdoc.getElementById('m-l-target').textContent=t.target; pdoc.getElementById('m-l-min').textContent=t.minutes;
+    pdoc.getElementById('m-report').textContent=t.report; pdoc.getElementById('m-report').style.display=started?'':'none';
+    stripUpdate(plan);
+  }
+  /* Report after the talk: plan against actual per slide and chapter, and every change of slide with its time of day */
+  function report(){
+    var t=presenterText(), plan=talkPlan(), de=lang==='de', sep=de?';':',', rows=[], end=clock.pause||Date.now();
+    function q(v){ v=String(v==null?'':v); return /[";,\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v; }
+    function iso(ms){ var d=new Date(ms); return d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate())+' '+pad2(d.getHours())+':'+pad2(d.getMinutes())+':'+pad2(d.getSeconds()); }
+    rows.push([t.colNr,t.colTitle,t.colChap,t.colPlan,t.colActual,t.colDiff,t.colFrom,t.colTo]);
+    var tp=0, ta=0, chaps={}, order=[];
+    slides.forEach(function(s,i){
+      var k=slideKey(s), sp=spentOn(k), pl=plan?plan[i]:null, ch=s.dataset.chapterName||'', from=null, to=null;
+      clock.log.forEach(function(e,j){ if(e[0]!==k) return; if(from===null) from=e[1]; to=j+1<clock.log.length?clock.log[j+1][1]:end; });
+      rows.push([i+1,slideTitle(s),ch,pl!==null?mmss(pl):'',mmss(sp),pl!==null?(sp-pl>=0?'+':'')+mmss(sp-pl):'',from?iso(from):'',to?iso(to):'']);
+      tp+=pl||0; ta+=sp; if(!chaps[ch]){ chaps[ch]={p:0,a:0}; order.push(ch); } chaps[ch].p+=pl||0; chaps[ch].a+=sp;
+    });
+    rows.push(['',t.total,'',plan?mmss(tp):'',mmss(ta),plan?(ta-tp>=0?'+':'')+mmss(ta-tp):'',clock.start?iso(clock.start):'',clock.start?iso(end):'']);
+    rows.push([]); rows.push(['',t.colChap,'',t.colPlan,t.colActual,t.colDiff]);
+    order.forEach(function(c){ var x=chaps[c]; rows.push(['',c||'–','',plan?mmss(x.p):'',mmss(x.a),plan?(x.a-x.p>=0?'+':'')+mmss(x.a-x.p):'']); });
+    rows.push([]); rows.push([t.changes]);
+    clock.log.forEach(function(e){ var s=all.filter(function(x){ return slideKey(x)===e[0]&&inLang(x); })[0], i=s?slides.indexOf(s):-1;
+      rows.push([iso(e[1]),mmss(e[2]),i>=0?i+1:'',s?slideTitle(s):'']); });
+    var csv='﻿'+rows.map(function(r){ return r.map(q).join(sep); }).join('\r\n');
+    var a=pdoc.createElement('a'), name=(document.title||'Presentation').replace(/[\\/:*?"<>|]+/g,'').trim().replace(/\s+/g,'_');
+    a.href=pwin.URL.createObjectURL(new pwin.Blob([csv],{type:'text/csv;charset=utf-8'}));
+    a.download=name+'_'+(de?'Auswertung':'report')+'_'+iso(clock.start||Date.now()).slice(0,10)+'.csv';
+    pdoc.body.appendChild(a); a.click(); setTimeout(function(){ a.remove(); },1000);
+  }
+
+  var deepRun=[];
   function presenterRender(){
     if(!pwin||pwin.closed||!pdoc||cur<0) return;
     var t=presenterText(), s=slides[cur], nx=slides[cur+1];
@@ -1301,30 +1691,38 @@ html[data-motion="off"] #deck .bgvideo video{transition:none!important}
     pdoc.getElementById('m-brand').textContent=t.title;
     pdoc.getElementById('m-nr').innerHTML=pad2(cur+1)+' <span>/ '+pad2(n)+'</span>';
     pdoc.getElementById('m-chap').textContent=s.dataset.chapterName||'';
-    pdoc.getElementById('m-l-current').textContent=t.current;
     pdoc.getElementById('m-l-next').textContent=t.next;
     pdoc.getElementById('m-l-notes').textContent=t.notes+(canSave?(lang==='de'?' · anklicken zum Schreiben':' · click to write'):'');
+    pdoc.getElementById('m-l-time').textContent=t.time;
+    pdoc.getElementById('m-l-strip').textContent=t.strip;
     pdoc.getElementById('m-l-elapsed').textContent=t.elapsed;
     pdoc.getElementById('m-l-clock').textContent=t.clock;
-    pdoc.getElementById('m-back').textContent='‹ '+t.back;
-    pdoc.getElementById('m-forward').textContent=t.forward+' ›';
-    pdoc.getElementById('m-close').textContent=t.close;
+    pdoc.getElementById('m-view').textContent=t.view+' ▾';
+    pdoc.getElementById('m-back').textContent='‹';
+    pdoc.getElementById('m-back').title=t.back;
+    var pending=stepGroups(s).filter(stepOpen).length;
+    pdoc.getElementById('m-forward').innerHTML=t.forward+' ›'+(pending?'<small>'+t.clicks(pending)+'</small>':'');
+    pdoc.getElementById('m-close').title=t.close;
     pdoc.getElementById('m-fullscreen').textContent=document.fullscreenElement?t.exitFullscreen:t.fullscreen;
-    pdoc.getElementById('m-swap').textContent='⇄ '+t.swap;
+    pdoc.getElementById('m-swap').textContent='⇄';
     pdoc.getElementById('m-swap').title=t.swap+' (S)';
     pdoc.getElementById('m-lang').textContent=langLabel(' / ',function(l){return l;},function(l){return l.toLowerCase();}); pdoc.getElementById('m-lang').style.display=LANGS.length>1?'':'none';
+    /* deepening that follows: the slides left out right after this one */
+    var p=pool(), pi=p.indexOf(s), db=pdoc.getElementById('m-deep'); deepRun=[];
+    for(var j=pi+1;j<p.length&&!inTalk(p[j]);j++) deepRun.push(p[j]);
+    if(deepRun.length){ var g=deepRun[0].getAttribute('data-deepen')||t.skipped, ps=deepRun.reduce(function(a,x){ return a+(parseFloat(x.getAttribute('data-plan'))||0); },0);
+      db.innerHTML='+ '+g.replace(/</g,'&lt;')+'<small>'+t.slidesN(deepRun.length)+(ps?' · '+mmss(ps*1000):'')+'</small>'; db.classList.add('show'); }
+    else db.classList.remove('show');
     var c=pdoc.querySelector('#m-cur .m-mini'); c.innerHTML=''; c.appendChild(pdoc.importNode(presenterClone(s,false),true));
     var nm=pdoc.querySelector('#m-next .m-mini'), empty=pdoc.querySelector('#m-next .m-empty');
     nm.innerHTML='';
-    var pending=stepGroups(s).filter(stepOpen).length;
-    pdoc.getElementById('m-click').textContent=pending?t.clicks(pending):'';
     if(nx){ nm.appendChild(pdoc.importNode(presenterClone(nx,true),true)); empty.style.display='none';
-      pdoc.getElementById('m-nexttitle').textContent=pad2(cur+2)+'  '+(nx.getAttribute('data-title')||(nx.querySelector('h1,h2')?nx.querySelector('h1,h2').textContent.trim():''));
+      pdoc.getElementById('m-nexttitle').textContent=pad2(cur+2)+'  '+slideTitle(nx);
     } else { empty.style.display='grid'; empty.textContent=t.end; pdoc.getElementById('m-nexttitle').textContent=''; }
     var no=s.querySelector('.notes'), nbox=pdoc.getElementById('m-npt');
     if(!(canSave&&pdoc.activeElement===nbox&&noteFor===cur)){ nbox.innerHTML=no?no.innerHTML:(canSave?'':'<i>'+t.none+'</i>'); noteFor=cur; }
     if(canSave){ nbox.setAttribute('contenteditable','true'); nbox.setAttribute('data-ph',t.none); }
-    pdoc.getElementById('m-npt').style.fontSize=notesFontSize+'px';
+    nbox.style.fontSize=notesFontSize+'px';
     var tm=pdoc.getElementById('m-timer');
     tm.classList.toggle('show',!!s.vsTimer);
     pdoc.getElementById('m-t-finish').textContent=t.finish; pdoc.getElementById('m-t-reset').textContent=t.reset;
@@ -1375,9 +1773,11 @@ html[data-motion="off"] #deck .bgvideo video{transition:none!important}
     if(!pwin||pwin.closed||!pdoc) return;
     var now=new Date(), t=presenterText();
     pdoc.getElementById('m-clock').textContent=pad2(now.getHours())+':'+pad2(now.getMinutes());
-    var ms=(presenterPause?presenterPause:Date.now())-presenterStart, sec=Math.floor(ms/1000);
+    var sec=Math.floor(elapsed()/1000);
     pdoc.getElementById('m-elapsed').textContent=pad2(Math.floor(sec/3600))+':'+pad2(Math.floor(sec/60)%60)+':'+pad2(sec%60);
-    pdoc.getElementById('m-e-pause').textContent=presenterPause?'▶':'❚❚';
+    var pb=pdoc.getElementById('m-e-pause'); pb.textContent=clock.pause?'▶':'❚❚'; pb.style.display=clock.start?'':'none';
+    pdoc.getElementById('m-e-reset').style.display=clock.start?'':'none';
+    timeRender();
     presenterMedia();
     var s=slides[cur];
     if(s&&s.vsTimer){
@@ -1465,10 +1865,11 @@ html[data-motion="off"] #deck .bgvideo video{transition:none!important}
       '<span class="m-time"><small id="m-l-clock"></small><b id="m-clock"></b></span>'+
       '<span class="m-time"><small id="m-l-elapsed"></small><b id="m-elapsed"></b></span>'+
       '<button class="m-btn" id="m-e-pause"></button><button class="m-btn" id="m-e-reset">↺</button>'+
-      '<button class="m-btn" id="m-swap"></button><button class="m-btn accent" id="m-fullscreen"></button><button class="m-btn" id="m-lang"></button><button class="m-btn" id="m-close"></button></div>'+
-      '<div id="m-main"><div id="m-left"><div class="m-label" id="m-l-current"></div>'+
-      '<div class="m-frame" id="m-cur"><div class="m-mini"></div></div>'+
-      '<div id="m-nav"><button class="m-btn" id="m-back"></button><button class="m-btn accent" id="m-forward"></button><span id="m-click"></span></div>'+
+      '<button class="m-btn" id="m-view"></button><button class="m-btn" id="m-swap"></button><button class="m-btn" id="m-fullscreen"></button><button class="m-btn" id="m-lang"></button><button class="m-btn" id="m-close">✕</button>'+
+      '<span id="m-nav"><button class="m-btn" id="m-deep"></button><button class="m-btn" id="m-back"></button><button class="m-btn accent" id="m-forward"></button></span>'+
+      '<div id="m-menu"></div></div>'+
+      '<div id="m-main"><div class="m-dock" data-dock="top"></div><div class="m-dock" data-dock="left"></div>'+
+      '<div id="m-center"><div id="m-curwrap"><div class="m-frame" id="m-cur"><div class="m-mini"></div></div></div><div id="m-click"></div>'+
       '<div id="m-timer"><span class="m-label" id="m-l-timer"></span><span class="m-tz" id="m-tz"></span>'+
       '<button class="m-btn" data-d="-15">−15</button><button class="m-btn" data-d="-1">−1</button>'+
       '<button class="m-btn accent" id="m-t-start"></button><button class="m-btn" data-d="1">+1</button><button class="m-btn" data-d="15">+15</button>'+
@@ -1478,10 +1879,16 @@ html[data-motion="off"] #deck .bgvideo video{transition:none!important}
       '<span class="m-qh" id="m-qhelp"></span></div>'+
       '<div id="m-media"><span class="m-label" id="m-l-media"></span><button class="m-btn accent" id="m-v-toggle"></button><button class="m-btn" id="m-v-restart"></button>'+
       '<span class="m-ql" id="m-v-time"></span></div></div>'+
-      '<div id="m-right"><div class="m-label" id="m-l-next"></div>'+
-      '<div class="m-frame" id="m-next"><div class="m-mini"></div><div class="m-empty"></div></div><div id="m-nexttitle"></div>'+
-      '<div id="m-notes"><div class="m-header"><span class="m-label" id="m-l-notes"></span><span><button class="m-btn" id="m-smaller">A−</button> <button class="m-btn" id="m-larger">A+</button></span></div><div id="m-npt"></div></div>'+
-      '</div></div>'+
+      '<div class="m-dock" data-dock="right"></div><div class="m-dock" data-dock="bottom"></div></div>'+
+      '<div id="m-panels" hidden>'+
+      '<section class="m-panel" data-panel="time"><div class="m-ph"><span class="m-label" id="m-l-time"></span></div><div class="m-pb"><div id="m-tl">'+
+        '<div class="m-rem"><b id="m-rb"></b><span id="m-rl"></span><button class="m-btn" id="m-go"></button></div><div id="m-line"></div>'+
+        '<div class="m-stat"><b id="m-st"></b><span id="m-end"></span><span class="m-target"><span id="m-l-target"></span><input id="m-target" inputmode="decimal" autocomplete="off"><span id="m-l-min"></span></span><button class="m-btn" id="m-report"></button></div>'+
+      '</div></div></section>'+
+      '<section class="m-panel" data-panel="next"><div class="m-ph"><span class="m-label" id="m-l-next"></span></div><div class="m-pb"><div id="m-nextbox"><div class="m-frame" id="m-next"><div class="m-mini"></div><div class="m-empty"></div></div></div><div id="m-nexttitle"></div></div></section>'+
+      '<section class="m-panel" data-panel="notes"><div class="m-ph"><span class="m-label" id="m-l-notes"></span><button class="m-btn" id="m-smaller">A−</button><button class="m-btn" id="m-larger">A+</button></div><div class="m-pb"><div id="m-npt"></div></div></section>'+
+      '<section class="m-panel" data-panel="strip"><div class="m-ph"><span class="m-label" id="m-l-strip"></span><span class="m-sel" id="m-sel"></span><button class="m-btn" id="m-selreset"></button></div><div class="m-pb"><div id="m-strip"></div></div></section>'+
+      '</div><div id="m-drop"><div data-z="top"></div><div data-z="left"></div><div data-z="right"></div><div data-z="bottom"></div></div>'+
       '<scr'+'ipt>(function(){'+
       /* runs in the presenter window itself, so the key counts as a gesture of that window */
       'function reqFullscreen(e){ if(e) e.preventDefault(); var o=window.opener; if(!o||o.closed) return;'+
@@ -1490,30 +1897,46 @@ html[data-motion="off"] #deck .bgvideo video{transition:none!important}
       ' try{ if(location.origin&&location.origin.indexOf("http")===0) o.postMessage({vs:"fullscreen"},{targetOrigin:location.origin,delegate:"fullscreen"}); }catch(x){} }'+
       'function reqSwap(e){ if(e) e.preventDefault(); var o=window.opener; if(!o||o.closed) return; o.vsSwap.requested();'+
       ' try{ if(location.origin&&location.origin.indexOf("http")===0) o.postMessage({vs:"swap"},{targetOrigin:location.origin,delegate:"fullscreen"}); }catch(x){} }'+
+      'function typing(e){ return e.target&&(e.target.isContentEditable||e.target.tagName==="INPUT"); }'+
       'document.getElementById("m-swap").addEventListener("click",reqSwap);'+
-      'document.addEventListener("keydown",function(e){ if((e.key==="s"||e.key==="S")&&!e.metaKey&&!e.ctrlKey&&!e.altKey&&!(e.target&&e.target.isContentEditable)){ e.stopImmediatePropagation(); reqSwap(e); } },true);'+
+      'document.addEventListener("keydown",function(e){ if((e.key==="s"||e.key==="S")&&!e.metaKey&&!e.ctrlKey&&!e.altKey&&!typing(e)){ e.stopImmediatePropagation(); reqSwap(e); } },true);'+
       'document.getElementById("m-fullscreen").addEventListener("click",reqFullscreen);'+
-      'document.addEventListener("keydown",function(e){ if((e.key==="f"||e.key==="F")&&!e.metaKey&&!e.ctrlKey&&!e.altKey&&!(e.target&&e.target.isContentEditable)){ e.stopImmediatePropagation(); reqFullscreen(e); } },true);'+
+      'document.addEventListener("keydown",function(e){ if((e.key==="f"||e.key==="F")&&!e.metaKey&&!e.ctrlKey&&!e.altKey&&!typing(e)){ e.stopImmediatePropagation(); reqFullscreen(e); } },true);'+
       '})();</scr'+'ipt></body></html>');
     d.close();
     /* take over the deck styles (font, slides, timer), plus the presenter layout */
     document.querySelectorAll('style').forEach(function(st){ var x=d.createElement('style'); x.textContent=st.textContent; d.head.appendChild(x); });
     var x=d.createElement('style'); x.textContent=MCSS; d.head.appendChild(x);
-    pdoc=d; presenterStart=Date.now(); presenterPause=0;
+    pdoc=d; stripKey='';
     document.documentElement.classList.add('presenting');
     function onClick(id,fn){ d.getElementById(id).addEventListener('click',fn); }
     onClick('m-forward',next); onClick('m-back',prev); onClick('m-lang',toggleLang); onClick('m-close',presenterClose);
-    onClick('m-e-pause',function(){ if(presenterPause){ presenterStart+=Date.now()-presenterPause; presenterPause=0; } else presenterPause=Date.now(); presenterClock(); });
-    onClick('m-e-reset',function(){ presenterStart=Date.now(); if(presenterPause) presenterPause=presenterStart; presenterClock(); });
+    onClick('m-deep',function(){ if(!deepRun.length) return; deepRun.forEach(function(s){ opened[slideKey(s)]=true; }); reslide(deepRun[0]); });
+    onClick('m-view',function(e){ e.stopPropagation(); viewMenu(); });
+    d.getElementById('m-menu').addEventListener('click',function(e){ e.stopPropagation(); });
+    d.addEventListener('click',function(){ viewMenu(false); });
+    onClick('m-e-pause',clockPause);
+    var askTimer=null;
+    onClick('m-e-reset',function(){ var b=d.getElementById('m-e-reset'), t=presenterText();       /* in the talk only on a second click */
+      if(b.classList.contains('ask')){ clearTimeout(askTimer); b.classList.remove('ask'); b.textContent='↺'; clockReset(); return; }
+      b.classList.add('ask'); b.textContent=t.resetAsk; askTimer=setTimeout(function(){ b.classList.remove('ask'); b.textContent='↺'; },3500); });
+    onClick('m-go',function(){ if(clock.start) clockReset(); else clockStart(); });
+    onClick('m-report',report);
+    onClick('m-selreset',chooseReset);
+    var ti=d.getElementById('m-target');
+    ti.addEventListener('change',function(){ var v=parseFloat(String(ti.value).replace(',','.')); clock.target=v>0?Math.min(600,v):0; clockSave(); ti.blur(); presenterRender(); });
+    ti.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key==='Escape') ti.blur(); });
+    d.getElementById('m-line').addEventListener('click',function(e){ var g=e.target.closest('.m-seg'); if(g) go(parseInt(g.getAttribute('data-i'),10)); });
     onClick('m-q-reveal',function(){ var q=slides[cur]&&slides[cur].vsQuiz; if(q) q.reveal(); });
     onClick('m-q-reset',function(){ var q=slides[cur]&&slides[cur].vsQuiz; if(q) q.reset(); });
     onClick('m-t-start',function(){timerCommand('toggle');}); onClick('m-t-finish',function(){timerCommand('finish');}); onClick('m-t-reset',function(){timerCommand('reset');});
     d.querySelectorAll('#m-timer [data-d]').forEach(function(b){ b.addEventListener('click',function(){ timerCommand('delta',parseInt(b.getAttribute('data-d'),10)); }); });
     onClick('m-v-toggle',mediaToggle); onClick('m-v-restart',mediaReload);
-    onClick('m-smaller',function(){ notesFontSize=Math.max(16,notesFontSize-2); d.getElementById('m-npt').style.fontSize=notesFontSize+'px'; });
-    onClick('m-larger',function(){ notesFontSize=Math.min(48,notesFontSize+2); d.getElementById('m-npt').style.fontSize=notesFontSize+'px'; });
+    onClick('m-smaller',function(){ notesFontSize=Math.max(16,notesFontSize-2); d.getElementById('m-npt').style.fontSize=notesFontSize+'px'; laySave(); });
+    onClick('m-larger',function(){ notesFontSize=Math.min(60,notesFontSize+2); d.getElementById('m-npt').style.fontSize=notesFontSize+'px'; laySave(); });
+    d.querySelectorAll('.m-panel').forEach(panelDrag);
     d.addEventListener('keydown',function(e){
-      if(e.target&&e.target.isContentEditable){ if(e.key==='Escape') e.target.blur(); return; }      /* writing notes: keys are text */
+      if(e.target&&(e.target.isContentEditable||e.target.tagName==='INPUT')){ if(e.key==='Escape') e.target.blur(); return; }      /* writing: keys are text */
       if(e.key==='f'||e.key==='F'||e.key==='p'||e.key==='P'||e.key==='s'||e.key==='S') return; keycap(e,true); });
     var nb=d.getElementById('m-npt'), noteWas='';
     nb.addEventListener('focus',function(){ noteWas=nb.innerText.trim(); });
@@ -1521,9 +1944,11 @@ html[data-motion="off"] #deck .bgvideo video{transition:none!important}
     nb.addEventListener('paste',function(e){ e.preventDefault(); d.execCommand('insertText',false,(e.clipboardData||pwin.clipboardData).getData('text/plain')); });
     if(scr){ try{ pwin.moveTo(scr.availLeft,scr.availTop); pwin.resizeTo(scr.availWidth,scr.availHeight); }catch(e){} }
     pwin.addEventListener('resize',presenterScale);
+    try{ var ro=new pwin.ResizeObserver(function(){ presenterScale(); });      /* panels and control rows change the room of the slides */
+      ['m-curwrap','m-nextbox','m-strip'].forEach(function(id){ ro.observe(d.getElementById(id)); }); }catch(e){}
     pwin.addEventListener('pagehide',function(){ setTimeout(function(){ if(!pwin||pwin.closed) presenterClose(); },300); });
     clearInterval(presenterTick); presenterTick=setInterval(function(){ if(!pwin||pwin.closed){ presenterClose(); return; } presenterClock(); },250);
-    presenterRender();
+    layout();
   }
   window.addEventListener('beforeunload',function(){ if(pwin&&!pwin.closed){ try{ pwin.close(); }catch(e){} } });
   /* A click is the strongest gesture for Chrome: from here the window opens even when the key press was blocked */

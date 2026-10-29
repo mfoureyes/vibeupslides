@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.10.0
+- A new presenter view, built like the confidence monitor of PowerPoint and Keynote. The current slide stands in the middle and takes all the room the panels leave; Back and Next sit at the top right with the clicks still to come. Schedule, next slide, notes and a film strip are panels: drag one by its header to any edge, change its size at its inner edge, hide or move it from the menu View. The layout and the size of the notes are kept in the browser. Notes are larger and brighter.
+- The time of the talk. Opening the deck starts nothing: the time runs from the first step forward from the first slide or the Start button, and the clock times of the plan count from there. Back on the first slide after a rehearsal, Reset time sets it to Ready. Reloading the deck keeps the time. With a length (`minutes` in the deck, or a target typed in on the day) every slide gets its share by `weight`, fixed `plan` seconds stand as they are: the time left on the slide in green, yellow and red, a bar of all slides with chapter marks, where you should be and where you are, on time, over or ahead, and the expected end. Without a length the time is measured. Report downloads plan against actual per slide and chapter, with every change of slide and its clock time.
+- Deepenings: slides with `deepen` are left out of the short version and taken in while presenting, from the film strip (a click goes there) or with the yellow button next to Next when they follow the current slide; X opens or closes all of them, `?deepen=all` from the address. The box under a slide in the film strip takes it into the talk or leaves it out; with `vs present` or `vs edit` that choice is saved into `deck.json` (`show`), opened as a file it is kept in the browser. PDF and handout hold the talk as prepared, the checks of a build look at every slide.
+- `vs plan <deck>`: the planned time per slide and chapter, and the deepenings. vs-create asks for the length of a presented deck, proposes the minutes per part of the storyline with a reason, writes them as `minutes` and `weight`, and offers material that does not fit as deepenings instead of cutting it.
+
+- The chapter label of the styles silber, zine, horizont and schimmer speaks the language of the slide ("Kapitel 1" instead of "Chapter 1" on German slides).
+
+For brand libraries made with an earlier version:
+- Decks get the new presenter view with their next build.
+- A look made from silber, zine, horizont or schimmer keeps its English chapter label until its `masters/chapter.html` is copied again from the style, or a deck sets `kicker` on its chapter slides.
+
 ## 0.9.16
 - Guidance from the first message, after the first test as a new user. A new user who says "VibeUpSlides" gets a welcome before anything runs: what VibeUpSlides does, the way in three steps, what is set up now, and what the next question decides. The question of the route carries no recommendation unless the user's words make one obvious, and every option says what it leads to.
 - Every skill explains before it asks: where the user is, why the question, what happens with the answer. What was answered once is never asked again, also across skills (vs-design hands purpose, audience, name and languages to vs-create).

@@ -18,6 +18,7 @@ master and fills its slots. `vs masters <brand>` lists the masters of a brand wi
 | `motion` | how much moves: `"off"` (or `false`), `"calm"`, `"standard"` (default, same as `true`) or `"expressive"`. The kind of movement comes from the brand's motion profile |
 | `motion_set` | the motion set of this deck where it should differ from the brand's (`rise`, `soft`, `sweep`, `mask`, `draw`, `cascade`, `cut`, `site`, …). Written by `vs motion --deck <deck> --set <name>`; `--set brand` removes it |
 | `footer_left`, `footer_right` | override the footer texts of the brand for this deck |
+| `minutes` | the length the talk must have, in minutes. The presenter view spreads it over the slides by their `weight` and shows the time left per slide, whether the talk is on time and when it will end. Not set and no `plan` on the slides: the presenter view only measures. See "Length and time plan" below |
 | `brief` | the answers about purpose, presenter, audience, length, look and handout. Not rendered; the memory of the project |
 | `slides` | the list of slides |
 
@@ -34,6 +35,10 @@ master and fills its slots. `vs masters <brand>` lists the masters of a brand wi
 | `step` | `true`: the slide builds up click by click, on any master: the rows of its blocks in reading order, the first stands with the slide (blocks in one row come one by one). `false`: a slide whose master builds up on click arrives as a whole. Not set: as the master does it |
 | `order` | the click steps of this slide in an order of their own. The steps as the slide has them are numbered 1, 2, 3 …; `[3, [1, 2]]` (or `"3, 1+2"`) shows step 3 on the first click and steps 1 and 2 together on the next; an entry with a 0 (`[0, 2]`) puts those steps on the slide from the start. Steps not named follow in their own order. Only on a slide that has click steps (from its master or `step`) |
 | `move` | how much moves on this one slide: `"calm"`, `"expressive"` or `"off"`. Not set: as the deck (`motion`) |
+| `deepen` | the name of a deepening this slide belongs to, e.g. `"Method"` (`true` names it `more`). It is left out of the short version and can be taken in while presenting. See "Deepenings" below |
+| `show` | `true` or `false`: the presenter's own choice for this slide, over what `deepen` says. Written by the presenter view when the deck runs with `vs present` or `vs edit`; leave it alone unless the user asks |
+| `weight` | the slide's share of the length (`minutes`): 1 is an ordinary slide, 2 twice as long, 0.5 half. Not set: 1, chapter slides 0.4, the cover 0.6 |
+| `plan` | planned seconds on this slide, fixed: they are not spread. For slides whose time is known (a pitch of 10 minutes by a guest, a video). Timer slides count with their minutes |
 | `voice` | `false`: the text of this slide is not checked against the brand's voice rules (text taken over word for word, other people's words) |
 | `edited` | written by the editing mode, not by you: texts the user changed, waiting to be corrected in the language they were written in and translated into the others, `[{"path": "bullets.2", "from": "de", "to": ["en"], "text": "..."}]`. Do that, then remove the entry |
 | `source` | source line in the footer, for numbers and photos |
@@ -46,6 +51,34 @@ master and fills its slots. `vs masters <brand>` lists the masters of a brand wi
 Everything else is a slot of the master. Slots take HTML: `<em>` marks the accent word of a title,
 `<b>` a bold word. Slots a master does not know are ignored; a missing optional slot leaves its
 element out.
+
+## Length and time plan
+
+When the length of the talk is known, write it as `minutes` and give each slide a `weight` that
+follows the storyline: the slides that carry the argument get more, transitions and chapter slides
+less. The presenter view divides the minutes by these weights; typed into the presenter view, another
+length ("5 minutes" on the day) is divided the same way. `vs plan <deck>` prints the plan per slide
+and per chapter; check it against the length before handing over.
+
+```json
+{"minutes": 20, "slides": [
+  {"master": "cover", "title": "…"},
+  {"master": "bullets", "title": "…", "weight": 2},
+  {"master": "video", "src": "assets/demo.mp4", "plan": 90}]}
+```
+
+Without `minutes` and without `plan` there is no plan: the presenter view measures how long the talk
+and each slide took. That is the right choice when nobody knows the length yet.
+
+## Deepenings
+
+A deck can carry more than the talk needs: slides with `"deepen": "<name>"` stand in the deck
+but not in the short version. While presenting, the film strip of the presenter view shows them
+grey with the name of their deepening; a click on one takes it in and goes there, the box under it
+takes it into the prepared talk or leaves any slide out without going there. When skipped slides
+follow the current one, a yellow button next to Next takes them in. X opens or closes all
+deepenings; `?deepen=all` or `?deepen=Method,Cases` opens them from the address. The PDF and the
+handout hold the talk as prepared; the checks of the build look at every slide.
 
 ## Shared slides and facts
 

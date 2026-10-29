@@ -653,7 +653,7 @@ def check(html, lang=None, bottom=980, right=1820, width=1600):
     problems = []
     with sync_playwright() as p:
         br = p.chromium.launch(); pg = br.new_page(viewport={"width": width, "height": round(width * 9 / 16)})
-        pg.goto("file://" + os.path.abspath(html) + (f"?lang={lang}" if lang else "")); pg.wait_for_timeout(800)
+        pg.goto("file://" + os.path.abspath(html) + "?deepen=all" + (f"&lang={lang}" if lang else "")); pg.wait_for_timeout(800)
         n = pg.evaluate("document.querySelectorAll('#deck > .slide:not(.off)').length")
         for i in range(1, n + 1):
             pg.evaluate(f"location.hash='#/{i}'"); pg.wait_for_timeout(700)
@@ -673,7 +673,7 @@ def shots(html, out_dir, slides=None, lang=None, width=1600, settle=1800):
     paths = []
     with sync_playwright() as p:
         br = p.chromium.launch(); pg = br.new_page(viewport={"width": width, "height": round(width * 9 / 16)})
-        pg.goto("file://" + os.path.abspath(html) + (f"?lang={lang}" if lang else "")); pg.wait_for_timeout(800)
+        pg.goto("file://" + os.path.abspath(html) + "?deepen=all" + (f"&lang={lang}" if lang else "")); pg.wait_for_timeout(800)
         n = pg.evaluate("document.querySelectorAll('#deck > .slide:not(.off)').length")
         for i in (slides or range(1, n + 1)):
             pg.evaluate(f"location.hash='#/{i}'"); pg.wait_for_timeout(300)
@@ -724,7 +724,7 @@ def inspect(html, out_dir=None, lang=None, slides=None, bottom=930, right=1800, 
     with sync_playwright() as p:
         br = p.chromium.launch(); pg = br.new_page(viewport={"width": width, "height": round(width * 9 / 16)})
         errors = []; pg.on("pageerror", lambda e: errors.append(str(e)))
-        pg.goto("file://" + os.path.abspath(html) + "?export=1" + (f"&lang={lang}" if lang else "")); pg.wait_for_timeout(900)
+        pg.goto("file://" + os.path.abspath(html) + "?export=1&deepen=all" + (f"&lang={lang}" if lang else "")); pg.wait_for_timeout(900)
         n = pg.evaluate("document.querySelectorAll('#deck > .slide:not(.off)').length")
         page_is_reading = pg.evaluate("!!document.querySelector('#deck > .slide > .rs')")      # the reduced slide of a reading version is checked in the live one
         look = legible is not None and not page_is_reading
@@ -751,7 +751,7 @@ def inspect(html, out_dir=None, lang=None, slides=None, bottom=930, right=1800, 
             other = "dark" if first == "light" else "light"; seen[other] = {}
             dk = lambda: pg.evaluate("[...document.querySelectorAll('#deck > .slide:not(.off)')].map(s=>s.classList.contains('vs-dk'))")
             was = dk()
-            pg.goto("file://" + os.path.abspath(html) + "?export=1&scheme=" + other + (f"&lang={lang}" if lang else "")); pg.wait_for_timeout(900)
+            pg.goto("file://" + os.path.abspath(html) + "?export=1&deepen=all&scheme=" + other + (f"&lang={lang}" if lang else "")); pg.wait_for_timeout(900)
             now = dk()
             for i in seen[first]:
                 if i - 1 < len(was) and i - 1 < len(now) and was[i - 1] == now[i - 1]:

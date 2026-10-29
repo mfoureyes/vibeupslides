@@ -578,7 +578,7 @@
     if(on){ motionWas=root.getAttribute('data-motion'); root.setAttribute('data-motion','off'); }
     else { stopOrder(false); pending(); if(motionWas!==null) root.setAttribute('data-motion',motionWas); items.classList.remove('on'); openNotes(false); openPick(null); overflow(null);
       document.querySelectorAll('#deck .vs-voice').forEach(function(e){ e.classList.remove('vs-voice'); }); }
-    root.classList.toggle('vs-editing',on); btn.classList.toggle('on',on); prepare(); steps(); animState();
+    root.classList.toggle('vs-editing',on); if(window.vsDeepenSync) window.vsDeepenSync(); btn.classList.toggle('on',on); prepare(); steps(); animState();
     if(on&&news()) showReport(); if(!on) report.classList.remove('on');
     if(on){ say(FILE?T.fHint+(unchecked().length?T.fPending.replace('{n}',unchecked().length):''):T.hint); checkOverflow(); if(FILE&&(DIR||ROOT)) (DIR?allowed(true):fromRoot(true)).then(fileState); }
   }

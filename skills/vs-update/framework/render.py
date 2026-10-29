@@ -461,6 +461,16 @@ def _attrs(s, lang):
         a.append('data-fit="0"')
     if s.get("move") in ("calm", "expressive", "off"):       # how much moves on this one slide
         a.append(f'data-move="{s["move"]}"')
+    deepen = s.get("deepen")                                # a slide of a deepening: left out of the short version, opened while presenting
+    if deepen:
+        name = "more" if deepen is True else str(deepen)
+        a.append(f'data-deepen="{name.replace(chr(34), "&quot;")}"')
+    if isinstance(s.get("show"), bool):                     # the presenter's own choice for this slide, over what its deepening says
+        a.append(f'data-show="{1 if s["show"] else 0}"')
+    for key in ("plan", "weight"):                          # planned seconds on this slide; its share when a length is spread over the deck
+        try: v = float(s[key])
+        except (KeyError, TypeError, ValueError): continue
+        if v >= 0: a.append(f'data-{key}="{v:g}"')
     focus = str(s.get("focus") or "").strip().lower()       # which part of the photo stays in view: "right", "left top", "30% 20%"
     if focus and re.fullmatch(r"(left|right|center|top|bottom|\d{1,3}%)( (left|right|center|top|bottom|\d{1,3}%))?", focus):
         a.append(f'style="--focus:{focus}"')

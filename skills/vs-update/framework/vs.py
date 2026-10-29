@@ -46,6 +46,7 @@
     vs.py build <deck> [--pdf] [--handout] [--only 3,7] [--no-shots]
     vs.py build <deck> --mode reading|live       the other version of the deck next to the main one: to be read, or to be presented
     vs.py titles <deck>                          the slide titles in a row, per language: the argument without the slides
+    vs.py plan <deck>                            the time plan: minutes per slide and chapter from minutes, weight and plan
     vs.py video <deck> --slide 3 --seconds 7
     vs.py edit <deck> [--port N] [--no-open] [--reopen]
                                                  edit the deck in the browser: type into the slides, reorder, duplicate and delete; every change goes into deck.json
@@ -602,6 +603,11 @@ def _render_and_build(deck, b, out, deck_dir=None, standins=None, title=None, pd
         if p: images["LOGO_INV"] = os.path.join(b["_dir"], p)
     B.build(None, out, brand=b, title=title or deck.get("title"), images=images, slides_text=slides, pdf=pdf, mode=env["mode"],
             footer_left=deck.get("footer_left"), footer_right=deck.get("footer_right"), lang=(deck.get("langs") or [None])[0], scheme=deck.get("scheme"))
+    try: minutes = float(deck.get("minutes") or 0)          # the length the talk must have: the presenter view spreads it over the slides
+    except (TypeError, ValueError): minutes = 0
+    if minutes > 0:
+        html = open(out, encoding="utf-8").read()
+        open(out, "w", encoding="utf-8").write(html.replace("<html ", f'<html data-minutes="{minutes:g}" ', 1))
     if edit and deck_dir and os.path.exists(os.path.join(deck_dir, "deck.json")):      # which deck file the page was built from: changes made on it are told apart by this
         import edit as E
         html = open(out, encoding="utf-8").read()
@@ -1046,6 +1052,64 @@ def cmd_titles(args):
         for n, master, only, title in rows:
             print(f"{n:3d}  {(master + (f' ({only} only)' if only else '')).ljust(w)}  {title or '(no title)'}")
 
+def _talk_plan(slides, minutes):
+    """Planned seconds per slide as the presenter view computes them (master.html, talkPlan): "plan" and timer
+    slides stand as they are, the rest of the length is spread by "weight" (chapter 0.4, cover 0.6, else 1).
+    None when there is neither a length nor a plan: the presenter view then only measures."""
+    base = []
+    for s in slides:
+        p = s.get("plan")
+        if not isinstance(p, (int, float)) and s.get("master") == "timer": p = 60 * float(s.get("minutes", 10))
+        if isinstance(p, (int, float)) and p >= 0: base.append(("f", float(p))); continue
+        w = s.get("weight")
+        if not isinstance(w, (int, float)) or w < 0: w = 0.4 if s.get("master") == "chapter" else 0.6 if str(s.get("master", "")).startswith("cover") else 1
+        base.append(("w", float(w)))
+    fixed = sum(v for k, v in base if k == "f"); nf = sum(1 for k, _ in base if k == "f"); wsum = sum(v for k, v in base if k == "w")
+    target = 60 * minutes
+    if not target and not nf: return None
+    if target and not wsum: return [v * target / fixed if fixed else 0 for _, v in base]
+    per = max(0, target - fixed) / wsum if target else fixed / nf
+    return [v if k == "f" else v * per for k, v in base]
+
+def cmd_plan(args):
+    """The time plan of a deck: planned time per slide and chapter from "minutes", "weight" and "plan", and what the
+    deepenings would add. The same arithmetic as the presenter view."""
+    import render
+    pos = positional(args)
+    d = _deck_dir(pos[0] if pos else die("which deck?"))
+    try: deck = json.load(open(os.path.join(d, "deck.json"), encoding="utf-8"))
+    except ValueError as e: die(f"deck.json is not valid JSON: {e}")
+    lang = (deck.get("langs") or [deck.get("lang") or "en"])[0]
+    titles = {n: t for n, _, _, t in render.titles(deck).get(lang, [])}
+    rows = [(i, s) for i, s in enumerate(deck.get("slides", []), 1) if s.get("only") != "reading" and (not s.get("lang") or s["lang"] == lang)]
+    talk = [(i, s) for i, s in rows if (s["show"] if isinstance(s.get("show"), bool) else not s.get("deepen"))]
+    try: minutes = float(deck.get("minutes") or 0)
+    except (TypeError, ValueError): minutes = 0
+    plan = _talk_plan([s for _, s in talk], minutes)
+    def mmss(x): x = int(round(x)); return f"{x // 60}:{x % 60:02d}"
+    if plan is None:
+        print('No plan: the deck has no "minutes" and no slide a "plan". The presenter view measures the talk.')
+        return
+    print(f"Length {mmss(sum(plan))}" + (f" (minutes: {minutes:g})" if minutes else " (from the slides' plan)") + f", {len(talk)} slides in the talk")
+    at, chapter, chapters = 0, "", {}
+    for (i, s), p in zip(talk, plan):
+        if s.get("master") == "chapter" or s.get("chapter"):
+            c = s.get("chapter") or titles.get(i) or "?"; chapter = c.get(lang) if isinstance(c, dict) else c
+        chapters[chapter] = chapters.get(chapter, 0) + p
+        print(f"{mmss(at):>6}  {mmss(p):>5}  {i:3d}  {s.get('master', '?'):<14} {titles.get(i) or ''}")
+        at += p
+    if len(chapters) > 1:
+        print("per chapter: " + " | ".join(f"{c or '(opening)'} {mmss(v)}" for c, v in chapters.items()))
+    fixed = sum(float(s["plan"]) for _, s in talk if isinstance(s.get("plan"), (int, float)))
+    if minutes and fixed > 60 * minutes:
+        print(f"WARNING: the fixed plans of the slides ({mmss(fixed)}) are longer than the talk ({mmss(60 * minutes)}).")
+    taken = {i for i, _ in talk}; deep = {}
+    for i, s in rows:
+        if i in taken: continue
+        g = (s["deepen"] if isinstance(s.get("deepen"), str) else "more") if s.get("deepen") else None; deep.setdefault(g, []).append(i)
+    for g, nums in deep.items():
+        print((f"deepening '{g}'" if g else "left out by the presenter") + f": slides {', '.join(map(str, nums))}, not in the talk (taken in, they share the same length)")
+
 def cmd_build(args):
     import build as B
     if "--no-update" not in args: ensure_current()
@@ -1183,7 +1247,8 @@ def cmd_present(args):
     online = media.referenced_files(d, html[:1])[1]
     notes = [f"Needs to be online for: {', '.join(online)}"] if online else []
     notes.append("Notes written in the presenter view (M) are saved into deck.json and stay on the slide.")
-    api = edit.make_api(d, lambda: _quick_build(d), only=("state", "notes")) if os.path.exists(os.path.join(d, "deck.json")) else None
+    notes.append("Slides taken into the talk or left out in the film strip of the presenter view are saved into deck.json.")
+    api = edit.make_api(d, lambda: _quick_build(d), only=("state", "notes", "show")) if os.path.exists(os.path.join(d, "deck.json")) else None
     try: serve.present(d, html[0], int(port) if port else None, "--no-open" not in args, notes, api=api, label="presenting")
     except OSError as e: die(str(e))
     try:
@@ -1982,7 +2047,7 @@ def main():
     _ensure_env()
     import brandtools
     simple = {"init": cmd_init, "status": cmd_status, "update": cmd_update, "permissions": cmd_permissions, "doctor": cmd_doctor, "backup": cmd_backup, "restore": cmd_restore, "analyze": cmd_analyze, "videos": cmd_videos, "voice": cmd_voice, "ingest": cmd_ingest, "preview": cmd_preview,
-              "masters": cmd_masters, "elements": cmd_elements, "fonts": cmd_fonts, "new": cmd_new, "build": cmd_build, "titles": cmd_titles,"video": cmd_video,
+              "masters": cmd_masters, "elements": cmd_elements, "fonts": cmd_fonts, "new": cmd_new, "build": cmd_build, "titles": cmd_titles, "plan": cmd_plan,"video": cmd_video,
               "scenes": cmd_scenes, "motion": cmd_motion, "present": cmd_present, "edit": cmd_edit, "apply": cmd_apply, "shared": cmd_shared, "forms": cmd_forms, "design": cmd_design, "refresh": cmd_refresh, "langs": cmd_langs, "pack": cmd_pack, "handover": cmd_handover}
     try:
         if cmd in simple: simple[cmd](rest)

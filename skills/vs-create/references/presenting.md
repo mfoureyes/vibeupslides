@@ -17,6 +17,7 @@
 | A | animations on or off: off means everything stands, slides and click steps cut |
 | D | dark or light slides: light slides take the brand's dark colour, slides that are already dark, coloured or a photo stay |
 | V | the other version of the deck: live or reading, opened at the same slide |
+| X | open or close all deepenings (slides left out of the short version) |
 | P | PDF export of the version on screen, downloaded without a print dialogue |
 | R | replay the animation of the slide; restart the video, reload the page |
 | K | play or pause the video of the slide |
@@ -64,11 +65,37 @@ output says if the deck needs to be online when shown (remote video, websites). 
 
 ## Presenter view
 
-Like the presenter view of PowerPoint. **M** opens a second window for the laptop; the deck itself
-goes full screen on the projector. It shows the current slide as the room sees it, the next slide,
-the notes (size adjustable), slide count, chapter, clock, elapsed time with pause and reset, and on
-timer and quiz slides the controls for them, with the correct answer marked. All keys work in that
-window too.
+Like the presenter view of PowerPoint or Keynote. **M** opens a second window for the laptop; the deck
+itself goes full screen on the projector. The current slide stands in the middle and takes all the
+room the other panels leave; Back and Next are at the top right, with the clicks still to come on
+the slide. Around it four panels: the **schedule**, the **next slide**, the **notes** (A− A+) and the
+**film strip** with every slide of the deck. Each panel can be dragged by its header to another edge
+(top, left, right, bottom), its size changed at its inner edge, two panels at one edge against each
+other at the line between them; **View** hides panels, moves them and resets the layout. The layout
+is kept in the browser. Timer, quiz and video controls appear under the slide when the slide has
+them. All keys work in that window too.
+
+**Time.** Opening the deck or the presenter view starts nothing: the schedule says Ready. The time
+runs from the start of the talk, the first step forward from the first slide or the Start button;
+the clock times of the plan count from that moment. Back on the first slide after a rehearsal, the
+button **Reset time** sets it to Ready again (during the talk ↺ in the top bar, on a second click).
+Reloading the deck keeps the time; after eight hours untouched it starts afresh.
+
+- **With a plan** (`minutes` or `plan` in the deck, or a length typed into Target): the time left on
+  the slide, green, yellow from 80 %, red with a plus when over; a bar of all slides sized by their
+  plan, done slides green or red, chapter marks with the planned and the reached clock time; the
+  yellow line is where the clock says you should be, the white one where you are; On time, over or
+  ahead, and the expected end.
+- **Without a plan** the time is measured: the bar grows with the time each slide took.
+- **Report** downloads a table (CSV): plan against actual per slide and per chapter, and every
+  change of slide with its clock time.
+
+**Film strip and deepenings.** The film strip shows every slide, also those left out of the talk
+(grey, with the name of their deepening). A click goes to a slide and takes a skipped one in; the
+box under a slide takes it into the talk or leaves it out without going there. When the deck runs
+with `vs present` (or `vs edit`) the choice is saved into `deck.json`; opened as a file it holds in
+this browser only, and the strip says so. When skipped slides follow the current one, a yellow button
+next to Next takes them in and goes to the first; Next itself passes them by.
 
 What to tell the user:
 

@@ -478,6 +478,11 @@ def make_api(deck_dir, rebuild, voice_rules=None, only=None, finish=None, librar
             elif action in ("notes", "read"):               # texts of the slide as a whole: speaker notes, reader text
                 deck = load(deck_dir); text = sanitize(re.sub(r"\n\s*\n", "<br><br>", str(q.get("text") or "").strip()))
                 set_whole(deck, n, action, lang, text); changed(deck, out, n, action, lang, text, ui)
+            elif action == "show":                          # the presenter takes a slide into the talk or leaves it out
+                deck = load(deck_dir); slide = _slide(deck, n); v = q.get("value")
+                if isinstance(v, bool) and v != (not slide.get("deepen")): slide["show"] = v
+                else: slide.pop("show", None)                # the same as its deepening says: no choice of its own
+                save(deck_dir, deck); rebuild()
             elif action == "library" and library:           # what the page can offer for this slide
                 deck = load(deck_dir); masters, fit = library(); langs = deck.get("langs") or [deck.get("lang") or "en"]
                 out["masters"] = new_slides(masters)

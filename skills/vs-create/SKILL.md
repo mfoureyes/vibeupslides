@@ -183,7 +183,8 @@ since nobody can pick their own thesis from a list.
    supports) or `reading` (it is sent and must work without a speaker). Ask which one this deck is
    first. The other version can be built later from the same file; offer it, do not build it unasked.
 3. **Who presents, to whom, how long.** The user live, someone else, or nobody (it is read); who is
-   in the room; the length of the slot.
+   in the room; the length of the slot. Ask for the length whenever the deck is presented and it is
+   not known yet ("no fixed length" is an answer: then the presenter view only measures).
 4. **Look.** Within the brand: calm or bold, text-led or image-led, mostly light or mostly dark
    slides, how much motion (off, calm, standard, expressive), and whether a video has a place.
    Offer what the library makes possible.
@@ -210,6 +211,15 @@ with its title as a full sentence and the master it uses, following the structur
 deck; where the sources disagree on the order, offer the variants and let the user choose. The
 titles read in a row must give the argument. Wait for the confirmation. For long decks go block by
 block. Once the deck file exists, `vs titles <deck>` prints the titles in order for this check.
+
+**Time per part.** When the length is known, put it into the storyline: after each block of the
+storyline, the minutes it gets, taken from the structure of this kind of deck (where the argument
+is carried gets the most; the opening and the close are short), with a sentence on why. The user
+moves minutes between parts in the same answer. In the deck file this becomes `minutes` and a
+`weight` per slide (`references/deck-format.md`, "Length and time plan"); after the build,
+`vs plan <deck>` shows whether it fits. When the material is more than the length holds, do not cut
+it away: offer to keep the extra slides as deepenings (`deepen`), left out of the talk and at hand
+in the presenter view.
 
 If a slide needs a look no master has, say so here and choose: `free` (title plus your own body,
 for a one-off), or a new master through vs-build (when the look will be needed again).
@@ -397,7 +407,7 @@ belong on one click, set `"order"` (deck-format.md). The user can do the same in
 ("On click", "Order": they click the parts in the new order, with Shift to join one to the step
 before; the strength of movement, "Play").
 
-Name the version in half a sentence when you hand a deck over ("built with VibeUpSlides 0.9.16", from
+Name the version in half a sentence when you hand a deck over ("built with VibeUpSlides 0.10.0", from
 the status line of the setup), so that the user can tell which state they are testing.
 A button (`button: {label, url}` on the closing slide) is a call to action with a real target; a
 cover has none. The last slide credits the person who made the deck (`"author"` in the deck file,

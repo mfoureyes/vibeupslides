@@ -154,7 +154,9 @@ Updates: the skills check once a day whether a newer version is published and te
 
 One self-contained HTML file that runs offline in any browser:
 
-- **Presenter view** (M): current and next slide, speaker notes, clock, elapsed time
+- **Presenter view** (M): the current slide in the middle, next slide, speaker notes, a schedule
+  against the planned length (or the measured time), a film strip of all slides with deepenings to
+  take in while presenting, panels you arrange yourself, and a report of plan against actual
 - **Editing built in**: press the pencil, type into the slides, move, copy and delete slides,
   insert a new one from your masters; Chrome and Edge save straight into the file
 - **Timer slides** and **quiz slides**, run from the slide or from the presenter view

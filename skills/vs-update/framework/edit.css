@@ -78,3 +78,11 @@ html.export #deck .vs-raw,html.presenting #deck .vs-raw{text-decoration:none;out
 .vse-badge{position:fixed;z-index:2147483000;min-width:28px;height:28px;padding:0 7px;box-sizing:border-box;border-radius:14px;background:#5b6270;color:#fff;font:700 15px/28px system-ui,sans-serif;text-align:center;pointer-events:none;box-shadow:0 2px 8px rgba(0,0,0,.35)}
 .vse-badge.set{background:rgb(40,130,255)}
 html.vs-editing #deck .vse-part{outline:2px dashed rgba(40,130,255,.7);outline-offset:4px;cursor:pointer}
+
+/* the menu Format: link, bold, italic, struck through for the selected words, with their keys */
+#vse-fmt{display:none;flex-wrap:wrap;gap:4px}
+#vse-fmt.on{display:flex}
+#ctl #vse #vse-fmt button{display:flex;align-items:baseline;gap:8px}
+#vse-fmt button b{color:#fff;font-weight:600}
+#vse-fmt button small{color:#aab1bd;font-weight:400}
+.slide s{text-decoration-thickness:.08em}

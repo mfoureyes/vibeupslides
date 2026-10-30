@@ -44,6 +44,26 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 a.vs-btn{display:inline-block;margin-top:44px;padding:20px 38px;border-radius:var(--radius);background:var(--ink);color:var(--paper);font-weight:700;font-size:28px;line-height:1.1;text-decoration:none;cursor:pointer}
 .accent a.vs-btn{background:var(--on);color:var(--accent)} .dark a.vs-btn,.fullbleed a.vs-btn{background:var(--on);color:var(--deep)}
 a.vs-btn:hover{filter:brightness(1.12)}
+.slide a.vs-btn.vs-btn-2{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 3px currentColor}
+.slide:is(.accent,.dark,.fullbleed) a.vs-btn.vs-btn-2{background:transparent;color:var(--on)}
+/* buttons a slide carries ("buttons"), at its foot unless the master places them; in the live version each one that leads
+   to a page or a mail address has its QR code beside it, the reading version and the handout leave it out */
+.vs-actions{position:absolute;left:var(--pad);bottom:150px;display:flex;flex-wrap:wrap;align-items:center;gap:24px 40px;z-index:3}
+.vs-actions.in{position:static;margin-top:44px}
+.slide .vs-actions a.vs-btn,.slide .vs-btnqr a.vs-btn{margin-top:0}
+.vs-btnqr{display:inline-flex;align-items:center;gap:26px;vertical-align:middle}
+div>.vs-btnqr:only-child{margin-top:44px}
+.vs-actions .vs-btnqr{margin-top:0}
+.vs-qr{display:block;flex:none;width:136px;height:136px;border-radius:calc(var(--radius) / 2);overflow:hidden}
+.vs-qr svg{display:block;width:100%;height:100%}
+html[data-mode="reading"] .vs-qr{display:none}
+/* links in the text are for readers: underlined in the accent in the reading version, the handout and while editing, a click
+   opens the page beside the deck. On the screen of a talk nobody clicks and a line under words reads as emphasis: there
+   a link is plain text and does nothing. The linked source in the footer stays a link everywhere. */
+.slide a[href]:not(.vs-btn):not(.source){color:inherit;text-decoration:none}
+html[data-mode="live"]:not([data-handout]):not(.vs-editing) .slide a[href]:not(.vs-btn):not(.source){pointer-events:none;cursor:inherit}
+html[data-mode="reading"] .slide a[href]:not(.vs-btn):not(.source),html[data-handout] .slide a[href]:not(.vs-btn):not(.source),html.vs-editing .slide a[href]:not(.vs-btn):not(.source){text-decoration:underline;text-decoration-color:color-mix(in srgb,var(--accent) 75%,currentColor);text-decoration-thickness:.07em;text-underline-offset:.15em}
+.footer a.source{color:inherit;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.15em}
 img{display:block}
 
 /* ---------- Stage ---------- */
@@ -621,10 +641,11 @@ html[data-motion="off"] #deck .bgvideo video{transition:none!important}
     }
     if(!s.classList.contains('no-footer') && !s.querySelector('.footer')){
       var f=document.createElement('div'); f.className='footer';
-      var q=s.getAttribute('data-source');
-      f.innerHTML='<div>'+footer_left+(q?'<span class="source">'+q+'</span>':'')+'</div><div class="chap">'+(s.dataset.chapterName||'')+'</div><div class="re">'+footer_right+'<span class="nr"></span></div>';
+      var q=s.getAttribute('data-source'), qu=(s.getAttribute('data-source-url')||'').replace(/"/g,'%22');
+      f.innerHTML='<div>'+footer_left+(q?(qu?'<a class="source" href="'+qu+'" target="_blank" rel="noopener">'+q+'</a>':'<span class="source">'+q+'</span>'):'')+'</div><div class="chap">'+(s.dataset.chapterName||'')+'</div><div class="re">'+footer_right+'<span class="nr"></span></div>';
       s.appendChild(f);
     }
+    s.querySelectorAll('a[href^="http"]:not([target])').forEach(function(a){ a.target='_blank'; a.rel='noopener'; });      /* a page opens beside the deck */
     var fc=s.querySelector(':scope > .footer > .chap'); if(fc&&fc.textContent!==(s.dataset.chapterName||'')) fc.textContent=s.dataset.chapterName||'';
   }); }
   dress();

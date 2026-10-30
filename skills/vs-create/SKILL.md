@@ -334,7 +334,20 @@ do not change by themselves. `references/deck-format.md` has the details.
 **Every deck has an English version.** Whatever language the user works in, the deck carries
 English as well (`"langs": ["de", "en"]`, the user's language first), and every text is written
 in both from the start, each in the brand's voice for that language, not word for word. The L key
-and the language button switch. A further language comes later with `vs langs <deck> --add fr`: it
+and the language button switch.
+
+**Translate for the culture, not the words.** Each language version is written for its audience:
+examples, units, dates, number formats, forms of address and idioms are adapted, and an institution
+or a name the audience does not know gets a few words of context ("IBB, Berlin's state development
+bank"). Official names keep their established form in that language (an authority, a programme, a
+city: look it up, do not translate it yourself); names of people stay as they are written, and their
+transliteration into another script is confirmed by the user before it is used. Keep these
+explanations and established names in the brand's library, `names.json` (`{"IBB": {"en": "IBB,
+Berlin's state development bank", "zh": "…"}}`), read it before translating and add what you
+settled, so that every deck says it the same way. After translating, tell the user in a short list
+what you adapted and why (not every sentence, only what is more than a translation). Offer once per
+deck and language an independent check of the translation (a second reading without the original);
+it is an offer, not a step. A further language comes later with `vs langs <deck> --add fr`: it
 lists every text to translate, nothing else is rebuilt. This holds for decks that exist as well: when a build prints
 `ENGLISH: this deck has no English version`, add it in the same turn, without asking, and build
 again; it is not something to offer. Leave English out only when the user says they do not want
@@ -351,7 +364,17 @@ Writing rules, on top of the brand's voice:
   without a verb, emojis. Read every title aloud; if it sounds like an advert, rewrite it.
 - One message per slide; the content backs up the title. One accent word (`<em>`) per title at most.
 - Nothing is invented. A missing number or photo is left out or marked, and you tell the user.
-  Numbers carry their source in `source`.
+  Numbers carry their source in `source`, with `source_url` when it has an address. For readers (the
+  `reading` texts, a deck that is sent) the words that make the claim link to it (`<a href>`); on the
+  screen of a talk links are plain text (deck-format.md "Links and buttons").
+- No superlative without proof: "leading", "the first", "the largest", "unique", "best" only when a
+  source says so, and then with that source. Otherwise say what can be measured ("since 2011", "120
+  teams a year") or leave it out.
+- Official statements are quoted word for word from their source: names of programmes, laws and
+  institutions, figures of an authority, a quotation of a person. Do not paraphrase them into the voice;
+  mark them `"voice": false` if they break a rule.
+- A slide that asks for an action (a meeting, a download, a contact) carries it as a button
+  (`buttons`), not as an address in the text; in the live version it gets its QR code by itself.
 - Text from a document the user supplied is used word for word. If such a slide breaks a voice
   rule, it stays as it is and gets `"voice": false`; so do slides with other people's words.
 - Speaker notes on every slide of a live deck, in two forms in the language of the slide: `notes`
@@ -420,7 +443,7 @@ belong on one click, set `"order"` (deck-format.md). The user can do the same in
 ("On click", "Order": they click the parts in the new order, with Shift to join one to the step
 before; the strength of movement, "Play").
 
-Name the version in half a sentence when you hand a deck over ("built with VibeUpSlides 0.11.0", from
+Name the version in half a sentence when you hand a deck over ("built with VibeUpSlides 0.12.0", from
 the status line of the setup), so that the user can tell which state they are testing.
 A button (`button: {label, url}` on the closing slide) is a call to action with a real target; a
 cover has none. The last slide credits the person who made the deck (`"author"` in the deck file,

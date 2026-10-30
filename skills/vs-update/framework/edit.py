@@ -14,7 +14,7 @@ import copy, json, os, re, shutil, threading, time
 HERE = os.path.dirname(os.path.abspath(__file__))
 EDIT_HTML = "_edit.html"                 # the edit build in the deck folder; files that start with _ are not presented or packed
 KEEP = 200                               # versions kept for undo
-_INLINE = ("em", "strong", "b", "i", "u", "sup", "sub", "br", "mark", "small")
+_INLINE = ("em", "strong", "b", "i", "u", "s", "sup", "sub", "br", "mark", "small")
 
 
 def assets():
@@ -40,7 +40,7 @@ def sanitize(html):
     t = re.sub(r"<!--.*?-->", "", t, flags=re.S).replace("\r", "")
     t = re.sub(r"\s*\n\s*", "<br>", t.strip())
     t = re.sub(r"(<br>\s*)+$", "", re.sub(r"[ \t]+", " ", t))
-    return re.sub(r"<(em|strong|b|i|u|mark|small|span|a)>\s*</\1>", "", t).strip()
+    return re.sub(r"<(em|strong|b|i|u|s|mark|small|span|a)>\s*</\1>", "", t).strip()
 
 
 # ---------------------------------------------------------------- the deck file

@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.12.0
+- Links for readers. Any text can hold a link (`<a href>`): in the reading version, the handout and while editing it is underlined in the accent colour, opens beside the deck and stays a link in the PDF; on the screen of a talk it is plain text and does nothing. The build names links of the live text that the reading text of that place lacks (`LINKS:`). `source_url` makes the source line in the footer a link to the source.
+- Formatting in the browser editor: the menu Format and the keys ⌘K link, ⌘B bold, ⌘I italic, ⌘⇧X struck through for the selected words; the same again takes it off.
+- Buttons. `buttons` on any slide (one or a list of label, address and an optional secondary style) for a web page, a mail address or a file of the deck; they stand at the foot of the slide or where a master places `{{>buttons}}`, and look like the brand's button. In the live version every button to a page or an address has a QR code beside it, made by the framework itself (`qr.py`, no package); the reading version and the handout leave it out, `"qr": false` on a slide too.
+- Writing systems, on request. `"scripts": true` gives a deck language in Chinese, Japanese, Korean, Cyrillic, Greek, Hebrew, Arabic, Thai or Devanagari system faces of that script behind the brand's family on its slides; Chinese, Japanese and Korean then lose the slanted emphasis and break lines by their own rules. Without it the build only says that it could (`SCRIPTS:`).
+- vs-create: no superlative without a source, official statements word for word, sources linked in the text, actions as buttons; translations adapted to the audience with a short list of what was adapted, explanations and established names kept per language in the brand's `names.json`, an independent check offered. Good slides of an imported deck are kept as they are.
+- vs-build styles the primary and the secondary button of the slides after the website's buttons.
+
+For brand libraries made with an earlier version:
+- Nothing to do. A brand whose `theme.css` does not style `a.vs-btn` shows the engine's button; `vs-build` can take the website's buttons over when asked.
+
 ## 0.11.0
 - The reading version shows whole slides. A slide with texts for readers (`reading`, or `read`) is in the file twice: as it is for the live version, and for the reading version in the same master with a paragraph under its title (`explain`) and slots that say more (bullets as full sentences, a longer lead). Where those texts need the room, the body is set smaller, by a fifth at most. The reduced slide beside a column of text and the section bar are gone. The build lists content slides without text for readers.
 - Notes in two forms: `notes` is the whole speaking text, `cues` the same as talking points. The notes panel of the presenter view switches between them; the build lists slides with notes but no cues.

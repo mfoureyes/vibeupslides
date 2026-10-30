@@ -11,7 +11,7 @@
   var T=DE?{edit:'Bearbeiten (E)',toLive:'Bearbeiten (E): öffnet die Vortragsfassung zum Bearbeiten',earlier:'← nach vorn',later:'nach hinten →',dup:'Duplizieren',del:'Löschen',undo:'Rückgängig',redo:'Wiederholen',notes:'Notizen, Lesetext',
            saved:'Gespeichert',saving:'Speichere …',over:'Der Text läuft über die Folie hinaus: kürzen oder die Folie teilen',up:'↑',down:'↓',idup:'Duplizieren',idel:'Entfernen',
            sure:'Diese Folie löschen? (Rückgängig holt sie zurück)',hint:'Text anklicken und tippen. Enter speichert, Esc verwirft.',voice:'Sprache der Marke: ',
-           typing:'Im Textfeld: Enter speichert, Esc verwirft. Danach blättern die Pfeiltasten wieder; Bild↑/Bild↓ blättern immer.',
+           typing:'Im Textfeld: Enter speichert, Esc verwirft. Markierte Wörter: ⌘K Link, ⌘B fett, ⌘I kursiv, ⌘⇧X durchgestrichen (oder Menü Format). Danach blättern die Pfeiltasten wieder; Bild↑/Bild↓ blättern immer.',fmt:'Format',tFmt:'Die markierten Wörter verlinken, fett, kursiv oder durchgestrichen setzen',fLink:'Link',fBold:'Fett',fItalic:'Kursiv',fStrike:'Durchgestrichen',fClear:'Formatierung entfernen',fmtSelect:'Erst die Wörter markieren, dann formatieren.',fmtNone:'Erst in einen Text klicken und Wörter markieren.',linkAsk:'Adresse für den Link (Webseite oder E-Mail):',linkEdit:'Adresse des Links (leer entfernt den Link):',linkSelect:'Erst den Text markieren, der zum Link werden soll, dann ⌘K.',
            waiting:'Gespeichert. Nach „Fertig“ wird der Text korrigiert und nach {l} übersetzt.',saved2:'Gespeichert. Nach „Fertig“ wird die Rechtschreibung geprüft.',notesFor:'Notizen zu dieser Folie (für die Moderation)',notesSave:'Speichern',done:'Fertig',readFor:'Lesetext zu dieser Folie (steht in der Lesefassung neben der Folie)',
            tEarlier:'Die gezeigte Folie tauscht den Platz mit der Folie davor',tLater:'Die gezeigte Folie tauscht den Platz mit der Folie danach',tDup:'Eine Kopie der gezeigten Folie direkt dahinter einfügen',tDel:'Die gezeigte Folie aus dem Deck entfernen',
            gMove:'Reihenfolge: diese Folie',gSlide:'Diese Folie',gAdd:'Einfügen',gText:'Zur Folie',gSteps:'Verlauf',
@@ -25,7 +25,7 @@
          :{edit:'Edit (E)',toLive:'Edit (E): opens the version to present for editing',earlier:'← forward',later:'back →',dup:'Duplicate',del:'Delete',undo:'Undo',redo:'Redo',notes:'Notes, reader text',
            saved:'Saved',saving:'Saving …',over:'The text runs off the slide: shorten it or split the slide',up:'↑',down:'↓',idup:'Duplicate',idel:'Remove',
            sure:'Delete this slide? (Undo brings it back)',hint:'Click a text and type. Enter saves, Esc discards.',voice:'Brand voice: ',
-           typing:'In the text: Enter saves, Esc discards. After that the arrow keys turn the slides again; Page Up and Page Down always do.',
+           typing:'In the text: Enter saves, Esc discards. Selected words: ⌘K link, ⌘B bold, ⌘I italic, ⌘⇧X struck through (or the menu Format). After that the arrow keys turn the slides again; Page Up and Page Down always do.',fmt:'Format',tFmt:'Link, bold, italic or strike through the selected words',fLink:'Link',fBold:'Bold',fItalic:'Italic',fStrike:'Struck through',fClear:'Remove formatting',fmtSelect:'Select the words first, then format them.',fmtNone:'Click into a text and select words first.',linkAsk:'Address of the link (web page or email):',linkEdit:'Address of the link (empty removes the link):',linkSelect:'Select the text that becomes the link first, then ⌘K.',
            waiting:'Saved. After “Done” the text is corrected and translated into {l}.',saved2:'Saved. After “Done” the spelling is checked.',notesFor:'Notes for this slide (for the presenter)',notesSave:'Save',done:'Done',readFor:'Reader text for this slide (stands beside the slide in the reading version)',
            tEarlier:'The slide shown swaps places with the one before it',tLater:'The slide shown swaps places with the one after it',tDup:'Insert a copy of the slide shown right after it',tDel:'Remove the slide shown from the deck',
            gMove:'Order: this slide',gSlide:'This slide',gAdd:'Insert',gText:'For the slide',gSteps:'History',
@@ -38,7 +38,7 @@
            gAnim:'Animation',aStep:'On click',tStep:'The parts of this slide appear one after the other on click, the first stands with the slide. Press again: everything comes together',aMove:{'':'Movement: as the deck',calm:'Movement: calmer',expressive:'Movement: stronger',off:'Movement: none'},tMove:'How much moves on this one slide: as in the whole presentation, calmer, stronger or not at all',aPlay:'▶ Play',aOrder:'Order',aOrderOk:'Save order',tOrder:'Put the click steps of this slide in an order of your own and join parts into one step',oHint:'Click the parts in the order they should come. Hold Shift to have a part come together with the one before. Esc cancels.',oNone:'This slide has no click steps. Choose “On click” first.',oSaved:'Order saved.',tPlay:'Watch the animation of this slide, with its click steps',shared:'Several presentations share this slide (“{s}”). What you change here holds for this one only, unless you press “For all presentations”.',sharedAll:'Your changes to this slide (“{s}”) hold for all presentations: Claude takes them into the library and asks whether the other presentations should be updated.',forAll:'For all presentations',tForAll:'What you change on this shared slide should hold for every presentation that uses it. Press again: for this one only',edge:'It does not go further in this direction.',lastOne:'The last slide stays.',lastItem:'The last item of a list stays: delete the slide or ask Claude for another layout.',noItem:'This list cannot be rearranged here. Tell Claude what should change.',fClose:'Go on editing',fEnd1:'Changes saved',fEnd2:'The file “{f}” is saved. It belongs into the folder this presentation is in.',fEnd2d:'The file “{f}” is in your downloads folder now. Put it into the folder this presentation is in, or upload it in the chat.',fEnd3:'For correction, translation into the other languages and PDF tell Claude: “Apply my changes to {d}”.',fHint:'Click a text and type. Enter saves, Esc discards.',gSave:'Saving',fDir:'Choose folder …',fDirOk:'Saves into the file ✓',tDir:'Choose the folder your presentations are in (or the one of this presentation), once: from then on every change is saved in the presentation at once, for later presentations in that folder too',tDirOk:'Every change is saved in “{f}” at once',fWrong:'“{f}” is neither in this folder nor below it. Please choose the folder this presentation is in.',fSaved:'Saved in “{f}”',fFail:'Could not save: ',fNeed:'Not saved in the file yet: press “Choose folder …” and name the folder of this presentation.',fOk:'Close',fEndDir:'Your changes are in “{f}”. You can show it and pass it on as it is.',fPending:' · {n} text(s) unchecked: Claude corrects them as soon as you write to it. Until then they are marked in yellow.',gCheck:'Checking',uKeep:'Keep text as it is',tKeep:'The text of this slide you changed last stays exactly as it is: it is not corrected, only translated, and counts as checked',uTip:'Unchecked: typed by you, not corrected yet',uFlag:'{n} unchecked',uTitle:'Texts you typed that are not corrected yet. Tell Claude “Apply my changes”, or release them yourself with “Keep text as it is”.',uKept:'Stays exactly as it is and counts as checked.',rHead:'Taken over since you last edited',rSlide:'Slide {n}',rFixed:'corrected',rSame:'taken over as it was',rPending:'not corrected yet',rLangs:'translated: {l}'};
   function el(tag,attrs,html){ var e=document.createElement(tag); for(var k in attrs||{}) e.setAttribute(k,attrs[k]); if(html!==undefined) e.innerHTML=html; return e; }
   var panel=el('div',{id:'vse'}), items=el('div',{id:'vsi'}), note=el('div',{id:'vsn'}), notesBox=el('div',{id:'vse-notes'}), pick=el('div',{id:'vse-pick'}), line=el('div',{id:'vsl'}),
-      msg, btn, bUndo, bRedo, bNotes, bDone, bAdd, bField, bDir, bKeep, flag, area, area2, on=false;
+      msg, btn, bUndo, bRedo, bNotes, bDone, bAdd, bField, bDir, bKeep, flag, area, area2, on=false, fmt=el('div',{id:'vse-fmt'});
   function button(parent,label,fn,cls){ var b=el('button',cls?{'class':cls,type:'button'}:{type:'button'},label);
     b.addEventListener('mousedown',function(e){ e.preventDefault(); }); b.addEventListener('click',function(e){ e.stopPropagation(); fn(); }); parent.appendChild(b); return b; }
 
@@ -150,6 +150,9 @@
       if(typing){
         e.stopPropagation();
         if(t===area||t===area2){ if(type==='keydown'&&e.key==='Escape'){ openNotes(false); } return; }
+        if(type==='keydown'&&(e.metaKey||e.ctrlKey)&&!e.altKey){
+          var fk=e.key.toLowerCase(), fx=fk==='k'?'a':(fk==='b'?'b':(fk==='i'?'i':(fk==='x'&&e.shiftKey?'s':'')));
+          if(fx){ e.preventDefault(); fmtOn(t,fx); return; } }
         var dir=type==='keydown'?turn(e,t):0;               /* leaving the text at its end or its start turns the slide */
         if(dir){ e.preventDefault(); t.blur(); move(dir); }
         else if(type==='keydown'&&e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); t.blur(); }
@@ -161,6 +164,50 @@
       else if(on&&(e.metaKey||e.ctrlKey)&&(e.key==='z'||e.key==='Z')){ e.preventDefault(); e.stopPropagation(); step(e.shiftKey?'redo':'undo'); }
     },true);
   });
+
+  /* ⌘K in a text: the selected words become a link, or the link under the cursor gets another address (empty removes it).
+     Done on the page's nodes, as the texts are edited as plain text; saved with the text when it is left */
+  function linkAddr(u){ u=String(u||'').trim(); if(!u) return '';
+    if(/^[^\s@/]+@[^\s@/]+\.[a-z]{2,}$/i.test(u)) return 'mailto:'+u;
+    return /^(https?:|mailto:|#)/i.test(u)?u:'https://'+u; }
+  /* formatting of selected words, from the keys or the menu Format: bold, italic, struck through, a link. The texts are
+     edited as plain text, so the tags are set on the page's nodes; a second time on formatted words takes it off again.
+     The accent word of a title (<em>) is the brand's and stays */
+  var lastText=null, lastRange=null;
+  document.addEventListener('selectionchange',function(){ if(!on) return; var s=window.getSelection(); if(!s.rangeCount) return;
+    var n=s.anchorNode, e=n&&(n.nodeType===1?n:n.parentNode), t=e&&e.closest?e.closest('[contenteditable]'):null;
+    if(t&&t!==area&&t!==area2){ lastText=t; lastRange=s.getRangeAt(0).cloneRange(); } });
+  function unwrap(e){ while(e.firstChild) e.parentNode.insertBefore(e.firstChild,e); e.remove(); }
+  function fmtOn(t,kind){
+    if(kind==='a') return linkSel(t);
+    var s=window.getSelection(); if(!s.rangeCount) return; var r=s.getRangeAt(0); if(!t.contains(r.commonAncestorContainer)) return;
+    if(kind==='x'){ t.querySelectorAll('b,strong,i,s,u,a').forEach(function(e){ if(r.collapsed||r.intersectsNode(e)) unwrap(e); }); return; }
+    var n=r.startContainer.nodeType===1?r.startContainer:r.startContainer.parentNode, cur=n&&n.closest?n.closest(kind==='b'?'b,strong':kind):null;
+    if(cur&&t.contains(cur)){ unwrap(cur); return; }
+    if(r.collapsed){ say(T.fmtSelect); return; }
+    var w=document.createElement(kind); w.appendChild(r.extractContents()); r.insertNode(w);
+    s.removeAllRanges(); var nr=document.createRange(); nr.selectNodeContents(w); s.addRange(nr);
+  }
+  function fmtMenu(kind){
+    var t=lastText; if(!t||!document.contains(t)||!t.isContentEditable){ say(T.fmtNone); return; }
+    t.focus(); if(lastRange){ var s=window.getSelection(); s.removeAllRanges(); s.addRange(lastRange); }
+    fmtOn(t,kind);
+  }
+  function linkSel(t){
+    var sel=window.getSelection(); if(!sel.rangeCount) return;
+    var r=sel.getRangeAt(0); if(!t.contains(r.commonAncestorContainer)) return;
+    var n=r.startContainer.nodeType===1?r.startContainer:r.startContainer.parentNode, cur=n&&n.closest?n.closest('a'):null;
+    if(cur&&t.contains(cur)){
+      var v=window.prompt(T.linkEdit,cur.getAttribute('href')||''); if(v===null) return;
+      if(linkAddr(v)) cur.setAttribute('href',linkAddr(v));
+      else { while(cur.firstChild) cur.parentNode.insertBefore(cur.firstChild,cur); cur.remove(); }
+      return;
+    }
+    if(r.collapsed){ say(T.linkSelect); return; }
+    var u=linkAddr(window.prompt(T.linkAsk,'https://')); if(!u||u==='https://') return;
+    var a=document.createElement('a'); a.setAttribute('href',u);
+    a.appendChild(r.extractContents()); r.insertNode(a); sel.removeAllRanges();
+  }
 
   /* turning the slide out of a text: Page Up and Page Down always; an arrow key when the cursor already stands at
      the end (forward) or at the start (back) of the text */
@@ -606,6 +653,11 @@
     g=group(T.gSlide); named(button(g,T.dup,function(){ slideOp('duplicate'); }),T.tDup); named(button(g,T.del,function(){ slideOp('delete'); },'danger'),T.tDel);
     g=group(T.gAdd); bAdd=named(button(g,T.add,function(){ openPick('add'); }),T.tAdd); bField=named(button(g,T.field,function(){ openPick('field'); }),T.tField);
     g=group(T.gText); bNotes=named(button(g,T.notes,function(){ openNotes(!notesBox.classList.contains('on')); }),T.tNotes);
+    var bFmt=named(button(g,T.fmt+' ▾',function(){ fmt.classList.toggle('on'); bFmt.classList.toggle('on',fmt.classList.contains('on')); }),T.tFmt);
+    bFmt.addEventListener('mousedown',function(e){ e.preventDefault(); });      /* the text keeps its focus and its selection */
+    [[T.fLink,'⌘K','a'],[T.fBold,'⌘B','b'],[T.fItalic,'⌘I','i'],[T.fStrike,'⌘⇧X','s'],[T.fClear,'','x']].forEach(function(f){
+      var b=button(fmt,'',function(){ fmtMenu(f[2]); }); b.appendChild(el('b',{},f[0])); if(f[1]) b.appendChild(el('small',{},f[1]));
+      b.addEventListener('mousedown',function(e){ e.preventDefault(); }); });
     bAll=named(button(g,T.forAll,function(){ var s=active(); if(s&&s.getAttribute('data-shared')) anim('all',!s.getAttribute('data-forall')); }),T.tForAll); bAll.style.display='none';
     g=group(T.gAnim); bStep=named(button(g,T.aStep,function(){ var s=active(); if(s) anim('step',!stepOf(s)); }),T.tStep);
     bMove=named(button(g,T.aMove[''],function(){ var s=active(), l=['','calm','expressive','off']; if(s) anim('move',l[(l.indexOf(s.getAttribute('data-move')||'')+1)%4]); }),T.tMove);
@@ -618,7 +670,7 @@
     g=group('\u00a0'); bDone=named(button(g,T.done,finish,'go'),T.tDone);
     msg=el('div',{id:'vse-msg'});
     panel.appendChild(report); if(news()) btn.classList.add('news');
-    panel.appendChild(pick); panel.appendChild(notesBox); panel.appendChild(note); document.body.appendChild(line); panel.appendChild(msg); panel.appendChild(row);
+    panel.appendChild(pick); panel.appendChild(fmt); panel.appendChild(notesBox); panel.appendChild(note); document.body.appendChild(line); panel.appendChild(msg); panel.appendChild(row);
     panel.addEventListener('click',function(e){ e.stopPropagation(); });
     ctl.appendChild(panel); document.body.appendChild(items);
     button(items,T.up,function(){ itemOp('up'); }); button(items,T.down,function(){ itemOp('down'); });

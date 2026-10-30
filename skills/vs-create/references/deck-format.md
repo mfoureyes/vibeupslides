@@ -21,6 +21,7 @@ master and fills its slots. `vs masters <brand>` lists the masters of a brand wi
 | `minutes` | the length the talk must have, in minutes. The presenter view spreads it over the slides by their `weight` and shows the time left per slide, whether the talk is on time and when it will end. Not set and no `plan` on the slides: the presenter view only measures. See "Length and time plan" below |
 | `event` | where and when the deck is shown: `{"date": "2026-11-04", "start": "10:45", "place": "…", "audience": "…", "guest": "…"}`. `start` gives the schedule of the presenter view its clock times before the talk starts. Not rendered otherwise |
 | `copy_to` | folders the build copies its files into and reads back, e.g. a shared or cloud folder: `["~/Nextcloud/Talks/2026-11"]`. The build says what it copied and names older files of the deck there that it did not renew |
+| `scripts` | `true`: the deck's languages in another script (Chinese, Japanese, Cyrillic …) get matching system faces behind the brand's family. Only when the user wants it, see "Writing systems" |
 | `brief` | the answers about purpose, presenter, audience, length, look and handout. Not rendered; the memory of the project |
 | `slides` | the list of slides |
 
@@ -46,6 +47,9 @@ master and fills its slots. `vs masters <brand>` lists the masters of a brand wi
 | `voice` | `false`: the text of this slide is not checked against the brand's voice rules (text taken over word for word, other people's words) |
 | `edited` | written by the editing mode, not by you: texts the user changed, waiting to be corrected in the language they were written in and translated into the others, `[{"path": "bullets.2", "from": "de", "to": ["en"], "text": "..."}]`. Do that, then remove the entry |
 | `source` | source line in the footer, for numbers and photos |
+| `source_url` | the address of the source (`https://…`): the source line in the footer becomes a link to it, in the deck and in the PDF |
+| `buttons` | buttons on this slide: one or a list of `{"label": …, "url": …, "style": "secondary"}` (label per language like any text). `url` is a web page, `mailto:` an address, or a file of the deck folder. They stand at the foot of the slide, or where the master places `{{>buttons}}`. The closing masters also take one `button` slot. See "Links and buttons" below |
+| `qr` | `false`: no QR codes beside the buttons of this slide. By default the live version shows one beside every button that leads to a web page or a mail address |
 | `name` | name of the slide in outline and presenter view (default: its title) |
 | `chapter` | starts a chapter with this name; the `chapter` master does it by itself from its title |
 | `parts` | blocks of the brand's own on this slide (`vs masters <brand>` lists them): `[{"part": "takeaway", "t1": "...", "t2": "..."}]`, each with the slots of its part, texts per language like any slot. They stand at the end of the slide, before the notes; a free body places one with `<vs-part n="1"></vs-part>` (the number counts the list from 1) |
@@ -53,8 +57,43 @@ master and fills its slots. `vs masters <brand>` lists the masters of a brand wi
 | `handout` | `false`: left out of the handout build |
 
 Everything else is a slot of the master. Slots take HTML: `<em>` marks the accent word of a title,
-`<b>` a bold word. Slots a master does not know are ignored; a missing optional slot leaves its
+`<b>` a bold word, `<a href="https://…">` a link. Slots a master does not know are ignored; a missing optional slot leaves its
 element out.
+
+## Links and buttons
+
+- **Links in the text are for readers.** Any text can hold `<a href="https://…">the words</a>` (or
+  `mailto:`). In the reading version, the handout and while editing the link is underlined in the accent
+  colour and opens beside the deck; in the PDF it stays a link. On the screen of a talk nobody clicks and a
+  line under words reads as emphasis: there a link is plain text and does nothing. So put links where
+  readers are: into the `reading` texts of a slide (a link only in the live text is reported, `LINKS:`),
+  and where a number or a claim rests on a source with an address, link the words that make the claim
+  there and give the slide `source` with `source_url`: the footer line is a link in every version.
+  What the room should act on is a button (below), with its QR code.
+- **Formatting in the editor.** The user selects words and uses the menu Format or the keys: ⌘K
+  (Ctrl+K) link, ⌘B bold, ⌘I italic, ⌘⇧X struck through; the same again takes it off. `<b>`, `<i>`,
+  `<s>` and `<a>` are kept in the deck file; the accent word of a title stays `<em>`.
+- **Buttons.** A slide that asks for an action (book a meeting, download the paper, write to us) carries it
+  as a button, not as an address in the text: `"buttons": [{"label": {"de": "Termin vereinbaren", "en":
+  "Book a meeting"}, "url": "https://…"}]`, a second one with `"style": "secondary"` (outlined). One or two
+  per slide. They look like the brand's button (`a.vs-btn` in the brand's theme, taken from the website by
+  vs-build) and work in the HTML, online and in the PDF. Use them on reading versions and decks that are
+  sent, and on the closing slide of a talk.
+- **QR codes.** In the live version a QR code stands beside every button that leads to a web page or a mail
+  address, so the room takes the link with their phones. The reading version and the handout leave it out
+  (they have the link itself). `"qr": false` on a slide leaves it out there too. Links to a file of the deck
+  folder get no QR code: a phone cannot reach it.
+
+## Writing systems
+
+Only on request. For a language whose script the brand's typeface rarely covers (Chinese, Japanese,
+Korean, Cyrillic, Greek, Hebrew, Arabic, Thai, Devanagari) the browser takes a face of its own, and the
+build says so once (`SCRIPTS:`). When the user wants it (the letters look mixed or wrong), `"scripts":
+true` in the deck sets system faces of that script behind the brand's family, on those slides only:
+the brand face still sets every letter it has, the rest comes from one matching face. Chinese,
+Japanese and Korean then also lose the slanted `<em>` (there are no italics; the accent colour stays)
+and break lines by their own rules. Never set it without the user. Right-to-left languages (Hebrew, Arabic) need more than a face and are not laid out yet: say
+so to the user before writing such a deck.
 
 ## Length and time plan
 
@@ -406,3 +445,5 @@ otherwise ask the user for a PDF or the text. Detect hidden slides and ask wheth
 Pull images (`shape.image.blob`) into the deck's `images/` folder and drop tiny ones. Then propose
 a storyline, get it confirmed and write the deck file: titles rewritten as full sentences in the
 brand's voice, numbers, tables and images unchanged, outdated content (old dates) marked for the user.
+A slide of the original that already works (one clear message, a good chart, a strong photo) is taken
+over as it is, in content and wording, and set in the brand's master; say which ones you kept.

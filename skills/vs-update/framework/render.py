@@ -452,6 +452,9 @@ def _attrs(s, lang):
     for key, attr in (("name", "data-title"), ("chapter", "data-chapter"), ("source", "data-source"), ("about", "data-about")):
         if s.get(key):
             a.append(f'{attr}="{str(s[key]).replace(chr(34), "&quot;")}"')
+    url = str(s.get("source_url") or "").strip()
+    if s.get("source") and re.match(r"(?i)(https?:|mailto:)", url):     # the source in the footer is a link to it
+        a.append(f'data-source-url="{url.replace(chr(34), "%22")}"')
     if isinstance(s.get("step"), bool):                     # the deck says whether this slide builds up on click, whatever its master does
         a.append(f'data-step="{1 if s["step"] else 0}"')
     order = _order(s.get("order"))
@@ -600,11 +603,50 @@ def _prose(v):
         return v
     return "".join(f"<p>{p.strip()}</p>" for p in re.split(r"\n\s*\n", v) if p.strip())
 
+def _buttons(v):
+    """The buttons of a slide ("buttons": one or a list of {label, url, style}) as links that look like the brand's
+    button: a web page, a mail address, a file of the deck. style "secondary" draws the outlined one."""
+    out = []
+    for b in v if isinstance(v, list) else [v] if isinstance(v, dict) else []:
+        if not isinstance(b, dict): continue
+        url, label = str(b.get("url") or "").strip(), str(b.get("label") or "").strip()
+        if not url or not label or re.match(r"(?i)\s*(javascript|data|vbscript):", url): continue
+        new_tab = "" if re.match(r"(?i)(mailto|tel):", url) else ' target="_blank" rel="noopener"'
+        cls = "vs-btn" + (" vs-btn-2" if b.get("style") == "secondary" else "")
+        out.append(f'<a class="{cls}" href="{url.replace("&", "&amp;").replace(chr(34), "%22")}"{new_tab}>{label}</a>')
+    return "".join(out)
+
+def _h_buttons(env):
+    """{{>buttons}}: the slide's buttons where the master wants them; without it they stand at the foot of the slide."""
+    env["buttons_used"] = True
+    return f'<div class="vs-actions in">{env["buttons_html"]}</div>' if env.get("buttons_html") else ""
+
+def _with_qr(html):
+    """A QR code beside every button that leads to a web page or a mail address: in the live version the audience
+    takes the link with their phones. The reading version hides it, it has the link itself."""
+    import qr
+    def one(m):
+        attrs = m.group(1)
+        if not re.search(r'\bclass="[^"]*\bvs-btn\b', attrs): return m.group(0)
+        h = re.search(r'\bhref="((?:https?:|mailto:|tel:)[^"]+)"', attrs)
+        if not h: return m.group(0)
+        try: code = qr.svg(h.group(1).replace("&amp;", "&"))
+        except ValueError: return m.group(0)
+        return f'<span class="vs-btnqr">{m.group(0)}<span class="vs-qr" aria-hidden="true">{code}</span></span>'
+    return re.sub(r"<a\b([^>]*)>.*?</a>", one, html, flags=re.S)
+
+HELPERS["buttons"] = _h_buttons
+
 def _finish(html, n, env):
     """Mark the section with the slide's number in the deck file and the version it belongs to, and add the
     reader text. Both versions of a deck are in one file; the engine shows the slides of the version it runs."""
     only = env.get("only")
     html = re.sub(r"<section\b", f'<section data-n="{n}"' + (f' data-only="{only}"' if only else ""), html, 1)
+    if env.get("buttons_html") and not env.get("buttons_used") and "</section>" in html:
+        k = html.rindex("</section>")
+        html = html[:k] + f'<div class="vs-actions">{env["buttons_html"]}</div>\n' + html[k:]
+    if env.get("qr") and only != "reading" and "vs-btn" in html:
+        html = _with_qr(html)
     for extra in (env.get("read_html"), env.get("cues_html")):
         if extra and "</section>" in html:
             k = html.rindex("</section>")
@@ -687,6 +729,8 @@ def render_slide(slide, lang, masters, env):
     env["notes_html"] = f'<aside class="notes">{notes}</aside>' if notes else ""
     cues = _cues(s.get("cues"))                            # the notes as talking points: the presenter view switches between both
     env["cues_html"] = '<aside class="cues"><ul>' + "".join(f"<li>{c}</li>" for c in cues) + "</ul></aside>" if cues else ""
+    env["buttons_html"], env["buttons_used"] = _buttons(s.get("buttons")), False
+    env["qr"] = s.get("qr") is not False and not env.get("handout")
     if name in _FUNCTIONS:                                 # built-in slides write their own section: the talk's attributes go onto it
         html, extra = _FUNCTIONS[name](s, env), " ".join(_talk_attrs(s))
         return re.sub(r"<section\b", "<section " + extra, html, 1) if extra else html

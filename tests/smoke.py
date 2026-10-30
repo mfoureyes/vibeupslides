@@ -194,6 +194,81 @@ v2 = json.load(open(os.path.join(ws, "decks", "talk-two", "deck.json")))
 ok("a variant takes over slides, length and deepenings, with an empty event", tcode == 0 and len(v2["slides"]) == 7 and v2["minutes"] == 6 and v2["event"] == {}
    and v2["variant_of"] == "talk" and v2["slides"][3]["deepen"] == "Details" and "adapt the notes" in tout, tout)
 
+# ---------------------------------------------------------------- links, buttons with QR codes, writing systems
+import qr as qrmod
+try:
+    import cv2, numpy as np
+    def qr_reads(text):
+        m = qrmod.matrix(text); n, k = len(m), 6
+        img = np.full(((n + 8) * k, (n + 8) * k), 255, np.uint8)
+        for y, row in enumerate(m):
+            for x, v in enumerate(row):
+                if v: img[(y + 4) * k:(y + 5) * k, (x + 4) * k:(x + 5) * k] = 0
+        return cv2.QRCodeDetector().detectAndDecode(img)[0] == text
+    ok("the QR codes read back as their text, short and long, in any script",
+       all(qr_reads(t) for t in ("https://example.org", "mailto:hello@example.org", "https://example.org/" + "x" * 240, "Grüße 你好 https://ex.org/ü")))
+except ImportError:
+    print("skip: no OpenCV to read QR codes back")
+code, out = vs("new", "links", "--brand", "smoke", "--langs", "de,zh")
+ld = os.path.join(ws, "decks", "links")
+url, mail = "https://example.org/termin?a=1&b=2", "mailto:hallo@example.org"
+json.dump({"title": "Links", "brand": "smoke", "langs": ["de", "zh"], "english": False, "scripts": True, "slides": [
+    {"master": "bullets", "title": {"de": "Drei <em>Orte</em>", "zh": "三个<em>地点</em>"}, "source": "Amt 2025", "source_url": "https://example.org/amt",
+     "bullets": {"de": ["Ein Büro, siehe <a href=\"https://example.org/orte\">unsere Seite</a>.", "Eine Werkstatt.", "Ein Labor."], "zh": ["办公室。", "工作室。", "实验室。"]},
+     "buttons": {"label": "Mehr", "url": "https://example.org/mehr"}, "qr": False,
+     "reading": {"bullets": {"de": ["Ein Büro.", "Eine Werkstatt.", "Ein Labor."], "zh": ["办公室。", "工作室。", "实验室。"]}}},
+    {"master": "closing", "title": {"de": "Danke", "zh": "谢谢"},
+     "buttons": [{"label": {"de": "Termin", "zh": "预约"}, "url": url}, {"label": {"de": "Mail", "zh": "邮件"}, "url": mail, "style": "secondary"}]}]},
+    open(os.path.join(ld, "deck.json"), "w"), ensure_ascii=False)
+lcode, lout = vs("build", "links", "--pdf", "--no-shots")
+ok("the build names a link of the live text that the reading text of that place lacks", "LINKS: slide 1, bullets" in lout, lout[-600:])
+ldk = json.load(open(os.path.join(ld, "deck.json"))); ldk["slides"][0]["reading"]["bullets"]["de"][0] = "Ein Büro, siehe <a href=\"https://example.org/orte\">unsere Seite</a>."
+json.dump(ldk, open(os.path.join(ld, "deck.json"), "w"), ensure_ascii=False)
+lcode, lout = vs("build", "links", "--pdf", "--no-shots")
+vs("build", "links", "--mode", "reading", "--no-shots"); vs("handout", "links")
+lh = open(os.path.join(ld, "Links.html"), encoding="utf-8").read()
+with sync_playwright() as p:
+    br = p.chromium.launch(); pg = br.new_page(viewport={"width": 1600, "height": 900}); errors = []; pg.on("pageerror", lambda e: errors.append(str(e)))
+    pg.goto("file://" + os.path.join(ld, "Links.html") + "#/1"); pg.wait_for_timeout(900)
+    a = pg.evaluate("""()=>{var s=document.querySelector('.slide.active'), f=s.querySelector('.footer a.source'), l=s.querySelector('a[href*="orte"]');
+      return {src:f?f.getAttribute('href'):null, txt:f?f.textContent:null, tgt:l?l.target:null, line:l?getComputedStyle(l).textDecorationLine:null,
+              qr:s.querySelectorAll('.vs-qr').length, btn:s.querySelectorAll('.vs-actions a.vs-btn').length}}""")
+    pe = pg.evaluate("getComputedStyle(document.querySelector('.slide.active a[href*=\"orte\"]')).pointerEvents")
+    ok("a source with an address is a link in the footer; on the screen of a talk a link in the text is plain text that does nothing",
+       a["src"] == "https://example.org/amt" and a["txt"] == "Amt 2025" and a["tgt"] == "_blank" and a["line"] == "none" and pe == "none", str(a) + pe)
+    ok("buttons of a slide stand at its foot; qr false leaves their QR code out", a["btn"] == 1 and a["qr"] == 0, str(a))
+    pg.keyboard.press("ArrowRight"); pg.wait_for_timeout(700)
+    c = pg.evaluate("""()=>{var s=document.querySelector('.slide.active'); return {qr:[...s.querySelectorAll('.vs-btnqr')].map(q=>[q.querySelector('a').getAttribute('href'), getComputedStyle(q.querySelector('.vs-qr')).display]),
+      second:s.querySelector('a.vs-btn-2')?getComputedStyle(s.querySelector('a.vs-btn-2')).backgroundColor:null}}""")
+    ok("in the live version every button to a page or an address has its QR code beside it, the second one is outlined",
+       [q[0] for q in c["qr"]] == [url, mail] and all(q[1] == "block" for q in c["qr"]) and c["second"] == "rgba(0, 0, 0, 0)", str(c))
+    z = pg.evaluate("""()=>{var s=document.querySelector('section.slide[lang="zh"] h2'); var e=s&&s.querySelector('em'); return s?[getComputedStyle(s).fontFamily, e?getComputedStyle(e).fontStyle:null]:null}""")
+    ok("a language in another script gets faces of that script on its slides, without slanted emphasis", z and "PingFang SC" in z[0] and z[1] == "normal", str(z))
+    pg.goto("file://" + os.path.join(ld, "Links_reading.html") + "#/1"); pg.wait_for_timeout(900)
+    rl = pg.evaluate("(()=>{var a=document.querySelector('.slide.active a[href*=\"orte\"]'); return a?[getComputedStyle(a).textDecorationLine,getComputedStyle(a).pointerEvents,a.target]:null})()")
+    ok("in the reading version a link in the text is underlined and opens beside the deck", rl == ["underline", "auto", "_blank"], str(rl))
+    pg.goto("file://" + os.path.join(ld, "Links_reading.html") + "#/2"); pg.wait_for_timeout(900)
+    ok("the reading version keeps the buttons and leaves the QR codes out",
+       pg.evaluate("[...document.querySelectorAll('.slide.active .vs-qr')].every(q=>getComputedStyle(q).display==='none') && document.querySelectorAll('.slide.active a.vs-btn').length===2"))
+    ok("no script errors with links and buttons", not errors, str(errors[:3]))
+    br.close()
+ok("the handout has the buttons and no QR codes", "vs-btn" in open(os.path.join(ld, "Links_handout.html"), encoding="utf-8").read() and "class=\"vs-qr\"" not in open(os.path.join(ld, "Links_handout.html"), encoding="utf-8").read())
+uris = set()
+for pdf in [f for f in os.listdir(ld) if f.startswith("Links_") and f.endswith(".pdf") and "handout" not in f]:
+    for pg_ in pypdf.PdfReader(os.path.join(ld, pdf)).pages:
+        for an in pg_.get("/Annots") or []:
+            u = (an.get_object().get("/A") or {}).get("/URI")
+            if u: uris.add(str(u))
+ok("links, the linked source and the buttons stay links in the PDF", {"https://example.org/orte", "https://example.org/amt", url, mail} <= uris, str(sorted(uris)))
+ok("a deck in Latin languages gets no faces of other scripts", ":lang(" not in open(html, encoding="utf-8").read().split("<body")[0])
+del ldk["scripts"]; json.dump(ldk, open(os.path.join(ld, "deck.json"), "w"), ensure_ascii=False)
+lcode, lout = vs("build", "links", "--no-shots")
+ok("faces of another script only when the deck asks for them; without, the build says that it could",
+   ":lang(zh)" not in open(os.path.join(ld, "Links.html"), encoding="utf-8").read().split("<body")[0] and "SCRIPTS: zh" in lout, lout[-500:])
+import edit as E
+ok("the editor keeps bold, italic, struck through and links of a text, and drops what is not text",
+   E.sanitize('<b>a</b> <i>b</i> <s>c</s> <a href="https://x.org" onclick="y()">d</a> <font>e</font>') == '<b>a</b> <i>b</i> <s>c</s> <a href="https://x.org">d</a> e')
+
 # ---------------------------------------------------------------- video, embeds, scenes, present, pack
 import shutil, signal, time, zipfile, http.client
 ok("a deck without media stays one file", "this deck is a folder" not in out and not os.listdir(os.path.join(ws, "decks", "demo", "assets")))

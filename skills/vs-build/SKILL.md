@@ -281,6 +281,11 @@ slides must look and read like its website. Read `references/library.md` for the
   colour and type: how the label above a title looks, cards, chips and buttons, how images are
   cropped, rounded, tinted or framed, the bullet and arrow style, rules, patterns and the accent
   shape. Built with the tokens, using the saved elements (`url(el:arrows/arrow.svg)`).
+  The buttons of the slides are `a.vs-btn` (the primary one) and `a.vs-btn.vs-btn-2` (the
+  secondary, outlined one): style both after the first two entries of `buttons` in
+  `raw/components.json` (fill, text colour, radius, padding, type, case, arrow), at slide size
+  (about 28 px type), on paper and on dark and accent slides. Decks put them on slides that ask for
+  an action, with a QR code beside them in the live version.
 - **The element library**: the icons, arrows and shapes the analysis saved in `elements/` are what
   slides are decorated with. Go through them (`vs elements example`, `raw/elements.png`): delete
   what is not the brand's, rename every icon so its file says what it shows

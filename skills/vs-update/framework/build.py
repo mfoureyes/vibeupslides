@@ -169,6 +169,48 @@ def tokens_css(b):
             + motion.tokens_css(b) +
             "}" + head_rule + credit_rule)
 
+# Writing systems a brand typeface rarely covers: system faces of that script are set behind the brand's family for
+# the slides in such a language, so the brand face still sets every letter it has (Latin, figures) and the rest comes
+# from one matching face instead of whatever the browser finds. Only when the deck asks for it ("scripts": true).
+_SCRIPTS = {
+    "zh": ("'PingFang SC','Hiragino Sans GB','Microsoft YaHei','Noto Sans SC','Source Han Sans SC'", "'Songti SC','STSong','SimSun','Noto Serif SC'", True),
+    "zh-tw": ("'PingFang TC','Hiragino Sans CNS','Microsoft JhengHei','Noto Sans TC'", "'Songti TC','PMingLiU','Noto Serif TC'", True),
+    "zh-hk": ("'PingFang HK','PingFang TC','Microsoft JhengHei','Noto Sans HK'", "'Songti TC','PMingLiU','Noto Serif TC'", True),
+    "ja": ("'Hiragino Sans','Hiragino Kaku Gothic ProN','Yu Gothic','Meiryo','Noto Sans JP'", "'Hiragino Mincho ProN','Yu Mincho','Noto Serif JP'", True),
+    "ko": ("'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR'", "'AppleMyungjo','Batang','Noto Serif KR'", True),
+    "ru": ("'Helvetica Neue','Segoe UI',Arial,'Noto Sans'", "Georgia,'Times New Roman','Noto Serif'", False),
+    "el": ("'Helvetica Neue','Segoe UI',Arial,'Noto Sans'", "Georgia,'Times New Roman','Noto Serif'", False),
+    "he": ("'Arial Hebrew','Segoe UI',Arial,'Noto Sans Hebrew'", "'New Peninim MT','Times New Roman','Noto Serif Hebrew'", False),
+    "ar": ("'Geeza Pro','Segoe UI',Tahoma,'Noto Sans Arabic'", "'Al Nile','Times New Roman','Noto Naskh Arabic'", False),
+    "th": ("Thonburi,'Leelawadee UI','Noto Sans Thai'", "'Noto Serif Thai',Thonburi", False),
+    "hi": ("'Kohinoor Devanagari','Nirmala UI','Noto Sans Devanagari'", "'Devanagari Sangam MN','Noto Serif Devanagari'", False),
+}
+for _k, _v in (("uk", "ru"), ("bg", "ru"), ("sr", "ru"), ("be", "ru"), ("kk", "ru"), ("mk", "ru"), ("fa", "ar"), ("ur", "ar"), ("mr", "hi"), ("ne", "hi"), ("zh-hant", "zh-tw"), ("zh-hans", "zh")):
+    _SCRIPTS[_k] = _SCRIPTS[_v]
+
+def _script_of(lang):
+    l = str(lang or "").lower().replace("_", "-")
+    return l if l in _SCRIPTS else (l.split("-")[0] if l.split("-")[0] in _SCRIPTS else None)
+
+def scripts_css(b, langs):
+    """Faces for the writing systems of the deck's languages that a brand face rarely has (see _SCRIPTS). Ideographic
+    scripts also lose the slanted <em> (there are no italics) and break lines by their own rules."""
+    f, out = b["fonts"], []
+    fam = lambda role: (f.get(role) or {}).get("family")
+    for lang in langs or []:
+        key = _script_of(lang)
+        if not key: continue
+        sans, serif, ideo = _SCRIPTS[key]
+        fallback = f["body"].get("fallback") or "Arial, Helvetica, sans-serif"
+        body = ",".join(x for x in (f"'{fam('body')}'" if fam("body") else "", sans, fallback) if x)
+        head = ",".join(x for x in (f"'{fam('head')}'" if fam("head") else (f"'{fam('body')}'" if fam("body") else ""), sans, fallback) if x)
+        serif_rule = f"--font-serif:{','.join(x for x in (chr(39) + fam('serif') + chr(39) if fam('serif') else '', serif, 'serif') if x)};" if fam("serif") else ""
+        sel = f':lang({lang})'                              # on the slide only: inside it the faces follow from the variables
+        out.append(f".slide{sel}{{--font:{body};--font-head:{head};{serif_rule}font-family:var(--font)}}")
+        if ideo:
+            out.append(f"{sel} em,{sel} i{{font-style:normal}}{sel}{{line-break:strict;word-break:normal;overflow-wrap:anywhere}}")
+    return ("\n" + "\n".join(dict.fromkeys(out))) if out else ""
+
 _FONT_FORMATS = {".woff2": "woff2", ".woff": "woff", ".ttf": "truetype", ".otf": "opentype"}
 
 def fonts_css(b):
@@ -368,7 +410,7 @@ def mode_assets(mode):
     return tuple(out)
 
 def build(slides_path, out, brand=None, title=None, images=None, footer_left=None, footer_right=None,
-          pdf=False, lang=None, slides_text=None, mode="live", mode_css="", mode_js="", scheme=None):
+          pdf=False, lang=None, slides_text=None, mode="live", mode_css="", mode_js="", scheme=None, scripts=False):
     """Write the finished deck to `out`. Returns the output path. slides_text: the slide markup as a
     string instead of a file (slides_path is then ignored). mode: "live" or "reading"; the styles and
     script of a mode come from <mode>.css and <mode>.js next to this file unless they are passed in."""
@@ -390,7 +432,7 @@ def build(slides_path, out, brand=None, title=None, images=None, footer_left=Non
     langs = slide_langs(slides)
     lang = lang or (langs[0] if langs else b.get("lang", "en"))
     title = title or b.get("name") or "Presentation"
-    html = (master.replace("{{FONTS}}", fonts_css(b)).replace("{{TOKENS}}", tokens_css(b)).replace("{{THEME}}", theme_css(b))
+    html = (master.replace("{{FONTS}}", fonts_css(b)).replace("{{TOKENS}}", tokens_css(b) + (scripts_css(b, langs) if scripts else "")).replace("{{THEME}}", theme_css(b))
                   .replace("{{SLIDES}}", slides).replace("{{EXPORT_JS}}", export_js())
                   .replace("{{FAVICON}}", favicon(b)).replace("{{TITLE}}", title)
                   .replace("{{ASSETS}}", json.dumps(assets(b, footer_left, footer_right)))

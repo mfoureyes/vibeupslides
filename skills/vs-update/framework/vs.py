@@ -604,11 +604,12 @@ def _render_and_build(deck, b, out, deck_dir=None, standins=None, title=None, pd
         lg = b["logos"]; p = lg.get("primary_inverse") or lg.get("primary")
         if p: images["LOGO_INV"] = os.path.join(b["_dir"], p)
     B.build(None, out, brand=b, title=title or deck.get("title"), images=images, slides_text=slides, pdf=pdf, mode=env["mode"],
-            footer_left=deck.get("footer_left"), footer_right=deck.get("footer_right"), lang=(deck.get("langs") or [None])[0], scheme=deck.get("scheme"))
+            footer_left=deck.get("footer_left"), footer_right=deck.get("footer_right"), lang=(deck.get("langs") or [None])[0], scheme=deck.get("scheme"),
+            scripts=bool(deck.get("scripts")))
     try: minutes = float(deck.get("minutes") or 0)          # the length the talk must have: the presenter view spreads it over the slides
     except (TypeError, ValueError): minutes = 0
     start = str((deck.get("event") or {}).get("start") or "").strip() if isinstance(deck.get("event"), dict) else ""
-    root = (f'data-minutes="{minutes:g}" ' if minutes > 0 else "") + (f'data-start="{start}" ' if re.fullmatch(r"\d{1,2}:\d{2}", start) else "")
+    root = (f'data-minutes="{minutes:g}" ' if minutes > 0 else "") + (f'data-start="{start}" ' if re.fullmatch(r"\d{1,2}:\d{2}", start) else "") + ("data-handout " if deck.get("handout") else "")
     if root:                                                # the plan of the talk, for the presenter view
         html = open(out, encoding="utf-8").read()
         open(out, "w", encoding="utf-8").write(html.replace("<html ", "<html " + root, 1))
@@ -1171,6 +1172,16 @@ def cmd_build(args):
     for i, s in enumerate(deck.get("slides") or [], 1):      # a language added later: texts that do not have it yet
         for path, has in _lang_gaps(s, langs):
             print(f"TRANSLATE slide {i}, {path}: has {', '.join(has)}, not {', '.join(l for l in langs if l not in has)}; write it in the brand's voice for that language")
+    for i, s in enumerate(deck.get("slides") or [], 1):      # a link of the live text that the reader's own text of that place lacks
+        rd = s.get("reading") if isinstance(s, dict) and isinstance(s.get("reading"), dict) else {}
+        for k, v in rd.items():
+            if k != "explain" and "<a " in json.dumps(s.get(k), ensure_ascii=False) and "<a " not in json.dumps(v, ensure_ascii=False):
+                print(f"LINKS: slide {i}, {k}: the live text has a link the reading text lacks; readers are the ones who click: put it into \"reading\" {k} (or a button)")
+    import build as B
+    other = [l for l in langs if B._script_of(l)]
+    if other and not deck.get("scripts"):
+        print(f"SCRIPTS: {', '.join(other)} is written in a script the brand's typeface may not have; the browser then takes a face of its own. "
+              "If the user wants it (letters look mixed or wrong), \"scripts\": true in the deck sets matching system faces. Not without the user.")
     if mode == "live":                                     # notes come as the whole speaking text and as talking points
         bare = [str(i) for i, s in enumerate(deck.get("slides") or [], 1) if isinstance(s, dict) and s.get("notes") and not s.get("cues")]
         if bare: print(f"CUES: slides {', '.join(bare)} of deck.json have notes but no talking points: write \"cues\" (three to five short lines per language) from the notes")

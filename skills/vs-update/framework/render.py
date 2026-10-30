@@ -461,6 +461,15 @@ def _attrs(s, lang):
         a.append('data-fit="0"')
     if s.get("move") in ("calm", "expressive", "off"):       # how much moves on this one slide
         a.append(f'data-move="{s["move"]}"')
+    a += _talk_attrs(s)
+    focus = str(s.get("focus") or "").strip().lower()       # which part of the photo stays in view: "right", "left top", "30% 20%"
+    if focus and re.fullmatch(r"(left|right|center|top|bottom|\d{1,3}%)( (left|right|center|top|bottom|\d{1,3}%))?", focus):
+        a.append(f'style="--focus:{focus}"')
+    return " ".join(a)
+
+def _talk_attrs(s):
+    """What the presenter view needs to know of a slide: its deepening, the presenter's choice, its planned time."""
+    a = []
     deepen = s.get("deepen")                                # a slide of a deepening: left out of the short version, opened while presenting
     if deepen:
         name = "more" if deepen is True else str(deepen)
@@ -471,10 +480,7 @@ def _attrs(s, lang):
         try: v = float(s[key])
         except (KeyError, TypeError, ValueError): continue
         if v >= 0: a.append(f'data-{key}="{v:g}"')
-    focus = str(s.get("focus") or "").strip().lower()       # which part of the photo stays in view: "right", "left top", "30% 20%"
-    if focus and re.fullmatch(r"(left|right|center|top|bottom|\d{1,3}%)( (left|right|center|top|bottom|\d{1,3}%))?", focus):
-        a.append(f'style="--focus:{focus}"')
-    return " ".join(a)
+    return a
 
 def _m_timer(s, env):
     from timer import timer_slide
@@ -599,11 +605,35 @@ def _finish(html, n, env):
     reader text. Both versions of a deck are in one file; the engine shows the slides of the version it runs."""
     only = env.get("only")
     html = re.sub(r"<section\b", f'<section data-n="{n}"' + (f' data-only="{only}"' if only else ""), html, 1)
-    read = env.get("read_html")
-    if read and "</section>" in html:
-        k = html.rindex("</section>")
-        html = html[:k] + read + "\n" + html[k:]
+    for extra in (env.get("read_html"), env.get("cues_html")):
+        if extra and "</section>" in html:
+            k = html.rindex("</section>")
+            html = html[:k] + extra + "\n" + html[k:]
     return html
+
+def _for_reading(slide, rd):
+    """The slide as the reading version shows it: its "reading" texts over its own, "explain" (or "read") as the
+    paragraph under the title. Notes and reader text stay out of it."""
+    s = {k: v for k, v in slide.items() if k not in ("read", "reading", "notes", "cues")}
+    s.update({k: v for k, v in rd.items() if k != "explain"})
+    ex = rd.get("explain") or slide.get("read")
+    if ex: s["explain"] = ex
+    return s
+
+def _explain(html, text):
+    """The paragraph for readers, right under the slide's title (or at the end of the slide if it has none)."""
+    if not text: return html
+    p = f'<div class="vs-explain">{text}</div>'
+    m = re.search(r"</h[12]>", html)
+    if m: return html[:m.end()] + p + html[m.end():]
+    k = html.rfind("</section>")
+    return html[:k] + p + html[k:] if k >= 0 else html
+
+def _cues(v):
+    """Talking points: a list, or one per line of a string; leading dashes and bullets go."""
+    if isinstance(v, str): v = v.splitlines()
+    if not isinstance(v, list): return []
+    return [c for c in (re.sub(r"^\s*[-–•*]\s*", "", str(x)).strip() for x in v) if c]
 
 _CONTENTS = {"en": "Contents", "de": "Inhalt", "fr": "Sommaire", "es": "Contenido", "it": "Indice", "nl": "Inhoud"}
 
@@ -645,8 +675,8 @@ def render_slide(slide, lang, masters, env):
     s = _resolve_images(_resolve_lang(slide, lang, env["langs"]), env, full=bool(m["meta"].get("full_images")))
     env["lang"] = lang
     read, env["read_html"] = _prose(s.get("read")), ""
-    origin = "read" if read else ("notes" if _prose(s.get("notes")) else "none")
-    if env.get("mode") == "reading" and env.get("slide_no"):   # what the build reports for a deck whose main version is the reading one (not the editing's sample slides)
+    origin = "read" if read or s.get("explain") else ("notes" if _prose(s.get("notes")) else "none")
+    if env.get("mode") == "reading" and env.get("slide_no") and env.get("only") != "live":   # what the build reports for a deck whose main version is the reading one (not the editing's sample slides)
         env.setdefault("read_origin", {}).setdefault(origin, set()).add(env["slide_no"])
     text = read or _prose(s.get("notes"))                  # reading version: the text for readers goes onto the page, the notes when there is none
     if text and env.get("only") != "live":
@@ -655,8 +685,11 @@ def render_slide(slide, lang, masters, env):
         s["notes"] = read
     notes = s.get("notes")
     env["notes_html"] = f'<aside class="notes">{notes}</aside>' if notes else ""
-    if name in _FUNCTIONS:
-        return _FUNCTIONS[name](s, env)
+    cues = _cues(s.get("cues"))                            # the notes as talking points: the presenter view switches between both
+    env["cues_html"] = '<aside class="cues"><ul>' + "".join(f"<li>{c}</li>" for c in cues) + "</ul></aside>" if cues else ""
+    if name in _FUNCTIONS:                                 # built-in slides write their own section: the talk's attributes go onto it
+        html, extra = _FUNCTIONS[name](s, env), " ".join(_talk_attrs(s))
+        return re.sub(r"<section\b", "<section " + extra, html, 1) if extra else html
     slots = dict(_resolve_lang(fit_langs(m["meta"].get("defaults") or {}, env["langs"]), lang, env["langs"]))
     slots.update(s)
     if m["meta"].get("is_chapter") and not s.get("chapter"):
@@ -710,20 +743,31 @@ def render_deck(deck, masters, env):
             continue
         meta = (masters.get(slide.get("master")) or {}).get("meta", {})
         only = slide.get("only") if slide.get("only") in ("live", "reading") else ("live" if meta.get("reading") is False else None)
-        env["slide_no"], env["only"] = i, only
+        env["slide_no"] = i
+        # The reading version shows every slide whole, in its master. A slide with "reading" (texts of its own for
+        # readers) or "read" (a paragraph that explains it) is there twice: as it is for the live version, and with
+        # those texts for the reading one, the paragraph under its title.
+        rd = slide.get("reading") if isinstance(slide.get("reading"), dict) else {}
+        twice = only is None and (rd or slide.get("read")) and not env["handout"]
+        versions = [("live", slide), ("reading", _for_reading(slide, rd))] if twice else [(only, slide)]
         for lang in ([slide["lang"]] if slide.get("lang") else langs):
+          for only_v, sv in versions:
+            env["only"] = only_v
             try:
-                out.append(_finish(render_slide(slide, lang, masters, env), i, env)); last[lang] = len(out) - 1
+                html = render_slide(sv, lang, masters, env)
+                if only_v == "reading" and sv.get("explain"):
+                    html = _explain(html, _prose(_resolve_lang(sv["explain"], lang, langs)))
+                out.append(_finish(html, i, env)); last[lang] = len(out) - 1
                 if env.get("edit") and slide.get("shared"):  # the editing says that a change to this slide stays in this deck
                     out[-1] = re.sub(r"<section\b", '<section data-shared="' + re.sub(r"[^\w-]", "", str(slide["shared"])) + '"' + (' data-forall="1"' if slide.get("for_all") else ""), out[-1], 1)
             except Exception as e:
                 raise ValueError(f"slide {i} ({slide.get('master')}): {e}")
             pages[lang] = pages.get(lang, 0) + 1
-            if only != "live":
+            if only_v != "live":
                 rpages[lang] = rpages.get(lang, 0) + 1
             name = _plain(_resolve_lang(slide.get("chapter") or (slide.get("title") if meta.get("is_chapter") else ""), lang, langs))
             if name and name not in [c[0] for c in chapters.setdefault(lang, [])]:
-                chapters[lang].append((name, rpages.get(lang, 0) + (1 if only == "live" else 0)))
+                chapters[lang].append((name, rpages.get(lang, 0) + (1 if only_v == "live" else 0)))
         if len(out) == sum(pages.values()) == len(pages) and str(slide.get("master", "")).startswith("cover"):
             cover = len(out)                                # the contents page follows the cover
     env["only"] = None

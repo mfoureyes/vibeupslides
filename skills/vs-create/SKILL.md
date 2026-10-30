@@ -182,8 +182,9 @@ since nobody can pick their own thesis from a list.
 2. **Presented or read.** Every deck has a main mode: `live` (a person presents, the slide
    supports) or `reading` (it is sent and must work without a speaker). Ask which one this deck is
    first. The other version can be built later from the same file; offer it, do not build it unasked.
-3. **Who presents, to whom, how long.** The user live, someone else, or nobody (it is read); who is
-   in the room; the length of the slot. Ask for the length whenever the deck is presented and it is
+3. **Who presents, to whom, how long, when.** The user live, someone else, or nobody (it is read);
+   who is in the room; the length of the slot; for a presented deck the date, start and place
+   (`event`), so that the schedule shows clock times. Ask for the length whenever the deck is presented and it is
    not known yet ("no fixed length" is an answer: then the presenter view only measures).
 4. **Look.** Within the brand: calm or bold, text-led or image-led, mostly light or mostly dark
    slides, how much motion (off, calm, standard, expressive), and whether a video has a place.
@@ -353,8 +354,9 @@ Writing rules, on top of the brand's voice:
   Numbers carry their source in `source`.
 - Text from a document the user supplied is used word for word. If such a slide breaks a voice
   rule, it stays as it is and gets `"voice": false`; so do slides with other people's words.
-- Speaker notes on every slide of a live deck: short, full sentences, the numbers and names, the
-  transition to the next slide.
+- Speaker notes on every slide of a live deck, in two forms in the language of the slide: `notes`
+  the whole speaking text (full sentences that could be read aloud, the numbers and names, the
+  transition to the next slide) and `cues` the same as three to five short talking points.
 
 ## 5. Build and look
 
@@ -379,6 +381,17 @@ at every slide once; after later changes only at the ones you changed (`--only 3
 Rebuild as often as needed, it takes seconds.
 
 ## 6. Hand over
+
+**The handout comes with it.** A presented deck is handed over with `vs handout <deck>`: the talk
+as prepared, as HTML and a PDF per language. Say where the files are. If the deck has `copy_to`,
+the build copies them there and reads them back; say what it reported (an `OLDER` line means a
+file there was not renewed).
+
+**The same talk for another occasion.** `vs new <name> --from <deck> --variant` takes the slides
+over; ask only for what differs (`event`: date, start, place, audience, guest, length), then adapt
+the notes and cues to the new audience yourself (a guest to thank, an interpreter, what this
+audience knows) and suggest which slides go in or out (`deepen`, `show`). Say in one line which
+slides changed.
 
 **Ask about the other presentations, only when there is a reason.** Other decks are touched only
 when this session changed something they share: a shared slide or a fact (made, changed or pushed),
@@ -407,7 +420,7 @@ belong on one click, set `"order"` (deck-format.md). The user can do the same in
 ("On click", "Order": they click the parts in the new order, with Shift to join one to the step
 before; the strength of movement, "Play").
 
-Name the version in half a sentence when you hand a deck over ("built with VibeUpSlides 0.10.0", from
+Name the version in half a sentence when you hand a deck over ("built with VibeUpSlides 0.11.0", from
 the status line of the setup), so that the user can tell which state they are testing.
 A button (`button: {label, url}` on the closing slide) is a call to action with a real target; a
 cover has none. The last slide credits the person who made the deck (`"author"` in the deck file,
@@ -431,9 +444,10 @@ their first deck, add that the next one is a sentence away ("Make a presentation
 
 When the user wants the deck they presented as something to send, or a reading deck as something to
 present, build the other mode from the same file: `vs build kickoff --mode reading` (or
-`--mode live`). `references/modes.md` has the rules. For a reading version, write a `read` text on
-every slide that needs one: prose for someone who was not in the room, not the speaker cues; the
-build lists the slides that still fall back to the notes. Rewrite titles that only worked with a
+`--mode live`). `references/modes.md` has the rules. For a reading version, give every content slide
+`reading`: `explain` (two or three sentences for someone who was not in the room, not the speaker
+cues) and the slots that should say more, so that each slide works without a speaker; the build
+lists the content slides that have no text for readers yet. Rewrite titles that only worked with a
 voice. For a live version of a reading deck, move the prose into `notes`, keep a sentence title and
 one piece of evidence on the slide, and split dense pages. Slides that belong to one version only
 get `"only": "live"` or `"only": "reading"`. After an event, ask what was actually shown and mark

@@ -19,6 +19,8 @@ master and fills its slots. `vs masters <brand>` lists the masters of a brand wi
 | `motion_set` | the motion set of this deck where it should differ from the brand's (`rise`, `soft`, `sweep`, `mask`, `draw`, `cascade`, `cut`, `site`, …). Written by `vs motion --deck <deck> --set <name>`; `--set brand` removes it |
 | `footer_left`, `footer_right` | override the footer texts of the brand for this deck |
 | `minutes` | the length the talk must have, in minutes. The presenter view spreads it over the slides by their `weight` and shows the time left per slide, whether the talk is on time and when it will end. Not set and no `plan` on the slides: the presenter view only measures. See "Length and time plan" below |
+| `event` | where and when the deck is shown: `{"date": "2026-11-04", "start": "10:45", "place": "…", "audience": "…", "guest": "…"}`. `start` gives the schedule of the presenter view its clock times before the talk starts. Not rendered otherwise |
+| `copy_to` | folders the build copies its files into and reads back, e.g. a shared or cloud folder: `["~/Nextcloud/Talks/2026-11"]`. The build says what it copied and names older files of the deck there that it did not renew |
 | `brief` | the answers about purpose, presenter, audience, length, look and handout. Not rendered; the memory of the project |
 | `slides` | the list of slides |
 
@@ -28,7 +30,9 @@ master and fills its slots. `vs masters <brand>` lists the masters of a brand wi
 |---|---|
 | `master` | name of the master |
 | `notes` | speaker notes, shown in the presenter view |
-| `read` | text for readers, shown beside the slide in the reading version only: prose for someone who was not in the room. A string (a blank line starts a paragraph) or a list of paragraphs |
+| `read` | a paragraph for readers, set under the title in the reading version only: what the slide means for someone who was not in the room. A string or a list of paragraphs. Short: two or three sentences. The same as `reading.explain` |
+| `reading` | the slide as the reading version shows it: `explain` (the paragraph under the title) and any slot of the master with a text of its own for readers, e.g. `"bullets"` as full sentences or a longer `"lead"`. See "Two versions" below |
+| `cues` | the notes as talking points: a list of three to five short lines per language. The presenter view switches between the whole text (`notes`) and these |
 | `only` | `"live"` or `"reading"`: the slide exists in this version only |
 | `icon` (on items of `cards`, `columns`, `steps`) | the name of an icon from the brand's library, as `vs elements <brand>` lists it. Only icons the library holds: a name that is not there is reported and left out |
 | `fit` | `false`: the engine does not enlarge the body of this slide to fill it (also as a field of the deck, for all slides) |
@@ -123,7 +127,9 @@ files, how to open it and go on, in the deck's first language; written anew each
 hand). `vs handover <deck>` copies all of it, without the working files, into one tidy folder for
 the user. `vs new <deck> --from <other>`
 copies sources and research of an earlier deck, notes it as `"from"` in the deck file and prints
-that deck's brief.
+that deck's brief. `--variant` makes the same talk for another occasion: slides, length,
+deepenings and choices, images and assets come along too, `event` starts empty and the deck notes
+`"variant_of"`.
 
 ## Photos behind text
 
@@ -167,18 +173,47 @@ only. `references/modes.md` says when to offer it and what to rewrite first.
 
 What the reading version does with the same slides:
 
-- A slide with `read` becomes a page with the whole slide reduced on the left and the text in a
-  column on the right. A slide without `read` takes its `notes` as they are, and the build lists
-  those slides ("reader text missing ..."), so that they get rewritten. A slide with neither is
-  shown full size.
+- Every slide stays a whole slide in its master. A slide with `reading` (or `read`) is in the file
+  twice: as it is for the live version, and for the reading version with its texts for readers,
+  the paragraph `explain` under the title. Where those texts need the room, the body of the slide
+  is set smaller, by a fifth at most (27 px become about 22); beyond that the build reports the
+  overflow: shorten the text or split the slide.
+- A slide without `reading` and `read` is shown as in the live version; the build lists the content
+  slides among them ("no text for readers ..."), so that each is looked at: most need a sentence of
+  explanation, a few say everything themselves.
+
+```json
+{"master": "bullets", "title": "We work in three <em>places</em>",
+ "bullets": ["Office.", "Workshop.", "Lab."],
+ "reading": {"explain": "The three places are ten minutes apart, so a team can test in the morning what it built the day before.",
+             "bullets": ["The office has 40 desks that teams use for a year.", "The workshop has 3D printers and a laser cutter.", "In the lab, teams invite customers to trials."]}}
+```
 - All click steps are visible, motion is off, `timer` slides are left out, quiz slides show their
   answer, video and embed slides show their poster with the address as a link.
-- A contents page is generated after the cover when the deck has at least two chapters, and every
-  page carries a bar with all chapter names, the current one marked. Page numbers stay.
-- Speaker notes are not in the file at all.
+- A contents page is generated after the cover when the deck has at least two chapters. Page
+  numbers stay.
+- Speaker notes are not shown.
 
-Built live, a deck never shows `read` on a slide; where a slide has `read` but no `notes`, the
+Built live, a deck never shows `read` or `reading`; where a slide has `read` but no `notes`, the
 presenter view shows the reader text as notes.
+
+## Notes and talking points
+
+`notes` is the whole speaking text in the language of the slide, written to be read aloud if need
+be; `cues` are the same as three to five short talking points. The presenter view shows either,
+switched in the notes panel. Write both on every slide of a live deck; the build lists slides that
+have notes but no cues (`CUES: …`).
+
+```json
+{"master": "steps", "title": "…", "notes": {"en": "The support has three steps. First the team applies with one page …"},
+ "cues": {"en": ["Apply: one page", "Start: three months of coaching", "Grow: funding and network"]}}
+```
+
+## Handout
+
+`vs handout <deck>` builds `<Title>_handout.html` and a PDF per language: the talk as prepared,
+deepenings left out unless taken in, no timers, quizzes answered, pages numbered without gaps.
+Slides with `"handout": false` stay out. Run it at every hand-over of a presented deck.
 
 ## Images
 

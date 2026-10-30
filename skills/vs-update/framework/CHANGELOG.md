@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.11.0
+- The reading version shows whole slides. A slide with texts for readers (`reading`, or `read`) is in the file twice: as it is for the live version, and for the reading version in the same master with a paragraph under its title (`explain`) and slots that say more (bullets as full sentences, a longer lead). Where those texts need the room, the body is set smaller, by a fifth at most. The reduced slide beside a column of text and the section bar are gone. The build lists content slides without text for readers.
+- Notes in two forms: `notes` is the whole speaking text, `cues` the same as talking points. The notes panel of the presenter view switches between them; the build lists slides with notes but no cues.
+- `vs handout <deck>`: the handout of the talk as prepared, HTML and a PDF per language (deepenings left out unless taken in, no timers, quizzes answered, pages without gaps). vs-create makes it at every hand-over of a presented deck.
+- `event` in the deck (date, start, place, audience, guest): vs-create asks for it; its start gives the schedule of the presenter view clock times before the talk.
+- `vs new <name> --from <deck> --variant`: the same talk for another occasion, with slides, length, deepenings, images and assets. vs-create asks only for what differs and adapts notes and cues to the new audience.
+- `copy_to` in the deck: the build copies its files into those folders (a shared or cloud folder), reads them back and names older files of the deck there. Every build lists what it wrote, with time and size.
+- Built-in slides (timer, quiz) carry the deepening and plan of the deck file too.
+- Notes and choices saved from the presenter view of `vs present` update the copies in `copy_to` as well; at the end it says when the handout no longer shows the talk as chosen.
+- Presenter view: nothing flickers while panels, edges or the film strip move. The view writes only what changed four times a second, the current slide keeps its outline inside its room, the thumbnails move with their panel instead of being built again, and a panel joining an edge whose shares were set by hand gets its share. The film strip no longer writes its numbers into a slide of the thumbnail (the numbered dots of a cycle).
+
+For brand libraries made with an earlier version:
+- Nothing to do. Decks with `read` show it as the paragraph under the title in the reading version; long reader texts may now overflow there and need shortening (the build says where).
+
 ## 0.10.0
 - A new presenter view, built like the confidence monitor of PowerPoint and Keynote. The current slide stands in the middle and takes all the room the panels leave; Back and Next sit at the top right with the clicks still to come. Schedule, next slide, notes and a film strip are panels: drag one by its header to any edge, change its size at its inner edge, hide or move it from the menu View. The layout and the size of the notes are kept in the browser. Notes are larger and brighter.
 - The time of the talk. Opening the deck starts nothing: the time runs from the first step forward from the first slide or the Start button, and the clock times of the plan count from there. Back on the first slide after a rehearsal, Reset time sets it to Ready. Reloading the deck keeps the time. With a length (`minutes` in the deck, or a target typed in on the day) every slide gets its share by `weight`, fixed `plan` seconds stand as they are: the time left on the slide in green, yellow and red, a bar of all slides with chapter marks, where you should be and where you are, on time, over or ahead, and the expected end. Without a length the time is measured. Report downloads plan against actual per slide and chapter, with every change of slide and its clock time.

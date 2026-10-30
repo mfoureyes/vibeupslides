@@ -110,7 +110,7 @@ with sync_playwright() as p:
     br.close()
 
 # ---------------------------------------------------------------- time plan, deepenings, presenter panels
-code, out = vs("new", "talk", "--brand", "smoke", "--langs", "en")
+tcode, tout = vs("new", "talk", "--brand", "smoke", "--langs", "en")
 td = os.path.join(ws, "decks", "talk")
 json.dump({"title": "Talk", "brand": "smoke", "langs": ["en"], "minutes": 6, "slides": [
     {"master": "cover", "title": "A talk"},
@@ -120,10 +120,10 @@ json.dump({"title": "Talk", "brand": "smoke", "langs": ["en"], "minutes": 6, "sl
     {"master": "statement", "text": "Another detail.", "deepen": "Details"},
     {"master": "statement", "text": "The point.", "plan": 30},
     {"master": "closing", "title": "Thanks"}]}, open(os.path.join(td, "deck.json"), "w"))
-code, out = vs("build", "talk", "--no-shots")
-ok("a deck with deepenings and a length builds, and its checks look at every slide", code == 0 and "7 slides" in out, out[-500:])
-code, out = vs("plan", "talk")
-ok("vs plan spreads the length by weight and lists the deepening", code == 0 and "Length 6:00" in out and "deepening 'Details': slides 4, 5" in out and "  0:30    6" in out, out)
+tcode, tout = vs("build", "talk", "--no-shots")
+ok("a deck with deepenings and a length builds, and its checks look at every slide", tcode == 0 and "7 slides" in tout, tout[-500:])
+tcode, tout = vs("plan", "talk")
+ok("vs plan spreads the length by weight and lists the deepening", tcode == 0 and "Length 6:00" in tout and "deepening 'Details': slides 4, 5" in tout and "  0:30    6" in tout, tout)
 with sync_playwright() as p:
     br = p.chromium.launch(); pg = br.new_page(viewport={"width": 1280, "height": 720}); errors = []
     pg.on("pageerror", lambda e: errors.append(str(e)))
@@ -156,6 +156,43 @@ with sync_playwright() as p:
     ok("reloading the deck keeps the time", pg.evaluate("JSON.parse(localStorage.getItem('vs-clock:'+location.pathname)).start") > 0)
     ok("no script errors with deepenings and schedule", not errors, str(errors[:3]))
     br.close()
+
+
+# ---------------------------------------------------------------- notes and cues, event, handout, copies, variant
+tdk = json.load(open(os.path.join(td, "deck.json")))
+tdk["slides"][2].update(notes="Three points, the second one matters most.", cues=["First point", "- Second point: the one that matters", "Third point"])
+tdk["slides"][0]["notes"] = "Welcome."
+tdk["event"] = {"date": "2026-11-04", "start": "10:45", "place": "Hall"}
+drop = os.path.join(ws, "drop"); os.makedirs(drop)
+open(os.path.join(drop, "Talk_old.pdf"), "w").write("x"); os.utime(os.path.join(drop, "Talk_old.pdf"), (1, 1))
+tdk["copy_to"] = [drop]
+json.dump(tdk, open(os.path.join(td, "deck.json"), "w"))
+tcode, tout = vs("handout", "talk")
+import pypdf
+hp = os.path.join(td, "Talk_handout.pdf")
+ok("the handout holds the talk as prepared: deepenings out, a PDF beside the HTML", tcode == 0 and os.path.exists(hp) and len(pypdf.PdfReader(hp).pages) == 5, tout[-600:])
+ok("the build lists what it wrote and the copies it made and read back, and names older files there",
+   "written: Talk_handout.pdf" in tout and "copied: " + os.path.join(drop, "Talk_handout.pdf") in tout and "OLDER: " + os.path.join(drop, "Talk_old.pdf") in tout
+   and open(os.path.join(drop, "Talk_handout.pdf"), "rb").read() == open(hp, "rb").read(), tout[-800:])
+ok("the build lists slides with notes but no talking points", "CUES: slides 1 of deck.json" in tout, tout[-600:])
+tcode, tout = vs("build", "talk", "--no-shots")
+with sync_playwright() as p:
+    br = p.chromium.launch(); pg = br.new_page(); errors = []; pg.on("pageerror", lambda e: errors.append(str(e)))
+    pg.goto("file://" + os.path.join(td, "Talk.html") + "#/3"); pg.wait_for_timeout(1000)
+    ok("the event's start sets the root of the plan", pg.evaluate("document.documentElement.getAttribute('data-start')") == "10:45")
+    with pg.expect_popup() as pop: pg.keyboard.press("m")
+    w = pop.value; w.set_viewport_size({"width": 1500, "height": 950}); w.wait_for_timeout(900)
+    full = w.evaluate("document.getElementById('m-npt').textContent")
+    w.click("#m-ncues"); w.wait_for_timeout(300)
+    ok("the notes panel switches between the whole text and the talking points",
+       "second one matters" in full and w.evaluate("[...document.querySelectorAll('#m-npt li')].map(l=>l.textContent)") == ["First point", "Second point: the one that matters", "Third point"])
+    ok("before the start the plan shows clock times from the event's start", "10:45" in w.evaluate("document.getElementById('m-end').textContent"))
+    ok("no script errors with cues and event", not errors, str(errors[:3]))
+    br.close()
+tcode, tout = vs("new", "talk-two", "--from", "talk", "--variant")
+v2 = json.load(open(os.path.join(ws, "decks", "talk-two", "deck.json")))
+ok("a variant takes over slides, length and deepenings, with an empty event", tcode == 0 and len(v2["slides"]) == 7 and v2["minutes"] == 6 and v2["event"] == {}
+   and v2["variant_of"] == "talk" and v2["slides"][3]["deepen"] == "Details" and "adapt the notes" in tout, tout)
 
 # ---------------------------------------------------------------- video, embeds, scenes, present, pack
 import shutil, signal, time, zipfile, http.client
@@ -403,7 +440,7 @@ with sync_playwright() as p:
     pg.evaluate("window.vsGo(4)"); pg.wait_for_timeout(300); pg.keyboard.press("v"); pg.wait_for_timeout(1800)
     ok("the key V opens the reading version of the same file at the same slide",
        ev("document.documentElement.getAttribute('data-mode')") == "reading" and ev(shown + ".length") == 10 and ev("document.querySelector('#deck > .slide.active').getAttribute('data-n')") == "4"
-       and ev("!!document.querySelector('#deck > .slide.active > .rt')"))
+       and ev("!document.querySelector('#deck > .slide.rpage')"))
     pg.mouse.move(300, 300); pg.mouse.move(420, 380); pg.wait_for_timeout(200); pg.click("#ctl [data-act=pdf]"); pg.wait_for_timeout(200)
     with pg.expect_download(timeout=120000) as dl: pg.click("#xmenu [data-x=live]")
     pg.wait_for_timeout(800)
@@ -428,9 +465,9 @@ ok("the other version is built next to it with its own name, sheets and PDFs",
    code == 0 and 'data-mode="reading"' in rt and os.path.exists(live) and os.path.exists(os.path.join(rd, "shots_reading", "sheet_fr_1.png")) and os.path.exists(os.path.join(rd, "shots", "sheet_fr_1.png"))
    and os.path.exists(os.path.join(rd, "Modes_reading_FR.pdf")) and os.path.exists(os.path.join(rd, "Modes_reading_DE.pdf")), out[-800:])
 ok("the reading file carries both versions too", 'data-only="live"' in rt and "Sources" in rt and "Quellen" in rt)
-ok("the build lists the slides whose reader text is still the speaker notes", 'rewrite them as prose in "read"): slides 1, 4 of deck.json' in out, out)
-ok("reader text that is too long for its column is reported as overflow, in both languages", out.count("too long for its column") == 2 and "'slide': 8, 'reader_text'" in out and "FIX THE OVERFLOW" in out, out)
-ok("the reading density counts the reader text against its own limit", "density (reading, flag above 250 words)" in out and "WORDY page 8 (slide 9 of deck.json)" in out and "reader text)" in out, out)
+ok("the build lists the content slides without text for readers", "no text for readers, shown as in the live version: slides 4, 11 of deck.json" in out, out)
+ok("a text for readers that does not fit the slide is reported as overflow", "'slide': 8" in out and "FIX THE OVERFLOW" in out, out)
+ok("the reading density counts the text on the page against its own limit", "density (reading, flag above 250 words)" in out and "WORDY page 8 (slide 9 of deck.json)" in out, out)
 with sync_playwright() as p:
     br = p.chromium.launch(); ctx = br.new_context(viewport={"width": 1280, "height": 720}, accept_downloads=True)
     pg = ctx.new_page(); errors = []; pg.on("pageerror", lambda e: errors.append(str(e)))
@@ -440,28 +477,26 @@ with sync_playwright() as p:
     ok("reading leaves out the timer and live-only slides and takes the reading-only one",
        ev("[...document.querySelectorAll('#deck > .slide:not(.off)')].every(s=>!s.matches('.tslide')&&s.getAttribute('data-only')!=='live')")
        and ev("[...document.querySelectorAll('#deck > .slide:not(.off)')].some(s=>s.getAttribute('data-only')==='reading'&&!s.matches('.rcontents'))"))
-    ok("a slide with notes only shows them as reader text, marked as such", txt(".rt[data-from=notes] .rti") == "Saluer." and ev(f"!document.querySelector('{A} .rbar')"))
+    ok("a slide with notes only shows as in the live version, without the notes", not ev(f"!!document.querySelector('{A} .vs-explain, {A} .notes')") and txt("h1") != "")
     pg.keyboard.press("ArrowRight"); pg.wait_for_timeout(300)
     rows = ev("[...document.querySelectorAll('#deck > .slide.active .rtoc a')].map(a=>a.textContent+'|'+a.getAttribute('href'))")
     ok("the contents page follows the cover and names every chapter with its page", ev(f"document.querySelector('{A}').classList.contains('rcontents')") and rows == ["01Avant3|#/3", "02Après7|#/7"], str(rows))
     pg.click(A + " .rtoc li:nth-child(2) a"); pg.wait_for_timeout(400)
-    ok("a contents entry opens its chapter; the section bar marks it", ev("location.hash") == "#/7" and txt("h2") == "Après" and txt(".rbar .cur") == "Après"
-       and ev(f"document.querySelectorAll('{A} .rbar a').length") == 2 and ev(f"!document.querySelector('{A} > .rt')"))
+    ok("a contents entry opens its chapter", ev("location.hash") == "#/7" and txt("h2") == "Après")
     ev("location.hash='#/4'"); pg.wait_for_timeout(400)
-    box = ev(f"(()=>{{var p=document.querySelector('{A}'),s=p.querySelector('.rs > .slide').getBoundingClientRect(),t=p.querySelector('.rt').getBoundingClientRect(),w=p.getBoundingClientRect().width;"
-             "return [s.width/w,s.height/s.width,(t.left-s.right)/w,t.width/w]})()")
-    ok("a slide with reader text is shown reduced with the text in a column beside it",
-       txt(".rti") == "Texte pour qui lit.Second paragraphe." and 0.55 < box[0] < 0.68 and abs(box[1] - 9 / 16) < 0.01 and box[2] > 0.01 and box[3] > 0.22 and "Note orale" not in ev(f"document.querySelector('{A}').innerHTML"), str(box))
+    below = ev(f"(()=>{{var p=document.querySelector('{A}'),h=p.querySelector('h2').getBoundingClientRect(),x=p.querySelector('.vs-explain').getBoundingClientRect();return x.top>=h.bottom-2}})()")
+    ok("a slide with text for readers stays whole, the paragraph under its title",
+       txt(".vs-explain") == "Texte pour qui lit.Second paragraphe." and below and not ev(f"!!document.querySelector('{A} .rs')") and "Note orale" not in ev(f"document.querySelector('{A}').innerHTML"))
     ok("all click steps are visible and the page number stays", ev(f"[...document.querySelectorAll('{A} .f')].every(f=>getComputedStyle(f).opacity==='1')") and ev(f"document.querySelectorAll('{A} .f').length") == 3
-       and txt("> .footer .nr") == "04" and txt(".rbar .cur") == "Avant")
+       and txt("> .footer .nr") == "04")
     pg.keyboard.press("ArrowRight"); pg.wait_for_timeout(300)
-    ok("one forward press moves one page, there are no steps to click through", ev("location.hash") == "#/5" and txt(".rti") == "Montrer la barre.")
+    ok("one forward press moves one page, there are no steps to click through", ev("location.hash") == "#/5" and not ev(f"!!document.querySelector('{A} .vs-explain')"))
     pg.keyboard.press("ArrowRight"); pg.wait_for_timeout(300)
-    ok("quiz questions show their answer", ev(f"!!document.querySelector('{A} .qslide.qopen .qopt.qright')") and "B." in txt(".qexplain") and txt(".rti") == "La bonne est B.")
+    ok("quiz questions show their answer", ev(f"!!document.querySelector('{A}.qslide.qopen .qopt.qright')") and "B." in txt(".qexplain") and txt(".vs-explain") == "La bonne est B.")
     pg.keyboard.press("l"); pg.wait_for_timeout(500)
-    ok("language switch in a reading deck", ev("document.documentElement.lang") == "de" and txt(".rti") == "Richtig ist B." and txt(".rbar .cur") == "Vorher")
+    ok("language switch in a reading deck", ev("document.documentElement.lang") == "de" and txt(".vs-explain") == "Richtig ist B.")
     pg.keyboard.press("l"); pg.wait_for_timeout(300); pg.keyboard.press("o"); pg.wait_for_timeout(600)
-    ok("overview of a reading deck shows the pages", ev("document.querySelectorAll('#ov .th').length") == 10 and ev("document.querySelectorAll('#ov .th .rpage .rti').length") == 5)
+    ok("overview of a reading deck shows the pages", ev("document.querySelectorAll('#ov .th').length") == 10 and ev("document.querySelectorAll('#ov .th .vs-explain').length") == 3)
     pg.keyboard.press("Escape"); pg.wait_for_timeout(300)
     with pg.expect_download(timeout=90000) as dl: pg.keyboard.press("p")
     ok("PDF export from a reading deck, and the deck stays at rest afterwards", dl.value.suggested_filename == "Modes_reading_FR.pdf" and ev("document.documentElement.classList.contains('export')"))

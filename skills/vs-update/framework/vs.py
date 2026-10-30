@@ -31,7 +31,7 @@
                                                  film strip of a set as a picture; choose the brand's set; --site makes the copied set again
 
   Decks (the vs-create skill)
-    vs.py new <deck> --brand <name> [--langs en,de] [--from <deck>]
+    vs.py new <deck> --brand <name> [--langs en,de] [--from <deck> [--variant]]
                                                  a deck folder with deck.json, sources/, research/, images/; --from takes sources and research of an earlier deck along
     vs.py shared <brand> [slide <name> --from <deck> --slide N | fact <key> <value> [--lang de]]
                                                  what the brand's decks share: slides (team, contact) and facts (address, figures); make a slide shared, set a fact
@@ -44,6 +44,7 @@
     vs.py langs <deck> [--add fr] | vs.py langs --brand <name> [--add fr]
                                                  the languages of a deck or a brand; add one later without rebuilding masters or decks: lists the texts to translate
     vs.py build <deck> [--pdf] [--handout] [--only 3,7] [--no-shots]
+    vs.py handout <deck>                         the handout of the talk as prepared: HTML and a PDF per language
     vs.py build <deck> --mode reading|live       the other version of the deck next to the main one: to be read, or to be presented
     vs.py titles <deck>                          the slide titles in a row, per language: the argument without the slides
     vs.py plan <deck>                            the time plan: minutes per slide and chapter from minutes, weight and plan
@@ -597,6 +598,7 @@ def _render_and_build(deck, b, out, deck_dir=None, standins=None, title=None, pd
     env = {"mode": mode or deck.get("mode") or "live", "brand_dir": b["_dir"], "deck_dir": deck_dir, "standins": standins or {}, "brand_name": b.get("name", ""), "brand_info": _brand_info(b),
            "brand": b, "out_dir": os.path.dirname(os.path.abspath(out)), "edit": edit}
     slides = render.render_deck(deck, masters, env)
+    origin = {k: set(v) for k, v in (env.get("read_origin") or {}).items()}      # what the deck's slides hold, before the editing renders its samples
     images = dict(env["images"])
     if env.get("need_logo_inv"):
         lg = b["logos"]; p = lg.get("primary_inverse") or lg.get("primary")
@@ -605,15 +607,18 @@ def _render_and_build(deck, b, out, deck_dir=None, standins=None, title=None, pd
             footer_left=deck.get("footer_left"), footer_right=deck.get("footer_right"), lang=(deck.get("langs") or [None])[0], scheme=deck.get("scheme"))
     try: minutes = float(deck.get("minutes") or 0)          # the length the talk must have: the presenter view spreads it over the slides
     except (TypeError, ValueError): minutes = 0
-    if minutes > 0:
+    start = str((deck.get("event") or {}).get("start") or "").strip() if isinstance(deck.get("event"), dict) else ""
+    root = (f'data-minutes="{minutes:g}" ' if minutes > 0 else "") + (f'data-start="{start}" ' if re.fullmatch(r"\d{1,2}:\d{2}", start) else "")
+    if root:                                                # the plan of the talk, for the presenter view
         html = open(out, encoding="utf-8").read()
-        open(out, "w", encoding="utf-8").write(html.replace("<html ", f'<html data-minutes="{minutes:g}" ', 1))
+        open(out, "w", encoding="utf-8").write(html.replace("<html ", "<html " + root, 1))
     if edit and deck_dir and os.path.exists(os.path.join(deck_dir, "deck.json")):      # which deck file the page was built from: changes made on it are told apart by this
         import edit as E
         html = open(out, encoding="utf-8").read()
         info = "<script>window.VS_EDIT=" + json.dumps({"deck": os.path.basename(os.path.normpath(deck_dir)), "base": E.base_of(deck_dir),
                                                        "report": E.report(deck_dir, deck), "masters": E.templates(deck, masters, env), "fields": E.field_variants(deck, masters, env)}, ensure_ascii=False).replace("</", "<\\/") + "</script>"
         open(out, "w", encoding="utf-8").write(html.replace("</head>", info + "\n</head>", 1) if "</head>" in html else info + html)
+    env["read_origin"] = origin
     return env
 
 def brand_langs(b):
@@ -992,6 +997,7 @@ def cmd_langs(args):
 def cmd_new(args):
     import build as B
     pos = positional(args, ("--brand", "--langs", "--title", "--from", "--author"))
+    if "--variant" in args and not arg(args, "--from"): die("a variant needs the deck it is made from: --from <deck>")
     name = re.sub(r"[^a-z0-9]+", "-", (pos[0] if pos else die("name the deck")).lower()).strip("-")
     origin = None
     if arg(args, "--from"):                                 # a deck made from an earlier one: its sources, its research, its brand
@@ -1001,8 +1007,9 @@ def cmd_new(args):
     d = os.path.join(home(), "decks", name)
     if os.path.exists(os.path.join(d, "deck.json")): die(f"deck '{name}' exists: {d}")
     _deck_parts(d)
+    variant = bool(origin) and "--variant" in args          # the same talk for another occasion: the slides come along
     if origin:
-        for part in ("sources", "research"):
+        for part in ("sources", "research") + (("images", "assets") if variant else ()):
             if os.path.isdir(os.path.join(od, part)): shutil.copytree(os.path.join(od, part), os.path.join(d, part), dirs_exist_ok=True)
     langs = arg(args, "--langs").split(",") if arg(args, "--langs") else brand_langs(json.load(open(os.path.join(B.brand_dir(brand), "brand.json"), encoding="utf-8")))
     if not arg(args, "--langs") and "en" not in langs: langs = langs + ["en"]      # a deck always has an English version, unless the languages are named
@@ -1013,11 +1020,19 @@ def cmd_new(args):
             "slides": [{"master": "cover", "title": "Title with one <em>accent</em> word", "lead": "One sentence.", "notes": ""}]}
     if origin:
         deck["from"] = os.path.basename(od); deck["langs"] = langs if arg(args, "--langs") else (origin.get("langs") or langs)
+    if variant:
+        for k in ("slides", "minutes", "mode", "motion", "motion_set", "scheme", "density", "fit", "contents", "footer_left", "footer_right", "brief", "credit"):
+            if k in origin: deck[k] = json.loads(json.dumps(origin[k]))
+        if not arg(args, "--title"): deck["title"] = origin.get("title") or deck["title"]
+        deck["event"] = {}; deck["variant_of"] = os.path.basename(od)
     json.dump(deck, open(os.path.join(d, "deck.json"), "w", encoding="utf-8"), indent=2, ensure_ascii=False)
     print("deck:", os.path.join(d, "deck.json"))
     for part, what in DECK_PARTS.items(): print(f"  {part + '/':10s} {what}")
     print("brand photos are named as brand:images/<file>.")
-    if origin:
+    if variant:
+        print(f"a variant of the deck '{os.path.basename(od)}': slides, length, deepenings and choice, sources, research, images and assets are copied."
+              f" The event is empty: ask for date, start, place, audience and guest (\"event\"), then adapt the notes, cues and slides to the new audience and say which slides changed.")
+    elif origin:
         print(f"made from the deck '{os.path.basename(od)}': its sources and research are copied; its slides are in {os.path.join(od, 'deck.json')} to take over what fits"
               f" (\"{origin.get('title', '')}\", {len(origin.get('slides') or [])} slides, brief: {json.dumps(origin.get('brief') or {}, ensure_ascii=False)})")
 
@@ -1150,11 +1165,15 @@ def cmd_build(args):
         for s in sheets: print("  sheet:", s)
     if mode == "reading":
         origin = env.get("read_origin") or {}; nums = lambda k: ", ".join(str(n) for n in sorted(origin.get(k, ())))
-        if origin.get("notes"): print(f"reader text missing, the speaker notes are shown as they are (rewrite them as prose in \"read\"): slides {nums('notes')} of deck.json")
-        if origin.get("none"): print(f"no reader text and no notes, shown full size: slides {nums('none')} of deck.json")
+        quiet = lambda n: re.match(r"(cover|chapter|closing|timer|quiz)", str((deck.get("slides") or [{}] * n)[n - 1].get("master", "")))      # they say what they say
+        bare = sorted(n for n in set(origin.get("notes", ())) | set(origin.get("none", ())) if not quiet(n))
+        if bare: print(f"no text for readers, shown as in the live version: slides {', '.join(map(str, bare))} of deck.json. Where a slide needs explaining, write \"reading\": {{\"explain\": …}} and the slots it should say more in (see modes.md)")
     for i, s in enumerate(deck.get("slides") or [], 1):      # a language added later: texts that do not have it yet
         for path, has in _lang_gaps(s, langs):
             print(f"TRANSLATE slide {i}, {path}: has {', '.join(has)}, not {', '.join(l for l in langs if l not in has)}; write it in the brand's voice for that language")
+    if mode == "live":                                     # notes come as the whole speaking text and as talking points
+        bare = [str(i) for i, s in enumerate(deck.get("slides") or [], 1) if isinstance(s, dict) and s.get("notes") and not s.get("cues")]
+        if bare: print(f"CUES: slides {', '.join(bare)} of deck.json have notes but no talking points: write \"cues\" (three to five short lines per language) from the notes")
     if not deck.get("author") and deck.get("credit") is not False:
         print("AUTHOR: deck.json names no \"author\": the last slide credits the person who made the deck. Ask the user for their name once, set it in the deck and as the brand's default (vs.py set <brand> author=\"Name\").")
     try:                                                    # free slides in a form the brand has used before: time for a master
@@ -1186,6 +1205,40 @@ def cmd_build(args):
     print(f"\n{out}\n{len(deck.get('slides', []))} slides, {len(langs)} language(s), {time.time() - t0:.1f} s" + ("" if clean else " | FIX THE OVERFLOW: shorten text, never shrink type")
           + ("" if readable else " | FIX THE LEGIBILITY: every text must be readable; change the picture, the master or the theme, or shorten, never leave it")
           + (f" | NOT FINISHED: {len(edit.waiting(deck))} text(s) the user typed are not corrected or translated yet (the REVIEW lines); the deck is not handed over like this" if edit.waiting(deck) else ""))
+    _deliver(d, deck, [out] + ([os.path.splitext(out)[0] + "_" + l.upper() + ".pdf" for l in langs] + [os.path.splitext(out)[0] + ".pdf"] if "--pdf" in args else []), t0)
+
+def _deliver(d, deck, files, since):
+    """What this build wrote, with time and size, and the copies in the folders of "copy_to" (a shared folder, a cloud
+    drive): each is copied there and read back, so that nobody presents or sends an older version by mistake."""
+    files = [f for f in files if os.path.exists(f) and os.path.getmtime(f) >= since - 1]
+    for f in files:
+        print(f"written: {os.path.relpath(f, d)}  {time.strftime('%H:%M', time.localtime(os.path.getmtime(f)))}  {os.path.getsize(f) // 1024} kB")
+    targets = deck.get("copy_to") or []
+    for t in [targets] if isinstance(targets, str) else targets:
+        folder = os.path.expanduser(str(t))
+        if not os.path.isdir(folder):
+            print(f"COPY: the folder {folder} of \"copy_to\" does not exist (or is not shared with this session): nothing copied there"); continue
+        for f in files:
+            dst = os.path.join(folder, os.path.basename(f))
+            try:
+                shutil.copy2(f, dst)
+                same = os.path.getsize(dst) == os.path.getsize(f) and open(dst, "rb").read() == open(f, "rb").read()
+            except OSError as e:
+                print(f"COPY FAILED: {dst}: {e}"); continue
+            print(("copied: " if same else "COPY DIFFERS, check it: ") + dst)
+        stem = re.sub(r"[^\w-]+", "_", deck.get("title") or "").strip("_")
+        for x in sorted(os.listdir(folder)):                # other files of this deck there: older than the deck's own, or not the same
+            p, own = os.path.join(folder, x), os.path.join(d, x)
+            if not (stem and x.startswith(stem) and x.endswith((".html", ".pdf"))) or x in [os.path.basename(f) for f in files]: continue
+            if not os.path.exists(own):
+                if os.path.getmtime(p) < since: print(f"OLDER: {p} is from {time.strftime('%d.%m. %H:%M', time.localtime(os.path.getmtime(p)))} and the deck has no such file any more")
+            elif os.path.getsize(p) != os.path.getsize(own) or open(p, "rb").read() != open(own, "rb").read():
+                print(f"OLDER: {p} is not the deck's current {x} (from {time.strftime('%d.%m. %H:%M', time.localtime(os.path.getmtime(own)))}): build that version again or copy it")
+
+def cmd_handout(args):
+    """The handout: the slides of the talk as prepared (no deepenings left out, no timers, quizzes revealed, pages
+    numbered without gaps), as HTML and as a vector PDF per language. Made at every hand-over of a presented deck."""
+    cmd_build([a for a in args if a not in ("--handout", "--pdf")] + ["--handout", "--pdf", "--no-shots"])
 
 def _deck_html(d, handout=False):
     """The built HTML files of a deck folder: the main version before the other mode's (<Title>_reading.html, <Title>_live.html), newest first."""
@@ -1232,9 +1285,10 @@ def _quick_build(d):
     """Build the deck's main HTML again without the checks: after a change made on the page that is being shown."""
     import build as B, contextlib, io
     deck = json.load(open(os.path.join(d, "deck.json"), encoding="utf-8")); b = B.load_brand(deck.get("brand"))
-    title = deck.get("title") or os.path.basename(d)
+    title = deck.get("title") or os.path.basename(d); out = os.path.join(d, re.sub(r"[^\w-]+", "_", title).strip("_") + ".html"); t0 = time.time()
     with contextlib.redirect_stdout(io.StringIO()):
-        _render_and_build(deck, b, os.path.join(d, re.sub(r"[^\w-]+", "_", title).strip("_") + ".html"), deck_dir=d, title=title, mode=deck.get("mode") or "live")
+        _render_and_build(deck, b, out, deck_dir=d, title=title, mode=deck.get("mode") or "live")
+        _deliver(d, deck, [out], t0)                         # the copies in "copy_to" follow every change, not only a build
 
 def cmd_present(args):
     import edit, media, serve
@@ -1249,8 +1303,13 @@ def cmd_present(args):
     notes.append("Notes written in the presenter view (M) are saved into deck.json and stay on the slide.")
     notes.append("Slides taken into the talk or left out in the film strip of the presenter view are saved into deck.json.")
     api = edit.make_api(d, lambda: _quick_build(d), only=("state", "notes", "show")) if os.path.exists(os.path.join(d, "deck.json")) else None
+    dj = os.path.join(d, "deck.json"); was = os.path.getmtime(dj) if os.path.exists(dj) else 0
     try: serve.present(d, html[0], int(port) if port else None, "--no-open" not in args, notes, api=api, label="presenting")
     except OSError as e: die(str(e))
+    if was and os.path.getmtime(dj) > was:
+        print("The deck was changed in the presenter view (notes or the slides of the talk); its main HTML and the copies in \"copy_to\" are current.")
+        if any(f.endswith("_handout.html") for f in os.listdir(d)):
+            print(f"NEXT: the handout shows the talk as it was prepared before: build it again with `vs.py handout {os.path.basename(d)}`, then the reading version if the deck has one.")
     try:
         for line in edit.todo(edit.load(d)): print(line)
     except (OSError, ValueError): pass
@@ -2047,7 +2106,7 @@ def main():
     _ensure_env()
     import brandtools
     simple = {"init": cmd_init, "status": cmd_status, "update": cmd_update, "permissions": cmd_permissions, "doctor": cmd_doctor, "backup": cmd_backup, "restore": cmd_restore, "analyze": cmd_analyze, "videos": cmd_videos, "voice": cmd_voice, "ingest": cmd_ingest, "preview": cmd_preview,
-              "masters": cmd_masters, "elements": cmd_elements, "fonts": cmd_fonts, "new": cmd_new, "build": cmd_build, "titles": cmd_titles, "plan": cmd_plan,"video": cmd_video,
+              "masters": cmd_masters, "elements": cmd_elements, "fonts": cmd_fonts, "new": cmd_new, "build": cmd_build, "titles": cmd_titles, "plan": cmd_plan, "handout": cmd_handout,"video": cmd_video,
               "scenes": cmd_scenes, "motion": cmd_motion, "present": cmd_present, "edit": cmd_edit, "apply": cmd_apply, "shared": cmd_shared, "forms": cmd_forms, "design": cmd_design, "refresh": cmd_refresh, "langs": cmd_langs, "pack": cmd_pack, "handover": cmd_handover}
     try:
         if cmd in simple: simple[cmd](rest)

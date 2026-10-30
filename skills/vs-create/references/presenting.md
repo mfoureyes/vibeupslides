@@ -68,7 +68,8 @@ output says if the deck needs to be online when shown (remote video, websites). 
 Like the presenter view of PowerPoint or Keynote. **M** opens a second window for the laptop; the deck
 itself goes full screen on the projector. The current slide stands in the middle and takes all the
 room the other panels leave; Back and Next are at the top right, with the clicks still to come on
-the slide. Around it four panels: the **schedule**, the **next slide**, the **notes** (A− A+) and the
+the slide. Around it four panels: the **schedule**, the **next slide**, the **notes** (A− A+; Full text
+or Cues when the deck has talking points) and the
 **film strip** with every slide of the deck. Each panel can be dragged by its header to another edge
 (top, left, right, bottom), its size changed at its inner edge, two panels at one edge against each
 other at the line between them; **View** hides panels, moves them and resets the layout. The layout
@@ -87,6 +88,7 @@ Reloading the deck keeps the time; after eight hours untouched it starts afresh.
   yellow line is where the clock says you should be, the white one where you are; On time, over or
   ahead, and the expected end.
 - **Without a plan** the time is measured: the bar grows with the time each slide took.
+- **`event.start`** in the deck ("10:45") gives the plan its clock times before the talk starts.
 - **Report** downloads a table (CSV): plan against actual per slide and per chapter, and every
   change of slide with its clock time.
 

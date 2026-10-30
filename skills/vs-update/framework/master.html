@@ -454,7 +454,7 @@ html.export .mchev .c.f{background-position:0 0!important}html.export .mchev .c.
 #ov h4{color:rgba(255,255,255,.6);font-weight:700;font-size:13px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:24px;max-width:1700px;margin-left:auto;margin-right:auto}
 
 /* ---------- Notes ---------- */
-.notes,.read{display:none}
+.notes,.read,.cues{display:none}
 /* ---------- Dark scheme (key D): light slides take the deep colour, slides that are dark, accent or photo stay as they are ---------- */
 .slide.vs-dk{--paper:var(--deep);--ink:var(--on-deep);--accent-text:var(--accent-on-deep);
   --muted:color-mix(in srgb,var(--on-deep) 64%,var(--deep));--line:color-mix(in srgb,var(--on-deep) 22%,var(--deep));
@@ -658,7 +658,7 @@ html[data-motion="off"] #deck .bgvideo video{transition:none!important}
      a number and come together. data-wave="2" on a block puts it after all blocks of the first wave (answers after
      questions); inside a container with data-seq every block is a beat of its own, in the order of the markup.
      A content slide whose master marks no block at all gets its parts below the title marked here. */
-  var BLOCKSKIP='.kicker,.vs-topic,h1,h2,.header,.footer,.notes,.read,.bgvideo,.image,.photo,.wedge,.ghost,.biglogo,.mbox,.rbar,style,script';
+  var BLOCKSKIP='.kicker,.vs-topic,h1,h2,.header,.footer,.notes,.read,.cues,.bgvideo,.image,.photo,.wedge,.ghost,.biglogo,.mbox,.rbar,style,script';
   function orderBlocks(s){
     if(s.vsOrdered||s.classList.contains('rpage')) return; s.vsOrdered=true;
     if(!s.querySelector('.anim,.kpi,.f')&&!s.classList.contains('mslide')&&!s.classList.contains('media')&&s.querySelector(':scope > h2')){
@@ -683,19 +683,23 @@ html[data-motion="off"] #deck .bgvideo video{transition:none!important}
   /* Fill the slide: where the body of a content slide ends well above the footer, everything below the title is
      enlarged, by up to a third, as far as it still fits. "fit": false on a slide (or the deck) leaves it as it is. */
   var FITSKIP='.cover,.chapter,.media,.tslide,.qslide,.rpage,.rcontents,.fullbleed,.nofit',
-      FITOUT='.kicker,.vs-topic,h1,h2,.lead,.header,.footer,.notes,.read,.bgvideo,.image,.photo,.wedge,.ghost,.biglogo,.rbar,.badge,.vs-credit,.bar,style,script';
+      FITOUT='.kicker,.vs-topic,h1,h2,.lead,.header,.footer,.notes,.read,.cues,.bgvideo,.image,.photo,.wedge,.ghost,.biglogo,.rbar,.badge,.vs-credit,.bar,style,script';
   function fitSlide(s){
     if(s.vsFit||s.getAttribute('data-fit')==='0'||s.matches(FITSKIP)||!s.querySelector(':scope > h2')) return; s.vsFit=1;
     var body=Array.prototype.filter.call(s.children,function(c){ return !c.matches(FITOUT)&&getComputedStyle(c).position!=='absolute'; });
     if(!body.length) return;
     var sr=s.getBoundingClientRect(), sc=sr.height/H||1, cs=getComputedStyle(s), lim=s.querySelector(':scope > .vs-credit')?800:880,
         mid=cs.display==='flex'&&cs.justifyContent==='center', room=H-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom)-40,      /* centred slides: the height of all they hold counts */
-        flow=Array.prototype.filter.call(s.children,function(c){ return !c.matches('.header,.footer,.notes,.read,.wedge,.ghost,.rbar,.vs-credit,style,script')&&getComputedStyle(c).position!=='absolute'; });
+        flow=Array.prototype.filter.call(s.children,function(c){ return !c.matches('.header,.footer,.notes,.read,.cues,.wedge,.ghost,.rbar,.vs-credit,style,script')&&getComputedStyle(c).position!=='absolute'; });
     function fits(){ var b=0, t=1e9, wide=false; flow.forEach(function(c){ var q=c.getBoundingClientRect(); if(!q.width&&!q.height) return;
         b=Math.max(b,(q.bottom-sr.top)/sc); t=Math.min(t,(q.top-sr.top)/sc); if(c.scrollWidth>c.clientWidth+2) wide=true; });
       return b>0&&!wide&&(mid?b-t<=room:b<=lim); }
     function set(k){ body.forEach(function(c){ c.style.zoom=k===1?'':k; }); }
     s.classList.add('vs-measure');                           /* measured where everything will stand, not where an entrance starts */
+    if(MODE==='reading'&&!fits()){                           /* reading version, more text than room: the body gets smaller, at most by a fifth (27 px to about 22) */
+      set(.8); if(!fits()){ set(1); s.classList.remove('vs-measure'); return; }      /* smaller does not help (a layout fixed to the bottom): stays, the check says so */
+      var a=.8, z=1; for(var j=0;j<6;j++){ var m=(a+z)/2; set(m); if(fits()) a=m; else z=m; }
+      set(Math.floor(a*100)/100); s.classList.remove('vs-measure'); s.vsOrdered=false; return; }
     lim-=60; room-=60; if(!fits()){ s.classList.remove('vs-measure'); return; } lim+=60; room+=60;      /* nearly full already: stays */
     var lo=1, hi=1.4;
     for(var i=0;i<6;i++){ var k=(lo+hi)/2; set(k); if(fits()) lo=k; else hi=k; }
@@ -1318,14 +1322,14 @@ html[data-motion="off"] #deck .bgvideo video{transition:none!important}
   var MX={de:{time:'Zeitplan',strip:'Folien',view:'Ansicht',viewReset:'Ansicht zurücksetzen',viewHint:'Bereiche an ihrer Kopfzeile an einen Rand ziehen, Größen an den Kanten.',
               ready:'Bereit',startTalk:'Start',resetTime:'Zeit zurücksetzen',resetAsk:'Wirklich zurücksetzen?',planned:'geplant',measure:'ohne Plan, die Zeit wird gemessen',
               slideLeft:'Rest dieser Folie',onSlide:'auf dieser Folie',inPlan:'Im Plan',over:'drüber',ahead:'Vorsprung',endAt:'Ende voraussichtlich',length:'Dauer',
-              target:'Ziel',minutes:'Min.',report:'Auswertung',skipped:'übersprungen',slidesN:function(k){return k===1?'1 Folie':k+' Folien';},of:'von',
+              target:'Ziel',minutes:'Min.',report:'Auswertung',skipped:'übersprungen',slidesN:function(k){return k===1?'1 Folie':k+' Folien';},of:'von',script:'Text',cues:'Stichpunkte',
               savedDeck:'Auswahl wird im Deck gespeichert',savedLocal:'Auswahl gilt nur in diesem Browser',selReset:'Auswahl zurücksetzen',
               take:'In den Vortrag aufnehmen oder herausnehmen',pos:{top:'oben',left:'links',right:'rechts',bottom:'unten'},
               colNr:'Nr.',colTitle:'Folie',colChap:'Kapitel',colPlan:'Plan',colActual:'Ist',colDiff:'Abweichung',colFrom:'von',colTo:'bis',total:'Gesamt',changes:'Folienwechsel'},
          en:{time:'Schedule',strip:'Slides',view:'View',viewReset:'Reset view',viewHint:'Drag a panel by its header to an edge, sizes at the edges.',
               ready:'Ready',startTalk:'Start',resetTime:'Reset time',resetAsk:'Really reset?',planned:'planned',measure:'no plan, the time is measured',
               slideLeft:'left on this slide',onSlide:'on this slide',inPlan:'On time',over:'over',ahead:'ahead',endAt:'Expected end',length:'Length',
-              target:'Target',minutes:'min',report:'Report',skipped:'skipped',slidesN:function(k){return k===1?'1 slide':k+' slides';},of:'of',
+              target:'Target',minutes:'min',report:'Report',skipped:'skipped',slidesN:function(k){return k===1?'1 slide':k+' slides';},of:'of',script:'Full text',cues:'Cues',
               savedDeck:'The choice is saved in the deck',savedLocal:'The choice holds in this browser only',selReset:'Reset choice',
               take:'Take into the talk or leave out',pos:{top:'top',left:'left',right:'right',bottom:'bottom'},
               colNr:'No.',colTitle:'Slide',colChap:'Chapter',colPlan:'Plan',colActual:'Actual',colDiff:'Difference',colFrom:'from',colTo:'to',total:'Total',changes:'Changes of slide'}};
@@ -1378,6 +1382,9 @@ html[data-motion="off"] #deck .bgvideo video{transition:none!important}
     '#m-nextbox{flex:1;min-height:0;display:grid;place-items:center;padding:8px;overflow:hidden}#m-nexttitle{padding:0 10px 8px;font-size:14px;opacity:.8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}'+
     '#m-npt{flex:1;overflow:auto;line-height:1.45;font-weight:400;color:#fff;padding:12px 16px;background:#0E0E10}'+
     '#m-npt i{opacity:.5}#m-npt b,#m-npt strong{font-weight:700}#m-npt p{margin:0 0 .6em}'+
+    '#m-npt.m-cues ul{margin:0;padding-left:1.1em}#m-npt.m-cues li{margin:0 0 .45em;font-weight:500}#m-npt.m-cues li::marker{color:var(--accent-text)}'+
+    '.m-nmode{display:flex}.m-nmode .m-btn{border-radius:0;margin-left:-1.5px}.m-nmode .m-btn:first-child{border-radius:4px 0 0 4px}.m-nmode .m-btn:last-child{border-radius:0 4px 4px 0}'+
+    '.m-nmode .m-btn.on{background:#fff;color:#141416;border-color:#fff}'+
     '#m-npt[contenteditable]{outline:none;cursor:text}#m-npt[contenteditable]:focus{background:#19191B}#m-npt[contenteditable]:empty::before{content:attr(data-ph);opacity:.5;font-style:italic}'+
     '#m-click{font-size:14px;color:var(--accent-text);font-weight:700;letter-spacing:.04em;min-height:0}#m-click:empty{display:none}'+
     '#m-timer,#m-quiz,#m-media{display:none;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 14px;background:#2B2B2D;border-left:4px solid var(--accent)}'+
@@ -1408,10 +1415,10 @@ html[data-motion="off"] #deck .bgvideo video{transition:none!important}
     '.m-target{display:flex;align-items:center;gap:6px;opacity:.85}.m-target input{width:56px;font:inherit;font-weight:700;background:#0E0E10;color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:4px;padding:4px 6px}'+
     '#m-report{padding:5px 9px;font-size:12px}'+
     /* film strip */
-    '#m-strip{flex:1;min-height:0;display:flex;gap:10px;overflow:auto;padding:8px 10px}'+
+    '#m-strip{flex:1;min-height:0;display:flex;gap:10px;overflow:auto;padding:8px 10px;will-change:scroll-position}'+
     '.m-dock[data-dock=left] #m-strip,.m-dock[data-dock=right] #m-strip{flex-direction:column}'+
     '.m-th{flex:none;display:flex;flex-direction:column;gap:4px;cursor:pointer}'+
-    '.m-thf{position:relative;overflow:hidden;background:#fff;outline:1px solid rgba(255,255,255,.15)}.m-th:hover .m-thf{outline-color:rgba(255,255,255,.6)}'+
+    '.m-thf{position:relative;overflow:hidden;contain:strict;background:#fff;outline:1px solid rgba(255,255,255,.15)}.m-th:hover .m-thf{outline-color:rgba(255,255,255,.6)}'+
     '.m-th.cur .m-thf{outline:3px solid var(--accent)}.m-th.skip .m-thf{opacity:.32;filter:grayscale(1)}'+
     '.m-thl{display:flex;align-items:center;gap:6px;font-size:12px;font-variant-numeric:tabular-nums;color:rgba(255,255,255,.75);white-space:nowrap;overflow:hidden}'+
     '.m-thl input{margin:0;accent-color:var(--accent);cursor:pointer}.m-thl b{color:#fff;font-weight:700;overflow:hidden;text-overflow:ellipsis}.m-th.skip .m-thl b{color:#F2C14E;font-weight:500}'+
@@ -1450,7 +1457,8 @@ html[data-motion="off"] #deck .bgvideo video{transition:none!important}
   function frameFit(fr,box){
     if(!fr||!box) return; var w=box.clientWidth, h=box.clientHeight; if(!w||!h) return;
     var cs=pwin.getComputedStyle(box), pw=w-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight), ph=h-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom);
-    var fw=Math.max(40,Math.min(pw,ph*16/9)); fr.style.width=fw+'px'; fr.style.height=(fw*9/16)+'px';
+    var fw=Math.floor(Math.max(40,Math.min(pw-8,(ph-8)*16/9)));      /* room for the outline of the frame, which a box would cut off on one side */
+    if(fr.vsW===fw) return; fr.vsW=fw; fr.style.width=fw+'px'; fr.style.height=(fw*9/16)+'px';
     var m=fr.querySelector('.m-mini'); if(m) m.style.transform='scale('+(fw/W)+')';
   }
   function presenterScale(){
@@ -1460,6 +1468,7 @@ html[data-motion="off"] #deck .bgvideo video{transition:none!important}
     var box=pdoc.getElementById('m-strip'); if(!box||!box.offsetParent) return;
     var side=lay.pos.strip==='left'||lay.pos.strip==='right', tw, th;
     if(side){ tw=Math.max(80,box.clientWidth-22); th=tw*9/16; } else { th=Math.max(36,box.clientHeight-16-24); tw=th*16/9; }
+    tw=Math.floor(tw); th=tw*9/16; if(box.vsTW===tw&&box.vsN===box.children.length) return; box.vsTW=tw; box.vsN=box.children.length;
     box.querySelectorAll('.m-thf').forEach(function(f){ f.style.width=tw+'px'; f.style.height=th+'px'; f.firstChild.style.transform='scale('+(tw/W)+')'; });
     box.querySelectorAll('.m-th').forEach(function(t){ t.style.width=tw+'px'; });
   }
@@ -1480,7 +1489,9 @@ html[data-motion="off"] #deck .bgvideo video{transition:none!important}
     if(!pdoc) return;
     var hold=pdoc.getElementById('m-panels'), main=pdoc.getElementById('m-main');
     PANELS.forEach(function(p){ hold.appendChild(pdoc.querySelector('.m-panel[data-panel='+p+']')); });
-    ['top','left','right','bottom'].forEach(function(z){ dockOf(z).innerHTML=''; });
+    ['top','left','right','bottom'].forEach(function(z){ dockOf(z).innerHTML='';      /* shares set by hand only hold among the panels they were set for */
+      var at=PANELS.filter(function(p){ return !lay.hide[p]&&(lay.pos[p]||LAYDEF.pos[p])===z; });
+      if(at.some(function(p){ return !lay.grow[p]; })) at.forEach(function(p){ delete lay.grow[p]; }); });
     PANELS.forEach(function(p){
       if(lay.hide[p]) return;
       var el=pdoc.querySelector('.m-panel[data-panel='+p+']'), d=dockOf(lay.pos[p]||LAYDEF.pos[p]);
@@ -1492,7 +1503,7 @@ html[data-motion="off"] #deck .bgvideo video{transition:none!important}
       return has?Math.round(lay.size[z])+'px':'0px'; }
     main.style.gridTemplateRows=sz('top')+' minmax(0,1fr) '+sz('bottom');
     main.style.gridTemplateColumns=sz('left')+' minmax(0,1fr) '+sz('right');
-    stripKey=''; presenterRender();
+    stripCur=null; presenterRender();      /* the thumbnails move with their panel, they are not built again */
   }
   function dragging(e,move,done,cls){
     e.preventDefault(); var b=pdoc.body; b.classList.add('m-drag'); if(cls) cls.classList.add('on');
@@ -1575,14 +1586,14 @@ html[data-motion="off"] #deck .bgvideo video{transition:none!important}
   function pool(){ return all.filter(function(s){ return inLang(s)&&inVersion(s); }); }
   function stripBuild(){
     var box=pdoc.getElementById('m-strip'), p=pool(), key=lang+'|'+p.length+'|'+n;
-    if(key===stripKey&&box.children.length) return; stripKey=key; stripCur=null; box.innerHTML='';
+    if(key===stripKey&&box.children.length) return; stripKey=key; stripCur=null; box.innerHTML=''; box.vsTW=0;
     var t=presenterText();
     p.forEach(function(s){
       var th=pdoc.createElement('div'); th.className='m-th'; th.vsSlide=s;
       th.innerHTML='<div class="m-thf"><div class="m-mini"></div></div><div class="m-thl"><input type="checkbox"><b></b><span class="m-tt"></span></div>';
       var k=presenterClone(s,false); k.querySelectorAll('.f').forEach(function(f){ f.classList.add('on'); });
       th.querySelector('.m-mini').appendChild(pdoc.importNode(k,true));
-      var cb=th.querySelector('input'); cb.title=t.take;
+      var cb=th.querySelector('.m-thl input'); cb.title=t.take;
       cb.addEventListener('click',function(e){ e.stopPropagation(); choose(s,cb.checked); });
       th.addEventListener('click',function(){ var i=slides.indexOf(s); if(i<0){ opened[slideKey(s)]=true; reslide(s); } else go(i); });
       box.appendChild(th);
@@ -1596,31 +1607,38 @@ html[data-motion="off"] #deck .bgvideo video{transition:none!important}
       var s=th.vsSlide, i=slides.indexOf(s), k=slideKey(s), sp=spentOn(k), pl=plan&&i>=0?plan[i]:0, g=s.getAttribute('data-deepen');
       th.classList.toggle('cur',s===s0); th.classList.toggle('skip',i<0);
       th.classList.toggle('over',!!(pl&&sp>pl+10000)); th.classList.toggle('done',sp>0&&!(pl&&sp>pl+10000)&&s!==s0);
-      th.querySelector('input').checked=planned(s);
-      th.querySelector('b').textContent=i>=0?pad2(i+1)+(g?'  '+g:''):(g||t.skipped);
-      th.querySelector('b').title=slideTitle(s);
-      th.querySelector('.m-tt').textContent=sp>=1000?(mmss(sp)+(pl?' / '+mmss(pl):'')):(pl?mmss(pl):'');
+      var lb=th.vsLabel||(th.vsLabel=th.querySelector('.m-thl'));      /* the label, not a <b> or box of the slide in the thumbnail */
+      lb.querySelector('input').checked=planned(s);
+      txt(lb.querySelector('b'),i>=0?pad2(i+1)+(g?'  '+g:''):(g||t.skipped));
+      lb.querySelector('b').title=slideTitle(s);
+      txt(lb.querySelector('.m-tt'),sp>=1000?(mmss(sp)+(pl?' / '+mmss(pl):'')):(pl?mmss(pl):''));
       if(s===s0&&stripCur!==s0){ stripCur=s0; try{ th.scrollIntoView({block:'nearest',inline:'center'}); }catch(e){} }
     });
     var sel=pdoc.getElementById('m-sel'), rs=pdoc.getElementById('m-selreset');
-    sel.textContent=canSave?t.savedDeck:t.savedLocal;
-    rs.textContent=t.selReset; rs.style.display=(!canSave&&Object.keys(showLocal).length)?'':'none';
+    txt(sel,canSave?t.savedDeck:t.savedLocal);
+    txt(rs,t.selReset); rs.style.display=(!canSave&&Object.keys(showLocal).length)?'':'none';
   }
+
+  /* the presenter view is redrawn four times a second: only what changed is written, so nothing is laid out and painted again for nothing */
+  function txt(el,v){ v=String(v); if(el.textContent!==v) el.textContent=v; }
+  function cls(el,v){ if(el.className!==v) el.className=v; }
 
   /* ---------- Schedule: the time of the talk against its plan ---------- */
   function timeRender(){
     if(!pdoc||cur<0) return;
     var t=presenterText(), plan=talkPlan(), el=elapsed(), now=Date.now(), started=!!clock.start;
-    var keys=slides.map(slideKey), spent=keys.map(spentOn), total=0, starts=[];
+    var keys=slides.map(slideKey), spent=keys.map(spentOn), total=0, starts=[], base=null;
+    var sa=(root.getAttribute('data-start')||'').match(/^(\d{1,2}):(\d{2})$/);      /* the planned start of the event, "10:45" */
+    if(started) base=clock.start+clock.held; else if(sa){ var d0=new Date(); d0.setHours(+sa[1],+sa[2],0,0); base=d0.getTime(); }
     if(plan) plan.forEach(function(p){ starts.push(total); total+=p; });
     var rb=pdoc.getElementById('m-rb'), rl=pdoc.getElementById('m-rl'), go2=pdoc.getElementById('m-go'), st=pdoc.getElementById('m-st'), en=pdoc.getElementById('m-end');
     if(!started){
-      rb.textContent=t.ready; rb.className=''; rl.textContent=plan?mmss(total)+' '+t.planned:t.measure;
-      go2.textContent=t.startTalk; go2.className='m-btn accent show';
+      txt(rb,t.ready); cls(rb,''); txt(rl,plan?mmss(total)+' '+t.planned:t.measure);
+      txt(go2,t.startTalk); cls(go2,'m-btn accent show');
     } else {
-      if(plan){ var left=plan[cur]-spent[cur]; rb.textContent=(left<0?'+':'')+mmss(Math.abs(left)); rb.className=left<0?'r':(spent[cur]>=.8*plan[cur]?'y':'g'); rl.textContent=t.slideLeft; }
-      else { rb.textContent=mmss(spent[cur]); rb.className=''; rl.textContent=t.onSlide; }
-      go2.textContent=t.resetTime; go2.className='m-btn warn'+(cur===0?' show':'');
+      if(plan){ var left=plan[cur]-spent[cur]; txt(rb,(left<0?'+':'')+mmss(Math.abs(left))); cls(rb,left<0?'r':(spent[cur]>=.8*plan[cur]?'y':'g')); txt(rl,t.slideLeft); }
+      else { txt(rb,mmss(spent[cur])); cls(rb,''); txt(rl,t.onSlide); }
+      txt(go2,t.resetTime); cls(go2,'m-btn warn'+(cur===0?' show':''));
     }
     var line=pdoc.getElementById('m-line'), h='<div class="m-segs">', chap=null;
     if(plan&&total>0){
@@ -1633,28 +1651,28 @@ html[data-motion="off"] #deck .bgvideo video{transition:none!important}
         var c=s.dataset.chapterName||''; if(!c||c===chap){ chap=c||chap; return; } chap=c;
         var at=(clock.log.filter(function(e){ return e[0]===keys[i]; })[0]), d=at?at[2]-starts[i]:0;
         h+='<div class="m-chm" style="left:'+(starts[i]/total*100)+'%"><b>'+c.replace(/</g,'&lt;')+'</b><i class="'+(at?(d>10000?'over':'ok'):'')+'">'+
-          (started?dayTime(clock.start+clock.held+starts[i]):mmss(starts[i]))+(at?' · '+dayTime(at[1])+' ('+(d>=0?'+':'')+mmss(d)+')':'')+'</i></div>';
+          (base!==null?dayTime(base+starts[i]):mmss(starts[i]))+(at?' · '+dayTime(at[1])+' ('+(d>=0?'+':'')+mmss(d)+')':'')+'</i></div>';
       });
       if(started){
         var ist=starts[cur]+Math.min(spent[cur],plan[cur]);
         h+='<div class="m-soll" style="left:'+Math.min(100,el/total*100)+'%"></div><div class="m-ist" style="left:'+Math.min(100,ist/total*100)+'%"></div>';
         var dlt=el-ist;
-        st.textContent=dlt>10000?t.over+' +'+mmss(dlt):(dlt<-10000?t.ahead+' '+mmss(-dlt):t.inPlan); st.className=dlt>10000?'over':(dlt<-10000?'ahead':'ok');
+        txt(st,dlt>10000?t.over+' +'+mmss(dlt):(dlt<-10000?t.ahead+' '+mmss(-dlt):t.inPlan)); cls(st,dlt>10000?'over':(dlt<-10000?'ahead':'ok'));
         var rest=Math.max(0,plan[cur]-spent[cur]); for(var j=cur+1;j<plan.length;j++) rest+=plan[j];
-        en.textContent=t.endAt+' '+dayTime(now+rest);
-      } else { st.textContent=''; st.className=''; en.textContent=t.length+' '+mmss(total); }
+        txt(en,t.endAt+' '+dayTime(now+rest));
+      } else { txt(st,''); cls(st,''); txt(en,t.length+' '+mmss(total)+(base!==null?' · '+dayTime(base)+'–'+dayTime(base+total):'')); }
     } else {
       var seen=slides.map(function(s,i){ return spent[i]; }), sum=seen.reduce(function(a,b){ return a+b; },0);
       slides.forEach(function(s,i){ if(!seen[i]&&i!==cur) return;
         h+='<div class="m-seg'+(i===cur?' cur':' ok')+'" data-i="'+i+'" style="width:calc('+(sum?Math.max(seen[i],500)/sum*100:100/n)+'% - 2px)" title="'+pad2(i+1)+'  '+mmss(seen[i])+'"></div>'; });
       h+='</div>';
-      st.textContent=started?mmss(el):''; st.className=''; en.textContent=(T[lang]||T.en).slide+' '+(cur+1)+' '+t.of+' '+n;
+      txt(st,started?mmss(el):''); cls(st,''); txt(en,(T[lang]||T.en).slide+' '+(cur+1)+' '+t.of+' '+n);
     }
-    line.innerHTML=h;
+    if(line.vsHtml!==h){ line.vsHtml=h; line.innerHTML=h; }
     var ti=pdoc.getElementById('m-target');
     if(pdoc.activeElement!==ti){ ti.value=clock.target?String(clock.target):''; ti.placeholder=root.getAttribute('data-minutes')||'–'; }
-    pdoc.getElementById('m-l-target').textContent=t.target; pdoc.getElementById('m-l-min').textContent=t.minutes;
-    pdoc.getElementById('m-report').textContent=t.report; pdoc.getElementById('m-report').style.display=started?'':'none';
+    txt(pdoc.getElementById('m-l-target'),t.target); txt(pdoc.getElementById('m-l-min'),t.minutes);
+    txt(pdoc.getElementById('m-report'),t.report); pdoc.getElementById('m-report').style.display=started?'':'none';
     stripUpdate(plan);
   }
   /* Report after the talk: plan against actual per slide and chapter, and every change of slide with its time of day */
@@ -1719,9 +1737,16 @@ html[data-motion="off"] #deck .bgvideo video{transition:none!important}
     if(nx){ nm.appendChild(pdoc.importNode(presenterClone(nx,true),true)); empty.style.display='none';
       pdoc.getElementById('m-nexttitle').textContent=pad2(cur+2)+'  '+slideTitle(nx);
     } else { empty.style.display='grid'; empty.textContent=t.end; pdoc.getElementById('m-nexttitle').textContent=''; }
-    var no=s.querySelector('.notes'), nbox=pdoc.getElementById('m-npt');
-    if(!(canSave&&pdoc.activeElement===nbox&&noteFor===cur)){ nbox.innerHTML=no?no.innerHTML:(canSave?'':'<i>'+t.none+'</i>'); noteFor=cur; }
-    if(canSave){ nbox.setAttribute('contenteditable','true'); nbox.setAttribute('data-ph',t.none); }
+    /* notes as the whole speaking text or as talking points (.cues), switched in the panel; writing goes into the text */
+    var no=s.querySelector(':scope > .notes'), cu=s.querySelector(':scope > .cues'), nbox=pdoc.getElementById('m-npt'),
+        hasCues=!!deck.querySelector('.slide > .cues'), asCues=hasCues&&lay.notes==='cues'&&!!cu;
+    pdoc.getElementById('m-nmode').style.display=hasCues?'':'none';
+    pdoc.getElementById('m-nfull').textContent=t.script; pdoc.getElementById('m-ncues').textContent=t.cues;
+    pdoc.getElementById('m-nfull').classList.toggle('on',lay.notes!=='cues'); pdoc.getElementById('m-ncues').classList.toggle('on',lay.notes==='cues');
+    nbox.classList.toggle('m-cues',asCues);
+    if(!(canSave&&pdoc.activeElement===nbox&&noteFor===cur)){
+      nbox.innerHTML=asCues?cu.innerHTML:(no?no.innerHTML:(canSave?'':'<i>'+t.none+'</i>')); noteFor=cur; }
+    if(canSave&&!asCues){ nbox.setAttribute('contenteditable','true'); nbox.setAttribute('data-ph',t.none); } else nbox.removeAttribute('contenteditable');
     nbox.style.fontSize=notesFontSize+'px';
     var tm=pdoc.getElementById('m-timer');
     tm.classList.toggle('show',!!s.vsTimer);
@@ -1772,10 +1797,10 @@ html[data-motion="off"] #deck .bgvideo video{transition:none!important}
   function presenterClock(){
     if(!pwin||pwin.closed||!pdoc) return;
     var now=new Date(), t=presenterText();
-    pdoc.getElementById('m-clock').textContent=pad2(now.getHours())+':'+pad2(now.getMinutes());
+    txt(pdoc.getElementById('m-clock'),pad2(now.getHours())+':'+pad2(now.getMinutes()));
     var sec=Math.floor(elapsed()/1000);
-    pdoc.getElementById('m-elapsed').textContent=pad2(Math.floor(sec/3600))+':'+pad2(Math.floor(sec/60)%60)+':'+pad2(sec%60);
-    var pb=pdoc.getElementById('m-e-pause'); pb.textContent=clock.pause?'▶':'❚❚'; pb.style.display=clock.start?'':'none';
+    txt(pdoc.getElementById('m-elapsed'),pad2(Math.floor(sec/3600))+':'+pad2(Math.floor(sec/60)%60)+':'+pad2(sec%60));
+    var pb=pdoc.getElementById('m-e-pause'); txt(pb,clock.pause?'▶':'❚❚'); pb.style.display=clock.start?'':'none';
     pdoc.getElementById('m-e-reset').style.display=clock.start?'':'none';
     timeRender();
     presenterMedia();
@@ -1886,7 +1911,7 @@ html[data-motion="off"] #deck .bgvideo video{transition:none!important}
         '<div class="m-stat"><b id="m-st"></b><span id="m-end"></span><span class="m-target"><span id="m-l-target"></span><input id="m-target" inputmode="decimal" autocomplete="off"><span id="m-l-min"></span></span><button class="m-btn" id="m-report"></button></div>'+
       '</div></div></section>'+
       '<section class="m-panel" data-panel="next"><div class="m-ph"><span class="m-label" id="m-l-next"></span></div><div class="m-pb"><div id="m-nextbox"><div class="m-frame" id="m-next"><div class="m-mini"></div><div class="m-empty"></div></div></div><div id="m-nexttitle"></div></div></section>'+
-      '<section class="m-panel" data-panel="notes"><div class="m-ph"><span class="m-label" id="m-l-notes"></span><button class="m-btn" id="m-smaller">A−</button><button class="m-btn" id="m-larger">A+</button></div><div class="m-pb"><div id="m-npt"></div></div></section>'+
+      '<section class="m-panel" data-panel="notes"><div class="m-ph"><span class="m-label" id="m-l-notes"></span><span class="m-nmode" id="m-nmode"><button class="m-btn" id="m-nfull"></button><button class="m-btn" id="m-ncues"></button></span><button class="m-btn" id="m-smaller">A−</button><button class="m-btn" id="m-larger">A+</button></div><div class="m-pb"><div id="m-npt"></div></div></section>'+
       '<section class="m-panel" data-panel="strip"><div class="m-ph"><span class="m-label" id="m-l-strip"></span><span class="m-sel" id="m-sel"></span><button class="m-btn" id="m-selreset"></button></div><div class="m-pb"><div id="m-strip"></div></div></section>'+
       '</div><div id="m-drop"><div data-z="top"></div><div data-z="left"></div><div data-z="right"></div><div data-z="bottom"></div></div>'+
       '<scr'+'ipt>(function(){'+
@@ -1932,6 +1957,8 @@ html[data-motion="off"] #deck .bgvideo video{transition:none!important}
     onClick('m-t-start',function(){timerCommand('toggle');}); onClick('m-t-finish',function(){timerCommand('finish');}); onClick('m-t-reset',function(){timerCommand('reset');});
     d.querySelectorAll('#m-timer [data-d]').forEach(function(b){ b.addEventListener('click',function(){ timerCommand('delta',parseInt(b.getAttribute('data-d'),10)); }); });
     onClick('m-v-toggle',mediaToggle); onClick('m-v-restart',mediaReload);
+    onClick('m-nfull',function(){ lay.notes='full'; laySave(); presenterRender(); });
+    onClick('m-ncues',function(){ lay.notes='cues'; laySave(); presenterRender(); });
     onClick('m-smaller',function(){ notesFontSize=Math.max(16,notesFontSize-2); d.getElementById('m-npt').style.fontSize=notesFontSize+'px'; laySave(); });
     onClick('m-larger',function(){ notesFontSize=Math.min(60,notesFontSize+2); d.getElementById('m-npt').style.fontSize=notesFontSize+'px'; laySave(); });
     d.querySelectorAll('.m-panel').forEach(panelDrag);

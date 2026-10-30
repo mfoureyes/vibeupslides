@@ -114,13 +114,14 @@ The fields and commands are listed in `references/deck-format.md`; this is how t
 
 ### The reading page
 
-The page stays 16:9, so the reading version can be paged through, printed and exported like any
-deck. A slide **with** reader text is shown whole but reduced to 60 percent in a frame on the left;
-the text stands in a column on the right, set as reading text (26 px on the 1920 px page, about
-11 pt on a printed A4 sheet, 45 to 50 characters a line), centred against the slide while it is
-short. The column holds roughly 170 words. A slide **without** reader text and without notes is
-shown full size: covers, chapter openers, the closing slide, and any slide that says everything
-itself.
+The reading version shows every slide whole, in its master, 16:9 like the live one, so it can be
+paged through, printed and exported like any deck. What changes is the text: a slide with
+`reading` (or `read`) has a copy of its own for readers. `explain` stands under the title as a
+paragraph of reading text (26 px), two or three sentences; any slot of the master can say more
+(`bullets` as full sentences, a longer `lead`, labels that explain a figure). Where those texts
+need the room, the body of the slide is set smaller, by a fifth at most (about 22 px). A slide
+without either is shown as in the live version: covers, chapter openers, the closing slide, and any
+slide that says everything itself.
 
 | Element | In the reading version |
 |---|---|
@@ -129,19 +130,17 @@ itself.
 | `timer` slides | left out |
 | Quiz slides | the question with the answer and explanation shown, nothing to click |
 | Videos and embeds | the poster, the address as a link; no player is loaded |
-| Speaker notes | not shown; they only stand in for a missing `read` |
+| Speaker notes and cues | not shown |
 | `source` | in the footer of the page, as on the live slide |
 | Page numbers | in the footer of every page, counted in the reading version |
-| Section bar | on every page except cover slides (the closing slide is one) when the deck has at least two chapters: all chapter names in a row, the current one marked, each a link to its first page |
 | Contents | one page after the cover, generated from the chapters when there are at least two, with the page each chapter starts on; `"contents": false` in the deck file leaves it out |
 | Presenter view, notes panel | no buttons for them; outline, overview, language switch and PDF export work as in any deck |
 
 ### The checks
 
-- **Overflow** runs on the reading layout: the reduced slide is measured like a full one, and the
-  reader text is measured against its column (`'reader_text': '120 px too long for its column'`).
-  Text that is too long runs visibly over the footer rather than being cut, so it cannot go
-  unnoticed. Shorten it or split the slide.
+- **Overflow** runs on the reading version as on the live one, after the body was set smaller
+  where it could. Text that is too long runs visibly over the footer rather than being cut, so it
+  cannot go unnoticed. Shorten it or split the slide.
 - **Density**: every build prints the words visible per page and flags pages above the limit of
   the mode: 50 words for a live slide (a sentence title plus one piece of evidence; more than that
   is being read while the speaker talks), 250 for a reading page including its reader text (the
@@ -172,21 +171,22 @@ For a live version of a reading deck:
 ### What to write or rewrite
 
 For the reading version:
-- **`read` on every content slide**: two to five sentences of prose in the brand's voice that say
-  what the speaker would say, with the numbers and names. Write for someone who was not in the
+- **`reading` on every content slide**: `explain`, two or three sentences of prose in the brand's
+  voice that say what the speaker would say, with the numbers and names; and the slots that should
+  say more, e.g. the bullets as full sentences. Write for someone who was not in the
   room: no "as you can see", no references to the event. Text from a document the user supplied is
   used word for word.
 - **Titles**: check the chain. A live title that leans on the voice ("And then this happened")
   becomes a claim that stands alone. Change the title in the slot, so both versions gain.
 - **Charts and figures**: add `source` where it is missing and name the data point that matters
   in `read`.
-- **Image-only slides**: one sentence in `read`, or mark them `"only": "live"`.
+- **Image-only slides**: one sentence in `explain`, or mark them `"only": "live"`.
 - **Orientation**: the contents page and the section bar are generated from the chapters, so a
   deck of more than about ten pages needs chapters (inference). Add an appendix chapter marked
   `"only": "reading"` for sources and detail.
 - Then build with `vs build <deck> --mode reading`, look at the contact sheets in `shots_reading/`
-  and resolve overflow by shortening `read` or splitting the slide, never by shrinking type. The
-  build names the slides that still show raw notes; it is done when that line is gone.
+  and resolve overflow by shortening the texts or splitting the slide, never by shrinking type
+  yourself. The build names the content slides without text for readers; look at each.
 
 For the live version:
 - **`notes` on every slide**, written from `read`: short full sentences, the numbers and names,

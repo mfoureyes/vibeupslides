@@ -641,6 +641,22 @@ with sync_playwright() as p:
     ok("no script errors in the builds deck", not errors, str(errors[:3]))
     br.close()
 
+# the best form for a slide: a roadmap in two forms, a full circle beside the ring, columns side by side and stacked
+fd = os.path.join(ws, "decks", "shapes"); os.makedirs(fd)
+rm_h = {"master": "roadmap", "title": "Now, next, later", "horizons": [{"label": "Now", "when": "Q1", "items": [{"title": "A", "text": "a"}]}, {"label": "Next", "items": [{"title": "B"}, {"title": "C"}]}, {"label": "Later", "items": [{"title": "D"}]}]}
+cols = {"master": "column_chart", "title": "Side by side", "axis": ["Q1", "Q2", "Q3"], "series": [{"label": "2026", "values": [10, 20, 40]}, {"label": "2025", "values": [8, 16, 30]}]}
+json.dump({"title": "Shapes", "brand": "smoke", "langs": ["de", "en"], "slides": [
+    {"master": "cover", "title": "Shapes"}, sample("roadmap"), rm_h, dict(sample("share"), pie=True), sample("column_chart"), cols,
+    dict(cols, title="Stacked", stacked=True, unit="m"),
+]}, open(os.path.join(fd, "deck.json"), "w"))
+code, out = vs("build", "shapes", "--no-shots"); sh = open(os.path.join(fd, "Shapes.html"), encoding="utf-8").read()
+ok("a roadmap in milestones and in horizons, a pie, and a column chart side by side and stacked build clean in every language",
+   code == 0 and out.count("overflow: clean") == 2 and sh.count('class="vs-rm-p done') == 2 and sh.count('class="vs-rm-p now') == 2 and ">Heute</u>" in sh and ">Today</u>" in sh
+   and sh.count('class="vs-rm-s') == 6 and sh.count('class="vs-rm-s done') == 2 and out.count("legibility: clean") == 2 and sh.count('class="vs-rh-col') == 6 and 'vs-shr vs-shp' in sh, out[-600:])
+ok("columns are measured against the tallest, the highlighted one keeps the accent, stacks carry their total",
+   "--h:86.0%;--c:var(--accent)" in sh and "--h:43.0%;--c:var(--accent)" in sh and 'class="vs-cc-g mark"' in sh and 'data-moves' in sh and sh.count('class="vs-cc-a st"') == 6
+   and "<em>70 m</em>" in sh and sh.count('class="vs-cc-legend"') == 4, out[-300:])
+
 # entrances follow the reading order; previews in the brand's languages; the video with its title
 od = os.path.join(ws, "decks", "order"); os.makedirs(od)
 json.dump({"title": "Order", "brand": "smoke", "langs": ["en"], "slides": [
@@ -1119,10 +1135,23 @@ for nme, (x, y) in (("formsa", ("Alpha", "Beta")), ("formsb", ("Gamma", "Delta")
 out_a = vs("build", "formsa", "--no-shots")[1]; out_b = vs("build", "formsb", "--no-shots")[1]
 code, out = vs("forms", "smoke", "--promote", "formsb", "--slide", "2", "--name", "pair")
 fa = json.load(open(os.path.join(ws, "decks", "formsa", "deck.json")))["slides"][1]
-ok("a free form that comes up again is noticed, becomes a master of the brand and takes its place in every deck that had it",
-   "FORMS:" not in out_a and "FORMS: slide 2" in out_b and "slide 2 of formsa" in out_b and code == 0 and os.path.exists(os.path.join(lib, "masters", "pair.html"))
+ok("a new free form is told at once, becomes a master of the brand and takes its place in every deck that had it",
+   "FORMS: slide 2 is written freely in a form the brand does not have yet" in out_a and "--promote formsa --slide 2" in out_a and "FORMS: slide 2" in out_b and "slide 2 of formsa" in out_b and code == 0 and os.path.exists(os.path.join(lib, "masters", "pair.html"))
    and fa == {"title": "Libre", "master": "pair", "t1": "Alpha", "t2": "Text Alpha.", "t3": "Beta", "t4": "Text Beta."} and vs("build", "formsa", "--no-shots")[0] == 0
    and "pair:" in vs("forms", "smoke")[1] and "formsa, formsb" in vs("forms", "smoke")[1] and FM.mark("<p>x</p>") is None, out_b[-500:] + out + str(fa))
+
+vs("new", "formsc", "--brand", "smoke", "--langs", "fr,en"); fcp = os.path.join(ws, "decks", "formsc", "deck.json")
+json.dump({"title": "formsc", "brand": "smoke", "langs": ["fr", "en"], "author": "A", "slides": [{"master": "cover", "title": "T"}, {"master": "free", "title": "Trois",
+    "body": fbody("Un", "Deux")[:-6] + '<div class="card"><h3>Trois</h3><p>Text Trois.</p></div></div>'}]}, open(fcp, "w"))
+out_c = vs("build", "formsc", "--no-shots")[1]
+code, out_r = vs("forms", "smoke", "--remove", "pair"); fa = json.load(open(os.path.join(ws, "decks", "formsa", "deck.json")))["slides"][1]
+again = vs("build", "formsa", "--no-shots")[1]
+ok("a form close to one the brand has is set on that master rather than made a second one; a master taken out leaves its slides free again, word for word, and is not proposed again",
+   "close to the brand's master pair" in out_c and "--promote" not in out_c.split("close to the brand's master pair")[0][-200:] and code == 0
+   and fa == {"title": "Libre", "master": "free", "body": fbody("Alpha", "Beta")} and not os.path.exists(os.path.join(lib, "masters", "pair.html"))
+   and os.path.exists(os.path.join(lib, "removed", "pair.html")) and "FORMS: slide 2" not in again and "framework's masters" in vs("forms", "smoke", "--remove", "bullets")[1],
+   out_c[-500:] + out_r + str(fa) + again[-300:])
+shutil.rmtree(os.path.join(ws, "decks", "formsc"))
 
 # parts: a block that recurs inside free slides of different forms becomes a part of the brand
 band = '<div class="smoke-band" style="margin-top:40px"><b>{a}</b><p>{b}</p></div>'

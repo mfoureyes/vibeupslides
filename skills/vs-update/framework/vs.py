@@ -37,8 +37,8 @@
                                                  what the brand's decks share: slides (team, contact) and facts (address, figures); make a slide shared, set a fact
     vs.py design --examine <files, addresses> | <brand> --style <name> [--ground --ink --accent --head --body --radius …] | --gallery [--with <brand>] [--pick a,b,c]
                                                  a look from nothing: read the examples a user likes, make a look of their own from them (or from one of twelve styles), show looks side by side
-    vs.py forms <brand> [--promote <deck> --slide N --name <name>]
-                                                 forms of the brand's own: its masters and who uses them, free slides whose form came up again; make such a slide a master
+    vs.py forms <brand> [--promote <deck> --slide N --name <name>] [--remove <name>]
+                                                 forms of the brand's own: its masters and who uses them, free slides in a new form; make such a slide a master, or take one out again
     vs.py refresh [--brand <name>] [--check] [--all] [--except <deck>]
                                                  build again every deck that is behind its brand (shared slides and facts, look, framework); --check only lists them
     vs.py langs <deck> [--add fr] | vs.py langs --brand <name> [--add fr]
@@ -1589,16 +1589,19 @@ def cmd_design(args):
     print(f"NEXT: vs.py preview {name}, give the user the preview, write what they decide into design.md (design.journal), then confirm: vs.py confirm {name}")
 
 def cmd_forms(args):
-    """vs.py forms <brand>                                        the brand's own masters with the decks that use them, and free forms that came up more than once
+    """vs.py forms <brand>                                        the brand's own masters with the decks that use them, free forms not in the repertoire yet, masters close to one another
        vs.py forms <brand> --promote <deck> --slide N --name <name>    make that free slide a master of the brand; every slide of the same form in the brand's decks uses it from then on
+       vs.py forms <brand> --remove <name>                          take a master the brand made from a free slide out of the repertoire; its slides become free slides again
        vs.py forms <brand> --part <name> --from <deck> --slide N --block K       make block K of that free slide a part of the brand; every free slide holding the same block uses it
        vs.py forms <brand> --part <name> --from-master <master> --block K       make block K of one of the brand's masters a part; every master of the brand holding it word for word uses it"""
     import build as B, edit, forms, render
-    pos = positional(args, ("--promote", "--slide", "--name", "--part", "--from", "--from-master", "--block"))
+    pos = positional(args, ("--promote", "--slide", "--name", "--part", "--from", "--from-master", "--block", "--remove"))
     name = pos[0] if pos else die("which brand? vs.py forms <brand>")
     bd = B.brand_dir(name); mem = forms.load(bd)
     if arg(args, "--part"):
         return _forms_part(args, name, bd)
+    if arg(args, "--remove"):
+        return _forms_remove(arg(args, "--remove"), name, bd)
     if arg(args, "--promote"):
         d = _deck_dir(arg(args, "--promote")); deck = edit.load(d); langs = deck.get("langs") or [deck.get("lang") or "en"]
         n = int(arg(args, "--slide") or die("which slide? --slide N")); new = arg(args, "--name") or die("name the master: --name <name>")
@@ -1618,8 +1621,11 @@ def cmd_forms(args):
                     _, conv, sl = forms.to_master(new, s, dl)
                     if len(sl) == len(slots): dk["slides"][i] = conv; hit.append(i + 1)
             if hit: edit.save(dd, dk); changed.append(f"{dn} (slide {', '.join(map(str, hit))})")
-        mem = forms.load(bd); mem["seen"].pop(k, None); mem["own"][new] = {"made": time.strftime("%Y-%m-%d"), "from": f"{os.path.basename(d)}, slide {n}", "decks": [c.split(" ")[0] for c in changed]}
+        mem = forms.load(bd); mem["seen"].pop(k, None); mem["own"][new] = {"made": time.strftime("%Y-%m-%d"), "from": f"{os.path.basename(d)}, slide {n}", "decks": [c.split(" ")[0] for c in changed], "mark": k}
         json.dump(mem, open(forms.path(bd), "w", encoding="utf-8"), indent=1, ensure_ascii=False)
+        near = forms.similar(bd, forms.master_shape(text), set(render.load_masters(None)), skip={new})
+        if near: print(f"SIMILAR: the brand's master {near[0][0]} has nearly the same form. Keep one: give it what the other needs (an optional slot), "
+                      f"move the slides over and take the other out (vs.py forms {name} --remove <name>).")
         print(f"master '{new}': {os.path.join(bd, 'masters', new + '.html')}\nits texts are the slots {', '.join(slots)}: give them names that say what they hold, write its `use`, and check it in the preview (vs.py preview {name})."
               f"\nnow using it: {', '.join(changed) or 'no deck'}. Build them again: vs.py refresh --brand {name}")
         return
@@ -1632,8 +1638,13 @@ def cmd_forms(args):
     print(f"forms of {name}'s own (masters the framework does not have):")
     for n in sorted(own): print(f"  {n}: {own[n]['meta'].get('use', '')[:110]} | used by: {', '.join(sorted(use.get(n, []))) or 'no deck yet'}" + (f" | made {mem['own'][n].get('made')}" + (f" from {mem['own'][n]['from']}" if mem['own'][n].get('from') else "") if n in mem["own"] else ""))
     if not own: print("  none yet")
-    rep = {k: v for k, v in mem["seen"].items() if len(v.get("uses") or []) > 1}
-    print("\nfree slides in a form that came up more than once (make them masters: --promote <deck> --slide N --name <name>):")
+    pairs, names = [], sorted(own)
+    for i, a in enumerate(names):                           # forms close to one another: one of them is enough
+        for b, r in forms.similar(bd, forms.master_shape(open(own[a]["path"], encoding="utf-8").read()) if own[a].get("path") else [], defaults, skip=set(names[:i + 1])):
+            pairs.append(f"{a} and {b} ({int(r * 100)} % alike)")
+    if pairs: print("  close to one another, keep one (give it an optional slot, move the slides, --remove the other): " + "; ".join(pairs))
+    rep = {k: v for k, v in mem["seen"].items() if v.get("uses") and k not in mem["free"]}
+    print("\nfree slides in a form the repertoire does not have yet (make them masters: --promote <deck> --slide N --name <name>):")
     for k, v in rep.items(): print("  " + "; ".join(f"{u['deck']} slide {u['slide']} ({u.get('title', '')})" for u in v["uses"]) + f" | first seen {v.get('first')}")
     if not rep: print("  none")
     parts = render.load_parts(bd); puse = {}
@@ -1657,6 +1668,31 @@ def cmd_forms(args):
     print("\nblocks the brand's masters hold word for word (make them parts: --part <name> --from-master <master> --block K):")
     for h, where in sm: print("  " + ", ".join(f"{m} block {b}" for m, b in where) + f" | {re.sub(r'<[^>]+>', ' ', h)[:60].strip()}")
     if not sm: print("  none")
+
+def _forms_remove(new, brand, bd):
+    """vs.py forms <brand> --remove <name>: the master out of the brand's repertoire, its slides free again."""
+    import build as B, edit, forms, render
+    p = os.path.join(bd, "masters", new + ".html")
+    if new in render.load_masters(None): die(f"'{new}' is one of the framework's masters, not a form of the brand's own")
+    if not os.path.exists(p): die(f"the brand has no master of its own called '{new}'")
+    text = open(p, encoding="utf-8").read(); back, stuck = [], []
+    for dn, dd, dk in _decks():
+        if dk.get("brand") != brand and B.brand_dir(dk.get("brand")) != bd: continue
+        dl = dk.get("langs") or [dk.get("lang") or "en"]; hit = []
+        for i, s in enumerate(dk.get("slides") or []):
+            if isinstance(s, dict) and s.get("master") == new:
+                free = forms.to_free(text, s, dl)
+                if free is None: stuck.append(f"{dn} slide {i + 1}"); continue
+                dk["slides"][i] = free; hit.append(i + 1)
+        if hit: back.append((dn, dd, dk, hit))
+    if stuck: die(f"master {new} has changed since it was made, so its slides cannot be turned back word for word: {', '.join(stuck)}. Move them to another master first.")
+    for dn, dd, dk, hit in back: edit.save(dd, dk)
+    mem = forms.load(bd); rec = mem["own"].pop(new, {}) or {}
+    if rec.get("mark") and rec["mark"] not in mem["free"]: mem["free"].append(rec["mark"])     # it stays a free slide: no new reminder
+    json.dump(mem, open(forms.path(bd), "w", encoding="utf-8"), indent=1, ensure_ascii=False)
+    os.makedirs(os.path.join(bd, "removed"), exist_ok=True); os.replace(p, os.path.join(bd, "removed", new + ".html"))
+    print(f"master '{new}' is out of the repertoire (kept in {os.path.join(bd, 'removed', new + '.html')}). "
+          "Free slides again: " + (", ".join(dn + " (slide " + ", ".join(map(str, h)) + ")" for dn, _, _, h in back) or "none") + f". Build them again: vs.py refresh --brand {brand}")
 
 def _forms_part(args, brand, bd):
     """vs.py forms <brand> --part <name> (--from <deck> --slide N | --from-master <master>) --block K"""

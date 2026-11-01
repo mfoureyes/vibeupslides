@@ -31,18 +31,45 @@ _TAG = re.compile(r"<(/?)([a-zA-Z][\w-]*)\b([^>]*)>")
 _INLINE = {"em", "strong", "b", "i", "u", "sup", "sub", "br", "mark", "small", "span", "a"}
 _RAW = re.compile(r"<(style|script|svg)\b.*?</\1\s*>", re.S | re.I)
 
-def mark(body, least=3):
-    """The mark of a free slide's form: its block tags and their classes in order. None for a body with fewer
-    than `least` elements (a single paragraph is not a form)."""
+def shape(body):
+    """The block tags of a piece of HTML and their classes, in order, without the words."""
     b = _RAW.sub(lambda m: f"<{m.group(1).lower()}/>", str(body or ""))
     parts = []
     for m in _TAG.finditer(b):
         name = m.group(2).lower()
         if m.group(1) or name in _INLINE: continue
         cls = re.search(r'\bclass="([^"]*)"', m.group(3))
-        parts.append(name + ("." + ".".join(sorted(cls.group(1).split())) if cls else ""))
+        parts.append(name + ("." + ".".join(sorted(c for c in cls.group(1).split() if "{" not in c)) if cls else ""))
+    return parts
+
+def mark(body, least=3):
+    """The mark of a free slide's form: its block tags and their classes in order. None for a body with fewer
+    than `least` elements (a single paragraph is not a form)."""
+    parts = shape(body)
     if len(parts) < least: return None
     return hashlib.sha1(" ".join(parts).encode()).hexdigest()[:12]
+
+_FRAME = {"div.kicker", "div.vs-topic", "h2", "p.lead", "section.slide"}
+
+def master_shape(text):
+    """The form of a master's body: its blocks without the header, the title and lead every slide has, and the
+    template's own tags."""
+    body = re.sub(r"^\s*<!--vs.*?-->", "", text, count=1, flags=re.S)
+    body = re.sub(r"\{\{[^}]*\}\}", "", body)
+    return [t for t in shape(body) if t not in _FRAME and not t.startswith("section.")]
+
+def similar(brand_dir, shp, defaults=(), skip=(), least=.75):
+    """The brand's own masters whose form is close to shp: [(name, ratio)], the closest first."""
+    import difflib
+    out, folder = [], os.path.join(brand_dir, "masters")
+    for fn in sorted(os.listdir(folder)) if os.path.isdir(folder) and shp else []:
+        n = fn[:-5]
+        if not fn.endswith(".html") or n in defaults or n in skip: continue
+        try: other = master_shape(open(os.path.join(folder, fn), encoding="utf-8").read())
+        except OSError: continue
+        r = difflib.SequenceMatcher(None, shp, other).ratio()
+        if r >= least: out.append((n, round(r, 2)))
+    return sorted(out, key=lambda x: -x[1])
 
 _VOID = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr"}
 
@@ -112,10 +139,10 @@ def load(brand_dir):
         d = json.load(open(path(brand_dir), encoding="utf-8"))
         if isinstance(d, dict):
             for k in ("seen", "own", "parts", "own_parts"): d.setdefault(k, {})
-            d.setdefault("told", [])
+            d.setdefault("told", []); d.setdefault("free", [])
             return d
     except (OSError, ValueError): pass
-    return {"seen": {}, "own": {}, "parts": {}, "own_parts": {}, "told": []}
+    return {"seen": {}, "own": {}, "parts": {}, "own_parts": {}, "told": [], "free": []}
 
 def _title(slide, langs):
     t = slide.get("title")
@@ -159,13 +186,20 @@ def note(brand_dir, deck_name, deck, defaults=()):
             if isinstance(e, dict) and e.get("part"):
                 rec = mem["own_parts"].setdefault(str(e["part"]), {"made": today, "decks": []})
                 if deck_name not in rec["decks"]: rec["decks"].append(deck_name)
-    for k, slides in mine.items():
+    for k, slides in mine.items():                         # every new form goes into the repertoire at once, not only when it comes up again
+        if k in mem["free"]: continue                         # the user took it out of the repertoire: it stays a free slide
         uses = mem["seen"][k]["uses"]; others = [u for u in uses if u["deck"] != deck_name]
-        if len(uses) < 2: continue
-        where = ", ".join(f"slide {u['slide']} of {u['deck']}" for u in others[:4]) or f"slides {', '.join(map(str, slides))} of this deck"
-        lines.append(f"FORMS: slide {slides[0]} is written freely in a form the brand has used before ({where}; first seen {mem['seen'][k]['first']}). It has become part of how "
-                     f"this company presents: make it a master of the brand, so that every deck uses the same one and a change reaches all of them: "
-                     f"vs.py forms <brand> --promote {deck_name} --slide {slides[0]} --name <name>")
+        where = (" It came up before: " + ", ".join(f"slide {u['slide']} of {u['deck']}" for u in others[:4]) + ".") if others else ""
+        body = next((b for b in _bodies(deck["slides"][slides[0] - 1], langs)[:1]), "")
+        near = similar(brand_dir, shape(body), defaults)
+        if near:                                             # one form in the repertoire, not two
+            lines.append(f"FORMS: slide {slides[0]} is written freely in a form close to the brand's master {near[0][0]} ({int(near[0][1] * 100)} % alike).{where} "
+                         f"Give {near[0][0]} what this slide needs (an optional slot, one more item) and set the slide on it, rather than a second master of nearly the same form. "
+                         f"Tell the user in one line what {near[0][0]} can do now.")
+            continue
+        lines.append(f"FORMS: slide {slides[0]} is written freely in a form the brand does not have yet.{where} Make it a master of the brand now, so that the next deck can use it "
+                     f"and a change reaches every slide of this form: vs.py forms <brand> --promote {deck_name} --slide {slides[0]} --name <name>. "
+                     "Tell the user in one line, e.g. \"New form in the brand's repertoire: <name> (slide N); vs.py forms <brand> --remove <name> takes it out again.\"")
     for pk, here in blocks_here.items():                    # a block that recurs in slides of another form: a part
         uses = mem["parts"][pk]["uses"]
         if len(uses) < 2 or len({u["form"] for u in uses}) < 2: continue
@@ -278,9 +312,29 @@ def to_master(name, slide, langs):
             new[f"t{j + 1}"] = vals if len(set(vals.values())) > 1 else sample[f"t{j + 1}"]
     else: new.update(sample)
     smp = dict(sample); smp.update({k: (v.get(langs[0], next(iter(v.values()))) if isinstance(v, dict) else v) for k, v in slide.items() if k in ("kicker", "title", "lead")})
-    meta = {"name": name, "order": 75, "use": "A form of this brand's own, taken from a slide that was written freely and came up again. Say here what it is for.", "slots": slots, "sample": smp}
+    meta = {"name": name, "order": 75, "use": "A form of this brand's own, taken from a slide that was written freely. Say here what it is for.", "slots": slots, "sample": smp}
     cls = re.sub(r"[^\w -]", "", str(slide.get("class") or "")).strip()
     text = ("<!--vs " + json.dumps(meta, ensure_ascii=False) + " -->\n"
             f'<section class="slide{" " + cls if cls else ""}" {{{{attrs}}}}>\n  {{{{#kicker}}}}<div class="kicker">{{{{kicker}}}}</div>{{{{/kicker}}}}\n  <h2>{{{{title}}}}</h2>\n'
             "  {{#lead}}<p class=\"lead\">{{lead}}</p>{{/lead}}\n  " + "".join(tmpl).strip() + "\n  {{notes}}\n</section>\n")
     return text, new, list(sample)
+
+
+def to_free(text, slide, langs):
+    """A slide of a master the brand made from a free slide, as a free slide again: the master's body with the
+    slide's words. None when the master has changed so far that its body can no longer be filled word for word."""
+    m = re.search(r"\{\{/lead\}\}\s*(.*?)\s*\{\{notes\}\}", text, re.S)
+    if not m or re.search(r"\{\{[#^>]", m.group(1)): return None
+    tmpl = m.group(1); names = re.findall(r"\{\{\s*(\w+)\s*\}\}", tmpl)
+    def fill(lang):
+        def val(n):
+            v = slide.get(n, "")
+            if isinstance(v, dict): v = v.get(lang, v.get("*", next(iter(v.values()), "")))
+            return str(v)
+        return re.sub(r"\{\{\s*(\w+)\s*\}\}", lambda x: val(x.group(1)), tmpl)
+    per = {l: fill(l) for l in langs}
+    new = {k: v for k, v in slide.items() if k not in names and k != "master"}
+    new["master"] = "free"; new["body"] = per if len(set(per.values())) > 1 else per[langs[0]]
+    cls = re.search(r'<section class="slide ([^"{]+)"', text)
+    if cls: new["class"] = cls.group(1).strip()
+    return new

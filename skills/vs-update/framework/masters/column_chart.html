@@ -1,0 +1,39 @@
+<!--vs {"name": "column_chart", "order": 68, "prepare": "column_chart", "use": "Columns that grow from the ground: one figure per year, quarter or group (revenue by year), two or three series side by side to compare them (this year against last), or stacked when the parts of each column count as well as the whole (revenue by region per year). Up to eight columns, up to three series. With one series, highlight marks the column the slide is about and the others go light. Real numbers with a source. For a ranking of named things use bars, for a trend with many points line_chart, for parts of one whole share, for one series with a finding beside it figure with columns.", "slots": {"kicker": "small label above the title (optional)", "title": "the title as a full sentence, <em> marks the one accent word", "axis": "list of 2 to 8 labels under the columns (\"2023\", \"Q1\", a group up to 14 characters)", "series": "list of 1 to 3 {label, values, color}: values one number per label of the axis; label names the series in the legend (needed with two or more); color only to override the order accent, ink, grey", "stacked": "true: the series stand on one another, the total above each column (default: side by side)", "highlight": "the number of the column the slide is about (1 is the first), with one series (optional)", "unit": "the unit after the figures (\"m €\", \"%\"; optional)", "note": "one sentence below (optional)"}, "sample": {"kicker": "Columns", "title": "Revenue has doubled in three <em>years</em>", "source": "Sample figures", "unit": "m €", "axis": ["2022", "2023", "2024", "2025"], "series": [{"label": "Revenue", "values": [21, 27, 34, 43]}], "highlight": 4}} -->
+<section class="slide vs-ccl" {{attrs}}>
+  <style>
+  .vs-ccl .vs-cc-legend{display:flex;gap:40px;margin-top:22px;font-size:24px;font-weight:600}
+  .vs-ccl .vs-cc-legend span{display:inline-flex;align-items:center;gap:12px}
+  .vs-ccl .vs-cc-legend i{width:24px;height:24px;border-radius:min(var(--radius),5px);background:var(--c)}
+  .vs-ccl .vs-cc{position:relative;display:flex;gap:44px;margin-top:34px;height:500px;align-items:stretch}
+  .vs-ccl .vs-cc::after{content:"";position:absolute;left:0;right:0;bottom:72px;border-top:3px solid var(--ink)}
+  .vs-ccl .vs-cc-g{flex:1;display:flex;flex-direction:column;min-width:0}
+  .vs-ccl .vs-cc-a{position:relative;flex:1;display:flex;align-items:flex-end;justify-content:center;gap:10px;padding-bottom:3px}
+  .vs-ccl .vs-cc-b{position:relative;flex:1;max-width:150px;height:var(--h);min-height:4px;background:var(--c);border-radius:min(var(--radius),6px) min(var(--radius),6px) 0 0;
+    transform-origin:bottom}
+  .vs-ccl .vs-cc-b b{font-style:normal;position:absolute;left:50%;bottom:100%;transform:translateX(-50%);padding-bottom:10px;font-weight:700;font-size:26px;line-height:1;white-space:nowrap;color:var(--ink)}
+  .vs-ccl .vs-cc-g.mark .vs-cc-b b{color:var(--accent-text);font-size:32px}
+  .vs-ccl .vs-cc-a.st{flex-direction:column;align-items:center;justify-content:flex-end;gap:0}
+  .vs-ccl .vs-cc-a.st .vs-cc-b{flex:none;width:min(100%,180px);max-width:none;border-radius:0}
+  .vs-ccl .vs-cc-a.st .vs-cc-b+.vs-cc-b{border-top:3px solid var(--paper)}
+  .vs-ccl .vs-cc-a.st .vs-cc-b:first-of-type{border-radius:min(var(--radius),6px) min(var(--radius),6px) 0 0}
+  .vs-ccl .vs-cc-a.st .vs-cc-b b{display:none}
+  .vs-ccl .vs-cc-a.st>em{font-style:normal;font-family:inherit;font-weight:700;font-size:26px;line-height:1;padding-bottom:10px;white-space:nowrap}
+  .vs-ccl .vs-cc-l{font-size:24px;font-weight:600;line-height:1.25;text-align:center;padding-top:14px;height:72px}
+  /* the ground line and the labels stand at once; when the slide opens the columns grow from the line one after the
+     other, a stack part by part from the bottom, and each figure comes when its column is up */
+  .vs-ccl.active .vs-cc-b{--t:calc(.25s + var(--g) * var(--md) * .45 + var(--k) * var(--md) * .2);animation:vs-cc-grow calc(var(--md)*1.2) var(--me) var(--t) backwards}
+  .vs-ccl.active .vs-cc-b b{animation:vs-cc-in calc(var(--md)*.6) var(--me) calc(var(--t) + var(--md) * 1.1) backwards}
+  .vs-ccl.active .vs-cc-a.st .vs-cc-b{--t:calc(.25s + var(--g) * var(--md) * .6 + var(--k) * var(--md) * .7);animation-duration:calc(var(--md)*.7)}
+  .vs-ccl.active .vs-cc-a.st>em{animation:vs-cc-in calc(var(--md)*.6) var(--me) calc(.25s + var(--g) * var(--md) * .6 + var(--ns) * var(--md) * .7) backwards}
+  @keyframes vs-cc-grow{from{transform:scaleY(0)}}
+  @keyframes vs-cc-in{from{opacity:0}}
+  html.export .vs-ccl *,html[data-motion="off"] .vs-ccl *{animation:none!important}
+  .vs-ccl .callout{margin-top:26px}
+  </style>
+  {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+  <h2>{{title}}</h2>
+  {{#_legend}}<div class="vs-cc-legend">{{#_series}}<span style="--c:{{_c}}"><i></i>{{label}}</span>{{/_series}}</div>{{/_legend}}
+  <div class="vs-cc" data-moves style="--ns:{{_ns}}">{{#_cols}}<div class="vs-cc-g{{#_mark}} mark{{/_mark}}" style="--g:{{@i}}"><div class="vs-cc-a{{#_stacked}} st{{/_stacked}}">{{#_stacked}}<em>{{_sum}}</em>{{/_stacked}}{{#_bars}}<div class="vs-cc-b" style="--h:{{_h}}%;--c:{{_c}};--k:{{_k}}"><b>{{value}}{{#_unit}} {{_unit}}{{/_unit}}</b></div>{{/_bars}}</div><div class="vs-cc-l">{{label}}</div></div>{{/_cols}}</div>
+  {{#note}}<p class="callout anim">{{note}}</p>{{/note}}
+  {{notes}}
+</section>

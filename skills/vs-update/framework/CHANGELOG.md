@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.13.0
+- The best form for every slide. vs-create decides first what kind of statement a slide makes (a comparison, a part of a whole, a change over time, a sequence, a plan …) and then its form, from a table of statements, masters and the rules every chart keeps (`references/forms.md`); for the slides that carry the argument it looks further. A master only when it is the best form; otherwise the slide is written freely in the brand's design, with the same checks.
+- A new form goes into the brand's repertoire at once. The build names a free slide in a form the brand does not have yet the first time it appears, not only when it comes up again; vs-create makes it a master and tells the user in one line. `vs forms <brand> --remove <name>` takes it out again: its slides become free slides again, word for word, and the form is not proposed again. A free slide close to a master the brand made before is set on that master instead of a second one, and `vs forms <brand>` names masters that are close to one another.
+- Processes are drawn in the shape they have (branches, loops, roles), in the words of their context.
+- New masters: `roadmap` (milestones on a line with the current one marked, or three columns now, next and later) and `column_chart` (columns over years or groups, two or three series side by side or stacked, one column highlighted). `share` draws a full circle with `"pie": true`.
+- Charts build when their slide opens. The columns of `column_chart` grow one after the other from a ground line that stands at once, a stack part by part from the bottom, each figure when its column is up. A roadmap of milestones starts with its first point and draws the way to each next one before the point appears: solid up to the current point, dashed for what lies ahead. The growing bars of `waterfall` and `compare` and the circle of `share` now move when their slide is shown, not while it waited hidden.
+- The labels and figures of a column chart can be changed in the browser editor; a changed figure sets the height of its column.
+- A process written freely explains itself: arrows join the steps, a hand-over crosses into the other lane, the end is marked.
+- The legibility check measures the ground of a text as the colour seen most around it, not a blend at an edge.
+
+For brand libraries made with an earlier version:
+- Nothing to do. `roadmap` and `column_chart` come from the framework until the brand has masters of its own for them. A brand with its own copy of `share` keeps it as it is; for the pie, copy the framework's `share.html` into the brand's `masters/` again (vs-build) or leave it.
+
 ## 0.12.0
 - Links for readers. Any text can hold a link (`<a href>`): in the reading version, the handout and while editing it is underlined in the accent colour, opens beside the deck and stays a link in the PDF; on the screen of a talk it is plain text and does nothing. The build names links of the live text that the reading text of that place lacks (`LINKS:`). `source_url` makes the source line in the footer a link to the source.
 - Formatting in the browser editor: the menu Format and the keys ⌘K link, ⌘B bold, ⌘I italic, ⌘⇧X struck through for the selected words; the same again takes it off.

@@ -392,8 +392,35 @@ come up one after the other from left to right; `mark` names the column that car
  "mark": 3, "callout": "The drop begins in the quarter of the change.", "source": "Report 2025"}
 ```
 
+Two or three series side by side, or stacked when the parts of each column count as well as the
+whole, are a `column_chart`; the first series takes the accent colour, the others two greys:
+
+```json
+{"master": "column_chart", "title": "Every quarter beats last <em>year</em>", "source": "Report 2026",
+ "axis": ["Q1", "Q2", "Q3", "Q4"], "unit": "m €",
+ "series": [{"label": "2026", "values": [12, 14, 13, 17]}, {"label": "2025", "values": [9, 11, 12, 13]}]}
+```
+
+`"stacked": true` stands the series on one another with the total above each column; with one
+series, `"highlight": 4` keeps the fourth column in the accent colour and greys the others. Parts
+of one whole are a `share`: a ring with the part that counts in the middle, or with `"pie": true` a
+full circle, for parts that matter about equally. Two to five parts, adding up to 100.
+
+A roadmap is a `roadmap`, in one of two forms. Milestones on a line, the current one marked:
+
+```json
+{"master": "roadmap", "title": "The first stage is live, two more follow by <em>autumn</em>",
+ "milestones": [{"date": "Jan 2027", "label": "First version", "state": "done"},
+   {"date": "Mar 2027", "label": "Second version", "text": "Open to every team.", "state": "now"},
+   {"date": "Jun 2027", "label": "Integration"}, {"date": "Oct 2027", "label": "Done"}]}
+```
+
+Or three horizons when the dates are not fixed yet, `"horizons": [{"label": "Now", "when": "Q1",
+"items": [{"title": "...", "text": "..."}]}, {"label": "Next", ...}, {"label": "Later", ...}]`; the
+further out, the lighter the column. Both build one column or milestone per forward press.
+
 A chart that exists as an image file (`image`) cannot build up: it is a picture. Use `columns`,
-`bars` or `line_chart` whenever the numbers are at hand. 
+`bars`, `column_chart` or `line_chart` whenever the numbers are at hand. 
 
 **Builds on forward presses.** `timeline` shows one bar per forward press in the order of its
 rows, then the milestones; `phases` one phase (its whole column) per press; the first part stands

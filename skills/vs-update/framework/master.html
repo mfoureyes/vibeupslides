@@ -678,11 +678,12 @@ html[data-motion="off"] #deck .bgvideo video{transition:none!important}
   /* Order of the entrance: the blocks of a slide are numbered by rows from top to bottom, blocks in one row share
      a number and come together. data-wave="2" on a block puts it after all blocks of the first wave (answers after
      questions); inside a container with data-seq every block is a beat of its own, in the order of the markup.
-     A content slide whose master marks no block at all gets its parts below the title marked here. */
+     A content slide whose master marks no block at all gets its parts below the title marked here; data-moves on an
+     element says the master moves its parts itself. */
   var BLOCKSKIP='.kicker,.vs-topic,h1,h2,.header,.footer,.notes,.read,.cues,.bgvideo,.image,.photo,.wedge,.ghost,.biglogo,.mbox,.rbar,style,script';
   function orderBlocks(s){
     if(s.vsOrdered||s.classList.contains('rpage')) return; s.vsOrdered=true;
-    if(!s.querySelector('.anim,.kpi,.f')&&!s.classList.contains('mslide')&&!s.classList.contains('media')&&s.querySelector(':scope > h2')){
+    if(!s.querySelector('.anim,.kpi,.f,[data-moves]')&&!s.classList.contains('mslide')&&!s.classList.contains('media')&&s.querySelector(':scope > h2')){
       Array.prototype.forEach.call(s.children,function(c){
         if(c.matches(BLOCKSKIP)) return;
         if(c.tagName==='TABLE'){ c.querySelectorAll('tbody tr, tfoot tr').forEach(function(r){ r.classList.add('anim'); }); return; }

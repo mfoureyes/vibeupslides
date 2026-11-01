@@ -167,6 +167,8 @@ def _where(stack, paths, name):
         return None
     for k in range(len(stack) - 1, -1, -1):
         if isinstance(stack[k], dict) and first in stack[k]:
+            if first in (stack[k].get("_src") or {}):        # a prepared item names where its text comes from in the slide
+                return stack[k]["_src"][first]
             if paths[k] is None or first.startswith("@") or (paths[k] == "" and (first in _NOT_SLOT or first.startswith("is_"))):
                 return None
             return (paths[k] + "." if paths[k] else "") + name
@@ -427,7 +429,54 @@ def _prep_display(slots, env):
     m = re.match(r"([^\s<]+)\s+(.+)$", t, re.S)
     slots["_head"], slots["_rest"] = (m.group(1), m.group(2)) if m else (t, "")
 
-PREPARE = {"display": _prep_display, "waterfall": _prep_waterfall, "share": _prep_share, "venn": _prep_venn}
+def _prep_roadmap(slots, env):
+    """Milestones on a line: _n how many, _col the column of each, _now on the current point, _line "done" where the
+    way to a point is behind us (solid) and empty where it lies ahead (dashed)."""
+    ms = [m for m in slots.get("milestones") or [] if isinstance(m, dict)]
+    slots["_n"] = max(len(ms), 1)
+    for i, m in enumerate(ms):
+        m["state"] = str(m.get("state") or "").strip().lower() if str(m.get("state") or "").strip().lower() in ("done", "now") else ""
+        m["_now"] = m["state"] == "now"; m["_col"] = i + 1; m["_line"] = "done" if m["state"] else ""
+
+def _prep_columns(slots, env):
+    """Columns of a chart: one group per label of the axis, one bar per series side by side, or stacked. _h is the
+    height in percent of the tallest column (or stack), value the figure as text (editable in the browser), _c the colour; a highlighted column
+    keeps its colour and the others go light."""
+    axis = list(slots.get("axis") or []); series = [s for s in slots.get("series") or [] if isinstance(s, dict)]
+    stacked = bool(slots.get("stacked")) and len(series) > 1; unit = slots.get("unit") or ""; lang = env.get("lang")
+    def val(s, j):                                          # a figure typed in the editor may carry its unit or separators: "1.250 m €"
+        try: m = re.search(r"\d[\d.,]*", str((s.get("values") or [])[j]).replace("\u202f", "").replace("\xa0", ""))
+        except (IndexError, TypeError): return 0.0
+        if not m: return 0.0
+        n = m.group().rstrip(".,"); group = "." if (lang or "en")[:2] in ("de", "fr", "es", "it", "nl") else ","
+        if "." in n and "," in n:                           # both: the last one is the decimal mark
+            d = "." if n.rfind(".") > n.rfind(",") else ","; n = n.replace("," if d == "." else ".", "").replace(d, ".")
+        elif "." in n or "," in n:
+            sep = "." if "." in n else ","
+            if n.count(sep) > 1 or (sep == group and len(n) - n.rfind(sep) - 1 == 3): n = n.replace(sep, "")
+            else: n = n.replace(sep, ".")
+        try: return max(0.0, float(n))
+        except ValueError: return 0.0
+    tops = [sum(val(s, j) for s in series) if stacked else max([val(s, j) for s in series] or [0]) for j in range(len(axis))]
+    hi = max(tops or [0]) or 1.0
+    try: mark = int(slots.get("highlight") or 0)
+    except (TypeError, ValueError): mark = 0
+    cols = []
+    for j, label in enumerate(axis):
+        bars = []
+        for k, s in enumerate(series):
+            v = val(s, j); c = s.get("color") or CHART[k % len(CHART)]   # accent, then two greys: they stay apart where the accent is the ink
+            if mark and j + 1 != mark and len(series) == 1: c = CHART[2]
+            bars.append({"_h": round(v / hi * 86, 2), "value": _num(v, lang), "_unit": unit if not stacked else "", "_c": c, "_k": k,
+                         "_src": {"value": f"series.{k + 1}.values.{j + 1}"}})
+        if stacked: bars.reverse()                          # the first series stands on the ground
+        cols.append({"label": label, "_bars": bars, "_sum": _num(tops[j], lang) + (" " + unit if unit else ""), "_mark": mark == j + 1, "_src": {"label": f"axis.{j + 1}"}})
+    slots["_cols"] = cols; slots["_stacked"] = stacked; slots["_legend"] = len(series) > 1; slots["_ns"] = max(len(series), 1)
+    slots["_series"] = [{"label": s.get("label", ""), "_c": s.get("color") or CHART[k % len(CHART)], "_src": {"label": f"series.{k + 1}.label"}} for k, s in enumerate(series)]
+
+CHART = ["var(--accent)", "color-mix(in srgb,var(--ink) 64%,var(--paper))", "color-mix(in srgb,var(--ink) 40%,var(--paper))"]
+
+PREPARE = {"display": _prep_display, "waterfall": _prep_waterfall, "share": _prep_share, "venn": _prep_venn, "roadmap": _prep_roadmap, "column_chart": _prep_columns}
 
 HELPERS = {"chapter_number": _h_chapter_number, "bars": _h_bars, "columns": _h_columns, "bgvideo": _h_bgvideo, "chevron_fill": _h_chevron_fill, "line_chart": _h_line_chart,
            "verdict": _h_verdict, "lower_third": _h_lower_third, "el": _h_el, "icon": _h_icon,

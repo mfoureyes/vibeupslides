@@ -13,6 +13,7 @@
   .vs-wfl .vs-wf-c.down.low .vs-wf-v{top:auto;bottom:calc(var(--b) + var(--h) + 10px)}
   .vs-wfl .vs-wf-l{font-size:22px;line-height:1.25;text-align:center;padding-top:12px;height:66px}
   @keyframes vs-wf-grow{from{transform:scaleY(0)}}
+  .vs-wfl:not(.active) .vs-wf-b{animation:none}                 /* it moves when the slide is shown, not while it waits hidden */
   html.export .vs-wfl .vs-wf-b,html[data-motion="off"] .vs-wfl .vs-wf-b{animation:none}
   .vs-wfl .callout{margin-top:30px}
   </style>

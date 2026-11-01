@@ -16,6 +16,7 @@
   .vs-cmp .vs-cm-rows:not(:has(.on)) .vs-cm-row:first-of-type u i{background:var(--accent)}
   .vs-cmp .vs-cm-rows:not(:has(.on)) .vs-cm-row:first-of-type em{color:var(--accent-text)}
   @keyframes vs-cm-grow{from{transform:scaleX(0)}}
+  .vs-cmp:not(.active) .vs-cm-row u i{animation:none}                 /* it moves when the slide is shown, not while it waits hidden */
   html.export .vs-cmp .vs-cm-row u i,html[data-motion="off"] .vs-cmp .vs-cm-row u i{animation:none}
   .vs-cmp .callout{margin-top:44px}
   </style>

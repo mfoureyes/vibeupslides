@@ -1,0 +1,48 @@
+<!--vs {"name": "roadmap", "order": 77, "prepare": "roadmap", "use": "Where something is going, in one of two forms. horizons: three columns Now, Next and Later, each with up to four items, for a product or a plan whose dates are not fixed yet; the further out, the lighter the column (Now solid, Next outlined, Later dashed). milestones: three to six points on a line with their dates, the ones done in ink, the current one in the accent colour with a marker, the ones ahead hollow on a dashed line. Give horizons or milestones, not both. For bars over months use timeline, for steps that follow one another process or steps. It builds on forward presses: one column or one milestone per press.", "slots": {"topic": "short label that names the subject, above the title (optional), e.g. \"Roadmap\"", "title": "the claim as a full sentence, at most two lines (about 110 characters); <em> marks the one accent word", "horizons": "list of 3 {label, when, items}: label one or two words (\"Now\", \"Next\", \"Later\"), when a time span (\"Q1 2027\", optional), items a list of up to 4 {title, text}: title up to 40 characters, text one short sentence (optional; with four items keep it under 60 characters)", "milestones": "list of 3 to 6 {date, label, text, state}: date short (\"Mar 2027\"), label up to 28 characters, text one short sentence (optional, up to 70 characters with six), state \"done\", \"now\" (one at most) or \"\" for what is ahead", "now_label": "the word on the marker of the current milestone", "step": "false: the slide builds by itself when it appears. Default true: it builds on forward presses, one column or one milestone per press, the first with the slide"}, "defaults": {"now_label": {"de": "Heute", "fr": "Aujourd’hui", "es": "Hoy", "it": "Oggi", "nl": "Vandaag", "en": "Today"}, "step": true}, "sample": {"topic": "Roadmap", "title": "The first part is live, the next two follow by <em>autumn</em>", "milestones": [{"date": "Jan 2027", "label": "First version", "text": "Used by the first teams.", "state": "done"}, {"date": "Mar 2027", "label": "Second version", "text": "Open to every team.", "state": "now"}, {"date": "Jun 2027", "label": "Third part", "text": "Connected to the other systems."}, {"date": "Oct 2027", "label": "Done", "text": "The old system is switched off."}]}} -->
+<section class="slide vs-doc vs-rdm" {{attrs}}>
+  <style>
+  .vs-doc{display:flex;flex-direction:column;padding-bottom:150px}
+  .vs-topic{flex:none;font-weight:700;font-size:22px;line-height:1.3;color:var(--accent-text);margin-bottom:12px}
+  .vs-doc>h2{flex:none;font-size:46px;line-height:1.14;max-width:1680px;margin-bottom:0}
+  .vs-rdm .vs-rh{display:grid;grid-template-columns:repeat(3,1fr);gap:36px;margin-top:44px}
+  .vs-rdm .vs-rh-col{display:flex;flex-direction:column;gap:16px;min-width:0}
+  .vs-rdm .vs-rh-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:14px;border-bottom:4px solid var(--ink)}
+  .vs-rdm .vs-rh-col:first-child .vs-rh-head{border-color:var(--accent)}
+  .vs-rdm .vs-rh-head b{font-family:var(--font-head);font-weight:var(--w-head);font-size:40px;line-height:1.05}
+  .vs-rdm .vs-rh-col:first-child .vs-rh-head b{color:var(--accent-text)}
+  .vs-rdm .vs-rh-head small{font-weight:700;font-size:18px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+  .vs-rdm .vs-rh-item{padding:20px 24px;border-radius:min(var(--radius),14px);border:2px solid var(--line)}
+  .vs-rdm .vs-rh-col:first-child .vs-rh-item{background:var(--soft);border-color:transparent}
+  .vs-rdm .vs-rh-col:nth-child(3) .vs-rh-item{border-style:dashed}
+  .vs-rdm .vs-rh-item h3{font-size:28px;line-height:1.2;font-weight:var(--w-head)}
+  .vs-rdm .vs-rh-item p{font-size:22px;line-height:1.38;color:var(--muted);margin-top:6px}
+  .vs-rdm .vs-rm{position:relative;display:grid;grid-template-columns:repeat(var(--n),1fr);margin-top:64px}
+  .vs-rdm .vs-rm-s{position:absolute;grid-row:1;left:calc(17px - 100%);width:100%;top:84px;border-top:4px dashed var(--line);text-decoration:none}
+  .vs-rdm .vs-rm-s.done{border-top-style:solid;border-color:var(--ink)}
+  .vs-rdm .vs-rm-s.f{opacity:1;transform:scaleX(0);transform-origin:left;transition:none}
+  .vs-rdm .vs-rm-s.f.on{transform:none;transition:transform calc(var(--md)*1.1) var(--me)}  /* a line only draws forward, it never runs back on load */
+  .vs-rdm .vs-rm-p.f{transform:none;transition:opacity calc(var(--md)*.7) var(--me)}  /* a point appears where it stands on the line, it does not fly in */
+  .vs-rdm .vs-rm-p.f.on{transform:none;transition-delay:calc(var(--md)*.8)}
+  .vs-rdm.active .vs-rm-p.anim{animation-name:vs-rm-in}
+  @keyframes vs-rm-in{from{opacity:0}}
+  .vs-rdm.active .vs-rm-s.anim{transform-origin:left;animation:vs-rm-way calc(var(--md)*1.1) var(--me) backwards;animation-delay:calc((var(--k) - 1) * var(--md) * 1.4 - var(--md) * .8)}
+  .vs-rdm.active .vs-rm-p.anim{animation-delay:calc((var(--k) - 1) * var(--md) * 1.4)}
+  @keyframes vs-rm-way{from{transform:scaleX(0)}}
+  html.export .vs-rdm .vs-rm-s,html[data-motion="off"] .vs-rdm .vs-rm-s{animation:none}
+  .vs-rdm .vs-rm-p{position:relative;padding:0 28px 0 0;min-width:0}
+  .vs-rdm .vs-rm-p time{display:block;height:58px;font-weight:700;font-size:20px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+  .vs-rdm .vs-rm-p i{position:relative;z-index:1;display:block;width:34px;height:34px;margin-top:11px;border-radius:50%;background:var(--paper);border:4px solid var(--line);box-sizing:border-box}
+  .vs-rdm .vs-rm-p.done i{background:var(--ink);border-color:var(--ink)}
+  .vs-rdm .vs-rm-p.now i{width:46px;height:46px;margin-top:5px;margin-left:-6px;background:var(--accent);border-color:var(--paper);outline:4px solid var(--accent)}
+  .vs-rdm .vs-rm-p.now time{color:var(--accent-text)}
+  .vs-rdm .vs-rm-p u{position:absolute;left:-6px;top:-50px;text-decoration:none;font-weight:700;font-size:18px;letter-spacing:.12em;text-transform:uppercase;line-height:1;padding:8px 12px;border-radius:min(var(--radius),6px);background:var(--accent);color:var(--on-accent);white-space:nowrap}
+  .vs-rdm .vs-rm-p h3{font-size:30px;line-height:1.2;font-weight:var(--w-head);margin-top:30px}
+  .vs-rdm .vs-rm-p p{font-size:23px;line-height:1.38;color:var(--muted);margin-top:8px}
+  .vs-rdm .vs-rm-p:not(.done):not(.now) h3{color:var(--muted)}
+  </style>
+  {{#topic}}<div class="vs-topic">{{topic}}</div>{{/topic}}{{^topic}}{{#kicker}}<div class="vs-topic">{{kicker}}</div>{{/kicker}}{{/topic}}
+  <h2>{{title}}</h2>
+  {{#horizons.0.label}}<div class="vs-rh">{{#horizons}}<div class="vs-rh-col {{#step}}{{#@first}}anim{{/@first}}{{^@first}}f{{/@first}}{{/step}}{{^step}}anim{{/step}}" data-o="{{@i}}"><div class="vs-rh-head"><b>{{label}}</b>{{#when}}<small>{{when}}</small>{{/when}}</div>{{#items}}<div class="vs-rh-item"><h3>{{title}}</h3>{{#text}}<p>{{text}}</p>{{/text}}</div>{{/items}}</div>{{/horizons}}</div>{{/horizons.0.label}}
+  {{^horizons.0.label}}<div class="vs-rm" style="--n:{{_n}}">{{#milestones}}{{^@first}}<s class="vs-rm-s {{_line}} {{#step}}f{{/step}}{{^step}}anim{{/step}}" data-o="{{@i}}" style="grid-column:{{_col}} / span 1;--k:{{@i}}"></s>{{/@first}}<div class="vs-rm-p {{state}} {{#step}}{{#@first}}anim{{/@first}}{{^@first}}f{{/@first}}{{/step}}{{^step}}anim{{/step}}" data-o="{{@i}}" style="grid-column:{{_col}};grid-row:1;--k:{{@i}}"><time>{{date}}</time>{{#_now}}<u>{{now_label}}</u>{{/_now}}<i></i><h3>{{label}}</h3>{{#text}}<p>{{text}}</p>{{/text}}</div>{{/milestones}}</div>{{/horizons.0.label}}
+  {{notes}}
+</section>

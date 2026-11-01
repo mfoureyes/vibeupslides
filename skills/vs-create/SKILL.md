@@ -222,8 +222,13 @@ moves minutes between parts in the same answer. In the deck file this becomes `m
 it away: offer to keep the extra slides as deepenings (`deepen`), left out of the talk and at hand
 in the presenter view.
 
-If a slide needs a look no master has, say so here and choose: `free` (title plus your own body,
-for a one-off), or a new master through vs-build (when the look will be needed again).
+**The best form per slide.** For every slide, decide first what kind of statement the title makes
+(a comparison, a part of a whole, a change over time, a sequence, a plan …), then the form:
+`references/forms.md` has the table from statement to master, the rules every chart keeps, and when
+to look further for the slides that carry the argument. A master only when it is the best form;
+otherwise the slide is written freely in the brand's design and enters the brand's repertoire as a
+master at once (below, "A new form goes into the repertoire"). Name the form in the storyline line
+of each slide.
 
 ## 4. Write the deck file
 
@@ -281,19 +286,26 @@ hand. Something that repeats is a `cycle`; who gives what to whom is a `flow`; s
 on each other are `stairs`; one figure against others is `compare`; things that each have a
 picture are `tiles`; two questions at once are a `matrix`; many that become few are a `funnel`;
 what rests on what is a `pyramid`; two states are `before_after`; one thing and its parts are a
-`hub`; a path with an end is `steps` or `process`; dates are a `timeline`. A slide
+`hub`; a path with an end is `steps` or `process`; dates are a `timeline`; where it is going is a
+`roadmap`; parts of a whole are a `share` (ring or pie); series over years are a `column_chart`.
+`references/forms.md` has the whole table. A process is drawn in the shape it has (branches,
+loops, roles), in the words of its context, not poured into the nearest master. A slide
 may carry more than a title and three lines: a lead sentence, the structure, and one sentence
 below that says what follows (`note`), as long as it stays one idea.
-**What comes up again becomes the brand's.** A slide no master fits is written freely (`free`).
-The brand remembers the form of every free slide (`forms.json` in its library), and a build prints
-`FORMS:` when a deck uses a form that was used before, in this deck or another. Then make it a
-master without being asked: `vs forms <brand> --promote <deck> --slide N --name <name>` writes the
-master and puts it in place of every slide of that form in all decks of the brand. Give its slots
-names that say what they hold, write its `use`, look at it in the preview, run
-`vs refresh --brand <brand>`, and tell the user in one sentence that this form is now part of
-their library. From then on a change to the master reaches every deck. `vs forms <brand>` lists
-the brand's own forms and which deck uses what; read it before writing a free slide, the form may
-exist already.
+**A new form goes into the repertoire.** A slide no master fits is written freely (`free`), with
+the same checks as every slide. The brand remembers the form of every free slide (`forms.json` in
+its library), and a build prints `FORMS:` for a free slide in a form the brand does not have yet,
+the first time, not only when it comes up again. Make it a master without being asked:
+`vs forms <brand> --promote <deck> --slide N --name <name>` writes the master and puts it in place
+of every slide of that form in all decks of the brand. Give its slots names that say what they hold,
+write its `use`, look at it in the preview, run `vs refresh --brand <brand>`, and tell the user in
+one line: "New form in your repertoire: <name> (slide N); `vs forms <brand> --remove <name>` takes
+it out again." On their no, run that: the slides become free again, word for word, and the form is
+not proposed again. When the build says the free slide is close to a master the brand made before,
+give that master what the slide needs (an optional slot) and use it instead of making a second one.
+From then on a change to the master reaches every deck. `vs forms <brand>` lists the brand's own
+forms, which deck uses what and which are close to one another; read it before writing a free
+slide, the form may exist already.
 The same holds one level down, for **parts**: a block that comes up inside slides of different
 forms (a band with the conclusion, a contact box, a row of logos). A build prints `FORMS: block K
 of slide N recurs …`; make it a part without being asked: `vs forms <brand> --part <name> --from
@@ -443,7 +455,7 @@ belong on one click, set `"order"` (deck-format.md). The user can do the same in
 ("On click", "Order": they click the parts in the new order, with Shift to join one to the step
 before; the strength of movement, "Play").
 
-Name the version in half a sentence when you hand a deck over ("built with VibeUpSlides 0.12.0", from
+Name the version in half a sentence when you hand a deck over ("built with VibeUpSlides 0.13.0", from
 the status line of the setup), so that the user can tell which state they are testing.
 A button (`button: {label, url}` on the closing slide) is a call to action with a real target; a
 cover has none. The last slide credits the person who made the deck (`"author"` in the deck file,
@@ -611,5 +623,6 @@ picks the change up at its next build.
 | `references/structures.md` | planning: the structure, questions, lengths and typical mistakes for each kind of deck |
 | `references/modes.md` | the live and the reading version: differences and how to convert one into the other |
 | `references/deck-format.md` | writing `deck.json`: all fields, languages, images, video, timer, quiz, charts, importing a PowerPoint |
+| `references/forms.md` | the best form per slide: from the statement to the master, chart rules, processes, the brand's repertoire |
 | `references/presenting.md` | keys, presenter view, second screen, PDF and video, what to tell the user |
 | `references/pitfalls.md` | something looks wrong or a build misbehaves |

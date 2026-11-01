@@ -675,7 +675,11 @@ def _marks(r, shot):
         w, h = box[2] - box[0], box[3] - box[1]; k = max(1, max(w, h) // 64)
         away = [c for c in im.crop(box).resize((max(1, w // k), max(1, h // k)), Image.NEAREST).getdata() if sum(abs(c[i] - m["c"][i]) for i in range(3)) > 60]
         if not away: continue                               # nothing else in view: no ground to measure against
-        away.sort(key=_lum); bg = away[len(away) // 2]
+        common = {}                                          # the ground is the colour seen most around the mark, not a blend at its edge
+        for c in away: q = tuple(v // 16 for v in c); common.setdefault(q, []).append(c)
+        top = max(common.values(), key=len)
+        if len(top) * 4 >= len(away): bg = top[len(top) // 2]
+        else: away.sort(key=_lum); bg = away[len(away) // 2]
         fg = [bg[i] + (m["c"][i] - bg[i]) * min(1, m["a"]) for i in range(3)]
         hi, lo = sorted((_lum(fg), _lum(bg)), reverse=True); ratio = (hi + .05) / (lo + .05)
         if ratio < (MARK_QUIET if m["faint"] else MARK_MIN) and sum((a - b) ** 2 for a, b in zip(_lab(fg), _lab(bg))) ** .5 < MARK_HUE:

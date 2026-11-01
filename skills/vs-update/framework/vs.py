@@ -10,7 +10,7 @@
 
   Brand library (the vs-build skill)
     vs.py ingest <brand> <files...>              read documents the user has: style guide PDF, PowerPoint master, logos, fonts
-    vs.py analyze <url> --brand <name>           read a website, create the brand library, build the master preview
+    vs.py analyze <url> --brand <name> [--images N]   read a website, create the brand library, build the master preview (photos: up to 30)
     vs.py preview <brand>                        rebuild the master slides of a brand and their contact sheets
     vs.py brands | show <brand>                  list brands, show one
     vs.py set <brand> key=value ...              change brand.json, e.g. colors.accent=#D50C2F shape.motif=block
@@ -20,6 +20,8 @@
     vs.py fonts add <brand> <files...> [--family F] [--weight 700] [--style italic]
     vs.py fonts google <brand> "<Family>" --role head|body      take an open typeface as substitute
     vs.py videos <brand> [url]                   save the website's own video files into the library, for video slides and backgrounds
+    vs.py photos <brand> [--describe <file.json>] [--add <file or url> ...] [--remove <photo>] [--refresh]
+                                                 the brand's photos, one line each from its index; new ones are measured and put on a contact sheet to be described once
     vs.py elements <brand>                       the brand's library of icons, arrows and shapes from its website, by the names a deck uses
     vs.py masters <brand> [--full]               the master slides of a brand with their slots
     vs.py voice <brand> [files...] [--again]     how the brand writes: measure its texts, draft voice.md and the rules a build checks; files are sample texts to add
@@ -734,7 +736,7 @@ def _scaffold(name, url=""):
 
 def cmd_analyze(args):
     import build as B
-    pos = positional(args, ("--brand", "--pages"))
+    pos = positional(args, ("--brand", "--pages", "--images"))
     url = pos[0] if pos else die("which website?")
     name = arg(args, "--brand") or die("give the brand a folder name: --brand <name>")
     name = re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
@@ -742,8 +744,13 @@ def cmd_analyze(args):
     if os.path.exists(os.path.join(out, "brand.json")) and "--again" not in args:
         die(f"brand '{name}' exists. Use --again to read the website again (brand.json is redrafted; styleguide.md, theme.css and masters stay).")
     import analyze
-    analyze.extract(url, name=name, pages=int(arg(args, "--pages", 4)), fonts="--no-fonts" not in args, out=out)
+    analyze.extract(url, name=name, pages=int(arg(args, "--pages", 4)), fonts="--no-fonts" not in args, out=out, max_images=int(arg(args, "--images", 30)))
     d, copied = _scaffold(name, url)
+    try:                                                    # the photos measured now, described by Claude once (vs.py photos)
+        import photos
+        _, todo = photos.update(d)
+        if todo: print(f"PHOTOS: {len(todo)} photo(s) saved; contact sheet {', '.join(photos.sheet(d, todo))}. Describe them once: vs.py photos {name}")
+    except Exception as e: print("photos could not be measured:", str(e)[:120])
     if "--no-videos" not in args:
         try: analyze.fetch_videos(url, d)
         except Exception as e: print("videos could not be read:", str(e)[:120])
@@ -1192,6 +1199,10 @@ def cmd_build(args):
         raw = json.load(open(os.path.join(d, "deck.json"), encoding="utf-8"))
         for line in forms.note(b["_dir"], os.path.basename(d), raw, set(render.load_masters(None))): print(line.replace("<brand>", os.path.basename(b["_dir"])))
     except Exception: pass
+    try:                                                    # photos twice, undescribed, or missing where the brand has one
+        import photos, render
+        for line in photos.note(b["_dir"], raw, render.load_masters(b["_dir"])): print(line.replace("<brand>", os.path.basename(b["_dir"])))
+    except Exception: pass
     rp = os.path.join(d, "research", "report.md")
     if not os.path.exists(rp) or os.path.getsize(rp) < 200:
         print("RESEARCH: research/report.md is missing or empty. Write it from this conversation, in the user's language: what the deck is for, the audience, the line of argument, facts with their sources, decisions and open points, so that another deck on the topic can be made from it.")
@@ -1587,6 +1598,58 @@ def cmd_design(args):
     print(f"library {name}: {bd}\nfrom the style {style}" + (f", accent {arg(args, '--accent')}" if arg(args, "--accent") else ""))
     for nline in notes: print("NOTE:", nline)
     print(f"NEXT: vs.py preview {name}, give the user the preview, write what they decide into design.md (design.journal), then confirm: vs.py confirm {name}")
+
+def cmd_photos(args):
+    """vs.py photos <brand>                          the index of the brand's photos, one line each; measures new ones and puts the undescribed on a contact sheet
+       vs.py photos <brand> --describe <file.json>   take the words about photos into the index: {"photo_01.jpg": {"what", "who", "mood", "fits": [...], "people", "avoid"}}
+       vs.py photos <brand> --add <file or url> ...  take photos from outside into the brand
+       vs.py photos <brand> --remove <photo>         take a photo out (it moves to images/removed/)
+       vs.py photos <brand> --refresh [--max N]      read the photos of the website again and add the new ones"""
+    import build as B, photos
+    pos = positional(args, ("--describe", "--remove", "--max"))
+    name = pos[0] if pos else die("which brand? vs.py photos <brand>")
+    bd = B.brand_dir(name)
+    if arg(args, "--describe"):
+        try: data = json.load(open(arg(args, "--describe"), encoding="utf-8"))
+        except (OSError, ValueError) as e: die(f"cannot read {arg(args, '--describe')}: {e}")
+        photos.update(bd); taken, notes = photos.describe(bd, data)
+        print(f"{len(taken)} photo(s) described" + "".join("\n  " + n for n in notes))
+    elif arg(args, "--remove"):
+        try: photos.remove(bd, arg(args, "--remove"))
+        except ValueError as e: die(str(e))
+        print(f"{arg(args, '--remove')} is out of the brand (kept in images/removed/)")
+    elif "--add" in args:
+        for src in args[args.index("--add") + 1:]:
+            if src.startswith("--"): break
+            try: f, note = photos.add(bd, src)
+            except Exception as e: print(f"  {src}: not added ({str(e)[:120]})"); continue
+            print(f"  {src} -> images/{f}" + (f" ({note})" if note else ""))
+    elif "--refresh" in args:
+        try: url = json.load(open(os.path.join(bd, "brand.json"), encoding="utf-8")).get("url")
+        except (OSError, ValueError): url = None
+        url or die("brand.json names no website (\"url\")")
+        import analyze, tempfile
+        tmp = tempfile.mkdtemp(prefix="vs_photos_")
+        import contextlib, io
+        print(f"reading the photos of {url} (about a minute) ...")
+        with contextlib.redirect_stdout(io.StringIO()):     # the analysis talks about colours and fonts: only its photos matter here
+            analyze.extract(url, name=name, pages=4, fonts=False, out=tmp, max_images=int(arg(args, "--max", 30)))
+        got = json.load(open(os.path.join(tmp, "brand.json"), encoding="utf-8")).get("images") or []
+        new = 0
+        for p in got:                                       # what the user took out stays out
+            f, note = photos.add(bd, os.path.join(tmp, p["file"]), p.get("source"), again=False)
+            if not note: new += 1; print(f"  new: images/{f}")
+        shutil.rmtree(tmp, ignore_errors=True)
+        print(f"{new} new photo(s) from {url}")
+    d, todo = photos.update(bd)
+    print(f"\n{len(d['photos'])} photo(s) in {os.path.join(bd, 'images')}:")
+    for line in photos.lines(d): print("  " + line)
+    if todo:
+        sheets = photos.sheet(bd, todo)
+        print(f"\nDESCRIBE: {len(todo)} photo(s) are not described yet. Look at {', '.join(sheets)} once (numbers and file names under each photo) and write "
+              f"for each one what it shows, who (roles, not names you do not know), the mood, where it fits ({', '.join(photos.FITS)}), whether people are "
+              "recognisable (people: true) and what to avoid (\"avoid\": \"text over the left half\"); then vs.py photos " + name + " --describe <file.json>. "
+              "After that, choose photos from these lines, never by looking at the photos again.")
 
 def cmd_forms(args):
     """vs.py forms <brand>                                        the brand's own masters with the decks that use them, free forms not in the repertoire yet, masters close to one another
@@ -2154,7 +2217,7 @@ def main():
     import brandtools
     simple = {"init": cmd_init, "status": cmd_status, "update": cmd_update, "permissions": cmd_permissions, "doctor": cmd_doctor, "backup": cmd_backup, "restore": cmd_restore, "analyze": cmd_analyze, "videos": cmd_videos, "voice": cmd_voice, "ingest": cmd_ingest, "preview": cmd_preview,
               "masters": cmd_masters, "elements": cmd_elements, "fonts": cmd_fonts, "new": cmd_new, "build": cmd_build, "titles": cmd_titles, "plan": cmd_plan, "handout": cmd_handout,"video": cmd_video,
-              "scenes": cmd_scenes, "motion": cmd_motion, "present": cmd_present, "edit": cmd_edit, "apply": cmd_apply, "shared": cmd_shared, "forms": cmd_forms, "design": cmd_design, "refresh": cmd_refresh, "langs": cmd_langs, "pack": cmd_pack, "handover": cmd_handover}
+              "scenes": cmd_scenes, "motion": cmd_motion, "present": cmd_present, "edit": cmd_edit, "apply": cmd_apply, "shared": cmd_shared, "forms": cmd_forms, "photos": cmd_photos, "design": cmd_design, "refresh": cmd_refresh, "langs": cmd_langs, "pack": cmd_pack, "handover": cmd_handover}
     try:
         if cmd in simple: simple[cmd](rest)
         elif cmd == "brands":

@@ -1299,6 +1299,52 @@ ok("a slide's focus is passed to its photo, and nothing else is", 'style="--focu
 import build as BD2
 ok("a face detector is at hand or its absence is said", BD2._faces(__import__("PIL.Image", fromlist=["Image"]).new("RGB", (320, 180), "#888")) in ([], None))
 
+# the brand's photos: measured and described once, chosen from their words, cropped from the faces, set where a deck needs them
+from PIL import Image as PImg
+os.makedirs(os.path.join(lib, "images"), exist_ok=True)
+for k, col in ((1, "#2a6f97"), (2, "#e9c46a")):
+    PImg.new("RGB", (1600, 900), col).save(os.path.join(lib, "images", f"photo_0{k}.jpg"))
+PImg.new("RGB", (900, 1200), "#264653").save(os.path.join(ws, "outside.jpg"))
+code, out = vs("photos", "smoke")
+idx = json.load(open(os.path.join(lib, "images", "index.json")))["photos"]
+ok("the photos of a brand are measured into an index and put on a contact sheet to be described",
+   code == 0 and set(idx) == {"photo_01.jpg", "photo_02.jpg"} and idx["photo_01.jpg"]["format"] == "landscape" and idx["photo_02.jpg"]["tone"] == "light"
+   and "DESCRIBE: 2 photo(s)" in out and os.path.exists(os.path.join(lib, "raw", "photos_1.png")), out[-400:])
+dj = os.path.join(ws, "describe.json")
+json.dump({"photo_01.jpg": {"what": "a harbour at dawn", "mood": "calm", "fits": ["chapter", "cover"]},
+           "photo_02.jpg": {"what": "a field of wheat", "fits": ["closing", "chapter", "hero"]}}, open(dj, "w"))
+code, out = vs("photos", "smoke", "--describe", dj)
+ok("words about photos go into the index, a place that does not exist is named",
+   code == 0 and "photo_01.jpg: a harbour at dawn | mood: calm" in out and "not hero" in out and "DESCRIBE" not in out, out[-500:])
+code, out = vs("photos", "smoke", "--add", os.path.join(ws, "outside.jpg")); code2, out2 = vs("photos", "smoke", "--add", os.path.join(ws, "outside.jpg"))
+code3, out3 = vs("photos", "smoke", "--remove", "photo_03.jpg")
+ok("a photo from outside is taken in once, and one taken out is kept aside",
+   "-> images/photo_03.jpg" in out and "portrait" in out and "has this photo already" in out2 and code3 == 0
+   and os.path.exists(os.path.join(lib, "images", "removed", "photo_03.jpg")) and "photo_03" not in json.dumps(json.load(open(os.path.join(lib, "images", "index.json")))), out + out2 + out3)
+ix = json.load(open(os.path.join(lib, "images", "index.json"))); ix["photos"]["photo_01.jpg"]["focus"] = "30% 20%"
+json.dump(ix, open(os.path.join(lib, "images", "index.json"), "w"))
+vs("new", "pics", "--brand", "smoke"); pk = os.path.join(ws, "decks", "pics", "deck.json")
+json.dump({"title": "Pics", "brand": "smoke", "langs": ["en"], "author": "A", "english": True, "slides": [
+    {"master": "cover", "title": "T"}, {"master": "chapter", "number": 1, "title": "Harbour"},
+    {"master": "split", "photo": "brand:images/photo_01.jpg", "title": "Here", "bullets": ["One."]},
+    {"master": "statement_photo", "photo": "brand:images/photo_01.jpg", "title": "Again"},
+    {"master": "closing", "title": "Thanks"}]}, open(pk, "w"))
+code, out = vs("build", "pics", "--no-shots")
+ph = open(os.path.join(ws, "decks", "pics", "Pics.html"), encoding="utf-8").read()
+ok("a photo of the brand is cropped from its index, a photo used twice and a chapter or closing without one are named",
+   code == 0 and "--focus:30% 20%" in ph and "PHOTOS: brand:images/photo_01.jpg stands on slides 3, 4" in out
+   and ("own master chapter has no slot photo" in out or "slide 2 (chapter) has no photo" in out)
+   and ("own master closing has no slot photo" in out or "slide 5 (closing) has no photo, and the brand has 1 for this place (photo_02.jpg)" in out), out[-900:])
+for m in ("chapter", "closing"):
+    if os.path.exists(os.path.join(lib, "masters", m + ".html")): os.remove(os.path.join(lib, "masters", m + ".html"))
+pd = json.load(open(pk)); pd["slides"][1]["photo"] = "brand:images/photo_02.jpg"; pd["slides"][3]["photo"] = False; pd["slides"][4]["photo"] = False
+json.dump(pd, open(pk, "w"))
+code, out = vs("build", "pics", "--no-shots")
+ph = open(os.path.join(ws, "decks", "pics", "Pics.html"), encoding="utf-8").read()
+ok("a chapter takes a photo behind its text, and a slide that stays without one is left in peace",
+   code == 0 and ph.count('class="bgphoto"') == 1 and "PHOTOS:" not in out, out[-600:])
+shutil.rmtree(os.path.join(ws, "decks", "pics"))
+
 # update path: a newer payload is taken over before a build
 newer = os.path.join(ws, "payload"); shutil.copytree(FW, newer, ignore=shutil.ignore_patterns("__pycache__"))
 open(os.path.join(newer, "VERSION"), "w").write("99.0.0"); open(os.path.join(newer, "CHANGELOG.md"), "w").write("# Changelog\n\n## 99.0.0\n- test entry\n")

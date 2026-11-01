@@ -1520,7 +1520,7 @@ def fetch_videos(url, root, limit=3, max_mb=60):
     return out
 
 
-def extract(url, name=None, pages=4, fonts=True, out=None, max_images=12):
+def extract(url, name=None, pages=4, fonts=True, out=None, max_images=30):
     from playwright.sync_api import sync_playwright
     if not re.match(r"https?://", url): url = "https://" + url
     host = urlparse(url).netloc.replace("www.", "")

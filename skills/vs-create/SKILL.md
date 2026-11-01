@@ -325,10 +325,21 @@ enlarged by up to 40 percent. `"fit": false` on a slide (or the deck) keeps the 
 timer and quiz masters. Record the answers of step 2 in `brief`; it is the memory of the
 project, and a later session continues from it without asking again.
 
-**Pictures.** The main subject of a photo stands in the middle of its frame, whole. Set the crop
-with the slide's `"focus"` (`"left"`, `"right top"`, `"30% 20%"`), look at every picture slide on the
-contact sheet, and act on what the build points out (a head cut by the edge, people at the edge
-of a picture, a text over a face).
+**Photos.** Choose them yourself, without being asked, from `vs photos <brand>`: one line per photo
+with what it shows, who, the mood, the places it fits and what to avoid. Read the lines, never the
+photos. The opening slide (`cover_photo`), every `chapter` and the `closing` slide get a photo of
+the brand behind the text (slot `photo`, `"brand:images/<file>"`), chosen by what the slide says,
+not by what looks nice; a photo stands only once in a deck; a slide that is better without one
+says `"photo": false`. Photos with people (`people: true`) go where people are the point. Beyond
+those places, a photo comes where the content calls for it (`split`, `statement_photo`, a
+`profile`). A photo nobody has described yet is described first (the build says so).
+
+**Pictures.** The main subject of a photo stands in the middle of its frame, whole. The build crops
+a photo of the brand from the faces its index knows; set the slide's `"focus"` (`"left"`,
+`"right top"`, `"30% 20%"`) only where that is not right. Look at every picture slide on the
+contact sheet, and act on what the build points out (a photo used twice, a slide without a photo
+where the brand has one, a head cut by the edge, people at the edge of a picture, a text over a
+face).
 
 **What the brand's decks share.** A slide that returns in many decks (team, contact, references,
 "about us") and values many decks name (address, phone, number of employees, founding year) live
@@ -455,7 +466,7 @@ belong on one click, set `"order"` (deck-format.md). The user can do the same in
 ("On click", "Order": they click the parts in the new order, with Shift to join one to the step
 before; the strength of movement, "Play").
 
-Name the version in half a sentence when you hand a deck over ("built with VibeUpSlides 0.13.0", from
+Name the version in half a sentence when you hand a deck over ("built with VibeUpSlides 0.14.0", from
 the status line of the setup), so that the user can tell which state they are testing.
 A button (`button: {label, url}` on the closing slide) is a call to action with a real target; a
 cover has none. The last slide credits the person who made the deck (`"author"` in the deck file,

@@ -143,7 +143,10 @@ overlapping), the grid of projects, products or portfolio companies (picture, la
 the list rows (news, events, jobs: a date, a title, a rule between), the band of figures, the
 hero, quotes, the footer. For each one decide which master carries it, and build a master of the
 brand's own where no default does it justice. A photo treatment such as a polaroid frame is a
-component in `theme.css` that every photo master uses, not a single slide. A list design from
+component in `theme.css` that every photo master uses, not a single slide. The slides with a
+photo behind the text (`cover_photo`, `chapter`, `closing`) take how the site sets text over a
+picture: its own bands, frames, cut-outs or shapes come first; the framework's accent block and
+strip are only the fallback for a site that shows none. A list design from
 the site makes the agenda, the contents and any list of the brand; a portfolio grid makes cards,
 team and references. Record the inventory in the style guide as a table (pattern on the site →
 master or component), and count the library as unfinished while a pattern that would serve slides

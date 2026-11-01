@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.14.0
+- The brand's photos have an index (`images/index.json`). Each photo is measured once by the machine (size, format, faces, where its subject stands, colours, light or dark) and described once by Claude from a numbered contact sheet (what and who it shows, the mood, the places it fits, what to avoid). `vs photos <brand>` lists them one line each, so a deck chooses its photos from their words and nobody looks at them again.
+- `vs photos <brand> --add <file or url>` takes a photo from outside into the brand (the same photo twice is noticed), `--remove` moves one to `images/removed/`, `--refresh` reads the website's photos again and adds the new ones (what was taken out stays out).
+- The website analysis takes up to 30 photos (`--images N`); vs-build asks how many, and for the user's own photos.
+- vs-create sets photos by itself: on the opening slide, every chapter and the closing slide, chosen by what the slide says, each photo once in a deck.
+- `chapter` and `closing` take a photo behind the text (slot `photo`), darkened so the text stays readable. A brand with its own versions of these masters is told to give them the slot.
+- On an opening slide with a photo, the accent block shrinks to a strip when the brand has no logo to set in it; a chapter over a photo has no strip, its number stands readable on the photo. A brand built from a website takes the site's own way of setting text over a picture first.
+- A photo of the brand is cropped around the faces in it when the slide sets no `focus`; faces in flags and façades no longer count, a face needs skin.
+- The build names a photo used twice in a deck, photos of the brand nobody has described, and an opening, chapter or closing slide without a photo while the brand has one for that place.
+
 ## 0.13.0
 - The best form for every slide. vs-create decides first what kind of statement a slide makes (a comparison, a part of a whole, a change over time, a sequence, a plan …) and then its form, from a table of statements, masters and the rules every chart keeps (`references/forms.md`); for the slides that carry the argument it looks further. A master only when it is the best form; otherwise the slide is written freely in the brand's design, with the same checks.
 - A new form goes into the brand's repertoire at once. The build names a free slide in a form the brand does not have yet the first time it appears, not only when it comes up again; vs-create makes it a master and tells the user in one line. `vs forms <brand> --remove <name>` takes it out again: its slides become free slides again, word for word, and the form is not proposed again. A free slide close to a master the brand made before is set on that master instead of a second one, and `vs forms <brand>` names masters that are close to one another.

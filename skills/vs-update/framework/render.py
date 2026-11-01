@@ -496,7 +496,7 @@ def _order(v):
         if m: out.append("+".join(str(x) for x in m))
     return ",".join(out)
 
-def _attrs(s, lang):
+def _attrs(s, lang, env=None):
     a = [f'lang="{lang}"']
     for key, attr in (("name", "data-title"), ("chapter", "data-chapter"), ("source", "data-source"), ("about", "data-about")):
         if s.get(key):
@@ -515,9 +515,21 @@ def _attrs(s, lang):
         a.append(f'data-move="{s["move"]}"')
     a += _talk_attrs(s)
     focus = str(s.get("focus") or "").strip().lower()       # which part of the photo stays in view: "right", "left top", "30% 20%"
+    if not focus and env:                                   # none set: the faces of a photo of the brand keep it in view
+        focus = _photo_focus(s, env)
     if focus and re.fullmatch(r"(left|right|center|top|bottom|\d{1,3}%)( (left|right|center|top|bottom|\d{1,3}%))?", focus):
         a.append(f'style="--focus:{focus}"')
     return " ".join(a)
+
+def _photo_focus(s, env):
+    """The crop the brand's photo index gives the photo of this slide, "" when it knows none."""
+    import photos
+    for key in ("photo", "image"):
+        v = str(s.get(key) or "").strip(); m = re.fullmatch(r"\{\{IMG_(\w+)\}\}", v)
+        path = (env.get("images") or {}).get(m.group(1)) if m else os.path.join(env.get("brand_dir") or "", v[6:]) if v.startswith("brand:") else None
+        if path and os.path.basename(os.path.dirname(os.path.abspath(path))) == "images":
+            return photos.focus_of(path)
+    return ""
 
 def _talk_attrs(s):
     """What the presenter view needs to know of a slide: its deepening, the presenter's choice, its planned time."""
@@ -566,7 +578,7 @@ def _m_logo_intro(s, env):
 def _m_raw(s, env):
     html = s.get("html", "")
     if "<section" not in html:
-        html = f'<section class="slide {s.get("class", "")}" {_attrs(s, env["lang"])}>\n{html}\n{env["notes_html"]}\n</section>'
+        html = f'<section class="slide {s.get("class", "")}" {_attrs(s, env["lang"], env)}>\n{html}\n{env["notes_html"]}\n</section>'
     return html
 
 FUNCTION_MASTERS = {
@@ -795,7 +807,7 @@ def render_slide(slide, lang, masters, env):
     if m["meta"].get("prepare") in PREPARE:                # figures the template cannot work out: bar heights, parts of a ring
         PREPARE[m["meta"]["prepare"]](slots, env)
     env["slide"] = slots                                   # for helpers that work on the whole slide (video, embed, scene)
-    slots.update({"b": env.get("brand_info") or {}, "attrs": _attrs(s, lang), "notes": env["notes_html"], "motion": env.get("motion", True), "lang": lang,
+    slots.update({"b": env.get("brand_info") or {}, "attrs": _attrs(s, lang, env), "notes": env["notes_html"], "motion": env.get("motion", True), "lang": lang,
                   "brand": env.get("brand_name", "")})
     html = render_template(m["body"], slots, env)
     if s.get("parts") or "<vs-part" in html:

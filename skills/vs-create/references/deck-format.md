@@ -173,8 +173,9 @@ deepenings and choices, images and assets come along too, `event` starts empty a
 ## Photos behind text
 
 `"focus": "right"` on a slide (also `"left top"`, `"30% 20%"`) says which part of its photo stays
-in view when the picture is cropped. Use it to keep faces clear of the text: a build reports a text
-or number that covers a person's face as a fault.
+in view when the picture is cropped. Without it, a photo of the brand library is cropped around the
+faces its index knows. Use it to keep faces clear of the text: a build reports a text or number
+that covers a person's face as a fault.
 
 ## Two languages
 
@@ -257,8 +258,10 @@ Slides with `"handout": false` stay out. Run it at every hand-over of a presente
 ## Images
 
 Put files into `decks/<deck>/images/` and name them in a slot: `"photo": "images/team.jpg"`.
-Photos of the brand library: `"photo": "brand:images/photo_01.jpg"`. The style guide says what
-each library photo shows. A path that does not exist gives a warning and the master's placeholder.
+Photos of the brand library: `"photo": "brand:images/photo_01.jpg"`. `vs photos <brand>` lists
+what each library photo shows, one line each from its index (`images/index.json`), and the build
+crops it from the faces found in it. `chapter` and `closing` take a photo behind the text too;
+`"photo": false` keeps such a slide without one. A path that does not exist gives a warning and the master's placeholder.
 Use photos the user supplies or the library has; no stock pictures unless asked, and a credit in
 `source` where one is due. Keep decks light: photos about 2000 px wide at most, cut-outs about
 500 px high.

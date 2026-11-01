@@ -557,7 +557,6 @@ MARK_MIN = 1.5           # a ring, an arrow, a bar or a point below this contras
 MARK_QUIET = 1.15        # a line in a quiet colour (--line, --soft, --ghost) may be faint, below this it is gone
 MARK_HUE = 40            # a mark this far from its ground in colour (CIELAB) stands out even at low contrast: lime on white
 
-_CASCADE = None
 
 def _lum(c):
     f = lambda v: v / 12.92 if v <= .03928 else ((v + .055) / 1.055) ** 2.4
@@ -573,24 +572,8 @@ def _lab(c):
 def _faces(im):
     """Faces in a picture of a slide: [(x0, y0, x1, y1)]. None when no detector is installed (then the check names
     slides with text over a photo and leaves the looking to the reader)."""
-    global _CASCADE
-    try:
-        import cv2, numpy as np
-    except Exception:
-        return None
-    try:
-        if _CASCADE is None:
-            _CASCADE = [cv2.CascadeClassifier(os.path.join(cv2.data.haarcascades, n)) for n in ("haarcascade_frontalface_default.xml", "haarcascade_frontalface_alt2.xml")]
-        g = cv2.cvtColor(np.array(im), cv2.COLOR_RGB2GRAY)
-        g = cv2.createCLAHE(clipLimit=3.0, tileGridSize=(8, 8)).apply(g)      # photos behind text are darkened: bring the faces back out
-        hits = [[tuple(int(v) for v in f) for f in c.detectMultiScale(g, scaleFactor=1.08, minNeighbors=6, minSize=(26, 26))] for c in _CASCADE]
-        both = []                                           # a face counts when both detectors see it: one alone sees faces in textures
-        for (x, y, w, h) in hits[0]:
-            if any(min(x + w, a + c) - max(x, a) > .5 * min(w, c) and min(y + h, b + d) - max(y, b) > .5 * min(h, d) for (a, b, c, d) in hits[1]):
-                both.append((x, y, x + w, y + h))
-        return both
-    except Exception:
-        return None
+    import photos
+    return photos.faces(im)
 
 def _legible(r, shot):
     """Findings about one slide from the measured text and its screenshot: type too small, too little contrast

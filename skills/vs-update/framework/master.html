@@ -148,6 +148,9 @@ ul.bullets li::before{content:"";position:absolute;left:0;top:19px;width:16px;he
 .cover .photo{position:absolute;inset:0;z-index:0}
 .cover .photo img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) brightness(.45)}
 .cover.withphoto .wedge{opacity:.94}
+.cover.withphoto:not(.haslogo) .wedge{--wt:84%;--wb:72%}                     /* no logo to stand in the block: only a strip, the photo keeps the slide */
+.chapter.withphoto .wedge{display:none}                                       /* a chapter over a photo: the number stands on the photo, no strip to cross */
+.chapter.withphoto .ghost{color:color-mix(in srgb,var(--on) 28%,transparent)}  /* and stays readable there */
 .cover .biglogo{position:absolute;right:var(--pad);top:50%;transform:translateY(-50%);z-index:2;height:150px;width:auto}
 .cover.accent .biglogo{display:none}
 .cover.haslogo .header img.primary{visibility:hidden}
@@ -255,6 +258,10 @@ ul.bullets li::before{content:"";position:absolute;left:0;top:19px;width:16px;he
 /* a video box takes the shape of its video (the slot ratio, or the file once it has loaded), so nothing is cropped and no bars appear */
 /* background video of a photo, chapter or statement slide: silent loop behind the text, the photo stays as its still */
 .bgvideo{position:absolute;inset:0;overflow:hidden;z-index:-1}
+.bgphoto{position:absolute;inset:0;overflow:hidden;z-index:0}                  /* a photo behind a chapter or closing slide, darkened so the text stays readable */
+.bgphoto img{width:100%;height:100%;object-fit:cover;object-position:var(--focus,center)}
+.slide>.bgphoto::after{content:"";position:absolute;inset:0;background:color-mix(in srgb,var(--deep) 62%,transparent)}
+.slide.accent>.bgphoto::after{background:color-mix(in srgb,var(--accent) 80%,transparent)}
 .slide>.bgvideo::after{content:"";position:absolute;inset:0;background:color-mix(in srgb,var(--deep) 58%,transparent)}
 .image>.bgvideo,.photo>.bgvideo{z-index:auto}
 .bgvideo video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .8s}
@@ -680,7 +687,7 @@ html[data-motion="off"] #deck .bgvideo video{transition:none!important}
      questions); inside a container with data-seq every block is a beat of its own, in the order of the markup.
      A content slide whose master marks no block at all gets its parts below the title marked here; data-moves on an
      element says the master moves its parts itself. */
-  var BLOCKSKIP='.kicker,.vs-topic,h1,h2,.header,.footer,.notes,.read,.cues,.bgvideo,.image,.photo,.wedge,.ghost,.biglogo,.mbox,.rbar,style,script';
+  var BLOCKSKIP='.kicker,.vs-topic,h1,h2,.header,.footer,.notes,.read,.cues,.bgvideo,.bgphoto,.image,.photo,.wedge,.ghost,.biglogo,.mbox,.rbar,style,script';
   function orderBlocks(s){
     if(s.vsOrdered||s.classList.contains('rpage')) return; s.vsOrdered=true;
     if(!s.querySelector('.anim,.kpi,.f,[data-moves]')&&!s.classList.contains('mslide')&&!s.classList.contains('media')&&s.querySelector(':scope > h2')){
@@ -705,7 +712,7 @@ html[data-motion="off"] #deck .bgvideo video{transition:none!important}
   /* Fill the slide: where the body of a content slide ends well above the footer, everything below the title is
      enlarged, by up to a third, as far as it still fits. "fit": false on a slide (or the deck) leaves it as it is. */
   var FITSKIP='.cover,.chapter,.media,.tslide,.qslide,.rpage,.rcontents,.fullbleed,.nofit',
-      FITOUT='.kicker,.vs-topic,h1,h2,.lead,.header,.footer,.notes,.read,.cues,.bgvideo,.image,.photo,.wedge,.ghost,.biglogo,.rbar,.badge,.vs-credit,.bar,style,script';
+      FITOUT='.kicker,.vs-topic,h1,h2,.lead,.header,.footer,.notes,.read,.cues,.bgvideo,.bgphoto,.image,.photo,.wedge,.ghost,.biglogo,.rbar,.badge,.vs-credit,.bar,style,script';
   function fitSlide(s){
     if(s.vsFit||s.getAttribute('data-fit')==='0'||s.matches(FITSKIP)||!s.querySelector(':scope > h2')) return; s.vsFit=1;
     var body=Array.prototype.filter.call(s.children,function(c){ return !c.matches(FITOUT)&&getComputedStyle(c).position!=='absolute'; });

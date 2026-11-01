@@ -144,13 +144,17 @@ Ask in **one** round of the question tool (see "How to ask"), in this order, and
    photographed one by one). Ask for it by name: "Which of your presentations are you happy with?" A
    good deck of their own is the model for the masters, ahead of the website: what it does well is
    taken over as it is, never rebuilt roughly.
-6. **Texts.** Two or three texts they consider typical of how the company writes (a newsletter, a
+6. **Photos.** How many photos to take from the website (suggest: all it shows, up to 30; `vs
+   analyze … --images N`), and whether they have photos of their own (a folder, files): those go in
+   with `vs photos <brand> --add` after the analysis. Each photo is described once and then chosen
+   from its description, so more photos cost nothing later.
+7. **Texts.** Two or three texts they consider typical of how the company writes (a newsletter, a
    text about the company, a customer letter): the voice profile is built from them.
-7. **Their name.** The last slide of every deck credits the person who made it ("Made by …, with a
+8. **Their name.** The last slide of every deck credits the person who made it ("Made by …, with a
    little help from VibeUpSlides by vibeup.berlin"). Record it as the brand's default
    (`vs set example 'author="First Last"'`); a deck made by someone else names its own `author`.
 
-Say that "website only" is a complete answer to 5 and 6. Documents often define what a website
+Say that "website only" is a complete answer to 5, 6 and 7. Documents often define what a website
 does not show (slide types, grids, chart styles, logo and imagery rules, tone of voice). Read them
 first:
 
@@ -167,7 +171,8 @@ vs analyze https://example.com --brand example
 ```
 
 One run, about a minute. It declines cookie banners, reads a few pages and writes the library:
-a draft `brand.json`, logo candidates, typefaces sorted by licence situation, photos, the site's
+a draft `brand.json`, logo candidates, typefaces sorted by licence situation, up to 30 photos
+(`--images N` for another number; ask the user in step 1 how many they want), the site's
 icons, arrows and shapes as SVG, measurements of its buttons, cards, labels, images and sections,
 its copy, screenshots, the site's own video files where they can be saved (`videos/`), a copy of
 the default master slides as starting points, a measurement of how the site writes with a drafted
@@ -187,6 +192,19 @@ Open these as images, in this order, and form a picture of the brand before chan
 | `raw/logo_candidates.png` | which file is the real logo, and whether a light version exists |
 | `raw/elements.png` | the icons, arrows and shapes that were saved: the brand's element library (`vs elements <brand>` lists it) |
 | `preview/sheet_en_*.png` | what the default masters look like with only colours and type applied |
+| `raw/photos_*.png` | the photos, numbered: describe them now, once (below) |
+
+**Describe the photos once.** Look at `raw/photos_*.png` and write for every photo what it shows,
+who (roles such as "two colleagues at a whiteboard", never names you do not know), the mood, the
+places it fits (`cover`, `chapter`, `closing`, `split`, `background`, `statement`, `profile`,
+`gallery`), whether people can be recognised (`"people": true`) and what to avoid ("text over the
+left half"), as one JSON file: `{"photo_01.jpg": {"what": …, "who": …, "mood": …, "fits": […],
+"people": …, "avoid": …}}`, then `vs photos <brand> --describe <file>`. The machine has measured
+size, format, faces, where the subject stands, colours and brightness already. From then on
+nobody looks at these photos again: decks choose them from `vs photos <brand>`, one line each, and
+the build crops them from the faces in the index. Photos the user gives later go in with
+`vs photos <brand> --add <file or url>` and are described the same way; `--refresh` reads the
+website's photos again, `--remove` takes one out.
 
 Then read `raw/components.json` (measured styles) and `raw/copy.md` (the site's words), and run
 `vs voice <brand>` for the measurement of the language: address, sentence length, frequent words,
@@ -209,8 +227,11 @@ reply with a few words:
   presented live or sent to be read.
 - **Base**: light or dark slides as the default, and how much of the accent colour (a detail, or
   whole coloured slides). Say what the website does and what you would do.
-- **Imagery**: do they have own photos to use, which of the photos found on the site may be used,
-  which subjects or styles to avoid.
+- **Imagery**: do they have own photos to use (they go in with `vs photos <brand> --add`), which of
+  the photos found on the site may be used (take the others out with `--remove`), which subjects or
+  styles to avoid. Opening, chapter and closing slides take a photo of the brand behind the text
+  (slot `photo` of `cover_photo`, `chapter`, `closing`); the brand's own versions of these masters
+  keep that slot.
 - **Graphic elements**: name the shapes, icons and arrows you found and how you plan to use them;
   ask whether one of them is the brand's signature and whether anything must not be used.
 - **Languages**: asked in step 1; set in `brand.json`, the masters' samples are written in each of

@@ -799,7 +799,11 @@ def design_stats(html, lang=None, rules=None, width=1280):
 
 def _look(pg, shot, rules=None):
     """The legibility findings of the slide on show: its text and its drawn parts, against the brand's rules."""
-    try: return _legible(pg.evaluate(_LEGIBLE_JS), shot, rules) + _marks(pg.evaluate(_MARKS_JS), shot)
+    try:
+        marks = _marks(pg.evaluate(_MARKS_JS), shot)
+        if pg.evaluate("(document.querySelector('#deck > .slide.active')||{hasAttribute:()=>false}).hasAttribute('data-approved')"):
+            marks = ["hint: approved slide, kept as it is: " + m for m in marks]      # an approved slide keeps its drawing too
+        return _legible(pg.evaluate(_LEGIBLE_JS), shot, rules) + marks
     except Exception as e: return [f"could not be checked ({type(e).__name__}: {e})"[:160]]
 
 def _by_scheme(seen, titles):

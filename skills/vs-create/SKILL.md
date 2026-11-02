@@ -138,6 +138,11 @@ user gave when the brand was built (`brand.json`, style guide), and list the mas
 vs masters <brand>
 ```
 
+Read the brand's `rules` in `brand.json` as well (least type size, words per slide, kicker, capitals,
+accent share): a build checks them and stops when one is broken. Then list what the brand already has
+that people approved: `vs shared <brand>` (shared slides and facts) and, when the brand has a slide
+system of its own (`system.css` in its library), its decks (`vs system <brand> --list <deck.html>`).
+
 Both are binding. The style guide decides which pictures fit and which master suits which content.
 The voice profile decides how every title and sentence is written: its real sentences and its
 before-and-after pairs are the model, and its rules in `brand.json` are checked by every build.
@@ -212,6 +217,13 @@ with its title as a full sentence and the master it uses, following the structur
 deck; where the sources disagree on the order, offer the variants and let the user choose. The
 titles read in a row must give the argument. Wait for the confirmation. For long decks go block by
 block. Once the deck file exists, `vs titles <deck>` prints the titles in order for this check.
+
+**What exists comes first.** Before you write a slide, look for one that exists and was approved:
+a shared slide of the brand, a slide of the brand's own slide system or of an earlier deck the user
+named as good. Take it over as it is (`{"shared": "<name>"}`, or `vs shared <brand> slide <name>
+--from-html <deck.html> --slide N` for a slide of a built deck) and write only its notes and cues for
+this deck. Say in the storyline which slides come over this way. Rebuilding an approved slide from a
+master makes it worse, and the user notices.
 
 **Time per part.** When the length is known, put it into the storyline: after each block of the
 storyline, the minutes it gets, taken from the structure of this kind of deck (where the argument
@@ -295,7 +307,8 @@ loops, roles), in the words of its context, not poured into the nearest master. 
 may carry more than a title and three lines: a lead sentence, the structure, and one sentence
 below that says what follows (`note`), as long as it stays one idea.
 **A new form goes into the repertoire.** A slide no master fits is written freely (`free`), with
-the same checks as every slide. The brand remembers the form of every free slide (`forms.json` in
+the same checks as every slide. A free slide uses the brand's classes (and those of its `system.css`)
+and sets no type size below the brand's `min_body_px`; inline styles are for layout only. The brand remembers the form of every free slide (`forms.json` in
 its library), and a build prints `FORMS:` for a free slide in a form the brand does not have yet,
 the first time, not only when it comes up again. Make it a master without being asked:
 `vs forms <brand> --promote <deck> --slide N --name <name>` writes the master and puts it in place
@@ -388,6 +401,12 @@ Writing rules, on top of the brand's voice:
   titles ("5 reasons"), lists of attributes as a title, "not X but Y", punchlines, keyword chains
   without a verb, emojis. Read every title aloud; if it sounds like an advert, rewrite it.
 - One message per slide; the content backs up the title. One accent word (`<em>`) per title at most.
+- What the room reads in five seconds goes on the slide; the rest goes into `notes` and `cues`:
+  names of everyone involved, times of every session, module lists, the second and third example.
+  When the research is rich, the slide gets less, not more. A schedule shows two or three entries a
+  day (the `week` master), a person one line under a large portrait.
+- No eyebrow: leave `kicker` empty unless the user asks for one, and always when the brand's rules
+  say `kicker: false`. No small letter-spaced capitals as labels.
 - Nothing is invented. A missing number or photo is left out or marked, and you tell the user.
   Numbers carry their source in `source`, with `source_url` when it has an address. For readers (the
   `reading` texts, a deck that is sent) the words that make the claim link to it (`<a href>`); on the
@@ -412,16 +431,29 @@ Writing rules, on top of the brand's voice:
 vs build kickoff
 ```
 
-It prints the overflow result per language, a density line (words per slide, flagged against a
+Then measure the design against the brand's rules and, where there is one, against a deck the user
+approved:
+
+```bash
+vs check kickoff                                   # per slide: words, least type size, text below it, sizes, capitals, eyebrow
+vs check kickoff --against ~/Slides/approved.html  # the same for another deck, side by side
+```
+
+Use it in the critique at the contact sheet: a slide with many words, small type or several sizes is
+the one to cut first.
+
+The build prints the overflow result per language, a density line (words per slide, flagged against a
 limit that fits the mode), a voice line and the paths of the contact sheets. Overflow must be
 `clean`: shorten the text or split the slide, never shrink type. The legibility line must be
 `clean` as well: it names every text that is hard to read, by slide (`LEGIBILITY slide 4 (…):
-contrast 1.8 to 1 between text and ground …`, type under 18 px, text cut off, at the edge of the
+contrast 1.8 to 1 between text and ground …`, type under the brand's least size (`rules.min_body_px`, 18 px by default), an eyebrow or letter-spaced capitals where the brand has none, text cut off, at the edge of the
 slide, on top of another text or too close to it), and every ring, arrow, bar or line that hardly stands out; it
 looks at the light and the dark scheme and puts `dark scheme:` or `light scheme:` before what only one shows. A deck is not handed over with such a finding: take another
 picture or master, move the accent word, shorten, or correct the brand's master or theme
 (`pitfalls.md`). Slides flagged as wordy in a live
-deck usually carry text that belongs in the notes. The voice line names every text that breaks a
+deck usually carry text that belongs in the notes; when the brand sets `max_words_live`, the build
+says `FIX THE DENSITY` and the deck is not handed over until each slide keeps to it (approved
+slides and grids excepted). The voice line names every text that breaks a
 rule of the brand, by slide and slot (`VOICE slide 4 (bullets), bullets.2: sentence of 31 words
 (limit 22)`): rewrite it in the brand's voice until the line says `clean`. A finding that is wrong
 (a product name that contains an avoided word) is a matter for the rules, tell the user. Open the contact sheets and look
@@ -468,7 +500,7 @@ belong on one click, set `"order"` (deck-format.md). The user can do the same in
 ("On click", "Order": they click the parts in the new order, with Shift to join one to the step
 before; the strength of movement, "Play").
 
-Name the version in half a sentence when you hand a deck over ("built with VibeUpSlides 0.15.0", from
+Name the version in half a sentence when you hand a deck over ("built with VibeUpSlides 0.16.0", from
 the status line of the setup), so that the user can tell which state they are testing.
 A button (`button: {label, url}` on the closing slide) is a call to action with a real target; a
 cover has none. The last slide credits the person who made the deck (`"author"` in the deck file,

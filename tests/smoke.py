@@ -849,8 +849,9 @@ with sync_playwright() as p:
        len(offered) > 15 and [x["master"] for x in dj()["slides"]][:2] == ["cover", "statement"] and dj()["slides"][1].get("text") and pg.evaluate(f"document.querySelector('{A}').getAttribute('data-n')") == "2", str(offered[:6]))
     pg.once("dialog", lambda d: d.accept()); pg.locator("#vse > .row button").nth(3).click(); pg.wait_for_timeout(1800)
     pg.locator("#vse > .row button").nth(5).click(); pg.wait_for_timeout(500); fields = pg.locator("#vse-pick .list button b").all_inner_texts()
-    if "kicker" in fields: pg.locator("#vse-pick .list button").filter(has=pg.locator("b", has_text="kicker")).first.click(); pg.wait_for_timeout(1800)
-    ok("a field the slide does not use yet can be added and is then open for typing", "kicker" in fields and dj()["slides"][1].get("kicker") and pg.locator(f"{A} [data-s=kicker]").count() == 1, str(fields))
+    f0 = fields[0] if fields else ""          # the samples carry no kicker since 0.16.0: take the first field offered
+    if f0: pg.locator("#vse-pick .list button").filter(has=pg.locator("b", has_text=f0)).first.click(); pg.wait_for_timeout(1800)
+    ok("a field the slide does not use yet can be added and is then open for typing", f0 and "kicker" not in fields and dj()["slides"][1].get(f0) and pg.locator(f"{A} [data-s={f0}]").count() == 1, str(fields))
     pg.keyboard.press("Meta+z" if sys.platform == "darwin" else "Control+z"); pg.wait_for_timeout(1800); pg.keyboard.press("ArrowLeft"); pg.wait_for_timeout(400)
     pg.keyboard.press("ArrowRight"); pg.wait_for_timeout(400)
     pg.locator(f"{A} [data-s='bullets.3']").click(); pg.wait_for_timeout(200); pg.locator("#vsi button").nth(0).click(); pg.wait_for_timeout(1800)

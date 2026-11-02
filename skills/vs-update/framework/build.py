@@ -345,12 +345,14 @@ def assets(b, footer_left=None, footer_right=None):
     return a
 
 def theme_css(b):
-    """The brand's own stylesheet (theme.css), with url(el:path) replaced by the embedded element."""
+    """The brand's own stylesheet (theme.css), with url(el:path) replaced by the embedded element. A brand that came
+    with a slide system of its own (vs.py system) has its styles in system.css: they come first, the theme on top."""
     d = b.get("_dir")
-    p = os.path.join(d, "theme.css") if d else None
-    if not p or not os.path.exists(p):
-        return ""
-    css = re.sub(r"/\*.*?\*/", "", open(p, encoding="utf-8").read(), flags=re.S)
+    css = ""
+    for name in ("system.css", "theme.css"):
+        p = os.path.join(d, name) if d else None
+        if p and os.path.exists(p):
+            css += "\n" + re.sub(r"/\*.*?\*/", "", open(p, encoding="utf-8").read(), flags=re.S)
     if not css.strip():
         return ""
     def embed(m):
@@ -476,14 +478,14 @@ _CHECK_JS = """(()=>{const page=document.querySelector('#deck > .slide.active');
   (s.querySelector('.text')?s.querySelectorAll('.text > *'):s.querySelectorAll(sel)).forEach(e=>{
     const r=e.getBoundingClientRect();maxB=Math.max(maxB,(r.bottom-sr.top)/sc);maxR=Math.max(maxR,(r.right-sr.left)/sc);});
   return {b:Math.round(maxB),r:Math.round(maxR),t:(s.querySelector('h1,h2')||{}).textContent||'',
-          skip:s.classList.contains('no-footer'), low:s.classList.contains('fullbleed'),
+          skip:s.classList.contains('no-footer'), low:s.classList.contains('fullbleed'), ok:page.hasAttribute('data-approved')||page.hasAttribute('data-raster'),
           n:parseInt(page.getAttribute('data-n'),10)||0, read:words(rt), words:words(page)-chrome-words(rt),
           over:rt?Math.max(rt.scrollHeight-rt.clientHeight,rt.scrollWidth-rt.clientWidth):0, notes:!!(rt&&rt.hasAttribute('data-from'))}})()"""
 
 _LEGIBLE_JS = """(()=>{const page=document.querySelector('#deck > .slide.active');
   const s=page.querySelector(':scope > .rs > .slide')||page;
   const sr=s.getBoundingClientRect(),sc=sr.width/1920,out=[],seen=new Map();
-  const skip='.footer,.rbar,.notes,.rt,.ghost,.header,.qopts,[data-quiet],script,style,svg,canvas,video,iframe,[aria-hidden=true]';
+  const skip='.footer,.rbar,.notes,.rt,.ghost,.header,.qopts,.vs-credit,[data-quiet],script,style,svg,canvas,video,iframe,[aria-hidden=true]';   /* .vs-credit: the engine's own line on the last slide */
   const probe=document.createElement('i');probe.style.color='var(--ghost)';s.appendChild(probe);const ghost=getComputedStyle(probe).color;probe.remove();
   const w=document.createTreeWalker(s,NodeFilter.SHOW_TEXT),blocks=new Map();
   const blk=e=>{let b=e;while(b&&b!==s&&getComputedStyle(b).display.startsWith('inline'))b=b.parentElement;if(!blocks.has(b))blocks.set(b,blocks.size);return blocks.get(b);};   /* the paragraph a text belongs to: its own lines may sit close */
@@ -493,7 +495,10 @@ _LEGIBLE_JS = """(()=>{const page=document.querySelector('#deck > .slide.active'
     if(!it){const cs=getComputedStyle(e);if(cs.visibility==='hidden'||cs.color===ghost)continue;   /* the ghost colour is for numerals that only decorate */
       let a=1;for(let p=e;p&&p!==page.parentElement;p=p.parentElement)a*=parseFloat(getComputedStyle(p).opacity);
       const m=/^rgb/.test(cs.color)?cs.color.match(/[\\d.]+/g).map(Number):null;
-      it={t:'',px:parseFloat(cs.fontSize),bold:parseInt(cs.fontWeight,10)>=600,c:m?m.slice(0,3):null,a:a*(m&&m.length>3?m[3]:1),x0:1e9,y0:1e9,x1:-1e9,y1:-1e9,cut:0,q:[],ov:!!e.closest('.vs-overlap'),blk:blk(e),bleed:!!e.closest('.vs-bleed'),f:cs.fontStyle+' '+cs.fontWeight+' '+cs.fontSize+' '+cs.fontFamily,up:cs.textTransform==='uppercase'};
+      it={t:'',px:parseFloat(cs.fontSize),bold:parseInt(cs.fontWeight,10)>=600,c:m?m.slice(0,3):null,a:a*(m&&m.length>3?m[3]:1),x0:1e9,y0:1e9,x1:-1e9,y1:-1e9,cut:0,q:[],ov:!!e.closest('.vs-overlap'),blk:blk(e),bleed:!!e.closest('.vs-bleed'),f:cs.fontStyle+' '+cs.fontWeight+' '+cs.fontSize+' '+cs.fontFamily,up:cs.textTransform==='uppercase',
+        raster:!!(e.closest('.vs-raster')||s.hasAttribute('data-raster')||page.hasAttribute('data-raster')),kick:!!e.closest('.kicker,.eyebrow'),
+        ok:page.hasAttribute('data-approved')||s.hasAttribute('data-approved'),
+        caps:cs.textTransform==='uppercase'&&(parseFloat(cs.letterSpacing)||0)>=.04*parseFloat(cs.fontSize)};
       for(let p=e;p&&p!==s;p=p.parentElement){const ps=getComputedStyle(p);
         if(ps.overflowX!=='visible'||ps.overflowY!=='visible'){const q=p.getBoundingClientRect();it.clip=it.clip?{l:Math.max(it.clip.l,q.left),t:Math.max(it.clip.t,q.top),r:Math.min(it.clip.r,q.right),b:Math.min(it.clip.b,q.bottom)}:{l:q.left,t:q.top,r:q.right,b:q.bottom};}}
       seen.set(e,it);out.push(it);}
@@ -511,7 +516,8 @@ _LEGIBLE_JS = """(()=>{const page=document.querySelector('#deck > .slide.active'
   s.querySelectorAll('img,video,.image,.photo,[style*="background-image"]').forEach(e=>{if(e.closest('.header,.footer,.vs-ic'))return;const q=e.getBoundingClientRect();
     const isPic=e.tagName==='IMG'?!/\\.svg|image\\/svg/.test(e.currentSrc||e.src||''):true; if(isPic&&q.width*q.height>area*.12)photo=true;
     if(isPic&&q.width*q.height>area*.04&&q.width>60&&q.height>60)pics.push([Math.max(q.left,sr.left),Math.max(q.top,sr.top),Math.min(q.right,sr.right),Math.min(q.bottom,sr.bottom)]);});
-  return {items:out,sx:sr.left,sy:sr.top,sc:sc,photo:photo||pics.length>0,pics:pics}})()"""
+  const quiet=['dark','accent','cover','chapter','closing','withphoto','fullbleed'].some(c=>page.classList.contains(c)||s.classList.contains(c));
+  return {items:out,sx:sr.left,sy:sr.top,sc:sc,photo:photo||pics.length>0,pics:pics,light:!quiet&&!(photo||pics.length>0)}})()"""
 
 _MARKS_JS = r"""(()=>{const page=document.querySelector('#deck > .slide.active');
   const s=page.querySelector(':scope > .rs > .slide')||page;
@@ -553,6 +559,23 @@ _MARKS_JS = r"""(()=>{const page=document.querySelector('#deck > .slide.active')
   return {marks:out}})()"""
 
 MIN_TYPE = 18            # slide pixels (the slide is 1920 wide): below this nobody in a room reads it
+RULES = dict(            # what a brand may ask of its slides in "rules" of brand.json; these are the defaults
+    min_body_px=MIN_TYPE,    # the least type size on a slide
+    min_raster_px=None,      # the least type size in a timetable, plan or grid (slide "raster": true, or .vs-raster); None: as min_body_px
+    max_words_live=None,     # words on a slide of the live version; None: the deck's density (50); set, it is a fault above it
+    kicker=True,             # false: a small label above the title (kicker, eyebrow) is a fault
+    caps_labels=True,        # false: small capitals with letter-spacing are a fault
+    accent_share=None,       # the share of a light slide the accent colour may cover, e.g. 0.2; above it a hint
+    accent_display_contrast=None,   # the contrast an accent-coloured word in a display line (48 px and more) needs; None: 3 like any large text.
+                                    # A brand whose accent word on dark ground is a deliberate choice of its design sets it lower (e.g. 2.2)
+)
+
+def brand_rules(b):
+    """The rules of a brand (brand.json "rules") over the defaults, with the accent colour for the share check."""
+    r = dict(RULES); r.update({k: v for k, v in ((b or {}).get("rules") or {}).items() if k in RULES})
+    acc = str(((b or {}).get("colors") or {}).get("accent") or "")
+    r["_accent"] = tuple(int(acc[i:i + 2], 16) for i in (1, 3, 5)) if re.fullmatch(r"#[0-9a-fA-F]{6}", acc) else None
+    return r
 EDGE = 24                # text closer to the slide's edge than this looks cut
 MARK_MIN = 1.5           # a ring, an arrow, a bar or a point below this contrast to its ground is hardly seen
 MARK_QUIET = 1.15        # a line in a quiet colour (--line, --soft, --ghost) may be faint, below this it is gone
@@ -578,7 +601,7 @@ def _faces(im):
     import photos
     return photos.faces(im)
 
-def _legible(r, shot):
+def _legible(r, shot, rules=None):
     """Findings about one slide from the measured text and its screenshot: type too small, too little contrast
     between text and what is behind it, text cut off, text at the edge, texts on top of each other or too close."""
     from PIL import Image
@@ -613,11 +636,20 @@ def _legible(r, shot):
             if hit:
                 line = f'covers a person\'s face in the photo: "{it["t"]}"'
                 if line not in out: out.append(line)
+    rules = rules or brand_rules(None)
+    body = rules.get("min_body_px") or MIN_TYPE; raster = rules.get("min_raster_px") or body
     for it in items:
         q = '"' + it["t"] + '"'
-        if it["px"] < MIN_TYPE:
-            out.append(f"type of {it['px']:.0f} px, the least that reads is {MIN_TYPE}: {q}")
-        elif it["px"] < 24 and len(it["t"]) >= 40:          # a sentence, not a label
+        least = min(raster, body) if it.get("raster") else body
+        if rules.get("kicker") is False and it.get("kick"):
+            out.append(f"eyebrow: a small label above the title, the brand has none (rules.kicker false): leave the kicker empty: {q}")
+        elif rules.get("caps_labels") is False and it.get("caps"):
+            out.append(("hint: approved slide, kept as it is: " if it.get("ok") else "") + f"small capitals with letter-spacing, the brand has none (rules.caps_labels false): set the text in normal case: {q}")
+        if it["px"] < least:
+            out.append(("hint: approved slide, kept as it is: " if it.get("ok") and it["px"] >= MIN_TYPE * .7 else "")
+                       + f"type of {it['px']:.0f} px, the least that reads is {least:g}" + (" in a grid" if it.get("raster") else "")
+                       + (" (the brand's rule)" if least != MIN_TYPE else "") + f": {q}")
+        elif it["px"] < max(24, least) and len(it["t"]) >= 40:          # a sentence, not a label
             out.append(f"hint: running text of {it['px']:.0f} px is small for a room, 24 px and more reads well: {q}")
         if it["c"] and not it.get("ov"):                    # .vs-overlap: display lines laid over each other on purpose
             box = (max(0, int(it["x0"]) - 3), max(0, int(it["y0"]) - 3), min(im.width, int(it["x1"]) + 3), min(im.height, int(it["y1"]) + 3))
@@ -628,6 +660,9 @@ def _legible(r, shot):
                 fg = [bg[k] + (it["c"][k] - bg[k]) * min(1, it["a"]) for k in range(3)]
                 hi, lo = sorted((lum(fg), lum(bg)), reverse=True); ratio = (hi + .05) / (lo + .05)
                 need = 3.0 if it["px"] >= 24 or (it["bold"] and it["px"] >= 18) else 4.5
+                acc = rules.get("_accent")
+                if rules.get("accent_display_contrast") and acc and it["px"] >= 48 and sum(abs(it["c"][k] - acc[k]) for k in range(3)) < 60:
+                    need = min(need, rules["accent_display_contrast"])     # the brand's accent word in a title, its own decision
                 if ratio < need:
                     out.append(f"contrast {ratio:.1f} to 1 between text and ground, needed are {need:g}: {q}")
         if it["cut"] > 3:
@@ -654,6 +689,14 @@ def _legible(r, shot):
             elif min(ay1, cy1) - max(ay0, cy0) > 4: gap = max(c["x0"] - a["x1"], a["x0"] - c["x1"])    # side by side
             if gap is not None and gap / sc < need:
                 out.append(f'texts too close, {max(0, gap / sc):.0f} px apart where {need:.0f} are needed: "{a["t"]}" and "{c["t"]}"')
+    share, acc = rules.get("accent_share"), rules.get("_accent")
+    if share and acc and r.get("light"):                                # the accent is for the one thing that counts
+        small = im.resize((192, 108)).crop((0, 18, 192, 96))            # without header and footer, where the logos are
+        px = list(small.getdata()); n = sum(1 for c in px if sum(abs(c[k] - acc[k]) for k in range(3)) < 60)
+        if n / len(px) > share:
+            out.append(f"hint: the accent colour covers {100 * n / len(px):.0f} % of the slide, the brand allows {100 * share:.0f} %: one accent area, the rest in the brand's quiet colours")
+    if items and all(it.get("ok") for it in items):                   # an approved slide taken over as it is: what it has, it keeps; only a covered face stays a fault
+        out = [f if f.startswith("hint: ") or f.startswith("covers a person") else "hint: approved slide, kept as it is: " + f for f in out]
     return out
 
 def _marks(r, shot):
@@ -724,9 +767,39 @@ def shots(html, out_dir, slides=None, lang=None, width=1600, settle=1800):
     return paths
 
 
-def _look(pg, shot):
-    """The legibility findings of the slide on show: its text and its drawn parts."""
-    try: return _legible(pg.evaluate(_LEGIBLE_JS), shot) + _marks(pg.evaluate(_MARKS_JS), shot)
+_DESIGN_JS = """(()=>{const page=document.querySelector('#deck > .slide.active')||document.querySelector('.slide.active');if(!page)return null;
+  const s=page.querySelector(':scope > .rs > .slide')||page;const sr=s.getBoundingClientRect();const sc=sr.width/1920;
+  const skip=e=>e.closest('aside,.notes,.read,.cues,.rt,.rbar,.kopf,.fuss,.header,.footer,style,script,[data-export="aus"],.vs-credit');
+  let words=0,chars=0,small=0,minf=999,caps=0,kick=false;const sizes=new Set(),least=%s;
+  const w=document.createTreeWalker(s,NodeFilter.SHOW_TEXT);let n;
+  while(n=w.nextNode()){const t=n.textContent.trim();if(!t)continue;const e=n.parentElement;if(!e||skip(e))continue;
+    const cs=getComputedStyle(e);if(cs.visibility=='hidden'||cs.display=='none')continue;const r=e.getBoundingClientRect();if(!r.width||!r.height)continue;
+    const f=parseFloat(cs.fontSize)/sc;chars+=t.length;words+=t.split(/\\s+/).length;sizes.add(Math.round(f));if(f<least)small+=t.length;minf=Math.min(minf,f);
+    if(cs.textTransform=='uppercase'&&(parseFloat(cs.letterSpacing)||0)>=.04*parseFloat(cs.fontSize))caps++;if(e.closest('.kicker,.eyebrow'))kick=true;}
+  return {words,chars,minf:chars?Math.round(minf):0,sizes:sizes.size,small:chars?Math.round(100*small/chars):0,caps,kick,
+          title:((s.querySelector('h1,h2')||{}).textContent||'').trim().replace(/\\s+/g,' ').slice(0,60)}})()"""
+
+def design_stats(html, lang=None, rules=None, width=1280):
+    """The design of a built deck, measured per slide in export mode (every click step shown): words, least type
+    size, share of the text below the brand's least size, number of type sizes, letter-spaced capitals, eyebrow.
+    Works on any deck that numbers its slides as #/n, so a deck built by another tool can stand next to it."""
+    from playwright.sync_api import sync_playwright
+    least = (rules or {}).get("min_body_px") or MIN_TYPE; out = []
+    with sync_playwright() as p:
+        br = p.chromium.launch(); pg = br.new_page(viewport={"width": width, "height": round(width * 9 / 16)})
+        pg.goto("file://" + os.path.abspath(html) + "?export=1" + (f"&lang={lang}" if lang else "")); pg.wait_for_timeout(2500)
+        n = pg.evaluate("(()=>{const l='%s',a=[...document.querySelectorAll('#deck > .slide:not(.off)')];const b=a.filter(s=>s.getAttribute('lang')===l);return b.length||a.length})()" % (lang or "en"))
+        for i in range(1, n + 1):
+            pg.evaluate(f"location.hash='#/{i}'"); pg.wait_for_timeout(250)
+            pg.evaluate("document.querySelectorAll('.slide.active .f').forEach(f=>f.classList.add('on'))"); pg.wait_for_timeout(250)
+            r = pg.evaluate(_DESIGN_JS % least)
+            if r: r["n"] = i; out.append(r)
+        br.close()
+    return out
+
+def _look(pg, shot, rules=None):
+    """The legibility findings of the slide on show: its text and its drawn parts, against the brand's rules."""
+    try: return _legible(pg.evaluate(_LEGIBLE_JS), shot, rules) + _marks(pg.evaluate(_MARKS_JS), shot)
     except Exception as e: return [f"could not be checked ({type(e).__name__}: {e})"[:160]]
 
 def _by_scheme(seen, titles):
@@ -744,7 +817,7 @@ def _by_scheme(seen, titles):
         if found: out.append(dict(slide=i, title=titles[i], findings=found))
     return out
 
-def inspect(html, out_dir=None, lang=None, slides=None, bottom=930, right=1800, width=1280, per_sheet=6, stats=None, legible=None, schemes=True):
+def inspect(html, out_dir=None, lang=None, slides=None, bottom=930, right=1800, width=1280, per_sheet=6, stats=None, legible=None, schemes=True, rules=None):
     """Fast look at a deck in one browser session: overflow check plus contact sheets.
     Runs in export mode (no animation, all click steps shown), about a tenth of a second per slide.
     Returns (problems, sheet paths). slides: 1-based numbers to look at, None for all.
@@ -756,7 +829,8 @@ def inspect(html, out_dir=None, lang=None, slides=None, bottom=930, right=1800, 
     too small, text with too little contrast to its ground, text cut off or at the edge, texts on top of each other,
     rings, arrows, lines and bars that hardly stand out from their ground.
     schemes: look at the slides in the other scheme as well (light and dark, key D) and label what only one of them
-    shows ("dark scheme: ..."); a finding both show is named once, without a label."""
+    shows ("dark scheme: ..."); a finding both show is named once, without a label.
+    rules: the brand's rules (brand_rules): least type size, in grids too, kicker and letter-spaced capitals, accent share."""
     from playwright.sync_api import sync_playwright
     from PIL import Image
     import io
@@ -781,10 +855,10 @@ def inspect(html, out_dir=None, lang=None, slides=None, bottom=930, right=1800, 
             if r["over"] > 4:
                 problems.append(dict(slide=i, reader_text=f"{r['over']} px too long for its column", title=r["t"].strip()[:60]))
             if stats is not None:
-                stats.append(dict(slide=i, n=r["n"], words=r["words"], read=r["read"], notes=r["notes"], title=" ".join(r["t"].split())[:60]))
+                stats.append(dict(slide=i, n=r["n"], words=r["words"], read=r["read"], notes=r["notes"], exempt=bool(r.get("ok")), title=" ".join(r["t"].split())[:60]))
             shot = pg.screenshot() if out_dir or legible is not None else None
             if look:
-                titles[i] = " ".join(r["t"].split())[:60]; seen[first][i] = _look(pg, shot)
+                titles[i] = " ".join(r["t"].split())[:60]; seen[first][i] = _look(pg, shot, rules)
             if out_dir:
                 shots_.append((i, shot))
         if look and schemes and seen[first]:                # the same slides in the other scheme: only those that change with it
@@ -797,7 +871,7 @@ def inspect(html, out_dir=None, lang=None, slides=None, bottom=930, right=1800, 
                 if i - 1 < len(was) and i - 1 < len(now) and was[i - 1] == now[i - 1]:
                     seen[other][i] = seen[first][i]; continue      # a dark, accent or photo slide looks the same in both
                 pg.evaluate(f"location.hash='#/{i}'"); pg.wait_for_timeout(110)
-                seen[other][i] = _look(pg, pg.screenshot())
+                seen[other][i] = _look(pg, pg.screenshot(), rules)
         br.close()
     if look:
         legible += _by_scheme(seen, titles)

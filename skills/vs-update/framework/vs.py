@@ -39,6 +39,12 @@
                                                  a deck folder with deck.json, sources/, research/, images/; --from takes sources and research of an earlier deck along
     vs.py shared <brand> [slide <name> --from <deck> --slide N | fact <key> <value> [--lang de]]
                                                  what the brand's decks share: slides (team, contact) and facts (address, figures); make a slide shared, set a fact
+    vs.py shared <brand> slide <name> --from-html <deck.html> --title "<title>"
+                                                 take an approved slide of a built HTML deck over as it is (the brand's own slide system, an older deck)
+    vs.py system <brand> --from <master.html> | --list <deck.html>
+                                                 the styles of a slide system the brand already has (system.css), so its slides render as they did; list a deck's slides
+    vs.py check <deck> [--lang en] [--against <other.html>]
+                                                 the design measured per slide against the brand's rules: words, least type size, text below it, sizes, capitals, eyebrows, accent share
     vs.py design --examine <files, addresses> | <brand> --style <name> [--ground --ink --accent --head --body --radius …] | --gallery [--with <brand>] [--pick a,b,c]
                                                  a look from nothing: read the examples a user likes, make a look of their own from them (or from one of twelve styles), show looks side by side
     vs.py forms <brand> [--promote <deck> --slide N --name <name>] [--remove <name>]
@@ -658,7 +664,7 @@ def cmd_preview(args):
     problems, sheets, legible = [], [], {}
     for lang in langs:
         legible[lang] = []
-        pr, sh = B.inspect(out, os.path.join(d, "preview"), lang=lang, legible=legible[lang])
+        pr, sh = B.inspect(out, os.path.join(d, "preview"), lang=lang, legible=legible[lang], rules=B.brand_rules(b))
         problems += [dict(x, lang=lang) if len(langs) > 1 else x for x in pr]; sheets += sh
     print(f"\nmaster slides: {len(deck['slides'])} | {out}")
     for i, s in enumerate(deck["slides"], 1): print(f"  {i:2d} {s['master']}" + ("  (introduction)" if s.get("intro") else ""))
@@ -1168,13 +1174,16 @@ def cmd_build(args):
     langs = deck.get("langs") or ["en"]
     only = [int(x) for x in arg(args, "--only", "").split(",") if x.strip().isdigit()] or None
     limit = (deck.get("density") or {}).get(mode, DENSITY[mode])
-    clean = readable = True
+    rules = B.brand_rules(b); strict = mode == "live" and bool(rules.get("max_words_live"))
+    if strict: limit = min(limit, rules["max_words_live"])          # the brand's rule: above it the slide says too much for a room
+    clean = readable = dense = True
     for lang in langs:
         stats, found = [], []
-        problems, sheets = B.inspect(out, None if "--no-shots" in args else os.path.join(d, "shots" + ("_" + other if other else "")), lang=lang, slides=only, stats=stats, legible=found)
+        problems, sheets = B.inspect(out, None if "--no-shots" in args else os.path.join(d, "shots" + ("_" + other if other else "")), lang=lang, slides=only, stats=stats, legible=found, rules=rules)
         print(f"[{lang}] overflow:", problems or "clean"); clean = clean and not problems
         readable = _legible_report(found, lang) and readable
         print(f"[{lang}] " + _density(stats, mode, limit))
+        if strict and any(s["words"] + s["read"] > limit and not s.get("exempt") for s in stats): dense = False      # an approved slide taken over as it is, and a grid or timetable, keep their words
         if isinstance(b.get("voice"), dict):
             import render, voice
             print(f"[{lang}] " + voice.report(voice.check_deck(deck, b["voice"], lang, render._resolve_lang, mode), voice.rules_for(b["voice"], lang)))
@@ -1234,6 +1243,7 @@ def cmd_build(args):
               + (f"; needs to be online for {', '.join(online)}" if online else ""))
     print(f"\n{out}\n{len(deck.get('slides', []))} slides, {len(langs)} language(s), {time.time() - t0:.1f} s" + ("" if clean else " | FIX THE OVERFLOW: shorten text, never shrink type")
           + ("" if readable else " | FIX THE LEGIBILITY: every text must be readable; change the picture, the master or the theme, or shorten, never leave it")
+          + ("" if dense else f" | FIX THE DENSITY: the brand allows {limit} words on a slide; one statement per slide, the rest goes into the notes and cues")
           + (f" | NOT FINISHED: {len(edit.waiting(deck))} text(s) the user typed are not corrected or translated yet (the REVIEW lines); the deck is not handed over like this" if edit.waiting(deck) else ""))
     _deliver(d, deck, [out] + ([os.path.splitext(out)[0] + "_" + l.upper() + ".pdf" for l in langs] + [os.path.splitext(out)[0] + ".pdf"] if "--pdf" in args else []), t0)
 
@@ -1430,15 +1440,86 @@ def _decks():
             try: yield n, os.path.join(root, n), json.load(open(p, encoding="utf-8"))
             except ValueError: pass
 
+def cmd_check(args):
+    """vs.py check <deck> [--lang en] [--against <other.html>]: the deck's design measured, slide by slide, against the brand's rules."""
+    import build as B
+    pos = positional(args, ("--lang", "--against"))
+    d = _deck_dir(pos[0] if pos else die("which deck? vs.py check <deck>"))
+    deck = json.load(open(os.path.join(d, "deck.json"), encoding="utf-8"))
+    b = B.load_brand(deck.get("brand")); rules = B.brand_rules(b)
+    lang = arg(args, "--lang") or (deck.get("langs") or ["en"])[0]
+    built = [os.path.join(d, f) for f in os.listdir(d) if f.endswith(".html") and not re.search(r"_(reading|live|handout)\.html$", f)]
+    if not built: die("the deck is not built yet: vs.py build " + os.path.basename(d))
+    html = max(built, key=os.path.getmtime)
+    rows = [("this deck", B.design_stats(html, lang, rules))]
+    if arg(args, "--against"): rows.append((os.path.basename(arg(args, "--against")), B.design_stats(os.path.expanduser(arg(args, "--against")), lang, rules)))
+    least = rules.get("min_body_px") or B.MIN_TYPE; limit = rules.get("max_words_live") or DENSITY["live"]
+    for label, st in rows:
+        print(f"\n{label}: {len(st)} slides ({lang})\n  nr  words  least px  below {least:g} px  sizes  caps  eyebrow  title")
+        for s in st:
+            print(f"  {s['n']:2d}  {s['words']:5d}{'!' if s['words'] > limit else ' '} {s['minf']:8d}  {s['small']:10d} %  {s['sizes']:5d}  {s['caps']:4d}  {'yes' if s['kick'] else '-':7s}  {s['title'][:44]}")
+    print("\nsummary                     " + "  ".join(f"{l[:22]:>22s}" for l, _ in rows))
+    def line(name, f): print(f"  {name:26s}" + "  ".join(f"{f(st):>22}" for _, st in rows))
+    import statistics as S
+    line("words per slide (median)", lambda st: S.median([s["words"] for s in st]) if st else 0)
+    line(f"slides above {limit} words", lambda st: sum(s["words"] > limit for s in st))
+    line(f"text below {least:g} px", lambda st: f"{round(sum(s['small'] * s['chars'] for s in st) / max(1, sum(s['chars'] for s in st)))} %")
+    line("type sizes per slide", lambda st: S.median([s["sizes"] for s in st]) if st else 0)
+    line("letter-spaced capitals", lambda st: sum(s["caps"] for s in st))
+    line("slides with an eyebrow", lambda st: sum(1 for s in st if s["kick"]))
+    print("\nOne statement per slide; what the room need not read goes into the notes and cues. Grids and timetables may be smaller (\"raster\": true) where it makes sense on that slide.")
+
+def cmd_system(args):
+    """vs.py system <brand> --from <master.html or deck.html or .css>   take over the styles of a slide system the brand already has
+       vs.py system <brand> --list <deck.html>                       the slides of a built deck of that system, with title and id"""
+    import build as B, system
+    pos = positional(args, ("--from", "--list"))
+    name = pos[0] if pos else die("which brand? vs.py system <brand> --from <file>")
+    bd = B.brand_dir(name)
+    if arg(args, "--list"):
+        for n, lang, title, sid, cls in system.list_slides(open(os.path.expanduser(arg(args, "--list")), encoding="utf-8").read()):
+            print(f"  {lang:3s} {n:3d}  {title[:46]:46s}  {('id ' + sid) if sid else '':28s} {cls}")
+        print(f"Take one over: vs.py shared {name} slide <name> --from-html <file> --title \"<title>\"")
+        return
+    src = arg(args, "--from") or die("--from <the system's master HTML or stylesheet>")
+    engine = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "master.html"), encoding="utf-8").read()
+    css, classes, props = system.system_css(open(os.path.expanduser(src), encoding="utf-8").read(), engine)
+    out = os.path.join(bd, "system.css")
+    open(out, "w", encoding="utf-8").write(f"/* styles of the brand's own slide system, taken over by vs.py system from {os.path.basename(src)}; run it again when the system changes */\n" + css)
+    print(f"system.css: {out}\n  {len(classes)} classes of the system the engine lacks: {', '.join(classes[:40])}{' ...' if len(classes) > 40 else ''}"
+          + (f"\n  custom properties: {', '.join(props)}" if props else "")
+          + f"\nThey come under theme.css in every build of {name}. Slides of the system: vs.py system {name} --list <deck.html>; take one over: vs.py shared {name} slide <name> --from-html <deck.html> --title \"<title>\"")
+
 def cmd_shared(args):
     """vs.py shared <brand>                                   what the brand's decks share, and which deck uses what
        vs.py shared <brand> slide <name> --from <deck> --slide N    make slide N of a deck a shared slide; the deck names it from then on
+       vs.py shared <brand> slide <name> --from-html <file> (--title "<title>" | --id <data-id> | --slide N)
+                                                              take an approved slide of a built HTML deck over as it is (all languages, images embedded)
        vs.py shared <brand> fact <key> <value> [--lang de]    set a fact (address, team.size); with --lang for one language
        vs.py shared <brand> push --from <deck> --slide N      take what a deck changed on a shared slide into the library, for every deck"""
     import build as B, shared
-    pos = positional(args, ("--from", "--slide", "--lang"))
+    pos = positional(args, ("--from", "--slide", "--lang", "--from-html", "--title", "--id"))
     name = pos[0] if pos else die("which brand? vs.py shared <brand>")
     bd = B.brand_dir(name)
+    if len(pos) > 2 and pos[1] == "slide" and arg(args, "--from-html"):
+        import system
+        src = arg(args, "--from-html"); text = open(os.path.expanduser(src), encoding="utf-8").read()
+        brand = json.load(open(os.path.join(bd, "brand.json"), encoding="utf-8")); langs = brand_langs(brand)
+        rules = B.brand_rules(brand)
+        try:
+            s = system.slide(text, langs, title=arg(args, "--title"), sid=arg(args, "--id"),
+                             number=int(arg(args, "--slide")) if arg(args, "--slide") else None,
+                             strip=("kicker",) if rules.get("kicker") is False else (),
+                             keep=system.known_classes(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "master.html"), encoding="utf-8").read()
+                                                       + (open(os.path.join(bd, "system.css"), encoding="utf-8").read() if os.path.exists(os.path.join(bd, "system.css")) else "")
+                                                       + (open(os.path.join(bd, "theme.css"), encoding="utf-8").read() if os.path.exists(os.path.join(bd, "theme.css")) else "")))
+            path = shared.put_slide(bd, pos[2], s)
+        except ValueError as e: die(str(e))
+        miss = [l for l in langs if l not in s["html"]]
+        print(f"shared slide '{pos[2]}' from {os.path.basename(src)}: {path}\n  classes: {s.get('class') or '-'} | languages: {', '.join(s['html'])}"
+              + (f" | MISSING in {', '.join(miss)}: write that language into the slide file" if miss else "")
+              + f"\nIn a deck: {{\"shared\": \"{pos[2]}\"}} with notes and cues of its own. Its classes need the system's styles: vs.py system {name} --from <master.html>")
+        return
     if len(pos) > 1 and pos[1] == "slide":
         sname = pos[2] if len(pos) > 2 else die("name the shared slide: vs.py shared <brand> slide <name> --from <deck> --slide N")
         d = _deck_dir(arg(args, "--from") or die("--from <deck>")); n = int(arg(args, "--slide") or die("--slide N"))
@@ -2249,7 +2330,7 @@ def main():
     import brandtools
     simple = {"init": cmd_init, "status": cmd_status, "update": cmd_update, "permissions": cmd_permissions, "doctor": cmd_doctor, "backup": cmd_backup, "restore": cmd_restore, "analyze": cmd_analyze, "videos": cmd_videos, "voice": cmd_voice, "ingest": cmd_ingest, "preview": cmd_preview,
               "masters": cmd_masters, "elements": cmd_elements, "fonts": cmd_fonts, "new": cmd_new, "build": cmd_build, "titles": cmd_titles, "plan": cmd_plan, "handout": cmd_handout,"video": cmd_video,
-              "scenes": cmd_scenes, "motion": cmd_motion, "present": cmd_present, "edit": cmd_edit, "apply": cmd_apply, "shared": cmd_shared, "forms": cmd_forms, "photos": cmd_photos, "design": cmd_design, "refresh": cmd_refresh, "langs": cmd_langs, "pack": cmd_pack, "handover": cmd_handover}
+              "scenes": cmd_scenes, "motion": cmd_motion, "present": cmd_present, "edit": cmd_edit, "apply": cmd_apply, "shared": cmd_shared, "system": cmd_system, "check": cmd_check, "forms": cmd_forms, "photos": cmd_photos, "design": cmd_design, "refresh": cmd_refresh, "langs": cmd_langs, "pack": cmd_pack, "handover": cmd_handover}
     try:
         if cmd in simple: simple[cmd](rest)
         elif cmd == "brands":

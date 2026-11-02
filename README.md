@@ -50,6 +50,14 @@ editing mode built in.
 
 Changes go into the deck's content file; the look, the checks and both languages stay in step.
 
+> We already have a slide system and decks our board signed off. Use them.
+
+Claude takes the system's styles over as they are (`vs system`), brings the approved slides into
+the brand as shared slides, word for word and picture for picture (`vs shared … --from-html`), and
+writes your design rules into the brand: the least type size, how many words a slide may hold, no
+small labels above titles. Every build keeps to them, and `vs check` measures a deck against one
+you approved.
+
 ## The same deck in ten looks
 
 Every look is a full set of master slides: the content stays the same, the design carries it.

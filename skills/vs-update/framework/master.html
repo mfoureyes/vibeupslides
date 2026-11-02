@@ -140,6 +140,22 @@ ul.bullets li::before{content:"";position:absolute;left:0;top:19px;width:16px;he
 /* ---------- Layout: cover ---------- */
 .cover{padding-top:240px}
 .cover .text{position:relative;z-index:2;max-width:1040px}
+.cover.place-bottom .text{position:absolute;left:var(--pad);bottom:170px;max-width:640px}  /* the text low on the left: a person in the photo stays free */
+
+/* week: a programme week as a calendar (master week) */
+.vs-week{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:22px;margin-top:50px}
+.vs-wh{font-weight:var(--w-display);font-size:44px;line-height:1;border-bottom:4px solid var(--ink);padding-bottom:12px;margin-bottom:16px;color:var(--ink)}
+.vs-wh i{font-style:normal;font-size:27px;font-weight:400;color:var(--muted);margin-right:12px}
+.vs-week .vs-ws{margin-top:0;padding:16px 18px 18px;margin-bottom:14px;background:var(--soft);color:var(--ink);font-size:28px;line-height:1.2;font-weight:700}
+.vs-ws b{display:block;font-size:22px;color:var(--muted);margin-bottom:6px}
+.vs-ws.vs-key{background:var(--accent);color:var(--on-accent)}.vs-ws.vs-key b{color:var(--on-accent);opacity:.85}
+.vs-ws.vs-main{background:var(--deep);color:var(--on-deep)}.vs-ws.vs-main b{color:var(--on-deep);opacity:.75}
+.vs-ws.vs-build{background:transparent;border:2px solid var(--line)}
+.vs-wl{display:flex;flex-wrap:nowrap;gap:34px;margin-top:22px;font-size:22px;color:var(--muted)}
+.vs-wl span::before{content:"";display:inline-block;width:18px;height:18px;margin-right:10px;vertical-align:-2px;background:var(--soft)}
+.vs-wl .vs-key::before{background:var(--accent)}.vs-wl .vs-main::before{background:var(--deep)}.vs-wl .vs-build::before{background:transparent;border:2px solid var(--line);box-sizing:border-box}
+/* kpis: the logo of what the numbers belong to */
+.vs-kpilogo{position:absolute;right:var(--pad);top:196px;width:200px;height:auto;z-index:3}
 .cover h1{margin-top:26px}
 .cover .lead{color:color-mix(in srgb,var(--on) 90%,transparent);font-size:30px;max-width:900px;font-weight:400}
 .cover .meta{display:flex;gap:56px;margin-top:56px}
@@ -928,7 +944,7 @@ html[data-motion="off"] #deck .bgvideo video{transition:none!important}
     document.querySelector('#ctl [data-act="scheme"]').classList.toggle('off',scheme!=='dark');
     deck.querySelectorAll('.slide').forEach(function(s){
       var own=s.classList.contains('dark')||s.classList.contains('accent')||s.classList.contains('fullbleed');
-      var dk=scheme==='dark'&&!own; s.classList.toggle('vs-dk',dk);
+      var dk=scheme==='dark'&&!own&&!s.hasAttribute('data-fixed'); s.classList.toggle('vs-dk',dk);   /* data-fixed: a slide of another system keeps its colours */
       Array.prototype.forEach.call(s.children,function(c){
         if(!c.classList.contains('header')) return;
         c.querySelectorAll('img').forEach(function(im){

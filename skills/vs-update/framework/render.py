@@ -509,6 +509,12 @@ def _attrs(s, lang, env=None):
     order = _order(s.get("order"))
     if order:                                               # the click steps in an order of the deck's own (see master.html, reorder)
         a.append(f'data-order="{order}"')
+    if s.get("raster"):                                     # a timetable, a plan or a grid: its cells may be smaller than running text (brand rule min_raster_px)
+        a.append('data-raster="1"')
+    if s.get("fixed"):                                      # colours of its own (a slide of the brand's own system): it stays as it is in the dark scheme
+        a.append('data-fixed="1"')
+    if s.get("approved"):                                   # taken over as it is from a deck people approved: its sizes and words stay, the checks name them as hints
+        a.append('data-approved="1"')
     if s.get("fit") is False:                               # this slide keeps its sizes: the engine does not enlarge its body to fill the slide
         a.append('data-fit="0"')
     if s.get("move") in ("calm", "expressive", "off"):       # how much moves on this one slide

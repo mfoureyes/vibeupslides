@@ -57,16 +57,28 @@ _EMOJI = re.compile("[\U0001F300-\U0001FAFF\u2600-\u27BF]")
 _NOT_PROSE = re.compile(r"\b\d{5}\s+[A-ZÄÖÜ]|\bc/o\b|©|\bcookies?\b|\b(HRB|USt|VAT)\b", re.I)      # postal addresses, legal lines, cookie notices
 
 def plain(v):
-    return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", "", str(v or ""))).strip()
+    """The words of a text: no tags, no style or script blocks, no mail or web addresses (their parts are not terms)."""
+    v = re.sub(r"<(style|script)\b.*?</\1>", " ", str(v or ""), flags=re.S | re.I)
+    v = re.sub(r"</?(em|strong|b|i|span|a|small|sup|sub|u|mark)\b[^>]*>", "", v, flags=re.I)      # inline: part of the word
+    v = re.sub(r"<[^>]+>", " ", v)                                                                  # a block ends a phrase
+    import html as _h; v = _h.unescape(v)
+    v = re.sub(r"[\w.+-]+@[\w-]+(\.[\w-]+)+|\b(https?://|www\.)\S+|\b[\w-]+(\.[\w-]+)*\.(de|com|org|berlin|net|eu|io)(/\S*)?", " ", v)
+    return re.sub(r"\s+", " ", v).strip()
 
 def words(text):
     return _WORD.findall(text)
 
 def sentences(text):
-    """Split running text into sentences. A text without a full stop is one sentence."""
-    t = _ABBR.sub(lambda m: m.group(0).replace(".", "\u2024"), plain(text))        # abbreviations do not end a sentence
-    t = re.sub(r"(\d)\.(\s?\d)", "\\1\u2024\\2", t)
-    return [s.replace("\u2024", ".").strip() for s in _SENT.split(t) if s.strip()]
+    """Split running text into sentences. A text without a full stop is one sentence; so is each block of a slide's
+    own HTML (a cell, a heading, a list item), because a block ends what is said in it."""
+    raw = re.sub(r"<(style|script)\b.*?</\1>", " ", str(text or ""), flags=re.S | re.I)
+    chunks = re.split(r"</?(?:div|p|li|h[1-6]|td|th|tr|figcaption|figure|section|ul|ol|br|small)\b[^>]*>", raw, flags=re.I)
+    out = []
+    for chunk in chunks:
+        t = _ABBR.sub(lambda m: m.group(0).replace(".", "\u2024"), plain(chunk))        # abbreviations do not end a sentence
+        t = re.sub(r"(\d)\.(\s?\d)", "\\1\u2024\\2", t)
+        out += [s.replace("\u2024", ".").strip() for s in _SENT.split(t) if s.strip()]
+    return out
 
 def language(text, among=None):
     """The language a text is written in, by its small words. among: the codes to choose from."""
@@ -241,7 +253,7 @@ def check_text(text, rules, lang, reader=False, ui="en"):
     M = _MSG.get(ui, _MSG["en"]); out = []
     limit = rules.get("sentence_max_read") if reader else rules.get("sentence_max")
     if limit:
-        for s in sentences(t):
+        for s in sentences(text):
             n = len(words(s))
             if n > limit: out.append(M["long"].format(n=n, limit=limit, s=_short(s)))
     for entry in rules.get("avoid") or []:
@@ -271,7 +283,8 @@ def check_text(text, rules, lang, reader=False, ui="en"):
 # slots that hold no text of the brand: files, settings, other people's words, sources
 _NO_TEXT = {"master", "only", "lang", "name", "photo", "image", "images", "src", "video", "poster", "scene", "config", "icon", "logo", "logos", "file", "url", "href", "embed",
             "ratio", "step", "mark", "motion", "scheme", "fit", "handout", "source", "notes", "read", "quote", "voice", "edited", "chapter", "number", "value", "unit",
-            "correct", "minutes", "share", "density", "brief", "align", "variant", "surface"}
+            "correct", "minutes", "share", "density", "brief", "align", "variant", "surface",
+            "shared", "class", "place", "focus", "kind", "raster", "fixed", "approved", "time"}
 _FILE = re.compile(r"^(https?:|data:|brand:|images/|assets/|@\w+$)|\.(jpe?g|png|svg|webp|gif|mp4|webm|mov|pdf)$", re.I)
 
 def slots(slide):
@@ -296,7 +309,7 @@ def check_deck(deck, voice, lang, resolve, mode="live"):
     langs = deck.get("langs") or [lang]
     out = []
     for i, slide in enumerate(deck.get("slides", []), 1):
-        if slide.get("voice") is False or (slide.get("lang") and slide["lang"] != lang): continue
+        if slide.get("voice") is False or slide.get("approved") or (slide.get("lang") and slide["lang"] != lang): continue      # approved: taken over word for word
         if slide.get("only") in ("live", "reading") and slide["only"] != mode: continue
         s = resolve(slide, lang, langs)
         for path, text in slots(s):

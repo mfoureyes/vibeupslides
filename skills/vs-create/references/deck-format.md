@@ -54,6 +54,9 @@ master and fills its slots. `vs masters <brand>` lists the masters of a brand wi
 | `chapter` | starts a chapter with this name; the `chapter` master does it by itself from its title |
 | `parts` | blocks of the brand's own on this slide (`vs masters <brand>` lists them): `[{"part": "takeaway", "t1": "...", "t2": "..."}]`, each with the slots of its part, texts per language like any slot. They stand at the end of the slide, before the notes; a free body places one with `<vs-part n="1"></vs-part>` (the number counts the list from 1) |
 | `lang` | show this slide in one language only |
+| `raster` | `true`: a timetable, a plan or a grid; its cells are checked against the brand's `min_raster_px` instead of `min_body_px`, and its words do not count against `max_words_live`. Only where small cells make sense on that slide |
+| `approved` | set by `vs shared … --from-html`: a slide taken over as it is from a deck people approved; its sizes and words stay, the checks name them as hints |
+| `fixed` | set by `vs shared … --from-html`: the slide has colours of its own (a slide of the brand's slide system) and stays as it is in the dark scheme (key D) |
 | `handout` | `false`: left out of the handout build |
 
 Everything else is a slot of the master. Slots take HTML: `<em>` marks the accent word of a title,
@@ -368,6 +371,20 @@ centred clock for breaks. Timers are left out of handouts and reading versions.
 `correct` counts from 0; `null` makes it a poll. `"advance": true` reveals with the next forward
 click (say so in the notes). The question is a full sentence, answers fit on one line, the number
 of an estimate needs a source. In the handout build and in the reading version the answers are shown.
+
+**week**: one week of a programme as a calendar, five days side by side, two or three sessions a
+day, coloured by kind (`key` a milestone, `main` a workshop, `build` work time, `quiet` community).
+Names and details go into the notes.
+
+```json
+{"master": "week", "raster": true, "title": "Week 1 is about the <em>problem</em>",
+ "days": [{"day": "Mon", "date": "16", "sessions": [{"time": "10:00", "title": "Kickoff and team matching", "kind": "key"}]}],
+ "legend": [{"kind": "key", "label": "Milestone"}, {"kind": "main", "label": "Workshop"}]}
+```
+
+**cover_photo** and **cover** take `"place": "bottom"`: title and lead stand low on the left in a
+narrower column, so a person in the photo stays free. **kpis** takes a `logo` (the programme or
+product the numbers belong to), top right under the header.
 
 **logo_intro**: logo sting for videos. **raw**: `{"master": "raw", "html": "..."}` for a slide
 written by hand; use the tokens (`var(--accent)` ...), never hex colours. Prefer `free` (title plus

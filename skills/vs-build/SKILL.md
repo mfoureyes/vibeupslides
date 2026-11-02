@@ -154,6 +154,25 @@ Ask in **one** round of the question tool (see "How to ask"), in this order, and
    little help from VibeUpSlides by vibeup.berlin"). Record it as the brand's default
    (`vs set example 'author="First Last"'`); a deck made by someone else names its own `author`.
 
+**A slide system of their own.** When the "best presentation" is not a single deck but a slide
+system (an HTML master with its own stylesheet, sample slides and rules, from which their decks are
+built), that system is the source of the look, ahead of the website and ahead of the engine's
+masters: its slides were approved, and rebuilding them from masters makes them worse (denser,
+smaller, with labels nobody asked for). Take it over instead of reinterpreting it:
+
+```bash
+vs system example --from ~/Slides/system/master.html     # its styles the engine lacks, into library/example/system.css
+vs system example --list ~/Slides/2026-10_Delegation.html # the slides of a built deck, with title and id
+vs shared example slide campus --from-html ~/Slides/2026-10_Delegation.html --slide 5   # one approved slide, all languages, images embedded
+```
+
+`system.css` comes under `theme.css` in every build; run `vs system` again when the system changes,
+the system stays the source. A slide taken over this way is a shared slide marked `approved` and
+`fixed`: it keeps its sizes, words and colours (the checks name them as hints, the dark scheme leaves
+it as it is), and its classes of another engine's motion are dropped. Its notes are written per deck.
+Write the system's design rules into the brand's `rules` ("The brand's rules for every slide", below) and its wording rules into the
+voice profile.
+
 Say that "website only" is a complete answer to 5, 6 and 7. Documents often define what a website
 does not show (slide types, grids, chart styles, logo and imagery rules, tone of voice). Read them
 first:
@@ -391,6 +410,28 @@ vs confirm example
 The library is now the base for every deck. Say so, and end with the next step as a question the
 user can answer at once: "Shall we build the first presentation? Tell me what it is for and who
 will see it." If they say yes, hand over to vs-create in the same conversation.
+
+### The brand's rules for every slide
+
+A brand states what its slides must keep, in `brand.json` under `rules`, from its style guide or slide
+system and from what the user says. Every build checks them and does not hand a deck over that breaks one:
+
+| Rule | What it means | When to set it |
+|---|---|---|
+| `min_body_px` | the least type size on a slide (default 18) | from the style guide; a system whose smallest designed text is 22 px sets 22 |
+| `min_raster_px` | the least size in a timetable, plan or grid (a slide with `"raster": true`) | only where such a slide makes sense in its context |
+| `max_words_live` | words a slide of the live version may show; above it the build stops (`FIX THE DENSITY`) | when the user wants one statement per slide; 45 is a good value |
+| `kicker` | `false`: a small label above the title (eyebrow) is a fault | when the brand has none, or the user says so; most brands are better without |
+| `caps_labels` | `false`: small capitals with letter-spacing are a fault | with `kicker: false`, as a rule |
+| `accent_share` | the share of a light slide the accent may cover (a hint above it) | from the style guide (one fifth is common) |
+| `accent_display_contrast` | the contrast an accent word in a title needs (default 3) | only when the brand's own design puts its accent on dark ground on purpose |
+
+```bash
+vs set example rules.min_body_px=22 rules.max_words_live=45 rules.kicker=false rules.caps_labels=false rules.accent_share=0.2
+```
+
+Slides taken over as approved (`approved`) and grids (`raster`) keep their words; an approved slide
+keeps its sizes too. Everything else is held to the rules.
 
 ## Changing a library later
 

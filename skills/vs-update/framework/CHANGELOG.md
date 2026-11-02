@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.16.0
+- A brand's own rules for every slide, in `brand.json` under `rules`: the least type size (`min_body_px`, in grids `min_raster_px`), the words a live slide may show (`max_words_live`), no eyebrow (`kicker: false`), no letter-spaced capitals (`caps_labels: false`), the share of a light slide the accent may cover (`accent_share`) and the contrast an accent word in a title needs (`accent_display_contrast`). The build checks them; above `max_words_live` it stops with `FIX THE DENSITY`, an eyebrow or a capital label where the brand has none is a legibility finding.
+- A slide system the brand already has is taken over, not rebuilt. `vs system <brand> --from <master.html>` keeps the styles of the system the engine lacks in `library/<brand>/system.css` (under `theme.css` in every build); `vs system <brand> --list <deck.html>` lists the slides of a built deck; `vs shared <brand> slide <name> --from-html <deck.html> --slide N` takes one over as a shared slide, every language, images embedded, the kicker left out where the brand has none, classes of another engine's motion dropped. Such a slide is `approved` (its sizes and words stay, the checks name them as hints) and `fixed` (it keeps its colours in the dark scheme).
+- `vs check <deck> [--against <other.html>]`: the design measured per slide against the brand's rules (words, least type size, share of text below it, sizes, capitals, eyebrows), and side by side with a deck people approved, also one built by another tool.
+- New master `week`: one week of a programme as a calendar, five days, two or three sessions a day, coloured by kind; names and details go into the notes. `cover_photo` and `cover` take `"place": "bottom"` (the text low on the left, a person in the photo stays free), `kpis` takes a `logo`.
+- Slots `raster`, `approved`, `fixed` on any slide (deck-format.md).
+- The masters' samples carry no kicker any more, and every `kicker` slot says it is only for when the user asks.
+- vs-create: approved slides first (shared slides, the brand's slide system, a deck the user named as good), one statement per slide with the rest in notes and cues, no eyebrows, free slides only with the brand's classes and never smaller than its least size, `vs check` in the critique.
+- The voice check reads a slide's own HTML block by block (a cell or a heading ends what is said in it), leaves out style blocks, mail and web addresses, and skips approved slides; the legibility check leaves the engine's credit line on the last slide alone.
+
+For brand libraries made with an earlier version:
+- Nothing changes until a brand sets `rules`. Brands keep their own copies of `kpis`, `cover` and `cover_photo`; for `logo` and `place`, copy the framework's version into the brand's `masters/` again (vs-build).
+
 ## 0.15.0
 - Motion in one language per brand. Charts move in the set's own way: columns, bars, the ways of a roadmap and the circle of `share` grow, are uncovered, rise from a base line or settle with a bounce, as the set's other pieces do. `none` now stops everything, charts included.
 - Smoother sets. The stepped set `cut` is taken out as too choppy; a brand that had it moves in `sweep`, which keeps the hard edges. The other sets land softer and their pieces follow one another more closely.

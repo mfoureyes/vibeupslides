@@ -50,7 +50,7 @@ _WE = {"de": r"\b(wir|uns|unser\w*)\b", "en": r"\b(we|our|ours|us)\b", "fr": r"\
 _YOU = {"en": r"\b(you|your|yours)\b"}
 # ways of writing gender-inclusive forms in German
 _GENDER = {":innen": re.compile(r"\w:in(nen)?\b"), "*innen": re.compile(r"\w\*in(nen)?\b"), "_innen": re.compile(r"\w_in(nen)?\b"),
-           "Innen": re.compile(r"[a-zäöü]In(nen)?\b"), "/innen": re.compile(r"\w/-?in(nen)?\b")}
+           "Innen": re.compile(r"[a-zäöü]In(nen)?\b(?<!LinkedIn)"), "/innen": re.compile(r"\w/-?in(nen)?\b")}
 _EMOJI = re.compile("[\U0001F300-\U0001FAFF\u2600-\u27BF]")
 
 

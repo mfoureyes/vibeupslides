@@ -69,6 +69,13 @@ code, out = vs("build", "demo", "--no-shots")
 ok("type that is too small, text without contrast and text at the edge are reported with slide and text",
    "LEGIBILITY slide 1" in out and "type of 12 px" in out and "contrast 1." in out and '"Sous-titre"' in out and "at the edge of the slide" in out and "FIX THE LEGIBILITY" in out, out[-1200:])
 open(th, "w", encoding="utf-8").write(keep_theme)
+import io, build as Bmod
+from PIL import Image
+_png = io.BytesIO(); Image.new("RGB", (1920, 1080), "white").save(_png, "PNG")
+def _txt(t, y0, y1, blk, x0=200, x1=900): return dict(t=t, px=26, bold=False, c=None, a=1, x0=x0, x1=x1, y0=y0, y1=y1, iy0=y0, iy1=y1, cut=0, q=[[x0, y0, x1, y1]], blk=blk)
+def _near(gap, same=False): return Bmod._legible(dict(items=[_txt("Title", 300, 340, 1), _txt("Label", 340 + gap, 360 + gap, 1 if same else 2)], sx=0, sy=0, sc=1, photo=False, pics=[]), _png.getvalue())
+ok("two texts that nearly touch are reported as too close, lines of one paragraph and texts with air are not",
+   any("texts too close" in f for f in _near(3)) and not _near(12) and not _near(3, same=True), [_near(3), _near(12), _near(3, True)])
 code, out = vs("build", "demo", "--handout", "--no-shots")
 hand = open(os.path.join(ws, "decks", "demo", "Smoke_handout.html"), encoding="utf-8").read()
 ok("handout drops the timer slide and reveals the quiz", code == 0 and 'class="slide dark tslide' not in hand and "qsolved" in hand)
@@ -657,6 +664,17 @@ ok("columns are measured against the tallest, the highlighted one keeps the acce
    "--h:86.0%;--c:var(--accent)" in sh and "--h:43.0%;--c:var(--accent)" in sh and 'class="vs-cc-g mark"' in sh and 'data-moves' in sh and sh.count('class="vs-cc-a st"') == 6
    and "<em>70 m</em>" in sh and sh.count('class="vs-cc-legend"') == 4, out[-300:])
 
+# three blocks that move with the argument: struck-through before, a line that splits into two ways, a process along arrows
+cd_ = os.path.join(ws, "decks", "change"); os.makedirs(cd_)
+json.dump({"title": "Change", "brand": "smoke", "langs": ["de", "en"], "slides": [
+    {"master": "cover", "title": "Change"}, dict(sample("before_after"), strike=True), sample("fork"), sample("path"),
+    dict(sample("path"), step=False)]}, open(os.path.join(cd_, "deck.json"), "w"))
+code, out = vs("build", "change", "--no-shots"); ch = open(os.path.join(cd_, "Change.html"), encoding="utf-8").read()
+ok("before and after strikes the old points on a click, the fork splits on a click, the path grows along its arrows, clean in every language",
+   code == 0 and out.count("overflow: clean") == 2 and ch.count('class="vs-ba-t f" data-o="1"') == 6 and ch.count('vs-ba-to f" data-o="1"') == 2 and 'class="vs-ba vs-ba-x"' in ch
+   and ch.count('class="vs-fk-w vs-fk-w2 f" data-o="1"') == 2 and ch.count('class="vs-fk-end vs-fk-e2 f"') == 2
+   and ch.count('class="vs-ph-a f" data-o="4"') == 4 and ch.count('class="vs-ph-c vs-ph-accent f" data-o="3"') == 4 and out.count("legibility: clean") == 2, out[-600:])
+
 # entrances follow the reading order; previews in the brand's languages; the video with its title
 od = os.path.join(ws, "decks", "order"); os.makedirs(od)
 json.dump({"title": "Order", "brand": "smoke", "langs": ["en"], "slides": [
@@ -1086,6 +1104,23 @@ ok("the brand's own set is listed with the framework's and can be chosen", code 
 code, out = vs("build", "demo", "--no-shots")
 ok("a deck plays the set copied from the website", code == 0 and 'data-set="site"' in open(html, encoding="utf-8").read(), out[-300:])
 vs("motion", "smoke", "--set", "rise")
+import motion as MO2
+ok("the stepped set is retired: a brand that had it moves in sweep, and the website's stepped timing suggests sweep",
+   MO2.profile({"motion": {"set": "cut"}})["set"] == "sweep" and "cut" not in MO2.sets() and '"cut"' not in open(os.path.join(FW, "analyze.py"), encoding="utf-8").read())
+ok("charts move in the set's own way: every set gives columns, bars and rings its character, none stops everything",
+   all(all(f"@keyframes {r}{{" in s["css"] for r in MO2.CHART_ROLES) for s in MO2.sets().values())
+   and all("m-col" in open(os.path.join(FW, "masters", f + ".html"), encoding="utf-8").read() for f in ("column_chart", "waterfall"))
+   and "m-span" in open(os.path.join(FW, "masters", "compare.html"), encoding="utf-8").read() and "m-ring" in open(os.path.join(FW, "masters", "share.html"), encoding="utf-8").read()
+   and 'html[data-motion-set="none"] #deck *' in open(os.path.join(FW, "master.html"), encoding="utf-8").read())
+ok("the chapter's shape never crosses the slide in sweep and mask", all("-3%" not in MO2.sets()[s]["css"].split("@keyframes m-wipe")[1].split("@keyframes")[0] for s in ("sweep", "mask")))
+code, out = vs("motion", "smoke", "--take", "title=mask"); code2, _ = vs("build", "demo", "--no-shots"); dh = open(html, encoding="utf-8").read()
+ok("one kind of content can move as in another set: the title as in mask, the rest in the brand's own",
+   code == 0 and "title of smoke moves as in mask" in out and "taken from other sets: title as in mask" in out and '<style id="motion-take">' in dh
+   and "@keyframes m-title{from{clip-path:inset(0 100% 0 0)}" in dh.split('<style id="motion-take">')[1], out[-400:])
+code, out = vs("motion", "smoke", "--take", "title="); code2, _ = vs("build", "demo", "--no-shots")
+ok("and back to the brand's own set", code == 0 and "moves in the brand's own set again" in out and '<style id="motion-take">' not in open(html, encoding="utf-8").read(), out[-300:])
+code, out = vs("motion", "smoke", "--compare"); offer = out.split("motion sets side by side:")[1].split("(")[1].split(";")[0].split(")")[0] if "side by side:" in out else ""
+ok("a brand chooses from the few sets that fit, all of them only on request", code == 0 and 2 <= len(offer.split(", ")) <= 4 and "rise" in offer and "none" not in offer and "--compare all" in out, out[-400:])
 
 # the movement of one presentation: the sets on its own slides, its own set and strength, click steps and strength per slide
 code, out = vs("new", "moves", "--brand", "smoke", "--langs", "fr,de"); md = os.path.join(ws, "decks", "moves")

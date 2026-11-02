@@ -487,8 +487,8 @@ html.export .mchev .c.f{background-position:0 0!important}html.export .mchev .c.
   --muted:color-mix(in srgb,var(--on-deep) 64%,var(--deep));--line:color-mix(in srgb,var(--on-deep) 22%,var(--deep));
   --soft:color-mix(in srgb,var(--on-deep) 9%,var(--deep));--ghost:color-mix(in srgb,var(--on-deep) 10%,var(--deep))}
 .slide.vs-dk .mbox{background:color-mix(in srgb,var(--on-deep) 9%,var(--deep))}
-/* ---------- Motion switched off (key A, or "motion": "off"): everything stands, slides and click steps cut ---------- */
-html[data-motion="off"] #deck *,html[data-motion="off"] #deck *::before,html[data-motion="off"] #deck *::after{animation:none!important;transition:none!important}
+/* ---------- Motion switched off (key A, "motion": "off" or the set none): everything stands, charts too, slides and click steps cut ---------- */
+html[data-motion="off"] #deck *,html[data-motion="off"] #deck *::before,html[data-motion="off"] #deck *::after,html[data-motion-set="none"] #deck *,html[data-motion-set="none"] #deck *::before,html[data-motion-set="none"] #deck *::after{animation:none!important;transition:none!important}
 html[data-motion="off"] #deck .bgvideo video{transition:none!important}
 #np{position:fixed;left:20px;right:20px;bottom:80px;max-width:900px;background:rgba(43,43,45,.95);color:#fff;padding:22px 26px;border-radius:8px;font-size:17px;line-height:1.55;z-index:55;display:none;box-shadow:0 10px 30px rgba(0,0,0,.4);font-weight:300}
 #np.on{display:block}

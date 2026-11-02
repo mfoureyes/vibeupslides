@@ -4,7 +4,7 @@
   .vs-wfl .vs-wf{display:flex;gap:22px;margin-top:36px;height:470px;align-items:stretch}
   .vs-wfl .vs-wf-c{flex:1;display:flex;flex-direction:column;min-width:0}
   .vs-wfl .vs-wf-a{position:relative;flex:1;border-bottom:3px solid var(--ink)}
-  .vs-wfl .vs-wf-b{position:absolute;left:0;right:0;bottom:var(--b);height:var(--h);min-height:4px;background:var(--ink);transform-origin:bottom;animation:vs-wf-grow calc(var(--md)*1.2) var(--me) backwards;animation-delay:calc(var(--k) * 120ms)}
+  .vs-wfl .vs-wf-b{position:absolute;left:0;right:0;bottom:var(--b);height:var(--h);min-height:4px;background:var(--ink);transform-origin:bottom;animation:m-col calc(var(--md)*1.2) var(--m-bar-ease,var(--me)) backwards;animation-delay:calc(var(--k) * 120ms)}
   .vs-wfl .vs-wf-c.down .vs-wf-b{background:var(--line);transform-origin:top}
   .vs-wfl .vs-wf-c.total .vs-wf-b{background:var(--accent)}
   .vs-wfl .vs-wf-v{position:absolute;left:0;right:0;bottom:calc(var(--b) + var(--h) + 10px);text-align:center;font-weight:700;font-size:28px;line-height:1.1;white-space:nowrap}
@@ -12,7 +12,6 @@
   .vs-wfl .vs-wf-c.down .vs-wf-v{bottom:auto;top:calc(100% - var(--b) + 10px)}
   .vs-wfl .vs-wf-c.down.low .vs-wf-v{top:auto;bottom:calc(var(--b) + var(--h) + 10px)}
   .vs-wfl .vs-wf-l{font-size:22px;line-height:1.25;text-align:center;padding-top:12px;height:66px}
-  @keyframes vs-wf-grow{from{transform:scaleY(0)}}
   .vs-wfl:not(.active) .vs-wf-b{animation:none}                 /* it moves when the slide is shown, not while it waits hidden */
   html.export .vs-wfl .vs-wf-b,html[data-motion="off"] .vs-wfl .vs-wf-b{animation:none}
   .vs-wfl .callout{margin-top:30px}

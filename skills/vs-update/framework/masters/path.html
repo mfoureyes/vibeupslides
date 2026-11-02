@@ -1,0 +1,33 @@
+<!--vs {"name": "path", "order": 52, "use": "A process as cards joined by arrows, in the brand's own look: three to five steps from left to right, the step the slide is about in the accent colour. Each click draws the arrow to the next step, then the step appears, so the room follows the way. For a process with branches, lanes or a loop write the slide freely (see the forms catalogue).", "slots": {"kicker": "small label above the title (optional)", "title": "the title as a full sentence, <em> marks the one accent word", "lead": "one sentence under the title (optional)", "steps": "list of 3 to 5 {tag, title, text, style}; style \"accent\" marks the one step the slide is about; use the words of the context, not \"Step 1\"", "arrow": "an arrow of the brand's element library, e.g. \"arrows/arrow_01.svg\" (optional; without it the arrow is drawn in the accent colour)", "note": "one sentence below (optional)", "step": "false: the steps follow one another by themselves. Default true: one step per click, the first with the slide"}, "defaults": {"step": true}, "sample": {"kicker": "The way", "title": "From the first call to the running <em>system</em>", "steps": [{"tag": "Week 1", "title": "Listen", "text": "We take up what is there."}, {"tag": "Week 2", "title": "Design", "text": "One plan everybody signs."}, {"tag": "Week 4", "title": "Build", "text": "The part this slide is about.", "style": "accent"}, {"tag": "Week 6", "title": "Run", "text": "It works without us."}]}} -->
+<section class="slide vs-pth" {{attrs}}>
+  <style>
+  .vs-pth .vs-ph{display:flex;align-items:stretch;margin-top:64px}
+  .vs-pth .vs-ph-c{flex:1 1 0;min-width:0;position:relative;background:var(--soft);border-radius:var(--radius,0);padding:36px 34px 40px;min-height:300px}
+  .vs-pth .vs-ph-c.vs-ph-accent{background:var(--accent);color:var(--on-accent,var(--on))}
+  .vs-pth .vs-ph-c small{display:block;font-weight:700;font-size:18px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);margin-bottom:16px}
+  .vs-pth .vs-ph-c h3{font-size:36px;line-height:1.2;font-weight:var(--w-head)}
+  .vs-pth .vs-ph-c p{font-size:25px;line-height:1.45;margin-top:12px;color:var(--muted)}
+  .vs-pth .vs-ph-c.vs-ph-accent small,.vs-pth .vs-ph-c.vs-ph-accent h3,.vs-pth .vs-ph-c.vs-ph-accent p{color:inherit}
+  .vs-pth .vs-ph-a{flex:0 0 84px;position:relative;display:flex;align-items:center;justify-content:center;color:var(--accent);transform-origin:left center}
+  .vs-pth .vs-ph-a>i{position:absolute;left:14px;right:16px;top:50%;height:5px;margin-top:-2.5px;background:var(--accent)}
+  .vs-pth .vs-ph-a>i::after{content:"";position:absolute;right:-2px;top:50%;width:20px;height:20px;margin-top:-10px;border-top:5px solid var(--accent);border-right:5px solid var(--accent);transform:rotate(45deg);box-sizing:border-box}
+  .vs-pth .vs-ph-a svg.el{width:56px;height:auto;max-height:56px}
+  .vs-pth .callout{margin-top:44px}
+  /* on a click the arrow grows in the motion set's own way (m-span), then the step it points to appears */
+  .vs-pth .vs-ph-a.f{opacity:1;transform:none;transition:none}
+  .vs-pth .vs-ph-a.f:not(.on){clip-path:inset(0 100% 0 0)}
+  .vs-pth.active .vs-ph-a.f.on{animation:m-span calc(var(--md)*.75) var(--m-bar-ease,var(--me)) backwards}
+  .vs-pth .vs-ph-c.f.on{transition-delay:calc(var(--md)*.55)}
+  .vs-pth.active .vs-ph-a.anim{animation-name:m-span}
+  html.export .vs-pth .vs-ph-a{clip-path:none!important}
+  @media print{.vs-pth .vs-ph-a{clip-path:none!important}}
+  </style>
+  {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+  <h2>{{title}}</h2>
+  {{#lead}}<p class="lead">{{lead}}</p>{{/lead}}
+  <div class="vs-ph" data-seq>
+    {{#steps}}{{^@first}}<div class="vs-ph-a f" data-o="{{@i}}">{{#arrow}}{{>el arrow}}{{/arrow}}{{^arrow}}<i></i>{{/arrow}}</div>{{/@first}}<div class="vs-ph-c{{#style}} vs-ph-{{style}}{{/style}} {{#@first}}anim"{{/@first}}{{^@first}}f" data-o="{{@i}}"{{/@first}}>{{#tag}}<small>{{tag}}</small>{{/tag}}<h3>{{title}}</h3>{{#text}}<p>{{text}}</p>{{/text}}</div>{{/steps}}
+  </div>
+  {{#note}}<p class="callout anim" data-wave="3">{{note}}</p>{{/note}}
+  {{notes}}
+</section>

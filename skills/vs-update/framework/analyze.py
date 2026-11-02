@@ -1375,7 +1375,7 @@ def read_motion(ctx, url, census, css_texts, shape=None):
     if amount in ("none", "hover only"):
         name, why = "rise", f"the site shows no movement of its own ({'only hover states' if amount == 'hover only' else 'no transitions, no animations'}), so the deck gets the calm default: short fades and rises, slides change with a fade"
     elif stepped:
-        name, why = "cut", "most transitions on the site use stepped timing: things switch instead of easing"
+        name, why = "sweep", "most transitions on the site use stepped timing: things switch instead of easing; sweep keeps the hard edges and still moves smoothly"
     elif kinds.get("mask", 0) >= max(2, sum(kinds.values()) * .25) or all_does.count("mask") >= 2:
         name, why = "mask", f"elements on the site are uncovered by masks ({kinds.get('mask', 0)} of the scroll reveals, {all_does.count('mask')} keyframe animations clip or mask)"
     elif (kinds.get("scale", 0) + kinds.get("blur", 0)) >= max(2, sum(kinds.values()) * .3):
@@ -1399,7 +1399,7 @@ def read_motion(ctx, url, census, css_texts, shape=None):
         why += f"; the site is busier than this sample shows ({', '.join(heavy)}), so also compare cascade, mask and sweep in the film strips"
     base = M.sets().get(name, {}).get("tokens", dict(M.TOKENS))
     tokens, measured = dict(base), []
-    if site_ease and re.match(r"cubic-bezier", site_ease) and name not in ("cut",) and (name == "cascade" or not overshoot):
+    if site_ease and re.match(r"cubic-bezier", site_ease) and (name == "cascade" or not overshoot):
         tokens["ease"] = site_ease; measured.append("ease")
     d = reveal.get("duration_s")
     if d and .2 <= d <= 2: tokens["duration"] = round(min(1.2, max(.35, d)), 2); measured.append("duration")

@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.15.0
+- Motion in one language per brand. Charts move in the set's own way: columns, bars, the ways of a roadmap and the circle of `share` grow, are uncovered, rise from a base line or settle with a bounce, as the set's other pieces do. `none` now stops everything, charts included.
+- Smoother sets. The stepped set `cut` is taken out as too choppy; a brand that had it moves in `sweep`, which keeps the hard edges. The other sets land softer and their pieces follow one another more closely.
+- The shape of a chapter slide makes its move in its own strip and never crosses the title (`sweep`, `mask`, `soft` and `cascade` used to pass over the whole slide or beyond the strip).
+- One kind of content may move as in another set: `vs motion <brand> --take title=mask` (title, text, number, photo, shape, chart); `--take title=` takes it back.
+- Choosing the motion: `vs motion <brand> --compare` plays only the sets that fit (the website's own, the one the analysis suggested, the brand's current one and `rise`); `--compare all` shows every set.
+- New blocks: `before_after` with `"strike": true` strikes the old points through on a click, line by line, with a thin line in the ink as a typesetter would, then the new side comes; `fork`, a line up to today that splits into two ways on a click (without and with), each with where it ends; `path`, a process as cards joined by arrows in the brand's look, each click drawing the arrow to the next step before the step appears (`"arrow"` takes an arrow of the brand's element library).
+- The legibility check names texts that come too close to each other (`texts too close`): two texts that are not one paragraph keep at least 8 px and a third of the smaller type's size between their letters. `fork` gives the ends of its ways a column of their own that fits every brand's margins.
+- `vs update` names the brand's own masters that lack options the default masters have now.
+
+For brand libraries made with an earlier version:
+- A brand with the set `cut` moves in `sweep` without a step; choose another with `vs motion <brand> --compare`.
+- Brands keep their own copies of `before_after`, `compare` and `waterfall` as they are; for the strike-through or charts in the set's own way, copy the framework's version into the brand's `masters/` again (vs-build). `fork` and `path` come from the framework at once.
+
 ## 0.14.0
 - The brand's photos have an index (`images/index.json`). Each photo is measured once by the machine (size, format, faces, where its subject stands, colours, light or dark) and described once by Claude from a numbered contact sheet (what and who it shows, the mood, the places it fits, what to avoid). `vs photos <brand>` lists them one line each, so a deck chooses its photos from their words and nobody looks at them again.
 - `vs photos <brand> --add <file or url>` takes a photo from outside into the brand (the same photo twice is noticed), `--remove` moves one to `images/removed/`, `--refresh` reads the website's photos again and adds the new ones (what was taken out stays out).

@@ -24,8 +24,10 @@ Check here when a slide looks wrong or a build misbehaves.
   photo surface moves to another word; a pale brand colour used for words is a matter for the
   brand's `theme.css`. `type of … px`: the master sets it too small; raise it in the brand's
   master to 18 px or more, and tell the user if that changes the brand's masters. `at the edge` and
-  `on top of each other`: the text is too long for its place or a master is misplaced; shorten or
-  correct the master. The check does not see pictures of text and the dark mode of a deck.
+  `on top of each other` and `too close`: the text is too long for its place or a master is misplaced;
+  shorten or correct the master. Two texts that are not one paragraph need air between their
+  letters, at least 8 px and a third of the smaller type's size: a label that grazes a title, two
+  end labels that run into each other, points on a line that touch. The check does not see pictures of text and the dark mode of a deck.
 
 ## Images
 

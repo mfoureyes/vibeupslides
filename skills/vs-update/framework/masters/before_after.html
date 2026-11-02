@@ -1,4 +1,4 @@
-<!--vs {"name": "before_after", "order": 43, "use": "Two states set against each other: before and after, today and tomorrow, the usual way and ours. The left side is quiet, the right side is the one the slide argues for. Two to four short points each, in the same order, so that they can be read across.", "slots": {"kicker": "small label above the title (optional)", "title": "the title as a full sentence, <em> marks the one accent word", "before": "{tag, title, points}: the state to leave; points is a list of 2 to 4 short sentences", "after": "{tag, title, points}: the state to reach, same number of points in the same order", "note": "one sentence below (optional)"}, "sample": {"kicker": "Before and after", "title": "The same task, done in two <em>ways</em>", "before": {"tag": "Before", "title": "How it is done today", "points": ["The first point about the way it is done now.", "The second point about the way it is done now.", "What this way costs."]}, "after": {"tag": "After", "title": "How it will be done", "points": ["The first point about the new way.", "The second point about the new way.", "What the new way brings."]}}} -->
+<!--vs {"name": "before_after", "order": 43, "use": "Two states set against each other: before and after, today and tomorrow, the usual way and ours. The left side is quiet, the right side is the one the slide argues for. Two to four short points each, in the same order, so that they can be read across. With \"strike\": true the points on the left are struck through on a click, then the right side appears: for a change the slide announces (paper becomes online, six weeks become three days).", "slots": {"kicker": "small label above the title (optional)", "title": "the title as a full sentence, <em> marks the one accent word", "before": "{tag, title, points}: the state to leave; points is a list of 2 to 4 short sentences", "after": "{tag, title, points}: the state to reach, same number of points in the same order", "note": "one sentence below (optional)", "strike": "true: the left points are struck through on a click, then the right side comes (optional)"}, "sample": {"kicker": "Before and after", "title": "The same task, done in two <em>ways</em>", "before": {"tag": "Before", "title": "How it is done today", "points": ["The first point about the way it is done now.", "The second point about the way it is done now.", "What this way costs."]}, "after": {"tag": "After", "title": "How it will be done", "points": ["The first point about the new way.", "The second point about the new way.", "What the new way brings."]}}} -->
 <section class="slide vs-baf" {{attrs}}>
   <style>
   .vs-baf .vs-ba{display:grid;grid-template-columns:1fr 90px 1fr;align-items:stretch;margin-top:60px}
@@ -14,13 +14,23 @@
   .vs-baf .vs-ba-a::before{content:"";position:absolute;left:18px;right:22px;top:50%;height:4px;margin-top:-2px;background:var(--accent)}
   .vs-baf .vs-ba-a::after{content:"";position:absolute;right:20px;top:50%;width:20px;height:20px;margin-top:-12px;border-top:4px solid var(--accent);border-right:4px solid var(--accent);transform:rotate(45deg)}
   .vs-baf .callout{margin-top:40px}
+  /* strike: the old points are struck through on one click, line by line, then the new side comes. A thin line in the ink
+     through the middle of the small letters, as a typesetter strikes; no accent, no bar */
+  .vs-baf .vs-ba-t{--x:max(2px,.075em);background:linear-gradient(var(--ink),var(--ink)) 0 calc(50% + .13em)/100% var(--x) no-repeat;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+  .vs-baf .vs-ba-t.f{opacity:1;transform:none;background-size:0 var(--x);transition:background-size calc(var(--md)*.7) var(--me) calc((var(--j,1) - 1)*var(--md)*.2)}
+  .vs-baf .vs-ba-t.f.on{background-size:100% var(--x)}
+  .vs-baf .vs-ba.vs-ba-x .vs-ba-a.f.on,.vs-baf .vs-ba.vs-ba-x .vs-ba-to.f.on{transition-delay:calc(var(--md)*.9)}
+  .vs-baf.active .vs-ba-t.anim{animation:vs-ba-strike calc(var(--md)*.7) var(--me) calc(var(--md)*1.2 + (var(--j,1) - 1)*var(--md)*.2) backwards}
+  @keyframes vs-ba-strike{from{background-size:0 var(--x)}}
+  html.export .vs-baf .vs-ba-t{background-size:100% var(--x)!important}
+  @media print{.vs-baf .vs-ba-t{background-size:100% var(--x)!important}}
   </style>
   {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
   <h2>{{title}}</h2>
-  <div class="vs-ba">
-    {{#before}}<div class="vs-ba-s anim">{{#tag}}<small>{{tag}}</small>{{/tag}}<h3>{{title}}</h3><ul class="bullets">{{#points}}<li>{{.}}</li>{{/points}}</ul></div>{{/before}}
-    <div class="vs-ba-a anim" data-wave="2"></div>
-    {{#after}}<div class="vs-ba-s vs-ba-to anim" data-wave="2">{{#tag}}<small>{{tag}}</small>{{/tag}}<h3>{{title}}</h3><ul class="bullets">{{#points}}<li>{{.}}</li>{{/points}}</ul></div>{{/after}}
+  <div class="vs-ba{{#strike}} vs-ba-x{{/strike}}">
+    {{#before}}<div class="vs-ba-s anim">{{#tag}}<small>{{tag}}</small>{{/tag}}<h3>{{title}}</h3><ul class="bullets">{{#points}}<li>{{#strike}}<span class="vs-ba-t f" data-o="1" style="--j:{{@i}}">{{/strike}}{{.}}{{#strike}}</span>{{/strike}}</li>{{/points}}</ul></div>{{/before}}
+    <div class="vs-ba-a {{#strike}}f" data-o="1{{/strike}}{{^strike}}anim" data-wave="2{{/strike}}"></div>
+    {{#after}}<div class="vs-ba-s vs-ba-to {{#strike}}f" data-o="1{{/strike}}{{^strike}}anim" data-wave="2{{/strike}}">{{#tag}}<small>{{tag}}</small>{{/tag}}<h3>{{title}}</h3><ul class="bullets">{{#points}}<li>{{.}}</li>{{/points}}</ul></div>{{/after}}
   </div>
   {{#note}}<p class="callout anim" data-wave="3">{{note}}</p>{{/note}}
   {{notes}}

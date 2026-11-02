@@ -3,7 +3,7 @@
  "fits": "brands with a strong graphic shape and hard edges: a diagonal, a bar, a block in the accent colour; confident, sporty, campaign-like",
  "tokens": {"ease": "cubic-bezier(.22,.61,.36,1)", "duration": 0.7, "stagger": 0.1, "travel": 28, "change": "slide"}} */
 /* --m-skew: how far the edge of the sweep leans, as a share of the slide width (0% is a straight edge) */
-.slide{--m-skew:22%;--mw-ease:cubic-bezier(.75,0,.25,1)}
+.slide{--m-skew:22%;--mw-ease:cubic-bezier(.65,0,.2,1)}
 html[data-motif="block"] .slide{--m-skew:0%}
 .mslide{--mseq:.4}          /* the text of cover, chapter and photo slides comes while the shape still sweeps, not after it */
 .mtext .mw{overflow:hidden;padding-bottom:.1em;margin-bottom:-.1em}
@@ -18,18 +18,20 @@ html[data-motif="block"] .slide{--m-skew:0%}
 @keyframes m-word{from{translate:0 110%}}
 @keyframes m-accent{from{background-position:100% 0}}
 @keyframes m-shape{from{clip-path:polygon(100% 0,100% 0,100% 100%,calc(100% - var(--m-skew)) 100%)}}
-@keyframes m-wipe{
-  0%{clip-path:polygon(calc(100% + var(--m-skew)) 0,100% 0,100% 100%,100% 100%)}
-  42%,58%{clip-path:polygon(calc(-3% - var(--m-skew)) 0,100% 0,100% 100%,calc(-3% - 2*var(--m-skew)) 100%)}}
+/* the chapter's shape sweeps in from the right edge and stops where it stands: it never crosses the title */
+@keyframes m-wipe{from{clip-path:polygon(calc(100% + var(--m-skew)) 0,calc(100% + var(--m-skew)) 0,100% 100%,100% 100%)}}
 @keyframes m-logo{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
 @keyframes m-numeral{from{opacity:0;translate:0 calc(var(--mt)*1.4)}}
 @keyframes m-roll{from{transform:none}}
 @keyframes m-figure{from{opacity:0;scale:.85}}
 @keyframes m-drift{from{scale:1.08}}
 @keyframes m-bar{from{width:0}}
-@keyframes m-mark{from{opacity:0;scale:2.2;animation-timing-function:cubic-bezier(.55,0,.9,.35)}60%{opacity:1}}
+@keyframes m-mark{from{opacity:0;scale:1.6}}
 @keyframes m-photo{from{clip-path:polygon(calc(100% + var(--m-skew)) 0,100% 0,100% 100%,100% 100%)}
   to{clip-path:polygon(calc(-3% - var(--m-skew)) 0,100% 0,100% 100%,calc(-3% - 2*var(--m-skew)) 100%)}}
 @keyframes m-rule{from{scale:1 0}}
 @keyframes m-panel{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
 @keyframes m-sting{from{clip-path:inset(0 100% 0 0);scale:1.03}to{clip-path:inset(0 0 0 0)}}
+@keyframes m-col{from{clip-path:inset(100% 0 0 0)}to{clip-path:inset(0)}}
+@keyframes m-span{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0)}}
+@keyframes m-ring{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0)}}

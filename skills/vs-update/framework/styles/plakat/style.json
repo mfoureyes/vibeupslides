@@ -51,7 +51,7 @@
    "head_tracking": "0.005em"
   },
   "motion": {
-   "set": "cut"
+   "set": "sweep"
   }
  }
 }

@@ -40,6 +40,8 @@ the accent shape, the big logo, large numerals, the slide change.
 Roles a set defines as keyframes (a brand's motion.css may redefine single ones):
     m-item m-title m-label m-word m-accent m-shape m-wipe m-logo m-numeral m-roll m-figure m-drift
     m-bar m-mark m-photo m-rule m-panel m-sting
+Chart roles (a set may define them, the hooks have a plain growth for sets that do not):
+    m-col (a column grows from its foot), m-span (a bar or way grows from its start), m-ring (a pie or ring)
 """
 import json, os, re
 
@@ -47,10 +49,19 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 SETS_DIR = os.path.join(HERE, "motion")
 
 DEFAULT_SET = "rise"
+RETIRED = {"cut": "sweep"}        # sets that were taken out, and the set a brand that had one moves in now
 TOKENS = {"ease": "cubic-bezier(.22,.61,.36,1)", "duration": 0.7, "stagger": 0.1, "travel": 28, "change": "slide"}
 LEVELS = ("off", "calm", "standard", "expressive")
 ROLES = ("m-item", "m-title", "m-label", "m-word", "m-accent", "m-shape", "m-wipe", "m-logo", "m-numeral", "m-roll",
          "m-figure", "m-drift", "m-bar", "m-mark", "m-photo", "m-rule", "m-panel", "m-sting")
+# the charts' roles: a set may give them its own character; the hooks define a plain growth for sets that do not
+CHART_ROLES = ("m-col", "m-span", "m-ring")
+# what a brand may take from another set than its own ("take" in brand.json motion): the roles of one kind of content,
+# with the set's rules that belong to them
+GROUPS = {"title": ("m-title", "m-word", "m-accent"), "text": ("m-item", "m-label", "m-panel", "m-figure"),
+          "number": ("m-numeral", "m-roll"), "photo": ("m-photo", "m-drift"),
+          "shape": ("m-shape", "m-wipe", "m-rule", "m-mark", "m-logo", "m-sting"), "chart": ("m-bar",) + CHART_ROLES}
+_GROUP_SEL = {"title": (".mtext",), "number": (".mnumber", ".mcount")}
 
 _EASE = re.compile(r"^(linear|ease|ease-in|ease-out|ease-in-out|step-start|step-end|cubic-bezier\(\s*-?[\d.]+(\s*,\s*-?[\d.]+){3}\s*\)"
                    r"|steps\(\s*\d+(\s*,\s*[a-z-]+)?\s*\)|linear\([\d.,%\s-]+\))$")
@@ -84,6 +95,39 @@ def sets(brand_dir=None):
             out[meta["name"]] = meta
     return dict(sorted(out.items(), key=lambda kv: (kv[1].get("order", 500), kv[0])))
 
+def _blocks(css):
+    """The top-level rules of a stylesheet as (prelude, whole rule), in their order."""
+    out, depth, start, i = [], 0, 0, 0
+    while i < len(css):
+        c = css[i]
+        if c == "{":
+            depth += 1
+        elif c == "}":
+            depth -= 1
+            if depth == 0:
+                rule = css[start:i + 1].strip(); out.append((rule[:rule.find("{")].strip(), rule)); start = i + 1
+        i += 1
+    return out
+
+def take_css(brand=None, base=None):
+    """The rules a brand takes from other sets than its own ("take": {"title": "mask", "chart": "cascade"}): the
+    keyframes of that kind of content, the set's rules for it, and the set's own custom properties they use."""
+    p = profile(brand); all_sets = sets(_dir_of(brand)); base = base or p["set"]; parts = []
+    for group, name in p["take"].items():
+        if name == base:
+            continue
+        roles, sel, took = GROUPS[group], _GROUP_SEL.get(group, ()), []
+        for prelude, rule in _blocks(all_sets[name]["css"]):
+            kf = prelude.split()[1] if prelude.startswith("@keyframes") and len(prelude.split()) > 1 else None
+            if (kf in roles) or (not kf and not prelude.startswith("@") and any(s in prelude for s in sel)):
+                took.append(rule)
+        used = set(re.findall(r"var\((--[\w-]+)", " ".join(took)))
+        own = dict(re.findall(r"(--[\w-]+)\s*:\s*([^;}]+)", " ".join(r for pr, r in _blocks(all_sets[name]["css"]) if pr in (".slide", ".mslide"))))
+        mine = set(re.findall(r"(--[\w-]+)\s*:", all_sets.get(base, {}).get("css", "")))
+        props = ";".join(f"{k}:{v.strip()}" for k, v in own.items() if k in used and k not in mine)
+        parts += ([".slide{" + props + "}"] if props else []) + took
+    return "\n".join(parts)
+
 def catalog(current=None, brand_dir=None):
     """Text list of the sets with their character, the brand's current one marked with *."""
     lines = []
@@ -105,11 +149,14 @@ def profile(brand=None):
     if isinstance(given, str):
         given = {"set": given}
     all_sets = sets(brand_dir)
-    name = given.get("set") if given.get("set") in all_sets else DEFAULT_SET
+    name = RETIRED.get(given.get("set"), given.get("set"))
+    name = name if name in all_sets else DEFAULT_SET
     p = dict(TOKENS, **(all_sets.get(name, {}).get("tokens") or {}))
     p.update({k: v for k, v in given.items() if k in TOKENS and v is not None})
     ease = str(p["ease"]).strip()
-    return {"set": name, "ease": ease if _EASE.match(ease) else TOKENS["ease"],
+    take = {g: RETIRED.get(s, s) for g, s in (given.get("take") or {}).items() if g in GROUPS and RETIRED.get(s, s) in all_sets and RETIRED.get(s, s) != name} \
+        if isinstance(given.get("take"), dict) else {}
+    return {"set": name, "take": take, "ease": ease if _EASE.match(ease) else TOKENS["ease"],
             "duration": _number(p["duration"], .1, 2.5, TOKENS["duration"]), "stagger": _number(p["stagger"], 0, .5, TOKENS["stagger"]),
             "travel": _number(p["travel"], 0, 200, TOKENS["travel"]), "change": p["change"] if p["change"] in ("slide", "fade", "none") else "slide"}
 
@@ -310,11 +357,14 @@ def assets(brand=None, level="standard", set_name=None):
     level off loads the set that does nothing and cuts from slide to slide."""
     level = intensity(level)
     all_sets = sets(_dir_of(brand))
+    set_name = RETIRED.get(set_name, set_name)
     name = "none" if level == "off" else (set_name if set_name in all_sets else profile(brand)["set"])
     css = all_sets.get(name, {}).get("css", "")
     own = "" if level == "off" else brand_css(brand)
+    took = "" if name == "none" else take_css(brand, name)
     return ("\n<style id=\"motion-hooks\">" + HOOKS_CSS + "</style>\n"
             f"<style id=\"motion-set\" data-set=\"{name}\">\n{css}\n</style>\n"
+            + (f"<style id=\"motion-take\">\n{took}\n</style>\n" if took else "")
             + (f"<style id=\"motion-brand\">\n{own}\n</style>\n" if own else "")
             + "<script>document.documentElement.setAttribute('data-motion-set','" + name + "');"
               "document.documentElement.setAttribute('data-motion','" + level + "');</script>\n"
@@ -404,7 +454,10 @@ HOOKS_CSS = r'''
 .active .mcols .mcol.f.on.mk b::after{animation:m-pop calc(var(--md)*.9) var(--me) calc(var(--md)*1.4) backwards}
 /* what is said about the chart (the callout beside it) comes when the chart stands */
 .active .mcols~* .anim{animation-delay:calc(var(--md)*2.2 + var(--ms)*14)}
+/* the charts' roles, plain growth; a set that gives charts its own character redefines them after this */
 @keyframes m-col{from{scale:1 0}}
+@keyframes m-span{from{scale:0 1}}
+@keyframes m-ring{from{opacity:0;rotate:-90deg;scale:.86}}
 @keyframes m-pop{from{opacity:0;scale:.5}}
 /* Bars that grow along a time axis (Gantt): --s is the period a bar starts in, --p how many it covers; the bars are
    uncovered at an even pace from left to right, so the build reads like time passing */

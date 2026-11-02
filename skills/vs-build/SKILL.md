@@ -329,9 +329,11 @@ slides must look and read like its website. Read `references/library.md` for the
   Look at its film strip (`vs motion example --strip site`) like at any other set and correct the
   file where a frame looks wrong. **Choosing the motion is a step of its own, and it is the
   user's:** `vs motion example --compare` writes `preview/motion/compare.html`, one file on which
-  the copy of the website and the framework's sets play the same slides of this brand side by
-  side. Give it to the user and ask one question: the motion of your website (`site`), or one of
-  the VibeUpSlides sets, of which you name the one or two that fit the brand best and why. Set what
+  the few sets that fit play the same slides of this brand side by side: the copy of the website
+  (`site`), the set the analysis suggested, the brand's current one and `rise` as the safe choice
+  (all sets only with `--compare all`, when the user asks for more). Give it to the user and ask
+  one question: the motion of your website, or one of the others, of which you name the one that
+  fits the brand best and why. Set what
   they choose (`vs motion example --set <name>`). If the website shows nothing that could be
   copied, say so and offer the framework's sets alone.
 - **Video**: if the site runs a film behind its hero, it is in `videos/` and marked `background`

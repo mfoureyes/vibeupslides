@@ -20,11 +20,11 @@ it is two slides or one form that shows both.
 | above or below a target | deviation | `bars` with the target in the note, `before_after` | bars from a middle line, left minus, right plus |
 | how something is spread | distribution | `bars` over bands (ages, price ranges) | a dot or bar strip per person or case |
 | two things go together | correlation | `matrix` (qualitative, four fields) | a scatter of points with the one that matters named |
-| what follows what | sequence, process | `steps`, `process`, `stairs` (building on each other), `cycle` (repeating), `flow` (who gives what to whom) | see "Processes" below |
-| what lies ahead | plan, roadmap | `roadmap` (milestones or now, next, later), `timeline` (bars over months), `phases` (proposal) | |
+| what follows what | sequence, process | `steps`, `process`, `path` (cards joined by arrows, built along them), `stairs` (building on each other), `cycle` (repeating), `flow` (who gives what to whom) | see "Processes" below |
+| what lies ahead | plan, roadmap | `roadmap` (milestones or now, next, later), `timeline` (bars over months), `phases` (proposal), `fork` (two ways from today: without and with) | |
 | how something is built | structure, hierarchy | `pyramid`, `hub`, `governance`, `sections` | an organisation chart, a system with its interfaces |
 | what overlaps | relation | `venn`, `matrix` | |
-| two states | change of state | `before_after`, `split` | |
+| two states | change of state | `before_after` (`"strike": true`: the old is struck through on a click), `split` | |
 | a choice, a decision | choice | `verdict`, `price_table`, `effort_table`, `compare` | |
 | where | position | `figure` with a map image | the places as points on a simple outline |
 | many become few | narrowing | `funnel` | |
@@ -84,7 +84,7 @@ masters that are close to one another.
 A process is drawn as it is, not as the nearest master draws it. Before choosing `steps` or
 `process`, ask what the process has: branches (a decision, two ways), a loop (back to an earlier
 step), roles (who does which step: lanes), hand-overs between organisations, waiting times, a
-part that runs in parallel. A straight line of four to six steps is `steps` or `process`; something
+part that runs in parallel. A straight line of four to six steps is `steps`, `process` or `path` (`path` takes the brand's arrow from its element library with `"arrow"`); something
 that repeats is `cycle`; who gives what to whom is `flow`. Anything else is written freely in the
 shape it has: lanes for roles, a fork for a decision, an arrow back for a loop, and the step the
 slide is about in the accent colour. The drawing explains itself: an arrow joins each step to the next,

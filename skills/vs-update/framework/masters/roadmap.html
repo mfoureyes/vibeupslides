@@ -25,9 +25,8 @@
   .vs-rdm .vs-rm-p.f.on{transform:none;transition-delay:calc(var(--md)*.8)}
   .vs-rdm.active .vs-rm-p.anim{animation-name:vs-rm-in}
   @keyframes vs-rm-in{from{opacity:0}}
-  .vs-rdm.active .vs-rm-s.anim{transform-origin:left;animation:vs-rm-way calc(var(--md)*1.1) var(--me) backwards;animation-delay:calc((var(--k) - 1) * var(--md) * 1.4 - var(--md) * .8)}
+  .vs-rdm.active .vs-rm-s.anim{transform-origin:left;animation:m-span calc(var(--md)*1.1) var(--m-bar-ease,var(--me)) backwards;animation-delay:calc((var(--k) - 1) * var(--md) * 1.4 - var(--md) * .8)}
   .vs-rdm.active .vs-rm-p.anim{animation-delay:calc((var(--k) - 1) * var(--md) * 1.4)}
-  @keyframes vs-rm-way{from{transform:scaleX(0)}}
   html.export .vs-rdm .vs-rm-s,html[data-motion="off"] .vs-rdm .vs-rm-s{animation:none}
   .vs-rdm .vs-rm-p{position:relative;padding:0 28px 0 0;min-width:0}
   .vs-rdm .vs-rm-p time{display:block;height:58px;font-weight:700;font-size:20px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);white-space:nowrap}

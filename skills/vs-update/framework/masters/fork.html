@@ -1,0 +1,54 @@
+<!--vs {"name": "fork", "order": 78, "use": "A line up to today that splits into two ways: what happens without a decision and what happens with it (without and with funding, the usual way and the proposal). The quiet way runs flat, the way the slide argues for rises in the accent colour, each with where it ends. On a click the line splits. Up to four points on the way so far.", "slots": {"kicker": "small label above the title (optional)", "title": "the title as a full sentence, <em> marks the one accent word", "past": "list of up to 4 {label, text}: the points on the way so far, from left to right (optional)", "now": "label of the point where the way splits, e.g. \"Today\"", "ways": "list of exactly 2 {label, value, text}: first the quiet way (without), then the way the slide argues for (with); value is where it ends, e.g. \"+40 %\" or \"2030: 12 sites\"", "note": "one sentence below (optional)", "step": "false: the line splits by itself when the slide appears. Default true: it splits on a click"}, "defaults": {"now": "Today", "step": true}, "sample": {"kicker": "Two ways", "title": "From today on, the decision makes the <em>difference</em>", "past": [{"label": "2022", "text": "Start"}, {"label": "2023", "text": "First result"}, {"label": "2024", "text": "Growth"}], "now": "Today", "ways": [{"label": "Without", "value": "flat", "text": "Things stay as they are."}, {"label": "With", "value": "+40 %", "text": "What the decision makes possible."}]}} -->
+<section class="slide vs-frk" {{attrs}}>
+  <style>
+  .vs-frk .vs-fk{display:grid;grid-template-columns:minmax(0,1fr) 460px;gap:0;margin-top:56px;height:440px}   /* the ends keep their room, the line takes what the brand's margins leave */
+  .vs-frk .vs-fk-fig{position:relative;height:440px}
+  .vs-frk .vs-fk-fig svg{position:absolute;inset:0;overflow:visible}
+  .vs-frk .vs-fk-fig path{fill:none;stroke-linecap:round;stroke-dasharray:1 1;stroke-dashoffset:0}
+  .vs-frk .vs-fk-p{stroke:var(--ink);stroke-width:6}
+  .vs-frk .vs-fk-w1{stroke:color-mix(in srgb,var(--ink) 30%,var(--paper));stroke-width:6}
+  .vs-frk .vs-fk-w2{stroke:var(--accent);stroke-width:9}
+  .vs-frk .vs-fk-past{position:absolute;left:0;top:290px;width:54.5%;display:grid;grid-auto-flow:column;grid-auto-columns:1fr;column-gap:20px;padding-right:40px}
+  .vs-frk .vs-fk-pt{position:relative;padding-top:34px;text-align:center;min-width:0}
+  .vs-frk .vs-fk-pt::before{content:"";position:absolute;left:50%;top:-11px;width:22px;height:22px;margin-left:-11px;border-radius:50%;background:var(--paper);border:5px solid var(--ink);box-sizing:border-box}
+  .vs-frk .vs-fk-pt b{display:block;font-size:26px;font-weight:700}
+  .vs-frk .vs-fk-pt span{display:block;font-size:22px;color:var(--muted);margin-top:4px}
+  .vs-frk .vs-fk-now{position:absolute;left:54.5%;top:290px;width:0}
+  .vs-frk .vs-fk-now::before{content:"";position:absolute;left:-17px;top:-17px;width:34px;height:34px;border-radius:50%;background:var(--accent)}
+  .vs-frk .vs-fk-now b{position:absolute;left:0;bottom:34px;translate:-50% 0;white-space:nowrap;font-weight:700;font-size:20px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-text)}
+  .vs-frk .vs-fk-ends{position:relative}
+  .vs-frk .vs-fk-end{position:absolute;left:36px;right:0}
+  .vs-frk .vs-fk-e1{top:278px}.vs-frk .vs-fk-e2{top:68px}   /* label and value level with the end of their way, the sentence runs on below */
+  .vs-frk .vs-fk-end small{display:block;font-weight:700;font-size:18px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .vs-frk .vs-fk-end b{display:block;font-size:56px;line-height:1.1;font-weight:var(--w-display);color:var(--muted)}
+  .vs-frk .vs-fk-e2 small,.vs-frk .vs-fk-e2 b{color:var(--accent-text)}
+  .vs-frk .vs-fk-end span{display:block;font-size:24px;line-height:1.35;color:var(--muted);margin-top:6px}
+  .vs-frk .callout{margin-top:36px}
+  /* the way so far draws from left to right, then the line splits: the quiet way first, the rising one after it */
+  .vs-frk.active .vs-fk-p{animation:m-draw calc(var(--md)*1.4) var(--m-bar-ease,var(--me)) calc(var(--md)*.4) backwards}
+  .vs-frk .vs-fk-w.f{opacity:1;transform:none;stroke-dashoffset:1;transition:stroke-dashoffset calc(var(--md)*1.5) var(--me)}
+  .vs-frk .vs-fk-w.f.on{stroke-dashoffset:0}
+  .vs-frk .vs-fk-w2.f,.vs-frk .vs-fk-e2.f{transition-delay:calc(var(--md)*.45)}
+  .vs-frk .vs-fk-end.f.on{transition-delay:calc(var(--md)*1.1)}.vs-frk .vs-fk-e2.f.on{transition-delay:calc(var(--md)*1.5)}
+  .vs-frk.active .vs-fk-w.anim{animation:m-draw calc(var(--md)*1.5) var(--me) calc(var(--md)*2) backwards}
+  .vs-frk.active .vs-fk-w2.anim{animation-delay:calc(var(--md)*2.45)}
+  html.export .vs-frk .vs-fk-w{stroke-dashoffset:0!important}
+  @media print{.vs-frk .vs-fk-w{stroke-dashoffset:0!important}}
+  </style>
+  {{#kicker}}<div class="kicker">{{kicker}}</div>{{/kicker}}
+  <h2>{{title}}</h2>
+  <div class="vs-fk">
+    <div class="vs-fk-fig">
+      <svg width="100%" height="440" viewBox="0 0 1000 440" preserveAspectRatio="none" aria-hidden="true">
+        <path class="vs-fk-p" pathLength="1" vector-effect="non-scaling-stroke" d="M0 290H545"/>
+        <path class="vs-fk-w vs-fk-w1 f" data-o="1" pathLength="1" vector-effect="non-scaling-stroke" d="M545 290C718 290 845 304 1000 320"/>
+        <path class="vs-fk-w vs-fk-w2 f" data-o="1" pathLength="1" vector-effect="non-scaling-stroke" d="M545 290C709 290 836 200 1000 110"/>
+      </svg>
+      <div class="vs-fk-past" data-seq>{{#past}}<div class="vs-fk-pt anim"><b>{{label}}</b>{{#text}}<span>{{text}}</span>{{/text}}</div>{{/past}}</div>
+      <div class="vs-fk-now anim"><b>{{now}}</b></div>
+    </div>
+    <div class="vs-fk-ends">{{#ways}}<div class="vs-fk-end vs-fk-e{{@i}} f" data-o="1"><small>{{label}}</small>{{#value}}<b>{{value}}</b>{{/value}}{{#text}}<span>{{text}}</span>{{/text}}</div>{{/ways}}</div>
+  </div>
+  {{#note}}<p class="callout anim" data-wave="3">{{note}}</p>{{/note}}
+  {{notes}}
+</section>

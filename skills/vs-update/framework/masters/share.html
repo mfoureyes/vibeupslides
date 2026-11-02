@@ -2,7 +2,7 @@
 <section class="slide vs-shr{{#pie}} vs-shp{{/pie}}" {{attrs}}>
   <style>
   .vs-shr .vs-sh{display:grid;grid-template-columns:480px 1fr;gap:120px;align-items:center;margin-top:36px}
-  .vs-shr .vs-sh-ring{position:relative;width:480px;height:480px;border-radius:50%;animation:vs-sh-in calc(var(--md)*1.6) var(--me) backwards}
+  .vs-shr .vs-sh-ring{position:relative;width:480px;height:480px;border-radius:50%;animation:m-ring calc(var(--md)*1.6) var(--me) backwards}
   .vs-shr .vs-sh-ring::after{content:"";position:absolute;inset:84px;border-radius:50%;background:var(--paper)}
   .vs-shr .vs-sh-mid{position:absolute;inset:84px;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
   .vs-shr .vs-sh-mid b{font-family:var(--font-head);font-weight:var(--w-display);font-size:104px;line-height:.95;color:var(--accent-text)}
@@ -13,7 +13,6 @@
   .vs-shr .vs-sh-item em{font-style:normal;font-weight:700;font-size:40px;line-height:1}
   .vs-shr .vs-sh-item h3{font-size:32px;line-height:1.25;font-weight:var(--w-head)}
   .vs-shr .vs-sh-item p{font-size:25px;line-height:1.42;color:var(--muted);margin-top:4px}
-  @keyframes vs-sh-in{from{transform:rotate(-90deg) scale(.86);opacity:0}}
   .vs-shr:not(.active) .vs-sh-ring{animation:none}                 /* it moves when the slide is shown, not while it waits hidden */
   html.export .vs-shr .vs-sh-ring,html[data-motion="off"] .vs-shr .vs-sh-ring{animation:none}
   .vs-shr.vs-shp .vs-sh-ring::after,.vs-shr.vs-shp .vs-sh-mid{display:none}

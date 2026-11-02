@@ -16,7 +16,7 @@ master and fills its slots. `vs masters <brand>` lists the masters of a brand wi
 | `density` | word limits of the density report, e.g. `{"live": 50, "reading": 250}` (these are the defaults) |
 | `contents` | `false`: no generated contents page in the reading version |
 | `motion` | how much moves: `"off"` (or `false`), `"calm"`, `"standard"` (default, same as `true`) or `"expressive"`. The kind of movement comes from the brand's motion profile |
-| `motion_set` | the motion set of this deck where it should differ from the brand's (`rise`, `soft`, `sweep`, `mask`, `draw`, `cascade`, `cut`, `site`, …). Written by `vs motion --deck <deck> --set <name>`; `--set brand` removes it |
+| `motion_set` | the motion set of this deck where it should differ from the brand's (`rise`, `soft`, `sweep`, `mask`, `draw`, `cascade`, `site`, …). Written by `vs motion --deck <deck> --set <name>`; `--set brand` removes it |
 | `footer_left`, `footer_right` | override the footer texts of the brand for this deck |
 | `minutes` | the length the talk must have, in minutes. The presenter view spreads it over the slides by their `weight` and shows the time left per slide, whether the talk is on time and when it will end. Not set and no `plan` on the slides: the presenter view only measures. See "Length and time plan" below |
 | `event` | where and when the deck is shown: `{"date": "2026-11-04", "start": "10:45", "place": "…", "audience": "…", "guest": "…"}`. `start` gives the schedule of the presenter view its clock times before the talk starts. Not rendered otherwise |

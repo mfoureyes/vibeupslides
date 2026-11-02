@@ -21,11 +21,11 @@
   .vs-ccl .vs-cc-l{font-size:24px;font-weight:600;line-height:1.25;text-align:center;padding-top:14px;height:72px}
   /* the ground line and the labels stand at once; when the slide opens the columns grow from the line one after the
      other, a stack part by part from the bottom, and each figure comes when its column is up */
-  .vs-ccl.active .vs-cc-b{--t:calc(.25s + var(--g) * var(--md) * .45 + var(--k) * var(--md) * .2);animation:vs-cc-grow calc(var(--md)*1.2) var(--me) var(--t) backwards}
+  .vs-ccl.active .vs-cc-b{--t:calc(.25s + var(--g) * var(--md) * .45 + var(--k) * var(--md) * .2);animation:m-col calc(var(--md)*1.2) var(--m-bar-ease,var(--me)) var(--t) backwards}
   .vs-ccl.active .vs-cc-b b{animation:vs-cc-in calc(var(--md)*.6) var(--me) calc(var(--t) + var(--md) * 1.1) backwards}
   .vs-ccl.active .vs-cc-a.st .vs-cc-b{--t:calc(.25s + var(--g) * var(--md) * .6 + var(--k) * var(--md) * .7);animation-duration:calc(var(--md)*.7)}
   .vs-ccl.active .vs-cc-a.st>em{animation:vs-cc-in calc(var(--md)*.6) var(--me) calc(.25s + var(--g) * var(--md) * .6 + var(--ns) * var(--md) * .7) backwards}
-  @keyframes vs-cc-grow{from{transform:scaleY(0)}}
+  /* columns grow in the motion set's own way (m-col), so a chart moves like the rest of the deck */
   @keyframes vs-cc-in{from{opacity:0}}
   html.export .vs-ccl *,html[data-motion="off"] .vs-ccl *{animation:none!important}
   .vs-ccl .callout{margin-top:26px}

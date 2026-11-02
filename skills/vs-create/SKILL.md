@@ -285,9 +285,11 @@ kind (figures, columns with icons, cards) is a sign that the content was poured 
 hand. Something that repeats is a `cycle`; who gives what to whom is a `flow`; stages that build
 on each other are `stairs`; one figure against others is `compare`; things that each have a
 picture are `tiles`; two questions at once are a `matrix`; many that become few are a `funnel`;
-what rests on what is a `pyramid`; two states are `before_after`; one thing and its parts are a
-`hub`; a path with an end is `steps` or `process`; dates are a `timeline`; where it is going is a
-`roadmap`; parts of a whole are a `share` (ring or pie); series over years are a `column_chart`.
+what rests on what is a `pyramid`; two states are `before_after` (with `"strike": true` the old
+side is struck through on a click before the new one comes); one thing and its parts are a
+`hub`; a path with an end is `steps`, `process` or `path` (cards joined by arrows that grow on
+each click); dates are a `timeline`; where it is going is a `roadmap`; a decision that splits the
+way from today on is a `fork`; parts of a whole are a `share` (ring or pie); series over years are a `column_chart`.
 `references/forms.md` has the whole table. A process is drawn in the shape it has (branches,
 loops, roles), in the words of its context, not poured into the nearest master. A slide
 may carry more than a title and three lines: a lead sentence, the structure, and one sentence
@@ -415,7 +417,7 @@ limit that fits the mode), a voice line and the paths of the contact sheets. Ove
 `clean`: shorten the text or split the slide, never shrink type. The legibility line must be
 `clean` as well: it names every text that is hard to read, by slide (`LEGIBILITY slide 4 (…):
 contrast 1.8 to 1 between text and ground …`, type under 18 px, text cut off, at the edge of the
-slide, or on top of another text), and every ring, arrow, bar or line that hardly stands out; it
+slide, on top of another text or too close to it), and every ring, arrow, bar or line that hardly stands out; it
 looks at the light and the dark scheme and puts `dark scheme:` or `light scheme:` before what only one shows. A deck is not handed over with such a finding: take another
 picture or master, move the accent word, shorten, or correct the brand's master or theme
 (`pitfalls.md`). Slides flagged as wordy in a live
@@ -466,7 +468,7 @@ belong on one click, set `"order"` (deck-format.md). The user can do the same in
 ("On click", "Order": they click the parts in the new order, with Shift to join one to the step
 before; the strength of movement, "Play").
 
-Name the version in half a sentence when you hand a deck over ("built with VibeUpSlides 0.14.0", from
+Name the version in half a sentence when you hand a deck over ("built with VibeUpSlides 0.15.0", from
 the status line of the setup), so that the user can tell which state they are testing.
 A button (`button: {label, url}` on the closing slide) is a call to action with a real target; a
 cover has none. The last slide credits the person who made the deck (`"author"` in the deck file,

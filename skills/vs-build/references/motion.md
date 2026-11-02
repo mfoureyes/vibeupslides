@@ -50,8 +50,18 @@ writing:
 | `mask` | straight masks open over text and pictures, nothing travels | editorial brands, large quiet type |
 | `draw` | a rule is drawn, the content unrolls from it, numbers tick | technical brands, grids and hairlines |
 | `cascade` | pieces drop in one after the other and settle with a small bounce | lively, playful brands |
-| `cut` | hard cuts and steps, no easing, words flash in the accent colour | loud, poster-like brands |
-| `none` | nothing moves | documents, formal reports |
+| `none` | nothing moves, charts neither | documents, formal reports |
+
+Every set moves every kind of content in its own way, charts too: columns, bars and the ways of a
+roadmap grow, are uncovered, settle with a bounce or rise from a base line as the set's other
+pieces do, and the shape of a chapter slide makes its move in its own strip without crossing the
+title. The stepped set `cut` was taken out as too choppy (0.15.0); a brand that had it moves in
+`sweep`, which keeps the hard edges.
+
+**One kind of content from another set.** A brand keeps one set, and may let one kind of content
+move as in another: `vs motion <brand> --take title=mask` (kinds: `title`, `text`, `number`,
+`photo`, `shape`, `chart`; `--take title=` takes it back). Use it only where the brand's own
+website does so (titles uncovered, everything else rising, for instance); one set stays the rule.
 
 ## Reading raw/motion.json
 
@@ -92,7 +102,7 @@ Decide from behaviour first, character second, and write the reason into the sty
   and easing as tokens.
 - **Long distances, overshooting easings** (a `cubic-bezier` with a value above 1), staggered
   groups, marquees → `cascade`.
-- **Stepped timing, instant state changes, blinking cursors, huge type on flat colour** → `cut`.
+- **Stepped timing, instant state changes, blinking cursors, huge type on flat colour** → `sweep`, with hard edges and smooth movement.
 - **Line drawings, stroke animations, diagrams that build up, grid lines** → `draw`.
 - **A strong accent shape** in the brand (a diagonal, a bar, a block that also appears in
   `shape.motif`) and a confident tone → `sweep`. The sweep leans as far as `--m-skew` says
@@ -116,7 +126,7 @@ presentation: vs-create sets `"motion": "calm"` for that deck.
 
 - `ease`: the easing measured on reveals; if there is none, the most frequent easing of the
   site's transitions that is not plain `ease`. Keep the set's own easing when the site offers only
-  `ease` and `linear`. `cut` and `draw` bring their own timing; leave `ease` out for them.
+  `ease` and `linear`. `draw` brings its own timing; leave `ease` out for it.
 - `duration`: the measured reveal duration. If only interface transitions were measured, take
   about twice their typical value (0.2 s on buttons becomes about 0.45 s on a slide). People in a
   room need longer than a reader at a screen; below 0.35 s an entrance reads as a flicker.
@@ -124,7 +134,7 @@ presentation: vs-create sets `"motion": "calm"` for that deck.
 - `travel`: the measured distance for `rise` and `cascade`. A site that fades without travel gets
   about 10.
 - `change`: `fade` for most brands, `slide` when the site itself moves sideways (carousels, page
-  transitions), `none` for `cut` and `none`.
+  transitions), `none` for `none`.
 
 Set single values with `vs.py set <brand> motion.duration=0.55`; `vs.py motion <brand> --reset`
 drops all tokens again.

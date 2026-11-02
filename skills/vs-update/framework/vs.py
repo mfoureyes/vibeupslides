@@ -28,9 +28,11 @@
     vs.py voice <brand> --check "text" [--lang de]   check one piece of text against the brand's rules
     vs.py motion --deck <deck> [--compare] [--set <name>|brand] [--level calm|standard|expressive]
                                                  the movement of one presentation: the sets side by side on its own slides, its own set and strength
-    vs.py motion <brand> [--compare] [--strip [set|all]] [--set <name>] [--level calm|expressive] [--reset] [--site]
-                                                 motion sets with their character, among them `site`, copied from the brand's website; all sets playing side by side;
-                                                 film strip of a set as a picture; choose the brand's set; --site makes the copied set again
+    vs.py motion <brand> [--compare [all]] [--strip [set|all]] [--set <name>] [--take <kind>=<set>] [--level calm|expressive] [--reset] [--site]
+                                                 motion sets with their character, among them `site`, copied from the brand's website; the sets that fit
+                                                 playing side by side (all with --compare all); film strip of a set as a picture; choose the brand's set;
+                                                 --take title=mask lets one kind of content (title, text, number, photo, shape, chart) move as in another set;
+                                                 --site makes the copied set again
 
   Decks (the vs-create skill)
     vs.py new <deck> --brand <name> [--langs en,de] [--from <deck> [--variant]]
@@ -469,11 +471,17 @@ def cmd_update(args):
     sync_framework(src)
     print("\nWhat is new:\n" + (changelog_since(cur, src) or "(no changelog entries)"))
     import render, build as B
-    defaults = {n for n, m in render.load_masters(None).items() if m["body"] is not None and not m["meta"].get("preview_only") and not m["meta"].get("hidden")}
+    fw = render.load_masters(None)
+    defaults = {n for n, m in fw.items() if m["body"] is not None and not m["meta"].get("preview_only") and not m["meta"].get("hidden")}
     for d in B.list_brands():
         own = {f[:-5] for f in os.listdir(os.path.join(d, "masters"))} if os.path.isdir(os.path.join(d, "masters")) else set()
         new = sorted(defaults - own)
         if new: print(f"brand {os.path.basename(d)}: new default masters it does not have yet: {', '.join(new)} (used from the framework until the brand gets its own)")
+        mine = render.load_masters(d)                     # the brand's copies of a default master that has gained slots since
+        grown = {n: sorted(set(fw[n]["meta"].get("slots") or {}) - set(mine[n]["meta"].get("slots") or {})) for n in own & defaults if n in mine}
+        grown = {n: s for n, s in grown.items() if s}
+        if grown: print(f"brand {os.path.basename(d)}: its own masters lack options the default masters have now: "
+                        + "; ".join(f"{n} ({', '.join(s)})" for n, s in sorted(grown.items())) + ". Take them over with vs-build where the brand wants them.")
 
 
 # ---------------------------------------------------------------- style
@@ -2126,8 +2134,17 @@ def render_title(deck, lang):
     t = deck.get("title")
     return t.get(lang, next(iter(t.values()), "")) if isinstance(t, dict) else t
 
+def _motion_shortlist(current, suggested, all_sets):
+    """The sets offered to a brand to choose from: its own, the one the website suggested, the set copied from the
+    website and rise as the safe choice; at most three besides a site set, never none."""
+    import motion
+    out = []
+    for s in (current, "site", suggested, motion.DEFAULT_SET):
+        if s and s in all_sets and s != "none" and s not in out: out.append(s)
+    return out[:4] if "site" in out else out[:3]
+
 def cmd_motion(args):
-    """vs.py motion <brand> [--strip [set|all]] [--set <name>] [--level calm|standard|expressive] [--reset]"""
+    """vs.py motion <brand> [--strip [set|all]] [--set <name>] [--take <kind>=<set>] [--compare [all]] [--level calm|standard|expressive] [--reset]"""
     import build as B, brandtools, motion, render, tempfile
     import html as html_mod
     all_sets = motion.sets()
@@ -2136,10 +2153,12 @@ def cmd_motion(args):
         k = args.index("--strip")
         strip = args[k + 1] if k + 1 < len(args) and (args[k + 1] in all_sets or args[k + 1] in ("all", "site")) else "current"
         args = args[:k + 1] + args[k + (2 if strip != "current" else 1):]
-    pos = positional(args, ("--set", "--level", "--deck"))
+    every = "--compare" in args and args.index("--compare") + 1 < len(args) and args[args.index("--compare") + 1] == "all"
+    if every: args = [a for i, a in enumerate(args) if not (a == "all" and i and args[i - 1] == "--compare")]
+    pos = positional(args, ("--set", "--level", "--deck", "--take"))
     if arg(args, "--deck"): return _motion_deck(args, pos)
     name = pos[0] if pos else die("which brand? vs.py motion <brand> [--strip [set|all]] [--set <name>]")
-    chosen = arg(args, "--set")
+    chosen = arg(args, "--set"); chosen = motion.RETIRED.get(chosen, chosen)
     all_sets = motion.sets(B.brand_dir(name))               # with the brand's own sets, such as the one copied from its website
     if "--site" in args:                                    # make the set copied from the website again, from what was measured
         try: facts = json.load(open(os.path.join(B.brand_dir(name), "raw", "motion.json"), encoding="utf-8"))
@@ -2147,17 +2166,29 @@ def cmd_motion(args):
         path = motion.write_site_set(B.brand_dir(name), facts, (facts.get("pages") or [""])[0])
         print(f"set copied from the website: {path}" if path else "the website shows no entrance that could be copied: no `site` set")
         all_sets = motion.sets(B.brand_dir(name))
+    if arg(args, "--take") is not None:                    # one kind of content moves as in another set: --take title=mask, --take title= drops it
+        kind, _, src = arg(args, "--take").partition("="); src = motion.RETIRED.get(src.strip(), src.strip())
+        if kind not in motion.GROUPS: die(f"what should move differently? one of {', '.join(motion.GROUPS)}: vs.py motion {name} --take title=mask")
+        if src and src not in all_sets: die(f"unknown motion set '{src}'. Sets: {', '.join(all_sets)}")
+        data = brandtools._read(name); m = data.get("motion") if isinstance(data.get("motion"), dict) else {}
+        take = dict(m.get("take") or {}); take.pop(kind, None)
+        if src: take[kind] = src
+        if take: m["take"] = take
+        else: m.pop("take", None)
+        data["motion"] = m; brandtools._write(name, data)
+        print(f"{kind} of {name} moves " + (f"as in {src}" if src else "in the brand's own set again"))
     if chosen or "--reset" in args:
         if chosen and chosen not in all_sets: die(f"unknown motion set '{chosen}'. Sets: {', '.join(all_sets)}")
         data = brandtools._read(name); m = data.get("motion") if isinstance(data.get("motion"), dict) else {}
         if chosen: m["set"] = chosen
-        if "--reset" in args: m = {"set": m.get("set", motion.DEFAULT_SET)}      # drop the brand's own tokens, the set's defaults apply
+        if "--reset" in args: m = {k: v for k, v in {"set": m.get("set", motion.DEFAULT_SET), "take": m.get("take")}.items() if v}      # drop the brand's own tokens, the set's defaults apply
         data["motion"] = m; brandtools._write(name, data)
         print(f"motion set of {name}: {m['set']}" + (" (tokens reset to the set's own)" if "--reset" in args else ""))
     b = B.load_brand(name); d = b["_dir"]; p = motion.profile(b)
     own = {k: v for k, v in (b.get("motion") or {}).items() if k in motion.TOKENS}
     print(f"motion sets (* is the set of {name}):\n" + motion.catalog(p["set"], d))
     if "site" not in all_sets: print("  (no set copied from the website: it was not measured, or shows no entrance that could be copied; `vs.py motion " + name + " --site` tries again)")
+    if p["take"]: print("taken from other sets: " + ", ".join(f"{k} as in {v}" for k, v in p["take"].items()))
     print(f"\nprofile: set {p['set']} | ease {p['ease']} | duration {p['duration']:g} s | stagger {p['stagger']:g} s | travel {p['travel']:g} px | change {p['change']}")
     print("tokens from brand.json: " + (", ".join(own) or "none, the set's own values apply") + " | motion.css: " + ("present" if os.path.exists(os.path.join(d, "motion.css")) else "none"))
     try: sug = json.load(open(os.path.join(d, "raw", "motion.json"), encoding="utf-8")).get("suggestion") or {}
@@ -2165,7 +2196,7 @@ def cmd_motion(args):
     if sug: print(f"the website analysis suggested: {sug.get('set')} ({sug.get('why')})")
     compare = "--compare" in args
     if strip is None and not compare:
-        print(f"\ncompare all sets live: vs.py motion {name} --compare   film strip of a set: vs.py motion {name} --strip [set|all]   choose one: vs.py motion {name} --set <name>   single tokens: vs.py set {name} motion.duration=0.6")
+        print(f"\ncompare the sets that fit live: vs.py motion {name} --compare [all]   one kind of content as in another set: vs.py motion {name} --take title=mask   film strip of a set: vs.py motion {name} --strip [set|all]   choose one: vs.py motion {name} --set <name>   single tokens: vs.py set {name} motion.duration=0.6")
         return
     level = motion.intensity(arg(args, "--level", "standard"))
     masters = render.load_masters(d)
@@ -2175,8 +2206,9 @@ def cmd_motion(args):
         import base64                                      # one file that carries all decks, so it opens anywhere and can be sent
         live = tempfile.mkdtemp(prefix="vibeupslides_compare_"); decks = {}
         stand = _standins(b, os.path.join(d, "raw", "standins"))
+        offer = list(all_sets) if every else _motion_shortlist(p["set"], sug.get("set"), all_sets)
         try:
-            for s in all_sets:
+            for s in offer:
                 _render_and_build({"title": "motion " + s, "langs": ["en"], "sample": True, "motion": level, "slides": slides},
                                   dict(b, motion=dict(b.get("motion") or {}, set=s)), os.path.join(live, s + ".html"), standins=stand)
                 decks[s] = base64.b64encode(open(os.path.join(live, s + ".html"), "rb").read()).decode()
@@ -2187,9 +2219,9 @@ def cmd_motion(args):
         open(out, "w", encoding="utf-8").write(MOTION_COMPARE.replace("__HEAD__", "__BRAND__: the motion sets side by side").replace("__PLAY__", "Play again").replace("__CUR__", "current set")
             .replace("__TEXT__", "Every tile plays the same slide in another set. Pick a slide, press Play again as often as you like, then name the set you want.")
             .replace("__BRAND__", html_mod.escape(b.get("name", name))).replace("__CURRENT__", p["set"])
-            .replace("__SETS__", json.dumps([{"name": k, "title": v.get("title", k), "character": v.get("character", "")} for k, v in all_sets.items()]))
+            .replace("__SETS__", json.dumps([{"name": k, "title": v.get("title", k), "character": v.get("character", "")} for k, v in all_sets.items() if k in offer]))
             .replace("__SLIDES__", json.dumps(wanted)).replace("__DECKS__", json.dumps(decks)))
-        print(f"\nmotion sets side by side: {out}\nchoose one: vs.py motion {name} --set <name>")
+        print(f"\nmotion sets side by side: {out} ({', '.join(offer)}" + ("" if every else f"; all {len(all_sets)}: --compare all") + f")\nchoose one: vs.py motion {name} --set <name>")
         if strip is None: return
     tmp = tempfile.mkdtemp(prefix="vibeupslides_motion_"); stand = _standins(b, os.path.join(d, "raw", "standins"))
     print()

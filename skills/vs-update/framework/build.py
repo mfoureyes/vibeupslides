@@ -485,14 +485,15 @@ _LEGIBLE_JS = """(()=>{const page=document.querySelector('#deck > .slide.active'
   const sr=s.getBoundingClientRect(),sc=sr.width/1920,out=[],seen=new Map();
   const skip='.footer,.rbar,.notes,.rt,.ghost,.header,.qopts,[data-quiet],script,style,svg,canvas,video,iframe,[aria-hidden=true]';
   const probe=document.createElement('i');probe.style.color='var(--ghost)';s.appendChild(probe);const ghost=getComputedStyle(probe).color;probe.remove();
-  const w=document.createTreeWalker(s,NodeFilter.SHOW_TEXT);
+  const w=document.createTreeWalker(s,NodeFilter.SHOW_TEXT),blocks=new Map();
+  const blk=e=>{let b=e;while(b&&b!==s&&getComputedStyle(b).display.startsWith('inline'))b=b.parentElement;if(!blocks.has(b))blocks.set(b,blocks.size);return blocks.get(b);};   /* the paragraph a text belongs to: its own lines may sit close */
   for(let n;n=w.nextNode();){if(!n.nodeValue.trim())continue;const e=n.parentElement;if(!e||e.closest(skip))continue;
     const r=document.createRange();r.selectNodeContents(n);const rects=[...r.getClientRects()].filter(q=>q.width>1&&q.height>1);if(!rects.length)continue;
     let it=seen.get(e);
     if(!it){const cs=getComputedStyle(e);if(cs.visibility==='hidden'||cs.color===ghost)continue;   /* the ghost colour is for numerals that only decorate */
       let a=1;for(let p=e;p&&p!==page.parentElement;p=p.parentElement)a*=parseFloat(getComputedStyle(p).opacity);
       const m=/^rgb/.test(cs.color)?cs.color.match(/[\\d.]+/g).map(Number):null;
-      it={t:'',px:parseFloat(cs.fontSize),bold:parseInt(cs.fontWeight,10)>=600,c:m?m.slice(0,3):null,a:a*(m&&m.length>3?m[3]:1),x0:1e9,y0:1e9,x1:-1e9,y1:-1e9,cut:0,q:[],ov:!!e.closest('.vs-overlap'),bleed:!!e.closest('.vs-bleed'),f:cs.fontStyle+' '+cs.fontWeight+' '+cs.fontSize+' '+cs.fontFamily,up:cs.textTransform==='uppercase'};
+      it={t:'',px:parseFloat(cs.fontSize),bold:parseInt(cs.fontWeight,10)>=600,c:m?m.slice(0,3):null,a:a*(m&&m.length>3?m[3]:1),x0:1e9,y0:1e9,x1:-1e9,y1:-1e9,cut:0,q:[],ov:!!e.closest('.vs-overlap'),blk:blk(e),bleed:!!e.closest('.vs-bleed'),f:cs.fontStyle+' '+cs.fontWeight+' '+cs.fontSize+' '+cs.fontFamily,up:cs.textTransform==='uppercase'};
       for(let p=e;p&&p!==s;p=p.parentElement){const ps=getComputedStyle(p);
         if(ps.overflowX!=='visible'||ps.overflowY!=='visible'){const q=p.getBoundingClientRect();it.clip=it.clip?{l:Math.max(it.clip.l,q.left),t:Math.max(it.clip.t,q.top),r:Math.min(it.clip.r,q.right),b:Math.min(it.clip.b,q.bottom)}:{l:q.left,t:q.top,r:q.right,b:q.bottom};}}
       seen.set(e,it);out.push(it);}
@@ -555,6 +556,8 @@ MIN_TYPE = 18            # slide pixels (the slide is 1920 wide): below this nob
 EDGE = 24                # text closer to the slide's edge than this looks cut
 MARK_MIN = 1.5           # a ring, an arrow, a bar or a point below this contrast to its ground is hardly seen
 MARK_QUIET = 1.15        # a line in a quiet colour (--line, --soft, --ghost) may be faint, below this it is gone
+GAP_MIN = 8              # slide pixels between the letters of two texts that are not one paragraph: below this they touch
+GAP_EM = .3              # ... and at least this share of the smaller type's size
 MARK_HUE = 40            # a mark this far from its ground in colour (CIELAB) stands out even at low contrast: lime on white
 
 
@@ -577,7 +580,7 @@ def _faces(im):
 
 def _legible(r, shot):
     """Findings about one slide from the measured text and its screenshot: type too small, too little contrast
-    between text and what is behind it, text cut off, text at the edge, texts on top of each other."""
+    between text and what is behind it, text cut off, text at the edge, texts on top of each other or too close."""
     from PIL import Image
     import io
     im = Image.open(io.BytesIO(shot)).convert("RGB"); sc = r["sc"]; out = []
@@ -642,7 +645,15 @@ def _legible(r, shot):
     for i, a in enumerate(solid):
         for c in solid[i + 1:]:
             if a.get("ov") and c.get("ov"): continue
-            if hit(a, c): out.append(f'texts on top of each other: "{a["t"]}" and "{c["t"]}"')
+            if hit(a, c): out.append(f'texts on top of each other: "{a["t"]}" and "{c["t"]}"'); continue
+            if a.get("blk") == c.get("blk"): continue                   # lines of one paragraph
+            need = max(GAP_MIN, GAP_EM * min(a["px"], c["px"]))         # the space a reader needs to see two texts as two
+            ay0, ay1, cy0, cy1 = a.get("iy0", a["y0"]), a.get("iy1", a["y1"]), c.get("iy0", c["y0"]), c.get("iy1", c["y1"])
+            gap = None
+            if min(a["x1"], c["x1"]) - max(a["x0"], c["x0"]) > 8: gap = max(cy0 - ay1, ay0 - cy1)          # one above the other
+            elif min(ay1, cy1) - max(ay0, cy0) > 4: gap = max(c["x0"] - a["x1"], a["x0"] - c["x1"])    # side by side
+            if gap is not None and gap / sc < need:
+                out.append(f'texts too close, {max(0, gap / sc):.0f} px apart where {need:.0f} are needed: "{a["t"]}" and "{c["t"]}"')
     return out
 
 def _marks(r, shot):

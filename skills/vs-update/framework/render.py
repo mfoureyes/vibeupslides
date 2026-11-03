@@ -515,6 +515,11 @@ def _attrs(s, lang, env=None):
         a.append('data-fixed="1"')
     if s.get("approved"):                                   # taken over as it is from a deck people approved: its sizes and words stay, the checks name them as hints
         a.append('data-approved="1"')
+    ctx = s.get("context")
+    if isinstance(ctx, dict):                               # a slideshow slide says what it is about on its own: programme and one sentence
+        pick = lambda v: (v.get(lang) or next(iter(v.values()), "")) if isinstance(v, dict) else (v or "")
+        esc = lambda v: str(v).replace("&", "&amp;").replace(chr(34), "&quot;").replace("<", "&lt;")
+        a.append(f'data-ctx-t="{esc(pick(ctx.get("title")))}" data-ctx-x="{esc(pick(ctx.get("text")))}"')
     kiosk = s.get("seconds") or (env or {}).get("kiosk")
     if kiosk:                                               # slideshow on a monitor: seconds this slide stays (deck "kiosk", slide "seconds")
         a.append(f'data-kiosk="{float(kiosk):g}"')

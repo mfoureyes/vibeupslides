@@ -424,7 +424,14 @@ html[data-motif="none"] .wedge{display:none}
 /* ---------- Controls ---------- */
 #ui{position:fixed;left:0;right:0;bottom:0;z-index:50;transition:opacity .4s;opacity:0;pointer-events:none}
 html.ui-on #ui{opacity:1;pointer-events:auto}
-html.kiosk #ui,html.kiosk #hint,html.kiosk #np{display:none!important}html.kiosk body{cursor:none}
+html.kiosk #ui,html.kiosk #hint,html.kiosk #np{display:none!important}
+.vs-ctx{position:absolute;top:44px;left:440px;right:440px;z-index:4;border-left:5px solid var(--accent);padding:2px 0 4px 20px;pointer-events:none}
+.vs-ctx b{display:block;font-size:26px;line-height:1.2;font-weight:700;color:var(--ink)}
+.vs-ctx span{display:block;font-size:22px;line-height:1.3;color:var(--ink);opacity:.85;margin-top:2px}
+.slide.dark .vs-ctx b,.slide.dark .vs-ctx span{color:#fff}
+.slide.split .vs-ctx{top:auto;bottom:0;width:46%;left:auto;right:auto;border-left:0;border-top:5px solid var(--accent);background:rgba(30,30,32,.86);padding:16px 28px 18px;box-sizing:border-box}
+.slide.split.bl .vs-ctx{left:0}.slide.split.br .vs-ctx{right:0}
+.slide.split .vs-ctx b,.slide.split .vs-ctx span{color:#fff}html.kiosk body{cursor:none}
 html.presenting #ui,html.presenting #hint,html.presenting #np{display:none!important}
 html.presenting .tslide .tbuttons,html.presenting .tslide .tsmall-row{visibility:hidden}
 #prog{position:absolute;left:0;bottom:0;height:4px;background:var(--accent);width:0;transition:width .4s var(--ease)}
@@ -840,6 +847,10 @@ html[data-motion="off"] #deck .bgvideo video{transition:none!important}
   function next(){ if(cur===0&&!clock.start) clockStart(); if(sceneStep(1)) return; var g=stepGroups(slides[cur]).filter(stepOpen); if(g.length){g[0].els.forEach(function(x){x.classList.add('on');});presenterRender();return;} go(cur+1,1); }
   function prev(){ if(sceneStep(-1)) return; var g=stepGroups(slides[cur]).filter(stepShown); if(g.length){g[g.length-1].els.forEach(function(x){x.classList.remove('on');});presenterRender();return;} go(cur-1,-1); }
 
+  /* The context of a slideshow slide (deck field "context"): programme and one sentence between the logos */
+  all.forEach(function(s){ var t=s.getAttribute('data-ctx-t'); if(!t||s.querySelector(':scope > .vs-ctx')) return;
+    var d=document.createElement('div'); d.className='vs-ctx'; var b=document.createElement('b'); b.textContent=t; d.appendChild(b);
+    var x=s.getAttribute('data-ctx-x'); if(x){ var sp=document.createElement('span'); sp.textContent=x; d.appendChild(sp); } s.appendChild(d); });
   /* Slideshow on a monitor: deck "kiosk" (seconds per slide, a slide may set "seconds") or ?kiosk=12 in the address.
      The deck runs on by itself, shows the click steps one after the other, starts over at the end and changes the
      language each round (?kiosklang=off keeps one language). K pauses and goes on; a key or click restarts the wait. */

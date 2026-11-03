@@ -424,6 +424,7 @@ html[data-motif="none"] .wedge{display:none}
 /* ---------- Controls ---------- */
 #ui{position:fixed;left:0;right:0;bottom:0;z-index:50;transition:opacity .4s;opacity:0;pointer-events:none}
 html.ui-on #ui{opacity:1;pointer-events:auto}
+html.kiosk #ui,html.kiosk #hint,html.kiosk #np{display:none!important}html.kiosk body{cursor:none}
 html.presenting #ui,html.presenting #hint,html.presenting #np{display:none!important}
 html.presenting .tslide .tbuttons,html.presenting .tslide .tsmall-row{visibility:hidden}
 #prog{position:absolute;left:0;bottom:0;height:4px;background:var(--accent);width:0;transition:width .4s var(--ease)}
@@ -838,6 +839,31 @@ html[data-motion="off"] #deck .bgvideo video{transition:none!important}
   }
   function next(){ if(cur===0&&!clock.start) clockStart(); if(sceneStep(1)) return; var g=stepGroups(slides[cur]).filter(stepOpen); if(g.length){g[0].els.forEach(function(x){x.classList.add('on');});presenterRender();return;} go(cur+1,1); }
   function prev(){ if(sceneStep(-1)) return; var g=stepGroups(slides[cur]).filter(stepShown); if(g.length){g[g.length-1].els.forEach(function(x){x.classList.remove('on');});presenterRender();return;} go(cur-1,-1); }
+
+  /* Slideshow on a monitor: deck "kiosk" (seconds per slide, a slide may set "seconds") or ?kiosk=12 in the address.
+     The deck runs on by itself, shows the click steps one after the other, starts over at the end and changes the
+     language each round (?kiosklang=off keeps one language). K pauses and goes on; a key or click restarts the wait. */
+  (function(){
+    var q=(location.search.match(/[?&]kiosk=(\d+(?:\.\d+)?)/)||[])[1];
+    if(!q && !document.querySelector('#deck > .slide[data-kiosk]')) return;
+    var turnLang=!/[?&]kiosklang=off/.test(location.search), paused=false, t=null, rt=[];
+    document.documentElement.classList.add('kiosk');
+    function secs(s){ return parseFloat(q||(s&&s.getAttribute('data-kiosk'))||12)||12; }
+    function reveal(){ rt.forEach(clearTimeout); rt=[]; var s=slides[cur]; if(!s) return;
+      stepGroups(s).filter(stepOpen).forEach(function(g,k){ rt.push(setTimeout(function(){ g.els.forEach(function(x){ x.classList.add('on'); }); }, 900+k*1100)); }); }
+    function onward(){
+      if(cur>=n-1){
+        if(turnLang&&LANGS.length>1){ lang=LANGS[(LANGS.indexOf(lang)+1)%LANGS.length]; if(cur>=0){ mediaLeave(slides[cur]); slides[cur].classList.remove('active'); }
+          applyLanguage(); buildToc(); built=false; cur=-1; go(0,1); }
+        else go(0,1);
+      } else go(cur+1,1);
+      reveal(); wait();
+    }
+    function wait(){ clearTimeout(t); if(!paused) t=setTimeout(onward, secs(slides[cur])*1000); }
+    window.addEventListener('load',function(){ setTimeout(function(){ reveal(); wait(); },600); });
+    document.addEventListener('keydown',function(e){ if(e.key==='k'||e.key==='K'){ paused=!paused; } setTimeout(wait,0); });
+    document.addEventListener('click',function(){ setTimeout(wait,0); });
+  })();
 
   /* Build the outline */
   function buildToc(){

@@ -515,6 +515,9 @@ def _attrs(s, lang, env=None):
         a.append('data-fixed="1"')
     if s.get("approved"):                                   # taken over as it is from a deck people approved: its sizes and words stay, the checks name them as hints
         a.append('data-approved="1"')
+    kiosk = s.get("seconds") or (env or {}).get("kiosk")
+    if kiosk:                                               # slideshow on a monitor: seconds this slide stays (deck "kiosk", slide "seconds")
+        a.append(f'data-kiosk="{float(kiosk):g}"')
     if s.get("fit") is False:                               # this slide keeps its sizes: the engine does not enlarge its body to fill the slide
         a.append('data-fit="0"')
     if s.get("move") in ("calm", "expressive", "off"):       # how much moves on this one slide
@@ -816,6 +819,8 @@ def render_slide(slide, lang, masters, env):
     slots.update({"b": env.get("brand_info") or {}, "attrs": _attrs(s, lang, env), "notes": env["notes_html"], "motion": env.get("motion", True), "lang": lang,
                   "brand": env.get("brand_name", "")})
     html = render_template(m["body"], slots, env)
+    if s.get("class") and isinstance(s["class"], str):     # classes of the deck's own on a master slide (e.g. nobiglogo)
+        html = re.sub(r'(<section class="slide)', lambda mm: mm.group(1) + " " + s["class"], html, count=1)
     if s.get("parts") or "<vs-part" in html:
         html = _place_parts(html, s, env)
     if "mslide" in html or "mchev" in html or "mcurve" in html:
@@ -845,6 +850,7 @@ def render_deck(deck, masters, env):
     chapters, pages, rpages, cover = {}, {}, {}, 0         # reading version: chapter starts and page counts per language, for the contents page
     langs = deck.get("langs") or [deck.get("lang") or "en"]
     level = motion.intensity(deck.get("motion", True))      # off, calm, standard, expressive
+    env["kiosk"] = deck.get("kiosk")
     env.update(langs=langs, motion=level != "off", motion_level=level, handout=bool(deck.get("handout")), sample=bool(deck.get("sample")))
     env.setdefault("images", {}); env.setdefault("assets", set()); env.setdefault("warnings", [])
     out = []; last = {}
